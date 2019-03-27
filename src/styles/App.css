@@ -1,0 +1,152 @@
+/* App's static wrapper */
+.App {
+  text-align: center;
+}
+
+.Grovv-logo {
+  pointer-events: none;
+  width: auto;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.App-body {
+  background-color: #5a5252;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+#App-Header {
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  height: 100px;
+  width: inherit;
+  background-color: #317d92;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#Header-Btns {
+  /* padding-top: 2px; */
+  padding-bottom: 2px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+#Home-Div {
+  height: 100px;
+  background-color: #317d92;
+}
+
+#App-Body-Content {
+  display: flex;
+  flex-direction: row;
+  margin-left: 240px;
+  height: 100%;
+}
+
+#App-Inner-Body {
+  width: 100vw;
+}
+
+#Main-Left {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 240px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(31, 30, 30);
+  overflow-x: hidden;
+}
+
+#Main-Left-Menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 240px;
+  z-index: 1;
+  background-color: #6c8a66;
+  overflow-x: hidden;
+}
+
+.Left-Menu-Btn {
+  background: #496870;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  height: 67px;
+  margin-bottom: 2px;
+}
+
+.Left-Menu-Btn:hover {
+  background: #5c7a81;
+}
+
+.Left-Menu-Btn:active {
+  background: #7899a0;
+}
+
+#Profile-Btn {
+  background: #91b4bd;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  text-align: center;
+  width: 80px;
+  height: 24px;
+  margin-left: 4px;
+}
+
+#Profile-Btn:active {
+  background: #90bfe6;
+}
+
+#Profile-Btn:hover {
+  background: #76ad65;
+}
+
+#Logout-Btn {
+  background: #91b4bd;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  text-align: center;
+  width: 80px;
+  height: 24px;
+  margin-left: 4px;
+}
+
+#Logout-Btn:active {
+  background: #90bfe6;
+}
+
+#Logout-Btn:hover {
+  background: #76ad65;
+}
+
+
+#Main-Content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+/* Website view  */
+
+.Site-View {
+  overflow: auto;
+}
