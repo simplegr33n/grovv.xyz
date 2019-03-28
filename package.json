@@ -2,7 +2,7 @@
   "name": "grovv-xyz",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://simplegr33n.github.io/grovv.xyz",
+  "homepage": "https://grovv.xyz",
   "dependencies": {
     "@firebase/database": "^0.3.13",
     "firebase": "^5.8.5",
