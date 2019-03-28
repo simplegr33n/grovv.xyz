@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/grovv.xyz/static/css/main.ffa01871.chunk.css"
   },
   {
-    "revision": "16d1009462954b17c05fb23bc2a4a1d9",
+    "revision": "d2bcc7503d7d1ce8011747d376aa506f",
     "url": "/grovv.xyz/index.html"
   }
 ];
