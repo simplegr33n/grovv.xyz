@@ -54,7 +54,7 @@ class App extends Component {
 
 	getUrls = () => {
 		// Urls location in tree
-		var ref = this.firebase.db.ref().child('urls')
+		var ref = this.firebase.db.ref().child('users').child(this.state.UID).child('urls')
 
 		ref.on("value", (snapshot) => {
 			this.setState({
