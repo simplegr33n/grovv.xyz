@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../styles/main-content.css';
+import '../../styles/App.css';
 import Firebase from '../../config/firebaseConfig.js'
 
 

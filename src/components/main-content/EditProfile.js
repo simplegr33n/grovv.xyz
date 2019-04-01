@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../styles/main-content.css';
+import '../../styles/App.css';
 import Firebase from '../../config/firebaseConfig.js'
 
 
@@ -22,22 +22,25 @@ class EditProfile extends Component {
 
     }
 
+    handleChangePassword = () => {
+        this.firebase.auth.sendPasswordResetEmail(this.state.username) // works for now... wont if actual usernames allowed
+        alert("Password reset email sent!")
+        return;
+    }
+
 
     render() {
         return (
-            <div id="submit-song-box">
-                <div>
-                    Edit Username:
-                        <input id="edit-username-area" value={this.props.username} onChange={this.handleUsernameChange} />
-                </div>
-                <div>
-                    Change Password:
-                        <input type="password" id="edit-password-area" />
-                </div>
-                <div id="post-button" onClick={this.handleSubmit}>
-                    Submit Changes
+
+            <div id="Profile-Page">
+                <div id="Profile-Page-Header">
+                    <div>
+                        Email: <b>{this.props.username}</b>
                     </div>
+                    <button onClick={this.handleChangePassword}>Change Password</button>
+                </div>
             </div>
+
         );
     }
 }

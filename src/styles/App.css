@@ -146,7 +146,54 @@
 }
 
 /* Website view  */
-
 .Site-View {
   overflow: auto;
+}
+
+.Site-View-Update {
+  overflow: auto;
+  width: calc(100% - 240px);
+  height: 100%;
+  position: fixed;
+}
+
+
+
+/* Auth */
+#signin-div {
+  background-color: #94bbce;
+  margin: 6px;
+  padding: 16px;
+  color: #1d1b1b;
+}
+
+#signup-div {
+  background-color: #8acea6;
+  margin: 6px;
+  padding: 16px;
+  color: #1d1b1b;
+}
+
+#signin-username {
+
+}
+
+#signup-username {
+
+}
+
+#submit-signin-btn {
+
+}
+
+#submit-signup-btn {
+
+}
+
+#goto-signup-button {
+
+}
+
+#goto-signin-button {
+
 }

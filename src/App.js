@@ -18,11 +18,13 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, plotly, livecam, editprofile, etc.
+			mainContent: 'signin', // signin, signup, main, editprofile, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
-			URL_plotly: null
+			URL_plotly: null,
+			zPlotly: 0,
+			zLivecam: 0
 		};
 
 		this.firebase = new Firebase()
@@ -83,7 +85,7 @@ class App extends Component {
 	handleSignIn = () => {
 		// set UID, page to plotly
 		this.setState({
-			mainContent: 'plotly'
+			mainContent: 'maincontent'
 		});
 
 	}
@@ -93,15 +95,23 @@ class App extends Component {
 	}
 
 	openPlotly = () => {
-		if (this.state.mainContent !== 'plotly') {
-			this.setState({ mainContent: 'plotly' });
+		if (this.state.mainContent !== 'maincontent') {
+			this.setState({ mainContent: 'maincontent' });
 		}
+		this.setState({
+			zPlotly: 1,
+			zLivecam: 0
+		});
 	}
 
 	openLiveCam = () => {
-		if (this.state.mainContent !== 'livecam') {
-			this.setState({ mainContent: 'livecam' });
+		if (this.state.mainContent !== 'maincontent') {
+			this.setState({ mainContent: 'maincontent' });
 		}
+		this.setState({
+			zPlotly: 0,
+			zLivecam: 1
+		});
 	}
 
 	openEditProfile = () => {
@@ -137,37 +147,30 @@ class App extends Component {
 									}
 								})()}
 							</div>
-							<div id="Main-Content">
-								{(() => {
-									if (this.state.UID) {
-										switch (this.state.mainContent) {
-											case 'plotly':
-												return (
-													<object className="Site-View" type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="live cam" />
-												);
-											case 'livecam':
-												return (
-													<object className="Site-View" type="text/html" data={this.state.URL_livecam} width="100%" height="100%" aria-label="live cam" />
-												);
-											case 'editprofile':
-												return <EditProfile UID={this.state.UID} username={this.state.username} />;
-											default:
-												return (
-													<object className="Site-View" type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="live cam" />
-												);
-										}
-									} else {
-										switch (this.state.mainContent) {
-											case 'signin':
-												return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
-											case 'signup':
-												return <SignUp gotoSignIn={this.setMainContent} />;
-											default:
-												return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
-										}
+							{(() => {
+								if (this.state.UID) {
+									switch (this.state.mainContent) {
+										case 'editprofile':
+											return <EditProfile UID={this.state.UID} username={this.state.username} />;
+										default:
+											return (
+												<div id="Main-Content">
+													<object className="Site-View-Update" style={{zIndex: this.state.zPlotly}} type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="plotly" />
+													<object className="Site-View-Update" style={{zIndex: this.state.zLivecam}} type="text/html" data={this.state.URL_livecam} width="100%" height="100%" aria-label="live cam" />
+												</div>
+											);
 									}
-								})()}
-							</div>
+								} else {
+									switch (this.state.mainContent) {
+										case 'signin':
+											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
+										case 'signup':
+											return <SignUp gotoSignIn={this.setMainContent} />;
+										default:
+											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
+									}
+								}
+							})()}
 						</div>
 					</div>
 				</header>
