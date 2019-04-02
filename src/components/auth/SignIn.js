@@ -49,10 +49,10 @@ class SignIn extends Component {
             alert('Bad email me thinks :(')
             return;
         }
-        if (!this.validatePassword(password)) {
-            alert('Bad password. Must be 7-15 characters with at least 1 numeric digit and a special character.')
-            return;
-        }
+        // if (!this.validatePassword(password)) {
+        //     alert('Bad password. Must be 7-15 characters with at least 1 numeric digit and a special character.')
+        //     return;
+        // }
         this.setState({
             username: '',
             password: ''

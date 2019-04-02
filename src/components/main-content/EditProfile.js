@@ -23,8 +23,8 @@ class EditProfile extends Component {
     }
 
     handleChangePassword = () => {
-        this.firebase.auth.sendPasswordResetEmail(this.state.username) // works for now... wont if actual usernames allowed
-        alert("Password reset email sent!")
+        // this.firebase.auth.sendPasswordResetEmail(this.state.username)
+        alert("Sorry - request from reset admin for now.")
         return;
     }
 
