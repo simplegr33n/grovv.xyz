@@ -83,6 +83,7 @@
   background: #496870;
   font-size: 18px;
   font-weight: bold;
+  text-align: right;
   border: none;
   height: 67px;
   margin-bottom: 2px;
@@ -196,4 +197,30 @@
 
 #goto-signin-button {
 
+}
+
+/* TEST */
+.test1 {
+  background-color: #61dafb;
+  color: black;
+}
+
+.test2 {
+  background-color: rgb(233, 84, 84);
+  color: black;
+}
+
+.Rnd-View {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.moveHandle {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  line-height: 24px;
+  position: fixed;
+  background-color: rgb(111, 175, 47);
 }

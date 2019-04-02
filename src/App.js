@@ -11,6 +11,7 @@ import SignUp from './components/auth/SignUp.js'
 
 // Main Content
 import EditProfile from './components/main-content/EditProfile.js'
+import TestResizeDraggable from './components/main-content/TestResizeDraggable.js'
 
 
 class App extends Component {
@@ -65,7 +66,8 @@ class App extends Component {
 				URL_livecam: snapshot.val().livecam,
 				URL_plotly: snapshot.val().plotly,
 				URL_vegger_livecam: snapshot.val().vegger_livecam,
-				URL_vegger_plotly: snapshot.val().vegger_plotly
+				URL_vegger_plotly: snapshot.val().vegger_plotly,
+				urls: snapshot.val()
 			});
 		}, function (errorObject) {
 			console.log("The url read failed: " + errorObject.code);
@@ -154,6 +156,12 @@ class App extends Component {
 		}
 	}
 
+	openTEST = () => {
+		if (this.state.mainContent !== 'TEST') {
+			this.setState({ mainContent: 'TEST' });
+		}
+	}
+
 
 	render() {
 		return (
@@ -178,6 +186,7 @@ class App extends Component {
 												<button className="Left-Menu-Btn" onClick={this.openPlotly}>GanjaGrove Plotly</button>
 												<button className="Left-Menu-Btn" onClick={this.openVeggerLiveCam}>Vegger Live</button>
 												<button className="Left-Menu-Btn" onClick={this.openVeggerPlotly}>Vegger Plotly</button>
+												<button className="Left-Menu-Btn" onClick={this.openTEST}>TEST</button>
 											</div>
 										);
 									}
@@ -188,6 +197,8 @@ class App extends Component {
 									switch (this.state.mainContent) {
 										case 'editprofile':
 											return <EditProfile UID={this.state.UID} username={this.state.username} />;
+										case 'TEST':
+											return <TestResizeDraggable urls={this.state.urls} />
 										default:
 											return (
 												<div id="Main-Content">
