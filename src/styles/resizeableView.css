@@ -1,0 +1,61 @@
+#Resizeable-Console-Page {
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.moveHandle {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    line-height: 24px;
+    position: fixed;
+    background-color: rgb(111, 175, 47);
+}
+
+.Resizeable-Plotly {
+    position: relative;
+    flex: 2;
+}
+
+.Resizeable-Cam {
+    position: relative;
+    flex: 1;
+}
+
+.Resizeable-Row {
+    display: flex;
+    flex-direction: row;
+    height: 50vh;
+    flex-grow: 1;
+}
+
+
+.RND-Plotly {
+    position: relative !important;
+}
+
+.RND-Cam {
+    position: relative !important;
+}
+
+.Rnd-View {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.Rnd-View-Vegger {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-width: 100%;
+}
+
+.Rnd-View-Vegger img {
+    object-fit: cover;
+    max-width: 100%;
+}
