@@ -16,8 +16,6 @@ class ResizeDraggableView extends Component {
             y: 200,
             URLS: this.props.urls
         };
-
-        console.log(this.props.urls)
     }
 
     render() {

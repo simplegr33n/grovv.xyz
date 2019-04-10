@@ -29,19 +29,80 @@ class App extends Component {
 			zPlotly: 0,
 			zLivecam: 0,
 			zVeggerLivecam: 0,
-			zVeggerPlotly: 0
+			zVeggerPlotly: 0,
+			sFlowerTemp: '',
+			sFlowerHumidity: '',
+			sVeggerTemp: '',
+			sVeggerHumidity: ''
 		};
 
 		this.firebase = new Firebase()
 		this.firebase.auth.onAuthStateChanged((user) => {
 			if (user) {
-				console.log(`UID: ${user.uid}`);
 				this.setState({ UID: user.uid });
 				this.getUrls();
 				this.getUsername();
+				this.watchSensors();
 			}
 		});
 
+	}
+
+	watchSensors = () => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data')
+
+		ref.child("flower").limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new flower data key: " + snapshot.key);
+			this.followFlower(snapshot.key);
+		}, function (errorObject) {
+			console.log("sensorwatch flower failed: " + errorObject.code);
+		});
+
+		ref.child("vegger").limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new vegger data key: " + snapshot.key);
+			this.followVegger(snapshot.key);
+		}, function (errorObject) {
+			console.log("sensorwatch vegger failed: " + errorObject.code);
+		});
+	}
+
+	followFlower = (key) => {
+		// Flower data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('flower').child(key)
+
+		ref.on('child_added', (snapshot) => {
+			let flowerTemp = Math.round( snapshot.val().cTemp * 10 ) / 10;
+			let flowerHumidity = Math.round( snapshot.val().humidity * 10 ) / 10;
+			console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
+
+			this.setState({ 
+				sFlowerTemp: flowerTemp,
+				sFlowerHumidity: flowerHumidity
+			});
+
+		}, function (errorObject) {
+			console.log("follow flower failed: " + errorObject.code);
+		});
+	}
+
+	followVegger = (key) => {
+		// Vegger data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('vegger').child(key)
+
+		ref.on('child_added', (snapshot) => {
+			let veggerTemp = Math.round( snapshot.val().cTemp * 10 ) / 10;
+			let veggerHumidity = Math.round( snapshot.val().humidity * 10 ) / 10;
+			console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
+
+			this.setState({ 
+				sVeggerTemp: veggerTemp,
+				sVeggerHumidity: veggerHumidity
+			});
+
+		}, function (errorObject) {
+			console.log("follow vegger failed: " + errorObject.code);
+		});
 	}
 
 	getUsername = () => {
@@ -179,17 +240,31 @@ class App extends Component {
 									if (this.state.UID) {
 										return (
 											<div id="Main-Left-Menu">
-												<div id="Header-Btns">
+
+												<div id="Footer-Btns">
 													<button id="Profile-Btn" onClick={this.openEditProfile}>Profile</button>
 													<button id="Logout-Btn" onClick={this.handleSignOut}>Logout</button>
 												</div>
+
+
+												<div className="QuickTemp-Row">
+													<button className="Sensor-Area" onClick={this.ll33}>GG</button>
+													<button className="Temp-Guage" onClick={this.ll33}>{this.state.sFlowerTemp}°C</button>
+													<button className="Humid-Guage" onClick={this.ll33}>{this.state.sFlowerHumidity}%</button>
+												</div>
+												<div className="QuickTemp-Row">
+													<button className="Sensor-Area" onClick={this.ll33}>VG</button>
+													<button className="Temp-Guage" onClick={this.ll33}>{this.state.sVeggerTemp}°C</button>
+													<button className="Humid-Guage" onClick={this.ll33}>{this.state.sVeggerHumidity}%</button>
+												</div>
+
 												<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI</button>
 												<button className="Left-Menu-Btn" onClick={this.openLiveCam}>GanjaGrove Live</button>
 												<button className="Left-Menu-Btn" onClick={this.openPlotly}>GanjaGrove Plotly</button>
 												<button className="Left-Menu-Btn" onClick={this.openVeggerLiveCam}>Vegger Live</button>
 												<button className="Left-Menu-Btn" onClick={this.openVeggerPlotly}>Vegger Plotly</button>
-												
-											
+
+
 											</div>
 										);
 									}
@@ -212,7 +287,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-											// return <ResizeDraggableView urls={this.state.urls} />
+										// return <ResizeDraggableView urls={this.state.urls} />
 									}
 								} else {
 									switch (this.state.mainContent) {
