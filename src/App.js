@@ -14,7 +14,8 @@ import EditProfile from './components/main-content/EditProfile.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 const mediumIndication = '#91eebb';
-const warningIndication = '#FF0000'
+const warningIndication = '#FFA500';
+const dangerIndication = '#FF0000';
 
 class App extends Component {
 
@@ -84,14 +85,18 @@ class App extends Component {
 			// console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
 
 			// SET safe ranges here 
-			if (flowerTemp > 20 && flowerTemp < 29) {
+			if (flowerTemp > 20 && flowerTemp < 27) {
 				this.flowerTempRef.current.style.background = mediumIndication;
+			} else if (flowerTemp < 19 || flowerTemp > 28) {
+				this.flowerTempRef.current.style.background = dangerIndication;
 			} else {
 				this.flowerTempRef.current.style.background = warningIndication;
 			}
 
-			if (flowerHumidity > 30 && flowerHumidity < 45) {
+			if (flowerHumidity > 30 && flowerHumidity < 43) {
 				this.flowerHumidityRef.current.style.background = mediumIndication;
+			} else if (flowerHumidity < 27 || flowerHumidity > 45) {
+				this.flowerHumidityRef.current.style.background = dangerIndication;
 			} else {
 				this.flowerHumidityRef.current.style.background = warningIndication;
 			}
@@ -117,14 +122,18 @@ class App extends Component {
 			// console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
 
 			// SET safe ranges here 
-			if (veggerTemp > 20 && veggerTemp < 29) {
+			if (veggerTemp > 22 && veggerTemp < 29) {
 				this.veggerTempRef.current.style.background = mediumIndication;
+			} else if (veggerTemp < 20 || veggerTemp > 30) {
+				this.veggerTempRef.current.style.background = dangerIndication;
 			} else {
 				this.veggerTempRef.current.style.background = warningIndication;
 			}
 
-			if (veggerHumidity > 40 && veggerHumidity < 70) {
+			if (veggerHumidity > 40 && veggerHumidity < 80) {
 				this.veggerHumidityRef.current.style.background = mediumIndication;
+			} else if (veggerHumidity < 35 || veggerHumidity > 85) {
+				this.veggerHumidityRef.current.style.background = dangerIndication;
 			} else {
 				this.veggerHumidityRef.current.style.background = warningIndication;
 			}
