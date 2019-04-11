@@ -13,6 +13,8 @@ import SignUp from './components/auth/SignUp.js'
 import EditProfile from './components/main-content/EditProfile.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
+const mediumIndication = '#91eebb';
+const warningIndication = '#FF0000'
 
 class App extends Component {
 
@@ -46,6 +48,10 @@ class App extends Component {
 			}
 		});
 
+		this.flowerTempRef = React.createRef()
+		this.flowerHumidityRef = React.createRef()
+		this.veggerTempRef = React.createRef()
+		this.veggerHumidityRef = React.createRef()
 	}
 
 	watchSensors = () => {
@@ -72,11 +78,25 @@ class App extends Component {
 		var ref = this.firebase.db.ref().child('sensor_data').child('flower').child(key)
 
 		ref.on('child_added', (snapshot) => {
-			let flowerTemp = Math.round( snapshot.val().cTemp * 10 ) / 10;
-			let flowerHumidity = Math.round( snapshot.val().humidity * 10 ) / 10;
-			console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
+			let flowerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
+			let flowerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
 
-			this.setState({ 
+			// console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
+
+			// SET safe ranges here 
+			if (flowerTemp > 20 && flowerTemp < 29) {
+				this.flowerTempRef.current.style.background = mediumIndication;
+			} else {
+				this.flowerTempRef.current.style.background = warningIndication;
+			}
+
+			if (flowerHumidity > 30 && flowerHumidity < 45) {
+				this.flowerHumidityRef.current.style.background = mediumIndication;
+			} else {
+				this.flowerHumidityRef.current.style.background = warningIndication;
+			}
+
+			this.setState({
 				sFlowerTemp: flowerTemp,
 				sFlowerHumidity: flowerHumidity
 			});
@@ -91,11 +111,25 @@ class App extends Component {
 		var ref = this.firebase.db.ref().child('sensor_data').child('vegger').child(key)
 
 		ref.on('child_added', (snapshot) => {
-			let veggerTemp = Math.round( snapshot.val().cTemp * 10 ) / 10;
-			let veggerHumidity = Math.round( snapshot.val().humidity * 10 ) / 10;
-			console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
+			let veggerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
+			let veggerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
 
-			this.setState({ 
+			// console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
+
+			// SET safe ranges here 
+			if (veggerTemp > 20 && veggerTemp < 29) {
+				this.veggerTempRef.current.style.background = mediumIndication;
+			} else {
+				this.veggerTempRef.current.style.background = warningIndication;
+			}
+
+			if (veggerHumidity > 40 && veggerHumidity < 70) {
+				this.veggerHumidityRef.current.style.background = mediumIndication;
+			} else {
+				this.veggerHumidityRef.current.style.background = warningIndication;
+			}
+
+			this.setState({
 				sVeggerTemp: veggerTemp,
 				sVeggerHumidity: veggerHumidity
 			});
@@ -157,7 +191,6 @@ class App extends Component {
 		// this.setState({
 		// 	mainContent: 'resizeview'
 		// });
-
 	}
 
 	setMainContent = (setValue) => {
@@ -249,13 +282,13 @@ class App extends Component {
 
 												<div className="QuickTemp-Row">
 													<button className="Sensor-Area" onClick={this.ll33}>GG</button>
-													<button className="Temp-Guage" onClick={this.ll33}>{this.state.sFlowerTemp}°C</button>
-													<button className="Humid-Guage" onClick={this.ll33}>{this.state.sFlowerHumidity}%</button>
+													<button className="Temp-Guage" ref={this.flowerTempRef} onClick={this.ll33}>{this.state.sFlowerTemp}°C</button>
+													<button className="Humid-Guage" ref={this.flowerHumidityRef} onClick={this.ll33}>{this.state.sFlowerHumidity}%</button>
 												</div>
 												<div className="QuickTemp-Row">
 													<button className="Sensor-Area" onClick={this.ll33}>VG</button>
-													<button className="Temp-Guage" onClick={this.ll33}>{this.state.sVeggerTemp}°C</button>
-													<button className="Humid-Guage" onClick={this.ll33}>{this.state.sVeggerHumidity}%</button>
+													<button className="Temp-Guage" ref={this.veggerTempRef} onClick={this.ll33}>{this.state.sVeggerTemp}°C</button>
+													<button className="Humid-Guage" ref={this.veggerHumidityRef} onClick={this.ll33}>{this.state.sVeggerHumidity}%</button>
 												</div>
 
 												<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI</button>
