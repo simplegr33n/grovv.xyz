@@ -4,6 +4,7 @@ import Firebase from './config/firebaseConfig.js'
 
 // Assets
 import cornerLogo from './assets/corner-logo.png'
+import menuHandle from './assets/menu-handle.png'
 
 // Auth
 import SignIn from './components/auth/SignIn.js'
@@ -13,7 +14,8 @@ import SignUp from './components/auth/SignUp.js'
 import EditProfile from './components/main-content/EditProfile.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
-const mediumIndication = '#91eebb';
+// QuickBar Indicator Colors (green/orange/red)
+const optimalIndication = '#91eebb';
 const warningIndication = '#FFA500';
 const dangerIndication = '#FF0000';
 
@@ -53,6 +55,8 @@ class App extends Component {
 		this.flowerHumidityRef = React.createRef()
 		this.veggerTempRef = React.createRef()
 		this.veggerHumidityRef = React.createRef()
+
+		this.leftMenuRef = React.createRef()
 	}
 
 	watchSensors = () => {
@@ -86,7 +90,7 @@ class App extends Component {
 
 			// SET safe ranges here 
 			if (flowerTemp > 20 && flowerTemp < 27) {
-				this.flowerTempRef.current.style.background = mediumIndication;
+				this.flowerTempRef.current.style.background = optimalIndication;
 			} else if (flowerTemp < 19 || flowerTemp > 28) {
 				this.flowerTempRef.current.style.background = dangerIndication;
 			} else {
@@ -94,7 +98,7 @@ class App extends Component {
 			}
 
 			if (flowerHumidity > 30 && flowerHumidity < 43) {
-				this.flowerHumidityRef.current.style.background = mediumIndication;
+				this.flowerHumidityRef.current.style.background = optimalIndication;
 			} else if (flowerHumidity < 27 || flowerHumidity > 45) {
 				this.flowerHumidityRef.current.style.background = dangerIndication;
 			} else {
@@ -123,7 +127,7 @@ class App extends Component {
 
 			// SET safe ranges here 
 			if (veggerTemp > 22 && veggerTemp < 29) {
-				this.veggerTempRef.current.style.background = mediumIndication;
+				this.veggerTempRef.current.style.background = optimalIndication;
 			} else if (veggerTemp < 20 || veggerTemp > 30) {
 				this.veggerTempRef.current.style.background = dangerIndication;
 			} else {
@@ -131,7 +135,7 @@ class App extends Component {
 			}
 
 			if (veggerHumidity > 40 && veggerHumidity < 80) {
-				this.veggerHumidityRef.current.style.background = mediumIndication;
+				this.veggerHumidityRef.current.style.background = optimalIndication;
 			} else if (veggerHumidity < 35 || veggerHumidity > 85) {
 				this.veggerHumidityRef.current.style.background = dangerIndication;
 			} else {
@@ -200,6 +204,16 @@ class App extends Component {
 		// this.setState({
 		// 	mainContent: 'resizeview'
 		// });
+	}
+
+	handleMenuHandle = () => {
+		console.log("Yup...pressed.")
+
+		if (this.leftMenuRef.current.style.left !== "-240px") {
+			this.leftMenuRef.current.style.left = '-240px';
+		} else {
+			this.leftMenuRef.current.style.left = '0';
+		}
 	}
 
 	setMainContent = (setValue) => {
@@ -273,44 +287,44 @@ class App extends Component {
 				<header className="App-body">
 					<div id="App-Inner-Body">
 						<div id="App-Body-Content">
-							<div id="Main-Left">
-								<div id="Home-Div">
-									<img src={cornerLogo} className="Grovv-logo" alt="grovv logo" />
+							<div id="Main-Left-Wrapper" ref={this.leftMenuRef}>
+								<div id="Main-Left">
+									<div id="Home-Div">
+										<img src={cornerLogo} id="Grovv-Logo" alt="grovv logo" />
+									</div>
+
+									{(() => {
+										if (this.state.UID) {
+											return (
+												<div id="Main-Left-Menu">
+
+													<div id="Footer-Btns">
+														<button id="Profile-Btn" onClick={this.openEditProfile}>Profile</button>
+														<button id="Logout-Btn" onClick={this.handleSignOut}>Logout</button>
+													</div>
+
+
+													<div className="QuickTemp-Row">
+														<button className="Grow-Area-Btn" onClick={this.openLiveCam}>GG <span role="img" aria-label="live cam">&#128250;</span></button>
+														<button className="Temp-Gauge-Btn" onClick={this.openPlotly} ref={this.flowerTempRef}>{this.state.sFlowerTemp}°C</button>
+														<button className="Humid-Gauge-Btn" onClick={this.openPlotly} ref={this.flowerHumidityRef}>{this.state.sFlowerHumidity}%</button>
+													</div>
+													<div className="QuickTemp-Row">
+														<button className="Grow-Area-Btn" onClick={this.openVeggerLiveCam}>VG <span role="img" aria-label="live cam">&#128250;</span></button>
+														<button className="Temp-Gauge-Btn" onClick={this.openVeggerPlotly} ref={this.veggerTempRef}>{this.state.sVeggerTemp}°C</button>
+														<button className="Humid-Gauge-Btn" onClick={this.openVeggerPlotly} ref={this.veggerHumidityRef}>{this.state.sVeggerHumidity}%</button>
+													</div>
+
+													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI</button>
+
+												</div>
+											);
+										}
+									})()}
 								</div>
-
-								{(() => {
-									if (this.state.UID) {
-										return (
-											<div id="Main-Left-Menu">
-
-												<div id="Footer-Btns">
-													<button id="Profile-Btn" onClick={this.openEditProfile}>Profile</button>
-													<button id="Logout-Btn" onClick={this.handleSignOut}>Logout</button>
-												</div>
-
-
-												<div className="QuickTemp-Row">
-													<button className="Sensor-Area" onClick={this.ll33}>GG</button>
-													<button className="Temp-Guage" ref={this.flowerTempRef} onClick={this.ll33}>{this.state.sFlowerTemp}°C</button>
-													<button className="Humid-Guage" ref={this.flowerHumidityRef} onClick={this.ll33}>{this.state.sFlowerHumidity}%</button>
-												</div>
-												<div className="QuickTemp-Row">
-													<button className="Sensor-Area" onClick={this.ll33}>VG</button>
-													<button className="Temp-Guage" ref={this.veggerTempRef} onClick={this.ll33}>{this.state.sVeggerTemp}°C</button>
-													<button className="Humid-Guage" ref={this.veggerHumidityRef} onClick={this.ll33}>{this.state.sVeggerHumidity}%</button>
-												</div>
-
-												<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI</button>
-												<button className="Left-Menu-Btn" onClick={this.openLiveCam}>GanjaGrove Live</button>
-												<button className="Left-Menu-Btn" onClick={this.openPlotly}>GanjaGrove Plotly</button>
-												<button className="Left-Menu-Btn" onClick={this.openVeggerLiveCam}>Vegger Live</button>
-												<button className="Left-Menu-Btn" onClick={this.openVeggerPlotly}>Vegger Plotly</button>
-
-
-											</div>
-										);
-									}
-								})()}
+								<div onClick={this.handleMenuHandle}>
+									<img src={menuHandle} id="Menu-Handle" alt="menu handle" />
+								</div>
 							</div>
 							{(() => {
 								if (this.state.UID) {

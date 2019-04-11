@@ -3,7 +3,7 @@
   text-align: center;
 }
 
-.Grovv-logo {
+#Grovv-Logo {
   pointer-events: none;
   width: auto;
   width: 100%;
@@ -58,21 +58,26 @@
 #App-Body-Content {
   display: flex;
   flex-direction: row;
-  margin-left: 240px;
   height: 100%;
+  z-index: 0;
 }
 
 #App-Inner-Body {
   width: 100vw;
 }
 
+#Main-Left-Wrapper {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  z-index: 100;
+}
+
 #Main-Left {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 240px;
-  position: fixed;
-  z-index: 1;
+  z-index: 100;
   top: 0;
   left: 0;
   background-color: rgb(31, 30, 30);
@@ -82,11 +87,17 @@
 #Main-Left-Menu {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 240px;
   z-index: 1;
   background-color: #6c8a66;
   overflow-x: hidden;
+}
+
+#Menu-Handle {
+  height: 80px;
+  margin-top: 21px;
+  z-index: 100;
+  position: relative;
 }
 
 .Left-Menu-Btn {
@@ -107,9 +118,36 @@
   background: #7899a0;
 }
 
-.Sensor-Area {
-  background: #91b4bd;
+
+.Temp-Gauge-Btn {
+  background: #91eebb;
   font-size: 18px;
+  font-weight: bold;
+  border: none;
+  text-align: center;
+  width: 80px;
+  height: 24px;
+  margin-left: 4px;
+}
+
+.Humid-Gauge-Btn {
+  background: #91eebb;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  text-align: center;
+  width: 80px;
+  height: 24px;
+  margin-left: 4px;
+}
+
+.Humid-Gauge-Btn:hover {
+  background: #eaebb4;
+}
+
+.Grow-Area-Btn {
+  background: #91b4bd;
+  font-size: 16px;
   font-weight: bold;
   border: none;
   text-align: center;
@@ -117,26 +155,15 @@
   height: 24px;
   /* margin-left: 4px; */
 }
-.Temp-Guage {
-  background: #91eebb;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  width: 80px;
-  height: 24px;
-  margin-left: 4px;
+
+.Grow-Area-Btn:hover {
+  background: #eaebb4;
 }
-.Humid-Guage{
-  background: #91eebb;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  width: 80px;
-  height: 24px;
-  margin-left: 4px;
+
+.Grow-Area-Btn:active {
+  background: #a4ccd6;
 }
+
 
 #Profile-Btn {
   background: #91bda8;
@@ -194,7 +221,7 @@
 
 .Site-View-Update {
   overflow: auto;
-  width: calc(100% - 240px);
+  /* width: calc(100% - 240px); */
   height: 100%;
   position: fixed;
 }
