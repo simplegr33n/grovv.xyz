@@ -64,29 +64,68 @@ class App extends Component {
 		var ref = this.firebase.db.ref().child('sensor_data')
 
 		ref.child("flower").limitToLast(1).on('child_added', (snapshot) => {
-			console.log("new flower data key: " + snapshot.key);
-			this.followFlower(snapshot.key);
+			console.log("new flower year data key: " + snapshot.key);
+			this.watchFlowerYear(snapshot.key);
 		}, function (errorObject) {
 			console.log("sensorwatch flower failed: " + errorObject.code);
 		});
 
 		ref.child("vegger").limitToLast(1).on('child_added', (snapshot) => {
-			console.log("new vegger data key: " + snapshot.key);
-			this.followVegger(snapshot.key);
+			console.log("new vegger year data key: " + snapshot.key);
+			this.watchVeggerYear(snapshot.key);
 		}, function (errorObject) {
 			console.log("sensorwatch vegger failed: " + errorObject.code);
 		});
 	}
 
-	followFlower = (key) => {
-		// Flower data in firebase
-		var ref = this.firebase.db.ref().child('sensor_data').child('flower').child(key)
+	watchFlowerYear = (year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('flower')
 
-		ref.on('child_added', (snapshot) => {
+		ref.child(year).limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new flower month data key: " + snapshot.key);
+			this.watchFlowerMonth(snapshot.key, year);
+		}, function (errorObject) {
+			console.log("sensorwatch flower failed: " + errorObject.code);
+		});
+
+	}
+
+	watchFlowerMonth = (month, year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('flower')
+
+		ref.child(year).child(month).limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new flower day data key: " + snapshot.key);
+			this.watchFlowerDay(snapshot.key, month, year);
+		}, function (errorObject) {
+			console.log("sensorwatch flower failed: " + errorObject.code);
+		});
+
+	}
+
+	watchFlowerDay = (day, month, year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('flower')
+
+		ref.child(year).child(month).child(day).limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new flower hour data key: " + snapshot.key);
+			this.watchFlowerHour(snapshot.key, day, month, year);
+		}, function (errorObject) {
+			console.log("sensorwatch flower failed: " + errorObject.code);
+		});
+
+	}
+
+	watchFlowerHour = (hour, day, month, year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('flower')
+
+		ref.child(year).child(month).child(day).child(hour).on('child_added', (snapshot) => {
 			let flowerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
 			let flowerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
 
-			// console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
+			 console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
 
 			// SET safe ranges here 
 			if (flowerTemp > 20 && flowerTemp < 27) {
@@ -111,19 +150,59 @@ class App extends Component {
 			});
 
 		}, function (errorObject) {
-			console.log("follow flower failed: " + errorObject.code);
+			console.log("follow flower hour failed: " + errorObject.code);
 		});
+
 	}
 
-	followVegger = (key) => {
-		// Vegger data in firebase
-		var ref = this.firebase.db.ref().child('sensor_data').child('vegger').child(key)
+	watchVeggerYear = (year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('vegger')
 
-		ref.on('child_added', (snapshot) => {
+		ref.child(year).limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new vegger month data key: " + snapshot.key);
+			this.watchVeggerMonth(snapshot.key, year);
+		}, function (errorObject) {
+			console.log("sensorwatch flower failed: " + errorObject.code);
+		});
+
+	}
+
+	watchVeggerMonth = (month, year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('vegger')
+
+		ref.child(year).child(month).limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new vegger day data key: " + snapshot.key);
+			this.watchVeggerDay(snapshot.key, month, year);
+		}, function (errorObject) {
+			console.log("sensorwatch flower failed: " + errorObject.code);
+		});
+
+	}
+
+	watchVeggerDay = (day, month, year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('vegger')
+
+		ref.child(year).child(month).child(day).limitToLast(1).on('child_added', (snapshot) => {
+			console.log("new vegger hour data key: " + snapshot.key);
+			this.watchVeggerHour(snapshot.key, day, month, year);
+		}, function (errorObject) {
+			console.log("sensorwatch vegger failed: " + errorObject.code);
+		});
+
+	}
+
+	watchVeggerHour = (hour, day, month, year) => {
+		// Sensor data in firebase
+		var ref = this.firebase.db.ref().child('sensor_data').child('vegger')
+
+		ref.child(year).child(month).child(day).child(hour).on('child_added', (snapshot) => {
 			let veggerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
 			let veggerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
 
-			// console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
+			 console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
 
 			// SET safe ranges here 
 			if (veggerTemp > 22 && veggerTemp < 29) {
