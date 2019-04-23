@@ -12,6 +12,7 @@ import SignUp from './components/auth/SignUp.js'
 
 // Main Content
 import EditProfile from './components/main-content/EditProfile.js'
+import Chart from './components/main-content/Chart.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 // QuickBar Indicator Colors (green/orange/red)
@@ -24,7 +25,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, editprofile, etc.
+			mainContent: 'signin', // signin, signup, main, editprofile, chart, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
@@ -359,6 +360,15 @@ class App extends Component {
 		}
 	}
 
+	openChart = () => {
+		if (this.state.mainContent !== 'chart') {
+			this.setState({ mainContent: 'chart' });
+		}
+	}
+
+	editChart = () => {
+			window.open('https://docs.google.com/spreadsheets/d/1i7EDfBIwj4eYU2LxyS02YwDDeNROcdgXjROKfzCtp60/edit?usp=sharing', 'sharer', 'toolbar=0,status=0,width=548,height=325');
+	}
 
 	render() {
 		return (
@@ -395,7 +405,10 @@ class App extends Component {
 													</div>
 
 													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI</button>
-
+													<div id="Left-Chart-Btns">
+														<button className="EditChart-Menu-Btn" onClick={this.editChart}>EDIT CHART</button>
+														<button className="Left-Menu-Btn" onClick={this.openChart}>CHART</button>
+													</div>
 												</div>
 											);
 										}
@@ -412,6 +425,8 @@ class App extends Component {
 											return <EditProfile UID={this.state.UID} username={this.state.username} />;
 										case 'resizeview':
 											return <ResizeDraggableView urls={this.state.urls} />
+										case 'chart':
+											return <Chart />
 										case 'maincontent':
 											return (
 												<div id="Main-Content">

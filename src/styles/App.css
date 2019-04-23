@@ -108,6 +108,7 @@
   border: none;
   height: 67px;
   margin-bottom: 2px;
+  flex: 1;
 }
 
 .Left-Menu-Btn:hover {
@@ -265,4 +266,40 @@
 
 #goto-signin-button {
 
+}
+
+#Left-Chart-Btns {
+  display: flex;
+}
+
+.EditChart-Menu-Btn {
+  background: #d6da20;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: right;
+  margin-right: 2px;
+  border: none;
+  height: 67px;
+  margin-bottom: 2px;
+  flex: 0.5;
+}
+
+.EditChart-Menu-Btn:hover {
+  background: #34b13a;
+}
+
+.EditChart-Menu-Btn:active {
+  background: #cdeeb2;
+}
+
+#Chart-Page {
+  margin-left: 200px;
+  margin-right: 200px;
+  width: 100%;
+  height: 100%;
+}
+
+#Food-Chart {
+  width: 100%;
+  height: 100%;
 }
