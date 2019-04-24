@@ -375,6 +375,8 @@ class App extends Component {
 		if (this.state.mainContent !== 'config') {
 			this.setState({ mainContent: 'config' });
 		}
+
+		
 	}
 
 	render() {

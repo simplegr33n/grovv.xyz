@@ -304,11 +304,100 @@
   height: 100%;
 }
 
+/* Config Page */
+
 #Config-Page {
-  background: #FFFFFF;
+  background: rgb(28, 116, 28);
   color: #000000;
+  font-size: 18px;
+  font-weight: bolder;
   margin-left: 200px;
   margin-right: 200px;
   width: 100%;
   height: 100%;
+  align-content: center;
+  text-align: center;
+}
+
+#Config-Temp-Field {
+  padding: 2px;
+  font-size: 14px;
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #e66f2a;
+  margin: 20px;
+}
+
+#Config-Temp-Min-Max {
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#Config-Fan-Min-Max {
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+#Config-Humidity-Field {
+  margin: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #2a82e6;
+}
+
+#Config-Humidity-Min-Max {
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#Config-Humidifier-Min-Max {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+#SAVE-CONFIG-BTN {
+  background-color: #e7f707;
+  margin: 40px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  user-select: none;
+}
+
+#SAVE-CONFIG-BTN:hover {
+  background-color: #45cc4b;
+
+}
+
+#SAVE-CONFIG-BTN:active {
+  background-color: #6deb73;
+
+}
+
+.Config-Input {
+  max-width: 60px;
+  margin-bottom: 4px;
 }
