@@ -1,14 +1,14 @@
 {
-  "main.css": "/static/css/main.65ecdbf2.chunk.css",
-  "main.js": "/static/js/main.5995d800.chunk.js",
-  "main.js.map": "/static/js/main.5995d800.chunk.js.map",
+  "main.css": "/static/css/main.e92f859c.chunk.css",
+  "main.js": "/static/js/main.c9ecb4d9.chunk.js",
+  "main.js.map": "/static/js/main.c9ecb4d9.chunk.js.map",
   "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
   "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-  "static/js/2.3a937585.chunk.js": "/static/js/2.3a937585.chunk.js",
-  "static/js/2.3a937585.chunk.js.map": "/static/js/2.3a937585.chunk.js.map",
+  "static/js/2.12da4a68.chunk.js": "/static/js/2.12da4a68.chunk.js",
+  "static/js/2.12da4a68.chunk.js.map": "/static/js/2.12da4a68.chunk.js.map",
   "index.html": "/index.html",
-  "precache-manifest.fd08f63a3c76ea8573103c6cc66018df.js": "/precache-manifest.fd08f63a3c76ea8573103c6cc66018df.js",
+  "precache-manifest.b32e3e14a1f6c8eba3f75813a11a0abd.js": "/precache-manifest.b32e3e14a1f6c8eba3f75813a11a0abd.js",
   "service-worker.js": "/service-worker.js",
-  "static/css/main.65ecdbf2.chunk.css.map": "/static/css/main.65ecdbf2.chunk.css.map",
+  "static/css/main.e92f859c.chunk.css.map": "/static/css/main.e92f859c.chunk.css.map",
   "static/media/corner-logo.png": "/static/media/corner-logo.5ece3763.png"
 }
