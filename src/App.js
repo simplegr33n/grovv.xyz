@@ -13,6 +13,7 @@ import SignUp from './components/auth/SignUp.js'
 // Main Content
 import EditProfile from './components/main-content/EditProfile.js'
 import Chart from './components/main-content/Chart.js'
+import Config from './components/main-content/Config.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 // QuickBar Indicator Colors (green/orange/red)
@@ -25,7 +26,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, editprofile, chart, etc.
+			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
@@ -126,7 +127,7 @@ class App extends Component {
 			let flowerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
 			let flowerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
 
-			 console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
+			console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
 
 			// SET safe ranges here 
 			if (flowerTemp > 20 && flowerTemp < 27) {
@@ -203,7 +204,7 @@ class App extends Component {
 			let veggerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
 			let veggerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
 
-			 console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
+			console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
 
 			// SET safe ranges here 
 			if (veggerTemp > 22 && veggerTemp < 29) {
@@ -367,7 +368,13 @@ class App extends Component {
 	}
 
 	editChart = () => {
-			window.open('https://docs.google.com/spreadsheets/d/1i7EDfBIwj4eYU2LxyS02YwDDeNROcdgXjROKfzCtp60/edit?usp=sharing', 'sharer', 'toolbar=0,status=0,width=548,height=325');
+		window.open('https://docs.google.com/spreadsheets/d/1i7EDfBIwj4eYU2LxyS02YwDDeNROcdgXjROKfzCtp60/edit?usp=sharing', 'sharer', 'toolbar=0,status=0,width=548,height=325');
+	}
+
+	openConfig = () => {
+		if (this.state.mainContent !== 'config') {
+			this.setState({ mainContent: 'config' });
+		}
 	}
 
 	render() {
@@ -376,15 +383,15 @@ class App extends Component {
 				<header className="App-body">
 					<div id="App-Inner-Body">
 						<div id="App-Body-Content">
-							<div id="Main-Left-Wrapper" ref={this.leftMenuRef}>
-								<div id="Main-Left">
-									<div id="Home-Div">
-										<img src={cornerLogo} id="Grovv-Logo" alt="grovv logo" />
-									</div>
 
-									{(() => {
-										if (this.state.UID) {
-											return (
+							{(() => {
+								if (this.state.UID) {
+									return (
+										<div id="Main-Left-Wrapper" ref={this.leftMenuRef}>
+											<div id="Main-Left">
+												<div id="Home-Div">
+													<img src={cornerLogo} id="Grovv-Logo" alt="grovv logo" />
+												</div>
 												<div id="Main-Left-Menu">
 
 													<div id="Footer-Btns">
@@ -406,18 +413,21 @@ class App extends Component {
 
 													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI</button>
 													<div id="Left-Chart-Btns">
-														<button className="EditChart-Menu-Btn" onClick={this.editChart}>EDIT CHART</button>
+														<button className="EditChart-Menu-Btn" onClick={this.editChart}>EDIT &#9998; CHART</button>
 														<button className="Left-Menu-Btn" onClick={this.openChart}>CHART</button>
 													</div>
+													<button className="Left-Menu-Btn" onClick={this.openConfig}>CONFIG &#9881;</button>
 												</div>
-											);
-										}
-									})()}
-								</div>
-								<div onClick={this.handleMenuHandle}>
-									<img src={menuHandle} id="Menu-Handle" alt="menu handle" />
-								</div>
-							</div>
+
+											</div>
+											<div onClick={this.handleMenuHandle}>
+												<img src={menuHandle} id="Menu-Handle" alt="menu handle" />
+											</div>
+										</div>
+									);
+								}
+							})()}
+
 							{(() => {
 								if (this.state.UID) {
 									switch (this.state.mainContent) {
@@ -427,6 +437,8 @@ class App extends Component {
 											return <ResizeDraggableView urls={this.state.urls} />
 										case 'chart':
 											return <Chart />
+										case 'config':
+											return <Config />
 										case 'maincontent':
 											return (
 												<div id="Main-Content">
