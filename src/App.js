@@ -14,7 +14,7 @@ import SignUp from './components/auth/SignUp.js'
 import EditProfile from './components/main-content/EditProfile.js'
 import Chart from './components/main-content/Chart.js'
 import Config from './components/main-content/Config.js'
-import Journal from './components/main-content/Journal.js'
+import Journal from './components/main-content/GrowJournal/GrowJournal.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 // QuickBar Indicator Colors (green/orange/red)
