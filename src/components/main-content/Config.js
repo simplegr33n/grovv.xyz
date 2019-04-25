@@ -11,12 +11,12 @@ class Config extends Component {
         this.state = {
             temp_min: null,
             temp_max: null,
-            temp_hist: null,
+            temp_hyst: null,
             fan_min: null,
             fan_max: null,
             humidity_min: null,
             humidity_max: null,
-            humidity_hist: null,
+            humidity_hyst: null,
             humidifier_min: null,
             humidifier_max: null
         };
@@ -33,12 +33,12 @@ class Config extends Component {
             {
                 temp_min: this.state.temp_min,
                 temp_max: this.state.temp_max,
-                temp_hist: this.state.temp_hist,
+                temp_hyst: this.state.temp_hyst,
                 fan_min: this.state.fan_min,
                 fan_max: this.state.fan_max,
                 humidity_min: this.state.humidity_min,
                 humidity_max: this.state.humidity_max,
-                humidity_hist: this.state.humidity_hist,
+                humidity_hyst: this.state.humidity_hyst,
                 humidifier_min: this.state.humidifier_min,
                 humidifier_max: this.state.humidifier_max
             }
@@ -57,12 +57,12 @@ class Config extends Component {
 			this.setState({
                 temp_min: snapshot.val().temp_min,
                 temp_max: snapshot.val().temp_max,
-                temp_hist: snapshot.val().temp_hist,
+                temp_hyst: snapshot.val().temp_hyst,
                 fan_min: snapshot.val().fan_min,
                 fan_max: snapshot.val().fan_max,
                 humidity_min: snapshot.val().humidity_min,
                 humidity_max: snapshot.val().humidity_max,
-                humidity_hist: snapshot.val().humidity_hist,
+                humidity_hyst: snapshot.val().humidity_hyst,
                 humidifier_min: snapshot.val().humidifier_min,
                 humidifier_max: snapshot.val().humidifier_max
 			});
@@ -80,8 +80,8 @@ class Config extends Component {
         this.setState({ temp_max: event.target.value });
     }
 
-    handleTempHistChange = (event) => {
-        this.setState({ temp_hist: event.target.value });
+    handleTempHystChange = (event) => {
+        this.setState({ temp_hyst: event.target.value });
     }
 
     handleFanMinChange = (event) => {
@@ -100,8 +100,8 @@ class Config extends Component {
         this.setState({ humidity_max: event.target.value });
     }
 
-    handleHumidityHistChange = (event) => {
-        this.setState({ humidity_hist: event.target.value });
+    handleHumidityHystChange = (event) => {
+        this.setState({ humidity_hyst: event.target.value });
     }
 
     handleHumidifierMinChange = (event) => {
@@ -130,8 +130,8 @@ class Config extends Component {
                             <input type="number" className="Config-Input" id="temp-max" value={this.state.temp_max} onChange={this.handleTempMaxChange}/>°C
                         </div>
                         <div>
-                            Hist:
-                            <input type="number" className="Config-Input" id="temp-hist" value={this.state.temp_hist} onChange={this.handleTempHistChange}/>Δ°C
+                            Hyst:
+                            <input type="number" className="Config-Input" id="temp-hyst" value={this.state.temp_hyst} onChange={this.handleTempHystChange}/>Δ°C
                         </div>
                     </div>
                     <h3>FAN POWER</h3>
@@ -160,8 +160,8 @@ class Config extends Component {
                             <input type="number" className="Config-Input" id="humidity-max" value={this.state.humidity_max} onChange={this.handleHumidityMaxChange}/>% R.H.
                         </div>
                         <div>
-                            Hist:
-                            <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hist} onChange={this.handleHumidityHistChange}/>Δ % R.H.
+                            Hyst:
+                            <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hyst} onChange={this.handleHumidityHystChange}/>Δ % R.H.
                         </div>
                     </div>
                     <h3>HUMIDIFIER POWER</h3>
