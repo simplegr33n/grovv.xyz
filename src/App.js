@@ -14,6 +14,7 @@ import SignUp from './components/auth/SignUp.js'
 import EditProfile from './components/main-content/EditProfile.js'
 import Chart from './components/main-content/Chart.js'
 import Config from './components/main-content/Config.js'
+import Journal from './components/main-content/Journal.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 // QuickBar Indicator Colors (green/orange/red)
@@ -26,7 +27,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, etc.
+			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
@@ -257,7 +258,7 @@ class App extends Component {
 				URL_vegger_livecam: snapshot.val().vegger_livecam,
 				URL_vegger_plotly: snapshot.val().vegger_plotly,
 				urls: snapshot.val(),
-				mainContent: 'resizeview'
+				//mainContent: 'journal'
 			});
 		}, function (errorObject) {
 			console.log("The url read failed: " + errorObject.code);
@@ -374,9 +375,13 @@ class App extends Component {
 	openConfig = () => {
 		if (this.state.mainContent !== 'config') {
 			this.setState({ mainContent: 'config' });
-		}
+		}	
+	}
 
-		
+	openJournal = () => {
+		if (this.state.mainContent !== 'journal') {
+			this.setState({ mainContent: 'journal' });
+		}	
 	}
 
 	render() {
@@ -414,6 +419,7 @@ class App extends Component {
 													</div>
 
 													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI</button>
+													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNAL &#3313;</button>
 													<div id="Left-Chart-Btns">
 														<button className="EditChart-Menu-Btn" onClick={this.editChart}>EDIT &#9998; CHART</button>
 														<button className="Left-Menu-Btn" onClick={this.openChart}>CHART</button>
@@ -437,6 +443,8 @@ class App extends Component {
 											return <EditProfile UID={this.state.UID} username={this.state.username} />;
 										case 'resizeview':
 											return <ResizeDraggableView urls={this.state.urls} />
+										case 'journal':
+											return <Journal />
 										case 'chart':
 											return <Chart />
 										case 'config':
@@ -451,7 +459,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-										// return <ResizeDraggableView urls={this.state.urls} />
+											return <Journal />
 									}
 								} else {
 									switch (this.state.mainContent) {
