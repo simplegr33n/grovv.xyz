@@ -1,457 +1,644 @@
 /* App's static wrapper */
+
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 #Grovv-Logo {
-  pointer-events: none;
-  width: auto;
-  width: 100%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+    pointer-events: none;
+    width: auto;
+    width: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .App-body {
-  background-color: #5a5252;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: row;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #5a5252;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 #App-Header {
-  position: fixed;
-  overflow: hidden;
-  top: 0;
-  height: 100px;
-  width: inherit;
-  background-color: #317d92;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    height: 100px;
+    width: inherit;
+    background-color: #317d92;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 #Footer-Btns {
-  /* padding-top: 2px; */
-  position: absolute;
-  padding-bottom: 2px;
-  left: 64px;
-  top: 70px;
-  display: flex;
-  justify-content: flex-end;
+    /* padding-top: 2px; */
+    position: absolute;
+    padding-bottom: 2px;
+    left: 64px;
+    top: 70px;
+    display: flex;
+    justify-content: flex-end;
 }
 
-.QuickTemp-Row{
-  /* padding-top: 2px; */
-  padding-bottom: 2px;
-  display: flex;
-  justify-content: flex-end;
+.QuickTemp-Row {
+    /* padding-top: 2px; */
+    padding-bottom: 2px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 #Home-Div {
-  height: 100px;
-  background-color: #317d92;
+    height: 100px;
+    background-color: #317d92;
 }
 
 #App-Body-Content {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  z-index: 0;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    z-index: 0;
 }
 
 #App-Inner-Body {
-  width: 100vw;
+    width: 100vw;
 }
 
 #Main-Left-Wrapper {
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  z-index: 100;
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    z-index: 100;
 }
 
 #Main-Left {
-  display: flex;
-  flex-direction: column;
-  width: 240px;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  background-color: rgb(31, 30, 30);
-  overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background-color: rgb(31, 30, 30);
+    overflow-x: hidden;
 }
 
 #Main-Left-Menu {
-  display: flex;
-  flex-direction: column;
-  width: 240px;
-  z-index: 1;
-  background-color: #6c8a66;
-  overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    z-index: 1;
+    background-color: #6c8a66;
+    overflow-x: hidden;
 }
 
 #Menu-Handle {
-  height: 80px;
-  margin-top: 21px;
-  z-index: 100;
-  position: relative;
+    height: 80px;
+    margin-top: 21px;
+    z-index: 100;
+    position: relative;
 }
 
 .Left-Menu-Btn {
-  background: #496870;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: right;
-  border: none;
-  height: 67px;
-  margin-bottom: 2px;
-  flex: 1;
+    background: #496870;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+    border: none;
+    height: 67px;
+    margin-bottom: 2px;
+    flex: 1;
 }
 
 .Left-Menu-Btn:hover {
-  background: #5c7a81;
+    background: #5c7a81;
 }
 
 .Left-Menu-Btn:active {
-  background: #7899a0;
+    background: #7899a0;
 }
 
-
 .Temp-Gauge-Btn {
-  background: #91eebb;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  width: 80px;
-  height: 24px;
-  margin-left: 4px;
+    background: #91eebb;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    width: 80px;
+    height: 24px;
+    margin-left: 4px;
 }
 
 .Humid-Gauge-Btn {
-  background: #91eebb;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  width: 80px;
-  height: 24px;
-  margin-left: 4px;
+    background: #91eebb;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    width: 80px;
+    height: 24px;
+    margin-left: 4px;
 }
 
 .Humid-Gauge-Btn:hover {
-  background: #eaebb4;
+    background: #eaebb4;
 }
 
 .Grow-Area-Btn {
-  background: #91b4bd;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  width: 80px;
-  height: 24px;
-  /* margin-left: 4px; */
+    background: #91b4bd;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    width: 80px;
+    height: 24px;
+    /* margin-left: 4px; */
 }
 
 .Grow-Area-Btn:hover {
-  background: #eaebb4;
+    background: #eaebb4;
 }
 
 .Grow-Area-Btn:active {
-  background: #a4ccd6;
+    background: #a4ccd6;
 }
 
-
 #Profile-Btn {
-  background: #91bda8;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  width: 80px;
-  height: 24px;
-  margin-left: 4px;
+    background: #91bda8;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    width: 80px;
+    height: 24px;
+    margin-left: 4px;
 }
 
 #Profile-Btn:active {
-  background: #90bfe6;
+    background: #90bfe6;
 }
 
 #Profile-Btn:hover {
-  background: #76ad65;
+    background: #76ad65;
 }
 
 #Logout-Btn {
-  background: #91bda8;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  text-align: center;
-  width: 80px;
-  height: 24px;
-  margin-left: 4px;
+    background: #91bda8;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    text-align: center;
+    width: 80px;
+    height: 24px;
+    margin-left: 4px;
 }
 
 #Logout-Btn:active {
-  background: #90bfe6;
+    background: #90bfe6;
 }
 
 #Logout-Btn:hover {
-  background: #76ad65;
+    background: #76ad65;
 }
 
-
 #Main-Content {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
+
 /* Website view  */
+
 .Site-View {
-  overflow: auto;
+    overflow: auto;
 }
 
 .Site-View-Update {
-  overflow: auto;
-  /* width: calc(100% - 240px); */
-  height: 100%;
-  position: fixed;
+    overflow: auto;
+    /* width: calc(100% - 240px); */
+    height: 100%;
+    position: fixed;
 }
-
 
 
 /* Auth */
+
 #signin-div {
-  background-color: #94bbce;
-  margin: 6px;
-  padding: 16px;
-  color: #1d1b1b;
+    background-color: #94bbce;
+    margin: 6px;
+    padding: 16px;
+    color: #1d1b1b;
 }
 
 #signup-div {
-  background-color: #8acea6;
-  margin: 6px;
-  padding: 16px;
-  color: #1d1b1b;
+    background-color: #8acea6;
+    margin: 6px;
+    padding: 16px;
+    color: #1d1b1b;
 }
 
-#signin-username {
+#signin-username {}
 
-}
+#signup-username {}
 
-#signup-username {
+#submit-signin-btn {}
 
-}
+#submit-signup-btn {}
 
-#submit-signin-btn {
+#goto-signup-button {}
 
-}
-
-#submit-signup-btn {
-
-}
-
-#goto-signup-button {
-
-}
-
-#goto-signin-button {
-
-}
+#goto-signin-button {}
 
 #Left-Chart-Btns {
-  display: flex;
+    display: flex;
 }
 
 .EditChart-Menu-Btn {
-  background: #d6da20;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: right;
-  margin-right: 2px;
-  border: none;
-  height: 67px;
-  margin-bottom: 2px;
-  flex: 0.5;
+    background: #d6da20;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 2px;
+    border: none;
+    height: 67px;
+    margin-bottom: 2px;
+    flex: 0.5;
 }
 
 .EditChart-Menu-Btn:hover {
-  background: #34b13a;
+    background: #34b13a;
 }
 
 .EditChart-Menu-Btn:active {
-  background: #cdeeb2;
+    background: #cdeeb2;
 }
 
 #Chart-Page {
-  margin-left: 200px;
-  margin-right: 200px;
-  width: 100%;
-  height: 100%;
+    margin-left: 200px;
+    margin-right: 200px;
+    width: 100%;
+    height: 100%;
 }
 
 #Food-Chart {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
+
 
 /* Config Page */
 
 #Config-Page {
-  background: rgb(28, 116, 28);
-  color: #000000;
-  font-size: 18px;
-  font-weight: bolder;
-  margin-left: 200px;
-  margin-right: 200px;
-  width: 100%;
-  height: 100%;
-  align-content: center;
-  text-align: center;
+    background: rgb(28, 116, 28);
+    color: #000000;
+    font-size: 18px;
+    font-weight: bolder;
+    margin-left: 200px;
+    margin-right: 200px;
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    text-align: center;
 }
 
 #Config-Temp-Field {
-  padding: 2px;
-  font-size: 14px;
-  font-weight: bold;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #e66f2a;
-  margin: 20px;
+    padding: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #e66f2a;
+    margin: 20px;
 }
 
 #Config-Temp-Min-Max {
-  padding: 2px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 #Config-Fan-Min-Max {
-  padding: 2px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 #Config-Humidity-Field {
-  margin: 20px;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 2px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #2a82e6;
+    margin: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 2px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #2a82e6;
 }
 
 #Config-Humidity-Min-Max {
-  padding: 2px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 #Config-Humidifier-Min-Max {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 #SAVE-CONFIG-BTN {
-  background-color: #e7f707;
-  margin: 40px;
-  padding: 20px;
-  font-size: 18px;
-  font-weight: bold;
-  user-select: none;
+    background-color: #e7f707;
+    margin: 40px;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    user-select: none;
 }
 
 #SAVE-CONFIG-BTN:hover {
-  background-color: #45cc4b;
-
+    background-color: #45cc4b;
 }
 
 #SAVE-CONFIG-BTN:active {
-  background-color: #6deb73;
-
+    background-color: #6deb73;
 }
 
 .Config-Input {
-  max-width: 60px;
-  margin-bottom: 4px;
+    max-width: 60px;
+    margin-bottom: 4px;
 }
+
 
 /* Journal Page */
 
 #Journal-Page {
-  background: rgb(16, 97, 29);
-  color: #000000;
-  font-size: 18px;
-  font-weight: bolder;
-  width: 100%;
-  height: 100%;
-  align-content: center;
-  text-align: center;
+    width: 100%;
+    height: 100%;
 }
 
+#Journal-Main {
+    background: rgb(16, 97, 29);
+    color: #000000;
+    font-size: 18px;
+    font-weight: bolder;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    text-align: center;
+}
 
 #Timeline-Container {
-  width: 95%;
-  height: 140px;
-  position: absolute;
-  left: 2.5%;
-  right: 2.5%;
-  background-color: #45cc4b;
-  bottom: 2.5%;
+    width: 95%;
+    height: 140px;
+    position: absolute;
+    left: 2.5%;
+    right: 2.5%;
+    background-color: #45cc4b;
+    bottom: 2.5%;
 }
 
 #Timeline-Line {
-  width: 95%;
-  height: 6px;
-  position: relative;
-  left: 2.5%;
-  right: 2.5%;
-  background-color: #191466;
-  top: 50%;
+    width: 95%;
+    height: 6px;
+    position: relative;
+    left: 2.5%;
+    right: 2.5%;
+    background-color: #191466;
+    top: 50%;
 }
 
 #Timeline-Add-Dot {
-  height: 25px;
-  width: 25px;
-  background-color: #191466;
-  border-radius: 50%;
-  margin-left: 96%;
-  top: 40%;
-  position: relative;
-  color: #FFFFFF;
-  user-select: none;
+    height: 25px;
+    width: 25px;
+    background-color: #191466;
+    border-radius: 50%;
+    margin-left: 96%;
+    top: 40%;
+    position: relative;
+    color: #FFFFFF;
+    user-select: none;
 }
 
 #Timeline-Add-Dot:hover {
-  background-color: #302a8a;
+    background-color: #302a8a;
 }
 
 #Timeline-Add-Dot:active {
-  background-color: #6962ca;
+    background-color: #6962ca;
+}
+
+
+/* JOURNAL MODAL */
+
+#Journal-Modal-Space {
+    width: 100%;
+    height: 100%;
+    z-index: 9999999;
+    background-color: #000000a9;
+    position: absolute;
+}
+
+#Journal-Edit-Entry-Modal {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 90%;
+    margin: 0 auto;
+    margin-top: 4%;
+    background-color: #29a343;
+    padding: 6px;
+}
+
+.journal-modal-edit-date {
+    display: flex;
+    flex-direction: row;
+}
+
+.modal-date-li {
+    font-size: 16px;
+    color: #fff;
+    background: darkorange;
+    display: block;
+    float: left;
+    padding: 4px;
+    position: relative;
+    text-decoration: none;
+    transition-duration: 0.5s;
+}
+
+.modal-date-li a {
+    color: #fff;
+}
+
+.modal-date-li:hover {
+    background: red;
+    cursor: pointer;
+}
+
+.journal-modal-edit-date {
+    background: darkorange;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+    width: 200px;
+}
+
+.journal-entry-date-dropdown {
+    background: orange;
+    visibility: hidden;
+    opacity: 0;
+    min-width: 5rem;
+    position: absolute;
+    transition: all 0.5s ease;
+    left: 0;
+    display: none;
+}
+
+.date-li {
+    clear: both;
+    width: 100%;
+    font-size: 16px;
+}
+
+.modal-date-li:hover>ul,
+.modal-date-li:focus-within>ul,
+.journal-entry-date-dropdown:hover {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+}
+
+
+#Journal-Edit-Topline {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly
+}
+
+.journal-modal-edit-stage {
+    display: flex;
+    flex-direction: row;
+}
+
+.modal-stage-li {
+    font-size: 16px;
+    color: #fff;
+    background: darkorange;
+    display: block;
+    float: left;
+    padding: 4px;
+    position: relative;
+    text-decoration: none;
+    transition-duration: 0.5s;
+}
+
+.modal-stage-li a {
+    color: #fff;
+}
+
+.modal-stage-li:hover {
+    background: red;
+    cursor: pointer;
+}
+
+.journal-modal-edit-stage {
+    background: darkorange;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+    width: 200px;
+}
+
+.journal-entry-stage-dropdown {
+    background: orange;
+    visibility: hidden;
+    opacity: 0;
+    min-width: 5rem;
+    position: absolute;
+    transition: all 0.5s ease;
+    left: 0;
+    display: none;
+}
+
+.stage-li {
+    clear: both;
+    width: 100%;
+    font-size: 16px;
+}
+
+.modal-stage-li:hover>ul,
+.modal-stage-li:focus-within>ul,
+.journal-entry-stage-dropdown:hover {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+}
+
+.journal-modal-edit-date-container {
+    flex: 1;
+}
+
+.journal-modal-edit-stage-container {
+    flex: 1;
+}    
+
+.journal-modal-edit-title {
+    flex: 1.5;
+}
+
+.journal-modal-edit-body {
+    min-height: 200px;
+    flex: 1;
+}
+
+.journal-add-images-area {
+    background-color: #aaa2a2;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.journal-add-images {
+    background-color: #a7ac6c;
+    width: 100%;
+    min-height: 80px;
+    display: flex;
+    flex-direction: row;
+}
+
+.journal-add-images-btn {
+    min-height: 40px;
+    width: 120px;
+    margin: 2px;
+}
+
+.journal-save-entry-btn {
+    min-height: 60px;
+}
+
+.journal-cancel-btn {
+    min-height: 60px;
 }
