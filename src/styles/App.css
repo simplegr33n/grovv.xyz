@@ -679,12 +679,14 @@
 }
 
 .Journal-Post-View {
-    background-color: #acda43;
+    background-color: rgb(103, 156, 78);
     color: #000;
     flex: 1;
     padding: 20px;
     margin: 5%;
     margin-left: 260px;
+    display: flex;
+    flex-direction: column;
 }
 
 .Journal-Post-Header {
@@ -707,4 +709,11 @@
     width: 100%;
     text-align: left;
     font-size: 18px;
+    flex: 1;
+}
+
+.Journal-Post-Images {
+    width: 100%;
+    height: 180px;
+    background-color: #92b83b;;
 }

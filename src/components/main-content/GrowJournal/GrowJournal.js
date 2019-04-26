@@ -20,7 +20,16 @@ class GrowJournal extends Component {
 
         this.timelineEntries = [];
 
-        this.watchTimeline();
+        //this.watchConfig = this.watchTimeline();
+    }
+
+    componentDidMount() {
+        this._ismounted = true;
+        this.watchConfig = this.watchTimeline();
+    }
+
+    componentWillUnmount() {
+        this._ismounted = false;
     }
 
     watchTimeline = () => {
@@ -96,9 +105,12 @@ class GrowJournal extends Component {
                                 </div>
 
                                 <div className="Journal-Post-Content">
-                               
-                                        {this.state.currentEntry.content}
-                
+                                    {this.state.currentEntry.content}
+                                </div>
+
+                                
+                                <div className="Journal-Post-Images">
+                                    ...images eventually...
                                 </div>
 
                             </div>
