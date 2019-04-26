@@ -416,53 +416,50 @@
 }
 
 #Timeline-Container {
-    width: 95%;
-    height: 140px;
     position: relative;
-    left: 2.5%;
-    right: 2.5%;
-    background-color: #7b817c;
-    bottom: 2.5%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    margin-bottom: 2.5%;
 }
 
 #Timeline-Line {
-    width: 95%;
+    width: 98%;
     height: 6px;
     position: relative;
-    left: 2.5%;
-    right: 2.5%;
-    background-color: #191466;
+    background-color: #ceac16;
     top: 50%;
 }
 
 #Timeline-Spots {
     width: 100%;
     height: 90%;
+    position: absolute;
+    top: -200%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    top: 45%;
+    justify-content: space-between;
 }
 
 #Timeline-Add-Dot {
-    height: 25px;
-    width: 25px;
+    height: 40px;
+    width: 40px;
     background-color: #191466;
     border-radius: 50%;
-    margin-left: 96%;
-    top: 45%;
-    position: absolute;
+    /* margin-left: 96%; */
+    /* top: 15%; */
+    bottom: 6%;
+    position: relative;
     color: #FFFFFF;
     user-select: none;
 }
 
 .Timeline-Dot {
-    height: 25px;
-    width: 25px;
+    height: 33px;
+    width: 33px;
     background-color: #0afc0a;
     border-radius: 50%;
     /* margin-left: 96%; */
-    top: 45%;
+    /* top: 20%; */
     position: relative;
     color: #FFFFFF;
     user-select: none;
