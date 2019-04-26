@@ -107,7 +107,7 @@
     font-weight: bold;
     text-align: right;
     border: none;
-    height: 67px;
+    min-height: 67px;
     margin-bottom: 2px;
     flex: 1;
 }
@@ -281,8 +281,8 @@
 }
 
 #Chart-Page {
-    margin-left: 200px;
-    margin-right: 200px;
+    margin-left: 100px;
+    margin-right: 100px;
     width: 100%;
     height: 100%;
 }
@@ -296,8 +296,8 @@
 /* Config Page */
 
 #Config-Page {
-    background: rgb(28, 116, 28);
-    color: #000000;
+    background: rgb(12, 68, 21);
+    color: #FFF;
     font-size: 18px;
     font-weight: bolder;
     margin-left: 200px;
@@ -318,7 +318,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #e66f2a;
+    color: #000;
+    background-color: #e47c40;
     margin: 20px;
 }
 
@@ -342,6 +343,7 @@
     margin: 20px;
     font-size: 14px;
     font-weight: bold;
+    color: #000;
     padding: 2px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -349,7 +351,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #2a82e6;
+    background-color: #5585bb;
 }
 
 #Config-Humidity-Min-Max {
@@ -368,8 +370,10 @@
 }
 
 #SAVE-CONFIG-BTN {
-    background-color: #e7f707;
-    margin: 40px;
+    background-color: #f1ff34;
+    color: #000;
+    margin-left: 40px;
+    margin-right: 40px;
     padding: 20px;
     font-size: 18px;
     font-weight: bold;
@@ -398,8 +402,8 @@
 }
 
 #Journal-Main {
-    background: rgb(16, 97, 29);
-    color: #000000;
+    background: rgb(12, 68, 21);
+    color: #FFF;
     font-size: 18px;
     font-weight: bolder;
     position: absolute;
@@ -673,7 +677,8 @@
 }
 
 .Journal-Post-View {
-    background-color: #b6e052;
+    background-color: #acda43;
+    color: #000;
     padding: 20px;
     margin: 20px;
 }

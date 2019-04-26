@@ -73,7 +73,7 @@ class GrowJournal extends Component {
 
             <div id="Journal-Page">
                 <div id="Journal-Main">
-
+                    <h1>Grow Journal</h1>
                     {(() => {
                         if (this.state.currentEntry) {
                             return <div className="Journal-Post-View">
@@ -97,7 +97,7 @@ class GrowJournal extends Component {
                             
                                    </div>
                         } else {
-                            return <div> Grow Journal... </div>
+                            return <div/>
                         }
                     })()}
 

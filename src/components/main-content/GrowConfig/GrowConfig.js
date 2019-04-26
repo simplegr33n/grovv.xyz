@@ -9,26 +9,39 @@ class GrowConfig extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            temp_min: null,
-            temp_max: null,
-            temp_hyst: null,
-            fan_min: null,
-            fan_max: null,
-            humidity_min: null,
-            humidity_max: null,
-            humidity_hyst: null,
-            humidifier_min: null,
-            humidifier_max: null
+            temp_min: '',
+            temp_max: '',
+            temp_hyst: '',
+            fan_min: '',
+            fan_max: '',
+            humidity_min: '',
+            humidity_max: '',
+            humidity_hyst: '',
+            humidifier_min: '',
+            humidifier_max: ''
         };
 
         this.firebase = new Firebase()
-        this.watchConfig();
+        //this.watchConfig = this.watchConfig();
     }
+
+    componentDidMount() {
+        this._ismounted = true;
+        this.watchConfig = this.watchConfig();
+    }
+
+    componentWillUnmount() {
+        this._ismounted = false;
+    }
+
+    // componentDidUpdate() {
+    //     this.watchConfig();
+    // }
 
     saveConfig = () => {
         console.log("Saving config... (TODO)")
         var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
-        
+
         ref.set(
             {
                 temp_min: this.state.temp_min,
@@ -47,14 +60,14 @@ class GrowConfig extends Component {
     }
 
     watchConfig = () => {
-		// Sensor data in firebase
-		var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
+        // Sensor data in firebase
+        var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
 
-		ref.on('value', (snapshot) => {
+        ref.on('value', (snapshot) => {
 
             console.log(snapshot.val());
 
-			this.setState({
+            this.setState({
                 temp_min: snapshot.val().temp_min,
                 temp_max: snapshot.val().temp_max,
                 temp_hyst: snapshot.val().temp_hyst,
@@ -65,13 +78,15 @@ class GrowConfig extends Component {
                 humidity_hyst: snapshot.val().humidity_hyst,
                 humidifier_min: snapshot.val().humidifier_min,
                 humidifier_max: snapshot.val().humidifier_max
-			});
+            });
 
-		}, function (errorObject) {
-			console.log("follow config failed: " + errorObject.code);
-		});
+            this.render();
+
+        }, function (errorObject) {
+            console.log("follow config failed: " + errorObject.code);
+        });
     }
-    
+
     handleTempMinChange = (event) => {
         this.setState({ temp_min: event.target.value });
     }
@@ -118,31 +133,32 @@ class GrowConfig extends Component {
         return (
 
             <div id="Config-Page">
+                <h1>Grow Config</h1>
                 <div id="Config-Temp-Field">
                     <h2>TEMPERATURE</h2>
                     <div id="Config-Temp-Min-Max">
                         <div>
                             Min:
-                            <input type="number" className="Config-Input" id="temp-min" value={this.state.temp_min} onChange={this.handleTempMinChange}/>°C
+                            <input type="number" className="Config-Input" id="temp-min" value={this.state.temp_min} onChange={this.handleTempMinChange} />°C
                         </div>
                         <div>
                             Max:
-                            <input type="number" className="Config-Input" id="temp-max" value={this.state.temp_max} onChange={this.handleTempMaxChange}/>°C
+                            <input type="number" className="Config-Input" id="temp-max" value={this.state.temp_max} onChange={this.handleTempMaxChange} />°C
                         </div>
                         <div>
                             Hyst:
-                            <input type="number" className="Config-Input" id="temp-hyst" value={this.state.temp_hyst} onChange={this.handleTempHystChange}/>Δ°C
+                            <input type="number" className="Config-Input" id="temp-hyst" value={this.state.temp_hyst} onChange={this.handleTempHystChange} />Δ°C
                         </div>
                     </div>
                     <h3>FAN POWER</h3>
                     <div id="Config-Fan-Min-Max">
                         <div>
                             Min:
-                            <input type="number" className="Config-Input" id="fan-min" value={this.state.fan_min} onChange={this.handleFanMinChange}/>%
+                            <input type="number" className="Config-Input" id="fan-min" value={this.state.fan_min} onChange={this.handleFanMinChange} />%
                         </div>
                         <div>
                             Max:
-                            <input type="number" className="Config-Input" id="fan-max" value={this.state.fan_max} onChange={this.handleFanMaxChange}/>%
+                            <input type="number" className="Config-Input" id="fan-max" value={this.state.fan_max} onChange={this.handleFanMaxChange} />%
                         </div>
                     </div>
 
@@ -153,26 +169,26 @@ class GrowConfig extends Component {
                     <div id="Config-Humidity-Min-Max">
                         <div>
                             Min:
-                            <input type="number" className="Config-Input" id="humidity-min" value={this.state.humidity_min} onChange={this.handleHumidityMinChange}/>% R.H.
+                            <input type="number" className="Config-Input" id="humidity-min" value={this.state.humidity_min} onChange={this.handleHumidityMinChange} />% R.H.
                         </div>
                         <div>
                             Max:
-                            <input type="number" className="Config-Input" id="humidity-max" value={this.state.humidity_max} onChange={this.handleHumidityMaxChange}/>% R.H.
+                            <input type="number" className="Config-Input" id="humidity-max" value={this.state.humidity_max} onChange={this.handleHumidityMaxChange} />% R.H.
                         </div>
                         <div>
                             Hyst:
-                            <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hyst} onChange={this.handleHumidityHystChange}/>Δ % R.H.
+                            <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hyst} onChange={this.handleHumidityHystChange} />Δ % R.H.
                         </div>
                     </div>
                     <h3>HUMIDIFIER POWER</h3>
                     <div id="Config-Humidifier-Min-Max">
                         <div>
                             Min:
-                            <input type="number" className="Config-Input" id="humidifier-min" value={this.state.humidifier_min} onChange={this.handleHumidifierMinChange}/>%
+                            <input type="number" className="Config-Input" id="humidifier-min" value={this.state.humidifier_min} onChange={this.handleHumidifierMinChange} />%
                         </div>
                         <div>
                             Max:
-                            <input type="number" className="Config-Input" id="humidifier-max" value={this.state.humidifier_max} onChange={this.handleHumidifierMaxChange}/>%
+                            <input type="number" className="Config-Input" id="humidifier-max" value={this.state.humidifier_max} onChange={this.handleHumidifierMaxChange} />%
                         </div>
                     </div>
 
