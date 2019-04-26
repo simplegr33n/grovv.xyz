@@ -124,18 +124,14 @@ class GrowJournal extends Component {
                     })()}
 
                     <div id="Timeline-Container">
-                        {/* <div id="Timeline-Line" /> */}
                         <div id="Timeline-Line" />
                         {/* Generate dots from firebase entries... */}
                         <div id="Timeline-Spots">
-                            
-                            {renderedTimeline}
-                            <button id="Timeline-Add-Dot" onClick={this.addTimelineEntry}>
-                            +
-                            </button>
-                        </div>
-                   
 
+                            {renderedTimeline}
+
+                            <button id="Timeline-Add-Dot" onClick={this.addTimelineEntry}>+</button>
+                        </div>
                     </div>
                 </div>
 

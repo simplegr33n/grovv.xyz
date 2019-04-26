@@ -40,21 +40,29 @@ class JournalAddEditModal extends Component {
         }
 
         // Journal data in firebase // TODO scalable.
-		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
+        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
 
         ref.push({
-            'title':this.state.title, 
+            'title': this.state.title,
             'content': this.state.content,
-            'grow_state': 'veg', 
-            'datetime_post': this.date.getTime(), 
+            'grow_state': 'veg',
+            'datetime_post': this.date.getTime(),
             'datetime_edit': 'last edit datetime',
             'datetime_true': this.date.getTime(),
-            'images': {'image1':{'url': 'donkey.jpg', 'thumbnail': 'donkey_thmb.jpg'}}})
+            'images': { 'image1': { 'url': 'donkey.jpg', 'thumbnail': 'donkey_thmb.jpg' } }
+        })
 
         console.log('pushed a new journal entry')
 
         this.props.closeModal("main");
     }
+
+    uploadPhotos() {
+
+    }
+
+
+    
 
     render() {
         return (
@@ -62,7 +70,7 @@ class JournalAddEditModal extends Component {
                 <div id="Journal-Edit-Entry-Modal">
                     <div id="Journal-Edit-Topline">
                         {/* TITLE INPUT  */}
-                        <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange}/>
+                        <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange} />
                         {/* DATE CONTAINER  */}
                         <div className="journal-modal-edit-date-container">
                             <ul className="journal-modal-edit-date">
@@ -170,13 +178,13 @@ class JournalAddEditModal extends Component {
 
                     </div>
 
-                    <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange}/>
+                    <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange} />
 
                     <div className="journal-add-images-area">
                         <button className="journal-add-images-btn">Add Images <span role="img" aria-label="camera">&#x1f4f7;</span></button>
-                        <div className="journal-add-images">
+                        <input type="file" accept="image/*" className="journal-add-images" />
 
-                        </div>
+
                     </div>
 
                     <button className="journal-cancel-btn" onClick={this.closeModal}>Cancel</button>

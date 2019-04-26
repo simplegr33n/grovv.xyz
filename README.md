@@ -29,3 +29,4 @@ Create optimized build and push to 'gh-pages' branch for deployment.
 ## Dependencies
 ### react-rnd
 * https://github.com/bokuweb/react-rnd
+* https://github.com/react-dropzone/react-dropzone
