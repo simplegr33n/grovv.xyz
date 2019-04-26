@@ -415,7 +415,7 @@
     position: absolute;
     left: 2.5%;
     right: 2.5%;
-    background-color: #45cc4b;
+    background-color: #7b817c;
     bottom: 2.5%;
 }
 
@@ -429,16 +429,45 @@
     top: 50%;
 }
 
+#Timeline-Spots {
+    width: 100%;
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    top: 45%;
+}
+
 #Timeline-Add-Dot {
     height: 25px;
     width: 25px;
     background-color: #191466;
     border-radius: 50%;
     margin-left: 96%;
-    top: 40%;
+    top: 45%;
+    position: absolute;
+    color: #FFFFFF;
+    user-select: none;
+}
+
+.Timeline-Dot {
+    height: 25px;
+    width: 25px;
+    background-color: #0afc0a;
+    border-radius: 50%;
+    /* margin-left: 96%; */
+    top: 45%;
     position: relative;
     color: #FFFFFF;
     user-select: none;
+}
+
+.Timeline-Dot:hover {
+    background-color: #bbfc0a;
+}
+
+.Timeline-Dot:active {
+    background-color: #aecfae;
 }
 
 #Timeline-Add-Dot:hover {
@@ -641,4 +670,10 @@
 
 .journal-cancel-btn {
     min-height: 60px;
+}
+
+.Journal-Post-View {
+    background-color: #b6e052;
+    padding: 20px;
+    margin: 20px;
 }

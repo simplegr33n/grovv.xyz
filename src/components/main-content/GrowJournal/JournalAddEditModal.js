@@ -51,7 +51,7 @@ class JournalAddEditModal extends Component {
             return;
         }
 
-        // Sensor data in firebase // TODO scalable.
+        // Journal data in firebase // TODO scalable.
 		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
 
         ref.push({
