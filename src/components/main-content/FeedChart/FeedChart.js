@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import '../../styles/App.css';
+import '../../../styles/App.css';
 
 
-class Chart extends Component {
+class FeedChart extends Component {
 
     constructor(props) {
         super(props);
@@ -25,4 +25,4 @@ class Chart extends Component {
     }
 }
 
-export default Chart;
+export default FeedChart;

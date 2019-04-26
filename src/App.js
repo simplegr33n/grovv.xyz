@@ -12,9 +12,9 @@ import SignUp from './components/auth/SignUp.js'
 
 // Main Content
 import EditProfile from './components/main-content/EditProfile.js'
-import Chart from './components/main-content/Chart.js'
-import Config from './components/main-content/Config.js'
-import Journal from './components/main-content/GrowJournal/GrowJournal.js'
+import FeedChart from './components/main-content/FeedChart/FeedChart.js'
+import GrowConfig from './components/main-content/GrowConfig/GrowConfig.js'
+import GrowJournal from './components/main-content/GrowJournal/GrowJournal.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 // QuickBar Indicator Colors (green/orange/red)
@@ -444,11 +444,11 @@ class App extends Component {
 										case 'resizeview':
 											return <ResizeDraggableView urls={this.state.urls} />
 										case 'journal':
-											return <Journal />
+											return <GrowJournal />
 										case 'chart':
-											return <Chart />
+											return <FeedChart />
 										case 'config':
-											return <Config />
+											return <GrowConfig />
 										case 'maincontent':
 											return (
 												<div id="Main-Content">
@@ -459,7 +459,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-											return <Journal />
+											return <GrowJournal />
 									}
 								} else {
 									switch (this.state.mainContent) {

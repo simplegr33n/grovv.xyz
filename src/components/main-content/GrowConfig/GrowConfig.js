@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import '../../styles/App.css';
+import '../../../styles/App.css';
 
-import Firebase from '../../config/firebaseConfig.js'
+import Firebase from '../../../config/firebaseConfig.js'
 
 
-class Config extends Component {
+class GrowConfig extends Component {
 
     constructor(props) {
         super(props);
@@ -187,4 +187,4 @@ class Config extends Component {
     }
 }
 
-export default Config;
+export default GrowConfig;

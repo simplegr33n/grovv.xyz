@@ -9,13 +9,62 @@ class JournalAddEditModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            title: '',
+            content: ''
         };
 
         this.firebase = new Firebase();
+
+        this.date = new Date();
+
+        this.month = new Array();
+        this.month[0] = "January";
+        this.month[1] = "February";
+        this.month[2] = "March";
+        this.month[3] = "April";
+        this.month[4] = "May";
+        this.month[5] = "June";
+        this.month[6] = "July";
+        this.month[7] = "August";
+        this.month[8] = "September";
+        this.month[9] = "October";
+        this.month[10] = "November";
+        this.month[11] = "December";
+
+    }
+
+    handleTitleChange = (event) => {
+        this.setState({ title: event.target.value });
+    }
+
+    handleContentChange = (event) => {
+        this.setState({ content: event.target.value });
     }
 
     closeModal = () => {
+        this.props.closeModal("main");
+    }
+
+    saveEntry = () => {
+        if (this.state.content === '') {
+            alert("Needs content or images!")
+            return;
+        }
+
+        // Sensor data in firebase // TODO scalable.
+		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
+
+        ref.push({
+            'title':this.state.title, 
+            'content': this.state.content,
+            'grow_state': 'veg', 
+            'datetime_post': this.date.getTime(), 
+            'datetime_edit': 'last edit datetime',
+            'datetime_true': this.date.getTime(),
+            'images': {'image1':{'url': 'donkey.jpg', 'thumbnail': 'donkey_thmb.jpg'}}})
+
+        console.log('pushed a new journal entry')
+
         this.props.closeModal("main");
     }
 
@@ -24,10 +73,12 @@ class JournalAddEditModal extends Component {
             <div id="Journal-Modal-Space">
                 <div id="Journal-Edit-Entry-Modal">
                     <div id="Journal-Edit-Topline">
-                        <input className="journal-modal-edit-title" placeholder="enter title..." />
+                        {/* TITLE INPUT  */}
+                        <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange}/>
+                        {/* DATE CONTAINER  */}
                         <div className="journal-modal-edit-date-container">
                             <ul className="journal-modal-edit-date">
-                                <li className="modal-date-li"><a href="#">January</a>
+                                <li className="modal-date-li"><a href="#">{this.month[this.date.getMonth()]}</a>
                                     <ul className="journal-entry-date-dropdown">
                                         <li className="date-li"><a href="#">January</a></li>
                                         <li className="date-li"><a href="#">February</a></li>
@@ -43,7 +94,7 @@ class JournalAddEditModal extends Component {
                                         <li className="date-li"><a href="#">December</a></li>
                                     </ul>
                                 </li>
-                                <li className="modal-date-li"><a href="#">1</a>
+                                <li className="modal-date-li"><a href="#">{this.date.getDate()}</a>
                                     <ul className="journal-entry-date-dropdown">
                                         <li className="date-li"><a href="#">1</a></li>
                                         <li className="date-li"><a href="#">2</a></li>
@@ -83,7 +134,7 @@ class JournalAddEditModal extends Component {
                                         <li className="date-li"><a href="#">2019</a></li>
                                     </ul>
                                 </li>
-                                <li className="modal-date-li"><a href="#">00:00</a>
+                                <li className="modal-date-li"><a href="#">{this.date.getHours()}:{this.date.getMinutes()}</a>
                                     <ul className="journal-entry-date-dropdown">
                                         <li className="date-li"><a href="#">00:00</a></li>
                                         <li className="date-li"><a href="#">01:00</a></li>
@@ -131,7 +182,7 @@ class JournalAddEditModal extends Component {
 
                     </div>
 
-                    <textarea className="journal-modal-edit-body" placeholder="enter body content..." />
+                    <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange}/>
 
                     <div className="journal-add-images-area">
                         <button className="journal-add-images-btn">Add Images &#x1f4f7;</button>
@@ -141,7 +192,7 @@ class JournalAddEditModal extends Component {
                     </div>
 
                     <button className="journal-cancel-btn" onClick={this.closeModal}>Cancel</button>
-                    <button className="journal-save-entry-btn">Save Entry</button>
+                    <button className="journal-save-entry-btn" onClick={this.saveEntry}>Save Entry</button>
 
                 </div>
             </div>
