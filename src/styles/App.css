@@ -711,6 +711,10 @@
 
 .Journal-Post-Images {
     width: 100%;
-    height: 180px;
+    /* height: 180px; */
     background-color: #92b83b;;
+}
+
+.Journal-Entry-Thumbnail {
+    padding: 4px;
 }

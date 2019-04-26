@@ -13,12 +13,14 @@ class GrowJournal extends Component {
         this.state = {
             displayContent: "main",
             currentEntry: null,
-            testContent: ''
+            testContent: '',
+            entryThumbnails: []
         };
 
         this.firebase = new Firebase();
 
         this.timelineEntries = [];
+        // this.entryThumbnails = [];
 
         //this.watchConfig = this.watchTimeline();
     }
@@ -37,6 +39,24 @@ class GrowJournal extends Component {
 
         ref.on('child_added', (snapshot) => {
 
+            // var thumbList = [];
+
+            // console.log(snapshot.child('images').val())
+
+            // snapshot.child('images').forEach(function (childSnapshot) {
+            //     //console.log(childSnapshot.key, JSON.stringify(childSnapshot.val()));
+            //     console.log(childSnapshot.val());
+            //     console.log(childSnapshot.val().url);
+            //     console.log(childSnapshot.val().thumb);
+
+            //     thumbList.push(childSnapshot.val())
+
+            // });
+
+            // this.setState({ entryThumbnails: thumbList });
+
+            this.getThumbs(snapshot.child('images').val());
+
             this.timelineEntries.push(snapshot.val())
 
             this.setState({ currentEntry: snapshot.val() });
@@ -47,6 +67,7 @@ class GrowJournal extends Component {
             console.log("follow journal failed: " + errorObject.code);
         });
     }
+
 
     fillTimeline = () => {
         console.log(this.timelineEntries.length);
@@ -75,11 +96,43 @@ class GrowJournal extends Component {
 
     }
 
+    displayFullImage = (ev) => {
+
+        //let val = ev.target.dataset.value;
+
+        //TODO
+    }
+
+    getThumbs = (thmbObj) => {
+        if (thmbObj === null) {
+            if (this.state.currentEntry === null) {
+                return;
+            } else {
+                thmbObj = this.state.currentEntry.images;
+            }
+        }
+
+        var thumbList = [];
+
+        for (var key in thmbObj) {
+            // skip loop if the property is from prototype
+            if (!thmbObj.hasOwnProperty(key)) continue;
+
+            thumbList.push(thmbObj[key])
+        }
+
+        this.setState({ entryThumbnails: thumbList });
+
+    }
+
     render() {
+
+        var datetimePost = null;
 
         var renderedTimeline = this.timelineEntries.map((item, i) => <button key={i} data-value={item.datetime_post} className="Timeline-Dot" onClick={this.setEntryContent} />)
 
-        var datetimePost = null;
+        var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
+
         if (this.state.currentEntry) {
             datetimePost = new Date(this.state.currentEntry.datetime_post)
         }
@@ -108,10 +161,17 @@ class GrowJournal extends Component {
                                     {this.state.currentEntry.content}
                                 </div>
 
-                                
-                                <div className="Journal-Post-Images">
-                                    ...images eventually...
-                                </div>
+
+                                    {(() => {
+                                        if (renderedThumbnails) {
+                                            return (
+                                                <div className="Journal-Post-Images">
+                                                    {renderedThumbnails}
+                                                </div>
+                                            )
+                                        }
+                                    })()}
+                
 
                             </div>
                         } else {
