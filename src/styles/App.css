@@ -405,6 +405,8 @@
     background: rgb(12, 68, 21);
     color: #FFF;
     font-size: 18px;
+    display: flex;
+    flex-direction: column;
     font-weight: bolder;
     position: absolute;
     width: 100%;
@@ -416,7 +418,7 @@
 #Timeline-Container {
     width: 95%;
     height: 140px;
-    position: absolute;
+    position: relative;
     left: 2.5%;
     right: 2.5%;
     background-color: #7b817c;
@@ -679,6 +681,30 @@
 .Journal-Post-View {
     background-color: #acda43;
     color: #000;
+    flex: 1;
     padding: 20px;
-    margin: 20px;
+    margin: 5%;
+    margin-left: 260px;
+}
+
+.Journal-Post-Header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.Journal-Post-Title {
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.Journal-Post-Date {
+    font-size: 22px;
+    font-style: italic;
+}
+
+.Journal-Post-Content {
+    width: 100%;
+    text-align: left;
+    font-size: 18px;
 }

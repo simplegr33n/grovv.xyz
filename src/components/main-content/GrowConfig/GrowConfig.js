@@ -22,7 +22,6 @@ class GrowConfig extends Component {
         };
 
         this.firebase = new Firebase()
-        //this.watchConfig = this.watchConfig();
     }
 
     componentDidMount() {
@@ -33,10 +32,6 @@ class GrowConfig extends Component {
     componentWillUnmount() {
         this._ismounted = false;
     }
-
-    // componentDidUpdate() {
-    //     this.watchConfig();
-    // }
 
     saveConfig = () => {
         console.log("Saving config... (TODO)")

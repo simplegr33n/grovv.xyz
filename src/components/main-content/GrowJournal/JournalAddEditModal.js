@@ -17,19 +17,7 @@ class JournalAddEditModal extends Component {
 
         this.date = new Date();
 
-        this.month = new Array();
-        this.month[0] = "January";
-        this.month[1] = "February";
-        this.month[2] = "March";
-        this.month[3] = "April";
-        this.month[4] = "May";
-        this.month[5] = "June";
-        this.month[6] = "July";
-        this.month[7] = "August";
-        this.month[8] = "September";
-        this.month[9] = "October";
-        this.month[10] = "November";
-        this.month[11] = "December";
+        this.month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     }
 
@@ -78,89 +66,89 @@ class JournalAddEditModal extends Component {
                         {/* DATE CONTAINER  */}
                         <div className="journal-modal-edit-date-container">
                             <ul className="journal-modal-edit-date">
-                                <li className="modal-date-li"><a href="#">{this.month[this.date.getMonth()]}</a>
+                                <li className="modal-date-li"><div onClick="">{this.month[this.date.getMonth()]}</div>
                                     <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><a href="#">January</a></li>
-                                        <li className="date-li"><a href="#">February</a></li>
-                                        <li className="date-li"><a href="#">March</a></li>
-                                        <li className="date-li"><a href="#">April</a></li>
-                                        <li className="date-li"><a href="#">May</a></li>
-                                        <li className="date-li"><a href="#">June</a></li>
-                                        <li className="date-li"><a href="#">July</a></li>
-                                        <li className="date-li"><a href="#">August</a></li>
-                                        <li className="date-li"><a href="#">September</a></li>
-                                        <li className="date-li"><a href="#">October</a></li>
-                                        <li className="date-li"><a href="#">November</a></li>
-                                        <li className="date-li"><a href="#">December</a></li>
+                                        <li className="date-li"><div onClick="">January</div></li>
+                                        <li className="date-li"><div onClick="">February</div></li>
+                                        <li className="date-li"><div onClick="">March</div></li>
+                                        <li className="date-li"><div onClick="">April</div></li>
+                                        <li className="date-li"><div onClick="">May</div></li>
+                                        <li className="date-li"><div onClick="">June</div></li>
+                                        <li className="date-li"><div onClick="">July</div></li>
+                                        <li className="date-li"><div onClick="">August</div></li>
+                                        <li className="date-li"><div onClick="">September</div></li>
+                                        <li className="date-li"><div onClick="">October</div></li>
+                                        <li className="date-li"><div onClick="">November</div></li>
+                                        <li className="date-li"><div onClick="">December</div></li>
                                     </ul>
                                 </li>
-                                <li className="modal-date-li"><a href="#">{this.date.getDate()}</a>
+                                <li className="modal-date-li"><div onClick="">{this.date.getDate()}</div>
                                     <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><a href="#">1</a></li>
-                                        <li className="date-li"><a href="#">2</a></li>
-                                        <li className="date-li"><a href="#">3</a></li>
-                                        <li className="date-li"><a href="#">4</a></li>
-                                        <li className="date-li"><a href="#">5</a></li>
-                                        <li className="date-li"><a href="#">6</a></li>
-                                        <li className="date-li"><a href="#">7</a></li>
-                                        <li className="date-li"><a href="#">8</a></li>
-                                        <li className="date-li"><a href="#">9</a></li>
-                                        <li className="date-li"><a href="#">10</a></li>
-                                        <li className="date-li"><a href="#">11</a></li>
-                                        <li className="date-li"><a href="#">12</a></li>
-                                        <li className="date-li"><a href="#">13</a></li>
-                                        <li className="date-li"><a href="#">14</a></li>
-                                        <li className="date-li"><a href="#">15</a></li>
-                                        <li className="date-li"><a href="#">16</a></li>
-                                        <li className="date-li"><a href="#">17</a></li>
-                                        <li className="date-li"><a href="#">18</a></li>
-                                        <li className="date-li"><a href="#">19</a></li>
-                                        <li className="date-li"><a href="#">20</a></li>
-                                        <li className="date-li"><a href="#">21</a></li>
-                                        <li className="date-li"><a href="#">22</a></li>
-                                        <li className="date-li"><a href="#">23</a></li>
-                                        <li className="date-li"><a href="#">24</a></li>
-                                        <li className="date-li"><a href="#">25</a></li>
-                                        <li className="date-li"><a href="#">26</a></li>
-                                        <li className="date-li"><a href="#">27</a></li>
-                                        <li className="date-li"><a href="#">28</a></li>
-                                        <li className="date-li"><a href="#">29</a></li>
-                                        <li className="date-li"><a href="#">30</a></li>
-                                        <li className="date-li"><a href="#">31</a></li>
+                                        <li className="date-li"><div onClick="">1</div></li>
+                                        <li className="date-li"><div onClick="">2</div></li>
+                                        <li className="date-li"><div onClick="">3</div></li>
+                                        <li className="date-li"><div onClick="">4</div></li>
+                                        <li className="date-li"><div onClick="">5</div></li>
+                                        <li className="date-li"><div onClick="">6</div></li>
+                                        <li className="date-li"><div onClick="">7</div></li>
+                                        <li className="date-li"><div onClick="">8</div></li>
+                                        <li className="date-li"><div onClick="">9</div></li>
+                                        <li className="date-li"><div onClick="">10</div></li>
+                                        <li className="date-li"><div onClick="">11</div></li>
+                                        <li className="date-li"><div onClick="">12</div></li>
+                                        <li className="date-li"><div onClick="">13</div></li>
+                                        <li className="date-li"><div onClick="">14</div></li>
+                                        <li className="date-li"><div onClick="">15</div></li>
+                                        <li className="date-li"><div onClick="">16</div></li>
+                                        <li className="date-li"><div onClick="">17</div></li>
+                                        <li className="date-li"><div onClick="">18</div></li>
+                                        <li className="date-li"><div onClick="">19</div></li>
+                                        <li className="date-li"><div onClick="">20</div></li>
+                                        <li className="date-li"><div onClick="">21</div></li>
+                                        <li className="date-li"><div onClick="">22</div></li>
+                                        <li className="date-li"><div onClick="">23</div></li>
+                                        <li className="date-li"><div onClick="">24</div></li>
+                                        <li className="date-li"><div onClick="">25</div></li>
+                                        <li className="date-li"><div onClick="">26</div></li>
+                                        <li className="date-li"><div onClick="">27</div></li>
+                                        <li className="date-li"><div onClick="">28</div></li>
+                                        <li className="date-li"><div onClick="">29</div></li>
+                                        <li className="date-li"><div onClick="">30</div></li>
+                                        <li className="date-li"><div onClick="">31</div></li>
                                     </ul>
                                 </li>
-                                <li className="modal-date-li"><a href="#">2019</a>
+                                <li className="modal-date-li"><div onClick="">2019</div>
                                     <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><a href="#">2019</a></li>
+                                        <li className="date-li"><div onClick="">2019</div></li>
                                     </ul>
                                 </li>
-                                <li className="modal-date-li"><a href="#">{this.date.getHours()}:{this.date.getMinutes()}</a>
+                                <li className="modal-date-li"><div onClick="">{this.date.getHours()}:{this.date.getMinutes()}</div>
                                     <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><a href="#">00:00</a></li>
-                                        <li className="date-li"><a href="#">01:00</a></li>
-                                        <li className="date-li"><a href="#">02:00</a></li>
-                                        <li className="date-li"><a href="#">03:00</a></li>
-                                        <li className="date-li"><a href="#">04:00</a></li>
-                                        <li className="date-li"><a href="#">05:00</a></li>
-                                        <li className="date-li"><a href="#">06:00</a></li>
-                                        <li className="date-li"><a href="#">07:00</a></li>
-                                        <li className="date-li"><a href="#">08:00</a></li>
-                                        <li className="date-li"><a href="#">09:00</a></li>
-                                        <li className="date-li"><a href="#">10:00</a></li>
-                                        <li className="date-li"><a href="#">11:00</a></li>
-                                        <li className="date-li"><a href="#">12:00</a></li>
-                                        <li className="date-li"><a href="#">13:00</a></li>
-                                        <li className="date-li"><a href="#">14:00</a></li>
-                                        <li className="date-li"><a href="#">15:00</a></li>
-                                        <li className="date-li"><a href="#">16:00</a></li>
-                                        <li className="date-li"><a href="#">17:00</a></li>
-                                        <li className="date-li"><a href="#">18:00</a></li>
-                                        <li className="date-li"><a href="#">19:00</a></li>
-                                        <li className="date-li"><a href="#">20:00</a></li>
-                                        <li className="date-li"><a href="#">21:00</a></li>
-                                        <li className="date-li"><a href="#">22:00</a></li>
-                                        <li className="date-li"><a href="#">23:00</a></li>
-                                        <li className="date-li"><a href="#">24:00</a></li>
+                                        <li className="date-li"><div onClick="">00:00</div></li>
+                                        <li className="date-li"><div onClick="">01:00</div></li>
+                                        <li className="date-li"><div onClick="">02:00</div></li>
+                                        <li className="date-li"><div onClick="">03:00</div></li>
+                                        <li className="date-li"><div onClick="">04:00</div></li>
+                                        <li className="date-li"><div onClick="">05:00</div></li>
+                                        <li className="date-li"><div onClick="">06:00</div></li>
+                                        <li className="date-li"><div onClick="">07:00</div></li>
+                                        <li className="date-li"><div onClick="">08:00</div></li>
+                                        <li className="date-li"><div onClick="">09:00</div></li>
+                                        <li className="date-li"><div onClick="">10:00</div></li>
+                                        <li className="date-li"><div onClick="">11:00</div></li>
+                                        <li className="date-li"><div onClick="">12:00</div></li>
+                                        <li className="date-li"><div onClick="">13:00</div></li>
+                                        <li className="date-li"><div onClick="">14:00</div></li>
+                                        <li className="date-li"><div onClick="">15:00</div></li>
+                                        <li className="date-li"><div onClick="">16:00</div></li>
+                                        <li className="date-li"><div onClick="">17:00</div></li>
+                                        <li className="date-li"><div onClick="">18:00</div></li>
+                                        <li className="date-li"><div onClick="">19:00</div></li>
+                                        <li className="date-li"><div onClick="">20:00</div></li>
+                                        <li className="date-li"><div onClick="">21:00</div></li>
+                                        <li className="date-li"><div onClick="">22:00</div></li>
+                                        <li className="date-li"><div onClick="">23:00</div></li>
+                                        <li className="date-li"><div onClick="">24:00</div></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -169,12 +157,12 @@ class JournalAddEditModal extends Component {
 
                         <div className="journal-modal-edit-stage-container">
                             <ul className="journal-modal-edit-stage">
-                                <li className="modal-stage-li"><a href="#">Veg</a>
+                                <li className="modal-stage-li"><div onClick="">Veg</div>
                                     <ul className="journal-entry-stage-dropdown">
-                                        <li className="stage-li"><a href="#">Veg</a></li>
-                                        <li className="stage-li"><a href="#">Flower</a></li>
-                                        <li className="stage-li"><a href="#">Seedling</a></li>
-                                        <li className="stage-li"><a href="#">None</a></li>
+                                        <li className="stage-li"><div onClick="">Veg</div></li>
+                                        <li className="stage-li"><div onClick="">Flower</div></li>
+                                        <li className="stage-li"><div onClick="">Seedling</div></li>
+                                        <li className="stage-li"><div onClick="">None</div></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -185,7 +173,7 @@ class JournalAddEditModal extends Component {
                     <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange}/>
 
                     <div className="journal-add-images-area">
-                        <button className="journal-add-images-btn">Add Images &#x1f4f7;</button>
+                        <button className="journal-add-images-btn">Add Images <span role="img" aria-label="camera">&#x1f4f7;</span></button>
                         <div className="journal-add-images">
 
                         </div>

@@ -18,7 +18,7 @@ class GrowJournal extends Component {
 
         this.firebase = new Firebase();
 
-        this.timelineEntries = new Array();
+        this.timelineEntries = [];
 
         this.watchTimeline();
     }
@@ -29,6 +29,8 @@ class GrowJournal extends Component {
         ref.on('child_added', (snapshot) => {
 
             this.timelineEntries.push(snapshot.val())
+
+            this.setState({ currentEntry: snapshot.val() });
 
             this.fillTimeline();
 
@@ -68,6 +70,11 @@ class GrowJournal extends Component {
 
         var renderedTimeline = this.timelineEntries.map((item, i) => <button key={i} data-value={item.datetime_post} className="Timeline-Dot" onClick={this.setEntryContent} />)
 
+        var datetimePost = null;
+        if (this.state.currentEntry) {
+            datetimePost = new Date(this.state.currentEntry.datetime_post)
+        }
+
         return (
 
 
@@ -77,27 +84,30 @@ class GrowJournal extends Component {
                     {(() => {
                         if (this.state.currentEntry) {
                             return <div className="Journal-Post-View">
-                                        <div>
-                                            {this.state.currentEntry.datetime_post} 
-                                        </div>
 
-                                        <div>
-                                            <b>
-                                                <h1>
-                                                    {this.state.currentEntry.title} 
-                                                </h1>
-                                            </b>
-                                        </div>
-                                        
-                                        <div>
-                                            <b>
-                                                {this.state.currentEntry.content} 
-                                            </b>
-                                        </div>
-                            
-                                   </div>
+                                <div className="Journal-Post-Header">
+                                    <div className="Journal-Post-Title">
+                                        {this.state.currentEntry.title}
+                                    </div>
+
+                                    <div className="Journal-Post-Date">
+                                        {datetimePost.toDateString()}
+                                    </div>
+                                </div>
+
+                                <div className="Journal-Post-Content">
+                               
+                                        {this.state.currentEntry.content}
+                
+                                </div>
+
+                            </div>
                         } else {
-                            return <div/>
+                            return (
+                                <div className="Journal-Post-View" >
+                                    Let's get some journal entries...
+                                </div>
+                            )
                         }
                     })()}
 
