@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
+import Dropzone from 'react-dropzone';
+
 import Firebase from '../../../config/firebaseConfig.js'
 
 
@@ -61,8 +63,17 @@ class JournalAddEditModal extends Component {
 
     }
 
-
+    onImageDrop(files) {
+        // this.setState({
+        //   uploadedFile: files[0]
+        // });
     
+        // this.handleImageUpload(files[0]);
+
+        console.log(files);
+      }
+    
+
 
     render() {
         return (
@@ -181,9 +192,24 @@ class JournalAddEditModal extends Component {
                     <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange} />
 
                     <div className="journal-add-images-area">
-                        <button className="journal-add-images-btn">Add Images <span role="img" aria-label="camera">&#x1f4f7;</span></button>
-                        <input type="file" accept="image/*" className="journal-add-images" />
 
+                        <Dropzone
+                            onDrop={this.onImageDrop.bind(this)}
+                            accept="image/*"
+                            multiple={true}>
+                            {({ getRootProps, getInputProps }) => {
+                                return (
+                                    <div
+                                        {...getRootProps()}
+                                    >
+                                        <input {...getInputProps()} />
+                                        {
+                                            <p>Try dropping some images <span role="img" aria-label="camera">&#x1f4f7;</span> here, <br></br>or click to select files to upload.</p>
+                                        }
+                                    </div>
+                                )
+                            }}
+                        </Dropzone>
 
                     </div>
 

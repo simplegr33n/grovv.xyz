@@ -27,6 +27,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 Create optimized build and push to 'gh-pages' branch for deployment.
 
 ## Dependencies
-### react-rnd
+* Firebase Cloud Storage
+* Firebase Cloud Functions (for Thumbnailing: https://github.com/firebase/functions-samples/tree/master/generate-thumbnail)
 * https://github.com/bokuweb/react-rnd
 * https://github.com/react-dropzone/react-dropzone
