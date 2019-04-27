@@ -42,15 +42,6 @@ class JournalAddEditModal extends Component {
             return;
         }
 
-        var imageIndex = 0;
-        var imageObj = [];
-        this.state.images.forEach((image) => {
-
-            imageObj.push({imageIndex : {image}})
-            imageIndex++;
-
-        })
-
         // Journal data in firebase // TODO scalable.
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
 

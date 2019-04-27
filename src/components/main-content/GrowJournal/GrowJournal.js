@@ -79,11 +79,8 @@ class GrowJournal extends Component {
     }
 
     displayFullImage = (ev) => {
-
-        //let val = ev.target.dataset.value;
-
-        //TODO
-        console.log("grow journal todo... displayFullImage = () => {}")
+        let val = ev.target.dataset.value;
+        window.open(val);
     }
 
     getThumbs = (thmbObj) => {
@@ -110,14 +107,14 @@ class GrowJournal extends Component {
 
     render() {
 
-        var datetimePost = null;
+        var datetimeTrue = null;
 
         var renderedTimeline = this.timelineEntries.map((item, i) => <button key={i} data-value={item.datetime_post} className="Timeline-Dot" onClick={this.setEntryContent} />)
 
         var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
 
         if (this.state.currentEntry) {
-            datetimePost = new Date(this.state.currentEntry.datetime_post)
+            datetimeTrue = new Date(this.state.currentEntry.datetime_true)
         }
 
         return (
@@ -136,7 +133,7 @@ class GrowJournal extends Component {
                                     </div>
 
                                     <div className="Journal-Post-Date">
-                                        {datetimePost.toDateString()}
+                                        {datetimeTrue.toDateString()}
                                     </div>
                                 </div>
 
