@@ -43,17 +43,9 @@ class GrowJournal extends Component {
 
             this.setState({ currentEntry: snapshot.val() });
 
-            this.fillTimeline();
-
         }, function (errorObject) {
             console.log("follow journal failed: " + errorObject.code);
         });
-    }
-
-
-    fillTimeline = () => {
-        console.log(this.timelineEntries.length);
-        console.log(this.timelineEntries);
     }
 
     addTimelineEntry = () => {
