@@ -718,3 +718,7 @@
 .Journal-Entry-Thumbnail {
     padding: 4px;
 }
+
+.Journal-Entry-Preview-Thumbnail {
+    max-width: 200px;
+}

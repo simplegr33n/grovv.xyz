@@ -20,9 +20,7 @@ class GrowJournal extends Component {
         this.firebase = new Firebase();
 
         this.timelineEntries = [];
-        // this.entryThumbnails = [];
 
-        //this.watchConfig = this.watchTimeline();
     }
 
     componentDidMount() {
@@ -38,22 +36,6 @@ class GrowJournal extends Component {
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
 
         ref.on('child_added', (snapshot) => {
-
-            // var thumbList = [];
-
-            // console.log(snapshot.child('images').val())
-
-            // snapshot.child('images').forEach(function (childSnapshot) {
-            //     //console.log(childSnapshot.key, JSON.stringify(childSnapshot.val()));
-            //     console.log(childSnapshot.val());
-            //     console.log(childSnapshot.val().url);
-            //     console.log(childSnapshot.val().thumb);
-
-            //     thumbList.push(childSnapshot.val())
-
-            // });
-
-            // this.setState({ entryThumbnails: thumbList });
 
             this.getThumbs(snapshot.child('images').val());
 
@@ -89,11 +71,11 @@ class GrowJournal extends Component {
 
         this.timelineEntries.forEach((timelineEntry) => {
             if (timelineEntry.datetime_post.toString() === val) {
+                this.getThumbs(timelineEntry.images);
                 this.setState({ currentEntry: timelineEntry });
                 return;
             }
-        })
-
+        })       
     }
 
     displayFullImage = (ev) => {
@@ -101,6 +83,7 @@ class GrowJournal extends Component {
         //let val = ev.target.dataset.value;
 
         //TODO
+        console.log("grow journal todo... displayFullImage = () => {}")
     }
 
     getThumbs = (thmbObj) => {

@@ -12,7 +12,8 @@ class JournalAddEditModal extends Component {
         super(props);
         this.state = {
             title: '',
-            content: ''
+            content: '',
+            images: []
         };
 
         this.firebase = new Firebase();
@@ -36,10 +37,19 @@ class JournalAddEditModal extends Component {
     }
 
     saveEntry = () => {
-        if (this.state.content === '') {
+        if (this.state.content === '' && this.state.images.length === 0) {
             alert("Needs content or images!")
             return;
         }
+
+        var imageIndex = 0;
+        var imageObj = [];
+        this.state.images.forEach((image) => {
+
+            imageObj.push({imageIndex : {image}})
+            imageIndex++;
+
+        })
 
         // Journal data in firebase // TODO scalable.
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
@@ -51,7 +61,7 @@ class JournalAddEditModal extends Component {
             'datetime_post': this.date.getTime(),
             'datetime_edit': 'last edit datetime',
             'datetime_true': this.date.getTime(),
-            'images': { 'image1': { 'url': 'donkey.jpg', 'thumbnail': 'donkey_thmb.jpg' } }
+            'images': this.state.images
         })
 
         console.log('pushed a new journal entry')
@@ -67,15 +77,54 @@ class JournalAddEditModal extends Component {
         // this.setState({
         //   uploadedFile: files[0]
         // });
-    
+
         // this.handleImageUpload(files[0]);
 
         console.log(files);
-      }
-    
+
+        this.handleImageUpload(files[0]);
+    }
+
+    displayFullImage = () => {
+
+        console.log("JournalAddEditModal todo")
+    }
+
+
+    handleImageUpload = (file) => {
+
+        // Get storage reference and push file blob 
+        var storageRef = this.firebase.storage.ref().child('journals').child('-LdG6gTCNZxfu1wU5Xvx/');
+
+        console.log("filename:" + file.name)
+
+        const metadata = { contentType: file.type };
+        const storageTask = storageRef.child(this.date.getTime() + file.name).put(file, metadata);
+        storageTask
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url)
+                // Create thumb url from url (thumbs automatically created via cloud function on upload)
+                var urlSplit = url.split("%2F")
+                //var urlName = urlSplit[2];
+                var thumbUrl = urlSplit[0] + "%2F" + urlSplit[1] + "%2Fthumb_" + urlSplit[2]
+
+                console.log(thumbUrl)
+
+                var tempImages = this.state.images;
+                tempImages.push({ 'url': url, 'thumb': thumbUrl  })
+                this.setState({ images: tempImages });
+
+            }).then(() => {
+                //this.props.goto('studio');
+            });
+    }
 
 
     render() {
+
+        var renderedThumbnails = this.state.images.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.url} className="Journal-Entry-Preview-Thumbnail" onClick={this.displayFullImage} />)
+
         return (
             <div id="Journal-Modal-Space">
                 <div id="Journal-Edit-Entry-Modal">
@@ -210,6 +259,16 @@ class JournalAddEditModal extends Component {
                                 )
                             }}
                         </Dropzone>
+
+                        {(() => {
+                            if (renderedThumbnails) {
+                                return (
+                                    <div className="Journal-Post-Images">
+                                        {renderedThumbnails}
+                                    </div>
+                                )
+                            }
+                        })()}
 
                     </div>
 
