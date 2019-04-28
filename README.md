@@ -31,3 +31,4 @@ Create optimized build and push to 'gh-pages' branch for deployment.
 * Firebase Cloud Functions (for Thumbnailing: https://github.com/firebase/functions-samples/tree/master/generate-thumbnail)
 * https://github.com/bokuweb/react-rnd
 * https://github.com/react-dropzone/react-dropzone
+* https://github.com/Hacker0x01/react-datepicker

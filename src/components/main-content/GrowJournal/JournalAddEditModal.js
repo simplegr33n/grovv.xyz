@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 import Dropzone from 'react-dropzone';
 
 import Firebase from '../../../config/firebaseConfig.js'
@@ -13,7 +17,8 @@ class JournalAddEditModal extends Component {
         this.state = {
             title: '',
             content: '',
-            images: []
+            images: [], 
+            trueDate: new Date()
         };
 
         this.firebase = new Firebase();
@@ -53,17 +58,13 @@ class JournalAddEditModal extends Component {
             'grow_state': 'veg',
             'datetime_post': this.date.getTime(),
             'datetime_edit': 'last edit datetime',
-            'datetime_true': this.date.getTime(),
+            'datetime_true': this.state.trueDate.getTime(),
             'images': this.state.images
         })
 
         console.log('pushed a new journal entry')
 
         this.props.closeModal("main");
-    }
-
-    uploadPhotos() {
-
     }
 
     onImageDrop(files) {
@@ -156,6 +157,10 @@ class JournalAddEditModal extends Component {
         });
     }
 
+    handleDateChange = (dt) => {
+        this.setState({ trueDate: dt });
+    }
+
 
     render() {
 
@@ -168,96 +173,9 @@ class JournalAddEditModal extends Component {
                         {/* TITLE INPUT  */}
                         <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange} />
                         {/* DATE CONTAINER  */}
-                        <div className="journal-modal-edit-date-container">
-                            <ul className="journal-modal-edit-date">
-                                <li className="modal-date-li"><div onClick="">{this.month[this.date.getMonth()]}</div>
-                                    <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><div onClick="">January</div></li>
-                                        <li className="date-li"><div onClick="">February</div></li>
-                                        <li className="date-li"><div onClick="">March</div></li>
-                                        <li className="date-li"><div onClick="">April</div></li>
-                                        <li className="date-li"><div onClick="">May</div></li>
-                                        <li className="date-li"><div onClick="">June</div></li>
-                                        <li className="date-li"><div onClick="">July</div></li>
-                                        <li className="date-li"><div onClick="">August</div></li>
-                                        <li className="date-li"><div onClick="">September</div></li>
-                                        <li className="date-li"><div onClick="">October</div></li>
-                                        <li className="date-li"><div onClick="">November</div></li>
-                                        <li className="date-li"><div onClick="">December</div></li>
-                                    </ul>
-                                </li>
-                                <li className="modal-date-li"><div onClick="">{this.date.getDate()}</div>
-                                    <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><div onClick="">1</div></li>
-                                        <li className="date-li"><div onClick="">2</div></li>
-                                        <li className="date-li"><div onClick="">3</div></li>
-                                        <li className="date-li"><div onClick="">4</div></li>
-                                        <li className="date-li"><div onClick="">5</div></li>
-                                        <li className="date-li"><div onClick="">6</div></li>
-                                        <li className="date-li"><div onClick="">7</div></li>
-                                        <li className="date-li"><div onClick="">8</div></li>
-                                        <li className="date-li"><div onClick="">9</div></li>
-                                        <li className="date-li"><div onClick="">10</div></li>
-                                        <li className="date-li"><div onClick="">11</div></li>
-                                        <li className="date-li"><div onClick="">12</div></li>
-                                        <li className="date-li"><div onClick="">13</div></li>
-                                        <li className="date-li"><div onClick="">14</div></li>
-                                        <li className="date-li"><div onClick="">15</div></li>
-                                        <li className="date-li"><div onClick="">16</div></li>
-                                        <li className="date-li"><div onClick="">17</div></li>
-                                        <li className="date-li"><div onClick="">18</div></li>
-                                        <li className="date-li"><div onClick="">19</div></li>
-                                        <li className="date-li"><div onClick="">20</div></li>
-                                        <li className="date-li"><div onClick="">21</div></li>
-                                        <li className="date-li"><div onClick="">22</div></li>
-                                        <li className="date-li"><div onClick="">23</div></li>
-                                        <li className="date-li"><div onClick="">24</div></li>
-                                        <li className="date-li"><div onClick="">25</div></li>
-                                        <li className="date-li"><div onClick="">26</div></li>
-                                        <li className="date-li"><div onClick="">27</div></li>
-                                        <li className="date-li"><div onClick="">28</div></li>
-                                        <li className="date-li"><div onClick="">29</div></li>
-                                        <li className="date-li"><div onClick="">30</div></li>
-                                        <li className="date-li"><div onClick="">31</div></li>
-                                    </ul>
-                                </li>
-                                <li className="modal-date-li"><div onClick="">2019</div>
-                                    <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><div onClick="">2019</div></li>
-                                    </ul>
-                                </li>
-                                <li className="modal-date-li"><div onClick="">{this.date.getHours()}:{this.date.getMinutes()}</div>
-                                    <ul className="journal-entry-date-dropdown">
-                                        <li className="date-li"><div onClick="">00:00</div></li>
-                                        <li className="date-li"><div onClick="">01:00</div></li>
-                                        <li className="date-li"><div onClick="">02:00</div></li>
-                                        <li className="date-li"><div onClick="">03:00</div></li>
-                                        <li className="date-li"><div onClick="">04:00</div></li>
-                                        <li className="date-li"><div onClick="">05:00</div></li>
-                                        <li className="date-li"><div onClick="">06:00</div></li>
-                                        <li className="date-li"><div onClick="">07:00</div></li>
-                                        <li className="date-li"><div onClick="">08:00</div></li>
-                                        <li className="date-li"><div onClick="">09:00</div></li>
-                                        <li className="date-li"><div onClick="">10:00</div></li>
-                                        <li className="date-li"><div onClick="">11:00</div></li>
-                                        <li className="date-li"><div onClick="">12:00</div></li>
-                                        <li className="date-li"><div onClick="">13:00</div></li>
-                                        <li className="date-li"><div onClick="">14:00</div></li>
-                                        <li className="date-li"><div onClick="">15:00</div></li>
-                                        <li className="date-li"><div onClick="">16:00</div></li>
-                                        <li className="date-li"><div onClick="">17:00</div></li>
-                                        <li className="date-li"><div onClick="">18:00</div></li>
-                                        <li className="date-li"><div onClick="">19:00</div></li>
-                                        <li className="date-li"><div onClick="">20:00</div></li>
-                                        <li className="date-li"><div onClick="">21:00</div></li>
-                                        <li className="date-li"><div onClick="">22:00</div></li>
-                                        <li className="date-li"><div onClick="">23:00</div></li>
-                                        <li className="date-li"><div onClick="">24:00</div></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-
+                        <DatePicker
+                            selected={this.state.trueDate}
+                            onChange={this.handleDateChange} />
 
                         <div className="journal-modal-edit-stage-container">
                             <ul className="journal-modal-edit-stage">
