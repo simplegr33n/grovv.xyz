@@ -429,7 +429,7 @@
 }
 
 #Timeline-Spots {
-    height: 105%;
+    height: 100%;
     right: -290%;
     position: absolute;
     bottom: 0;
@@ -661,10 +661,12 @@
 
 .journal-save-entry-btn {
     min-height: 30px;
+    z-index: 99;
 }
 
 .journal-cancel-btn {
     min-height: 30px;
+    z-index: 99;
 }
 
 .Journal-Post-View {
@@ -690,7 +692,7 @@
 }
 
 .Journal-Post-Date {
-    font-size: 22px;
+    font-size: 18px;
     font-style: italic;
 }
 
@@ -702,6 +704,15 @@
 
 .Journal-Post-Images {
     width: 100%;
+    flex: 1;
+    background-color: #92b83b;;
+}
+
+.Journal-Edit-Post-Images {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     flex: 1;
     background-color: #92b83b;;
 }

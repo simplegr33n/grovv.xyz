@@ -48,13 +48,34 @@ class GrowJournal extends Component {
         });
     }
 
+    updateShownJournalPost = (id) => {
+        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
+        if (id) {
+            ref = ref.child(id)
+        } else {
+            ref = ref.child(this.state.currentEntry.id)
+        }    
+
+        ref.on('value', (snapshot) => {
+            this.setState({ currentEntry: snapshot.val() });
+        }, function (errorObject) {
+            console.log("update journal failed: " + errorObject.code);
+        });
+
+    }
+
     addTimelineEntry = () => {
-        this.setState({ displayContent: "add-edit" });
+        this.setState({ displayContent: "add" });
+    }
+
+    editTimelineEntry = () => {
+        this.setState({ displayContent: "edit" });
     }
 
 
-    closeModal = () => {
+    closeModal = (key) => {
         this.setState({ displayContent: "main" });
+        this.updateShownJournalPost(key);
     }
 
     setEntryContent = (ev) => {
@@ -65,9 +86,10 @@ class GrowJournal extends Component {
             if (timelineEntry.datetime_post.toString() === val) {
                 this.getThumbs(timelineEntry.images);
                 this.setState({ currentEntry: timelineEntry });
+                this.updateShownJournalPost(timelineEntry.id);
                 return;
             }
-        })       
+        })
     }
 
     displayFullImage = (ev) => {
@@ -101,7 +123,8 @@ class GrowJournal extends Component {
 
         var datetimeTrue = null;
 
-        var renderedTimeline = this.timelineEntries.map((item, i) => <button key={i} data-value={item.datetime_post} className="Timeline-Dot" onClick={this.setEntryContent} />)
+        this.timelineEntries.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
+        var renderedTimeline = this.timelineEntries.map((item, i) => <button key={i} data-value={item.datetime_true} className="Timeline-Dot" onClick={this.setEntryContent} />)
 
         var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
 
@@ -115,24 +138,28 @@ class GrowJournal extends Component {
             <div id="Journal-Page">
                 <div id="Journal-Main">
                     <div id="Grow-Journal-Entry-Area">
-                    <div id="Grow-Journal-Header-Text">Grow Journal</div>
-                    {(() => {
-                        if (this.state.currentEntry) {
-                            return <div className="Journal-Post-View">
+                        <div id="Grow-Journal-Header-Text">Grow Journal</div>
+                        {(() => {
+                            if (this.state.currentEntry) {
+                                return <div className="Journal-Post-View">
 
-                                <div className="Journal-Post-Header">
-                                    <div className="Journal-Post-Title">
-                                        {this.state.currentEntry.title}
+                                    <div className="Journal-Post-Header">
+                                        <div className="Journal-Post-Date">
+                                            {datetimeTrue.toDateString()}
+                                        </div>
+
+                                        <div className="Journal-Post-Title">
+                                            {this.state.currentEntry.title}
+                                        </div>
+
+                                        <button className="Journal-Edit-Post-Btn" onClick={this.editTimelineEntry}>
+                                            edit &#9998;
+                                    </button>
                                     </div>
 
-                                    <div className="Journal-Post-Date">
-                                        {datetimeTrue.toDateString()}
+                                    <div className="Journal-Post-Content">
+                                        {this.state.currentEntry.content}
                                     </div>
-                                </div>
-
-                                <div className="Journal-Post-Content">
-                                    {this.state.currentEntry.content}
-                                </div>
 
 
                                     {(() => {
@@ -144,19 +171,19 @@ class GrowJournal extends Component {
                                             )
                                         }
                                     })()}
-                
 
-                            </div>
-                        } else {
-                            return (
-                                <div className="Journal-Post-View" >
-                                    Let's get some journal entries...
+
                                 </div>
-                            )
-                        }
-                    })()}
+                            } else {
+                                return (
+                                    <div className="Journal-Post-View" >
+                                        Let's get some journal entries...
+                                </div>
+                                )
+                            }
+                        })()}
                     </div>
-                    
+
 
                     <div id="Timeline-Container">
                         <div id="Timeline-Line" />
@@ -176,8 +203,10 @@ class GrowJournal extends Component {
                 {(() => {
 
                     switch (this.state.displayContent) {
-                        case 'add-edit':
-                            return <JournalAddEditModal closeModal={this.closeModal} />;
+                        case 'add':
+                            return <JournalAddEditModal closeModal={this.closeModal} editPost="new" />;
+                        case 'edit':
+                            return <JournalAddEditModal closeModal={this.closeModal} editPost={this.state.currentEntry} />;
                         case 'main':
                             return <div />;
                         default:

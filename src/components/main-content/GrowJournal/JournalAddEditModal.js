@@ -18,14 +18,44 @@ class JournalAddEditModal extends Component {
             title: '',
             content: '',
             images: [], 
-            trueDate: new Date()
+            postDate: new Date(),
+            trueDate: new Date(),
+            growState: 'veg', // pre, seedling, veg, flower, post
+            published: false,
+            key: null
         };
 
         this.firebase = new Firebase();
 
-        this.date = new Date();
+    }
 
-        this.month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    componentDidMount() {
+        if (this.props.editPost === "new") {
+            var entryRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal').push()
+            var entryKey = entryRef.key
+            this.setState({ key: entryKey });
+            
+            return;
+        }
+
+        console.log(this.props.editPost)
+
+        var tempTrueDate = new Date(this.props.editPost.datetime_true)
+        var tempContent = this.props.editPost.content
+        var tempTitle = this.props.editPost.title
+        var tempPostDate = new Date(this.props.editPost.datetime_post)
+        var tempImages = this.props.editPost.images
+        var tempKey = this.props.editPost.id
+
+        this.setState({ 
+            title: tempTitle,
+            content: tempContent,
+            trueDate: tempTrueDate,
+            postDate: tempPostDate,
+            images: tempImages,
+            key: tempKey, 
+            published: true
+        });
 
     }
 
@@ -38,9 +68,12 @@ class JournalAddEditModal extends Component {
     }
 
     cancelModal = () => {
-        // Delete any queued images when canceling out of window
-        this.deleteAllImages();
-        this.props.closeModal("main");
+        // If unpublished, delete any queued images when canceling out of window
+        if (this.state.published === false) {
+            this.deleteAllImages();
+        }
+
+        this.props.closeModal(this.state.key);
     }
 
     saveEntry = () => {
@@ -48,23 +81,26 @@ class JournalAddEditModal extends Component {
             alert("Needs content or images!")
             return;
         }
+        this.setState({ published: true });
 
         // Journal data in firebase // TODO scalable.
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
 
-        ref.push({
+        ref.child(this.state.key).set({
+            'id': this.state.key,
             'title': this.state.title,
+            'published': true,
             'content': this.state.content,
             'grow_state': 'veg',
-            'datetime_post': this.date.getTime(),
+            'datetime_post': this.state.postDate.getTime(),
             'datetime_edit': 'last edit datetime',
             'datetime_true': this.state.trueDate.getTime(),
             'images': this.state.images
         })
 
-        console.log('pushed a new journal entry')
+        console.log('pushed a journal entry')
 
-        this.props.closeModal("main");
+        this.props.closeModal(this.state.key);
     }
 
     onImageDrop(files) {
@@ -92,7 +128,7 @@ class JournalAddEditModal extends Component {
         console.log("filename:" + file.name)
 
         const metadata = { contentType: file.type };
-        const storageTask = storageRef.child(this.date.getTime() + file.name).put(file, metadata);
+        const storageTask = storageRef.child(this.state.postDate.getTime() + file.name).put(file, metadata);
         storageTask
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
@@ -172,28 +208,28 @@ class JournalAddEditModal extends Component {
                     <div id="Journal-Edit-Topline">
                         {/* TITLE INPUT  */}
                         <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange} />
-                        {/* DATE CONTAINER  */}
+                        {/* DATE PICKER  */}
                         <DatePicker
                             selected={this.state.trueDate}
                             onChange={this.handleDateChange} />
-
+                        {/* STAGE PICKER  */}
                         <div className="journal-modal-edit-stage-container">
                             <ul className="journal-modal-edit-stage">
-                                <li className="modal-stage-li"><div onClick="">Veg</div>
+                                <li className="modal-stage-li"><div onClick="">{this.state.growState}</div>
                                     <ul className="journal-entry-stage-dropdown">
-                                        <li className="stage-li"><div onClick="">Veg</div></li>
+                                        <li className="stage-li"><div onClick="">Post</div></li>
                                         <li className="stage-li"><div onClick="">Flower</div></li>
+                                        <li className="stage-li"><div onClick="">Veg</div></li>
                                         <li className="stage-li"><div onClick="">Seedling</div></li>
-                                        <li className="stage-li"><div onClick="">None</div></li>
+                                        <li className="stage-li"><div onClick="">Pre</div></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
-
                     </div>
-
+                    {/* BODY INPUT  */}
                     <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange} />
-
+                    {/* BODY INPUT  */}
                     <div className="journal-add-images-area">
 
                         <Dropzone
@@ -215,7 +251,7 @@ class JournalAddEditModal extends Component {
                         {(() => {
                             if (renderedThumbnails) {
                                 return (
-                                    <div className="Journal-Post-Images">
+                                    <div className="Journal-Edit-Post-Images">
                                         {renderedThumbnails}
                                     </div>
                                 )
