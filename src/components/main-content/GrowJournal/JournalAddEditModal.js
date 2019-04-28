@@ -32,7 +32,9 @@ class JournalAddEditModal extends Component {
         this.setState({ content: event.target.value });
     }
 
-    closeModal = () => {
+    cancelModal = () => {
+        // Delete any queued images when canceling out of window
+        this.deleteAllImages();
         this.props.closeModal("main");
     }
 
@@ -65,15 +67,14 @@ class JournalAddEditModal extends Component {
     }
 
     onImageDrop(files) {
-        // this.setState({
-        //   uploadedFile: files[0]
-        // });
-
-        // this.handleImageUpload(files[0]);
 
         console.log(files);
 
-        this.handleImageUpload(files[0]);
+        files.forEach((file) => {
+            this.handleImageUpload(file);
+            console.log("upload " + file);
+        }) 
+
     }
 
     displayFullImage = () => {
@@ -129,6 +130,16 @@ class JournalAddEditModal extends Component {
             
             this.setState({ images: tempImages });
             
+    }
+
+    deleteAllImages = () => {
+        let imagesToDelete = this.state.images;
+        this.setState({ images: [] });
+
+        imagesToDelete.forEach((img) => {
+            this.deleteImageFromFirebase(img.url);
+            this.deleteImageFromFirebase(img.thumb)
+        }) 
     }
 
     deleteImageFromFirebase = (url) => {
@@ -270,7 +281,7 @@ class JournalAddEditModal extends Component {
                         <Dropzone
                             onDrop={this.onImageDrop.bind(this)}
                             accept="image/*"
-                            multiple={false}>
+                            multiple={true}>
                             {({ getRootProps, getInputProps }) => {
                                 return (
                                     <div {...getRootProps()}>
@@ -295,7 +306,7 @@ class JournalAddEditModal extends Component {
 
                     </div>
 
-                    <button className="journal-cancel-btn" onClick={this.closeModal}>Cancel</button>
+                    <button className="journal-cancel-btn" onClick={this.cancelModal}>Cancel</button>
                     <button className="journal-save-entry-btn" onClick={this.saveEntry}>Save Entry</button>
 
                 </div>
