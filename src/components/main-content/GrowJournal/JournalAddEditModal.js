@@ -22,7 +22,7 @@ class JournalAddEditModal extends Component {
             trueDate: new Date(),
             growState: 'veg', // pre, seedling, veg, flower, post
             published: false,
-            key: null
+            key: ''
         };
 
         this.firebase = new Firebase();
@@ -30,11 +30,11 @@ class JournalAddEditModal extends Component {
     }
 
     componentDidMount() {
-        if (this.props.editPost === "new") {
-            var entryRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal').push()
-            var entryKey = entryRef.key
+        if(!this.props.editPost) {
+            var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
+            var entryRef = ref.push();
+            var entryKey = entryRef.key;
             this.setState({ key: entryKey });
-            
             return;
         }
 
@@ -85,6 +85,7 @@ class JournalAddEditModal extends Component {
 
         // Journal data in firebase // TODO scalable.
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
+        
 
         ref.child(this.state.key).set({
             'id': this.state.key,
@@ -200,7 +201,9 @@ class JournalAddEditModal extends Component {
 
     render() {
 
-        var renderedThumbnails = this.state.images.map((image, i) => <div className="Temp-Image-Div"><img key={i} alt="grow img" data-value={image.url} src={image.url} className="Journal-Entry-Preview-Thumbnail" onClick={this.displayFullImage} /><div data-value={image.url} onClick={this.deleteImage} className="Delete-Image-Btn">X</div></div>)
+        if (this.state.images) {
+            var renderedThumbnails = this.state.images.map((image, i) => <div className="Temp-Image-Div"><img key={i} alt="grow img" data-value={image.url} src={image.url} className="Journal-Entry-Preview-Thumbnail" onClick={this.displayFullImage} /><div data-value={image.url} onClick={this.deleteImage} className="Delete-Image-Btn">X</div></div>)
+        }
 
         return (
             <div id="Journal-Modal-Space">

@@ -82,11 +82,14 @@ class GrowJournal extends Component {
 
         let val = ev.target.dataset.value;
 
+        console.log(val)
+
+        this.updateShownJournalPost(val);
+
         this.timelineEntries.forEach((timelineEntry) => {
             if (timelineEntry.datetime_post.toString() === val) {
                 this.getThumbs(timelineEntry.images);
                 this.setState({ currentEntry: timelineEntry });
-                this.updateShownJournalPost(timelineEntry.id);
                 return;
             }
         })
@@ -124,7 +127,7 @@ class GrowJournal extends Component {
         var datetimeTrue = null;
 
         this.timelineEntries.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
-        var renderedTimeline = this.timelineEntries.map((item, i) => <button key={i} data-value={item.datetime_true} className="Timeline-Dot" onClick={this.setEntryContent} />)
+        var renderedTimeline = this.timelineEntries.map((item, i) => <button key={i} data-value={item.id} className="Timeline-Dot" onClick={this.setEntryContent} />)
 
         var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
 
