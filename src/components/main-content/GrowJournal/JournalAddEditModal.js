@@ -17,10 +17,10 @@ class JournalAddEditModal extends Component {
         this.state = {
             title: '',
             content: '',
-            images: [], 
+            images: [],
             postDate: new Date(),
             trueDate: new Date(),
-            growState: 'veg', // pre, seedling, veg, flower, post
+            growStage: 'veg', // pre, seedling, veg, flower, post
             published: false,
             key: ''
         };
@@ -30,7 +30,7 @@ class JournalAddEditModal extends Component {
     }
 
     componentDidMount() {
-        if(this.props.editPost === 'new') {
+        if (this.props.editPost === 'new') {
             var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
             var entryRef = ref.push();
             var entryKey = entryRef.key;
@@ -45,15 +45,20 @@ class JournalAddEditModal extends Component {
         var tempTitle = this.props.editPost.title
         var tempPostDate = new Date(this.props.editPost.datetime_post)
         var tempImages = this.props.editPost.images
+        if (tempImages === null || tempImages === undefined) {
+            tempImages = []
+        }
+        var tempGrowStage = this.props.editPost.grow_stage
         var tempKey = this.props.editPost.id
 
-        this.setState({ 
+        this.setState({
             title: tempTitle,
             content: tempContent,
             trueDate: tempTrueDate,
             postDate: tempPostDate,
+            growStage: tempGrowStage,
             images: tempImages,
-            key: tempKey, 
+            key: tempKey,
             published: true
         });
 
@@ -92,7 +97,7 @@ class JournalAddEditModal extends Component {
             'title': this.state.title,
             'published': true,
             'content': this.state.content,
-            'grow_state': 'veg',
+            'grow_stage': this.state.growStage,
             'datetime_post': this.state.postDate.getTime(),
             'datetime_edit': 'last edit datetime',
             'datetime_true': this.state.trueDate.getTime(),
@@ -111,7 +116,7 @@ class JournalAddEditModal extends Component {
         files.forEach((file) => {
             this.handleImageUpload(file);
             console.log("upload " + file);
-        }) 
+        })
 
     }
 
@@ -142,7 +147,7 @@ class JournalAddEditModal extends Component {
                 console.log(thumbUrl)
 
                 var tempImages = this.state.images;
-                tempImages.push({ 'url': url, 'thumb': thumbUrl  })
+                tempImages.push({ 'url': url, 'thumb': thumbUrl })
                 this.setState({ images: tempImages });
 
             }).then(() => {
@@ -151,23 +156,23 @@ class JournalAddEditModal extends Component {
     }
 
     deleteImage = (ev) => {
-            let val = ev.target.dataset.value;  
-            console.log(val);
-            console.log(this.state.images);
+        let val = ev.target.dataset.value;
+        console.log(val);
+        console.log(this.state.images);
 
-            let tempImages = []
+        let tempImages = []
 
-            this.state.images.forEach((img) => {
-                if (img.url.toString() === val) {
-                    this.deleteImageFromFirebase(img.url);
-                    this.deleteImageFromFirebase(img.thumb)
-                } else {
-                    tempImages.push(img)
-                }
-            }) 
-            
-            this.setState({ images: tempImages });
-            
+        this.state.images.forEach((img) => {
+            if (img.url.toString() === val) {
+                this.deleteImageFromFirebase(img.url);
+                this.deleteImageFromFirebase(img.thumb)
+            } else {
+                tempImages.push(img)
+            }
+        })
+
+        this.setState({ images: tempImages });
+
     }
 
     deleteAllImages = () => {
@@ -177,7 +182,7 @@ class JournalAddEditModal extends Component {
         imagesToDelete.forEach((img) => {
             this.deleteImageFromFirebase(img.url);
             this.deleteImageFromFirebase(img.thumb)
-        }) 
+        })
     }
 
     deleteImageFromFirebase = (url) => {
@@ -185,17 +190,21 @@ class JournalAddEditModal extends Component {
         var desertRef = this.firebase.storage.refFromURL(url)
 
         // Delete the file
-        desertRef.delete().then(function() {
-        // File deleted successfully
-        console.log("deleted " + url + "successfully :)")
-        }).catch(function(error) {
-        // Uh-oh, an error occurred!
-        console.log("deleted " + url + "error :(")
+        desertRef.delete().then(function () {
+            // File deleted successfully
+            console.log("deleted " + url + "successfully :)")
+        }).catch(function (error) {
+            // Uh-oh, an error occurred!
+            console.log("deleted " + url + "error :(")
         });
     }
 
     handleDateChange = (dt) => {
         this.setState({ trueDate: dt });
+    }
+
+    handleGrowStageChange = (event) => {
+        this.setState({ growStage: event.target.value });
     }
 
 
@@ -213,22 +222,17 @@ class JournalAddEditModal extends Component {
                         <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange} />
                         {/* DATE PICKER  */}
                         <DatePicker
+                            id="journal-edit-datepicker"
                             selected={this.state.trueDate}
                             onChange={this.handleDateChange} />
                         {/* STAGE PICKER  */}
-                        <div className="journal-modal-edit-stage-container">
-                            <ul className="journal-modal-edit-stage">
-                                <li className="modal-stage-li"><div onClick="">{this.state.growState}</div>
-                                    <ul className="journal-entry-stage-dropdown">
-                                        <li className="stage-li"><div onClick="">Post</div></li>
-                                        <li className="stage-li"><div onClick="">Flower</div></li>
-                                        <li className="stage-li"><div onClick="">Veg</div></li>
-                                        <li className="stage-li"><div onClick="">Seedling</div></li>
-                                        <li className="stage-li"><div onClick="">Pre</div></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
+                        <select id="journal-edit-grow-stage" onChange={this.handleGrowStageChange} value={this.state.growStage}>
+                            <option value="post">Post</option>
+                            <option value="flower">Flower</option>
+                            <option value="veg">Veg</option>
+                            <option value="seedling">Seedling</option>
+                            <option value="pre">Pre</option>
+                        </select>
                     </div>
                     {/* BODY INPUT  */}
                     <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange} />

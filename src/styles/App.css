@@ -770,3 +770,7 @@
 .Delete-Image-Btn:hover {
     color: rgb(241, 79, 79);
 }
+
+#journal-edit-datepicker {
+    height: 24px;
+}
