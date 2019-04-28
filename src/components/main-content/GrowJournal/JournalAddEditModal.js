@@ -30,7 +30,7 @@ class JournalAddEditModal extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.editPost) {
+        if(this.props.editPost === 'new') {
             var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
             var entryRef = ref.push();
             var entryKey = entryRef.key;
@@ -85,7 +85,7 @@ class JournalAddEditModal extends Component {
 
         // Journal data in firebase // TODO scalable.
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
-        
+
 
         ref.child(this.state.key).set({
             'id': this.state.key,
