@@ -13,6 +13,7 @@
     line-height: 24px;
     position: fixed;
     background-color: rgb(111, 175, 47);
+    cursor: move;
 }
 
 .Resizeable-Plotly {

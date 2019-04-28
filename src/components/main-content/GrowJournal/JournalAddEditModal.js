@@ -111,10 +111,44 @@ class JournalAddEditModal extends Component {
             });
     }
 
+    deleteImage = (ev) => {
+            let val = ev.target.dataset.value;  
+            console.log(val);
+            console.log(this.state.images);
+
+            let tempImages = []
+
+            this.state.images.forEach((img) => {
+                if (img.url.toString() === val) {
+                    this.deleteImageFromFirebase(img.url);
+                    this.deleteImageFromFirebase(img.thumb)
+                } else {
+                    tempImages.push(img)
+                }
+            }) 
+            
+            this.setState({ images: tempImages });
+            
+    }
+
+    deleteImageFromFirebase = (url) => {
+        // Create a reference to the file to delete
+        var desertRef = this.firebase.storage.refFromURL(url)
+
+        // Delete the file
+        desertRef.delete().then(function() {
+        // File deleted successfully
+        console.log("deleted " + url + "successfully :)")
+        }).catch(function(error) {
+        // Uh-oh, an error occurred!
+        console.log("deleted " + url + "error :(")
+        });
+    }
+
 
     render() {
 
-        var renderedThumbnails = this.state.images.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.url} className="Journal-Entry-Preview-Thumbnail" onClick={this.displayFullImage} />)
+        var renderedThumbnails = this.state.images.map((image, i) => <div className="Temp-Image-Div"><img key={i} alt="grow img" data-value={image.url} src={image.url} className="Journal-Entry-Preview-Thumbnail" onClick={this.displayFullImage} /><div data-value={image.url} onClick={this.deleteImage} className="Delete-Image-Btn">X</div></div>)
 
         return (
             <div id="Journal-Modal-Space">
@@ -239,9 +273,7 @@ class JournalAddEditModal extends Component {
                             multiple={false}>
                             {({ getRootProps, getInputProps }) => {
                                 return (
-                                    <div
-                                        {...getRootProps()}
-                                    >
+                                    <div {...getRootProps()}>
                                         <input {...getInputProps()} />
                                         {
                                             <p>Try dropping some images <span role="img" aria-label="camera">&#x1f4f7;</span> here, <br></br>or click to select files to upload.</p>

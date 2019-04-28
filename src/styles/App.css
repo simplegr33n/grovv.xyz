@@ -642,10 +642,13 @@
 
 .journal-add-images-area {
     background-color: #aaa2a2;
+    user-select: none;
+    cursor: pointer;
     width: 100%;
     text-align: left;
+    flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .journal-add-images {
@@ -656,18 +659,12 @@
     flex-direction: row;
 }
 
-.journal-add-images-btn {
-    min-height: 40px;
-    width: 120px;
-    margin: 2px;
-}
-
 .journal-save-entry-btn {
-    min-height: 60px;
+    min-height: 30px;
 }
 
 .journal-cancel-btn {
-    min-height: 60px;
+    min-height: 30px;
 }
 
 .Journal-Post-View {
@@ -735,4 +732,30 @@
     height: 100%;
     align-content: center;
     text-align: center;
+}
+
+.Temp-Image-Div {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    background-color: rgb(138, 133, 133);
+}
+
+.Delete-Image-Btn {
+    position: absolute;
+    user-select: none;
+    right: 10px;
+    top: 0;
+    cursor: pointer;
+    font-size: 32px;
+    font-weight: bolder;
+    color: rgb(241, 247, 158);
+}
+
+.Delete-Image-Btn:hover {
+    color: rgb(250, 6, 6);
+}
+
+.Delete-Image-Btn:hover {
+    color: rgb(241, 79, 79);
 }
