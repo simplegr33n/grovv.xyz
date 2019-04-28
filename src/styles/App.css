@@ -491,7 +491,6 @@
     display: flex;
     flex-direction: column;
     width: 90%;
-    height: 90%;
     margin: 0 auto;
     margin-top: 4%;
     background-color: #29a343;
@@ -636,7 +635,9 @@
 }
 
 .journal-modal-edit-body {
-    min-height: 200px;
+    max-height: 200px;
+    margin-top: 4px;
+    margin-bottom: 4px;
     flex: 1;
 }
 
@@ -646,7 +647,7 @@
     cursor: pointer;
     width: 100%;
     text-align: left;
-    flex: 1;
+    max-height: 200px;
     display: flex;
     flex-direction: row;
 }
@@ -660,13 +661,17 @@
 }
 
 .journal-save-entry-btn {
+    margin: 4px;
     min-height: 30px;
     z-index: 99;
+    background-color: rgb(65, 238, 102);
 }
 
 .journal-cancel-btn {
+    margin: 4px;
     min-height: 30px;
     z-index: 99;
+    background-color: rgb(209, 88, 88);
 }
 
 .Journal-Post-View {
@@ -711,8 +716,8 @@
 .Journal-Edit-Post-Images {
     width: 100%;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
     flex: 1;
     background-color: #92b83b;;
 }
@@ -773,4 +778,16 @@
 
 #journal-edit-datepicker {
     height: 24px;
+}
+
+#journal-cancel-save-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+#Image-Drop-Text {
+    font-size: 24px;
+    text-align: center;
+    font-weight: bolder;
 }

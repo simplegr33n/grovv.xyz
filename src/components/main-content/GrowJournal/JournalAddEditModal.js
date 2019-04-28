@@ -104,7 +104,7 @@ class JournalAddEditModal extends Component {
             'images': this.state.images
         })
 
-        console.log('pushed a journal entry')
+        console.log('set journal entry ' + this.state.key)
 
         this.props.closeModal(this.state.key);
     }
@@ -240,6 +240,7 @@ class JournalAddEditModal extends Component {
                     <div className="journal-add-images-area">
 
                         <Dropzone
+                        className="journal-add-images-dropzone"
                             onDrop={this.onImageDrop.bind(this)}
                             accept="image/*"
                             multiple={true}>
@@ -248,7 +249,7 @@ class JournalAddEditModal extends Component {
                                     <div {...getRootProps()}>
                                         <input {...getInputProps()} />
                                         {
-                                            <p>Try dropping some images <span role="img" aria-label="camera">&#x1f4f7;</span> here, <br></br>or click to select files to upload.</p>
+                                            <p id="Image-Drop-Text">Try dropping some <br></br> images <span role="img" aria-label="camera">&#x1f4f7;</span> here, <br></br>or click to <br></br> select files.</p>
                                         }
                                     </div>
                                 )
@@ -267,8 +268,12 @@ class JournalAddEditModal extends Component {
 
                     </div>
 
-                    <button className="journal-cancel-btn" onClick={this.cancelModal}>Cancel</button>
-                    <button className="journal-save-entry-btn" onClick={this.saveEntry}>Save Entry</button>
+                    <div id="journal-cancel-save-btns">
+                        <button className="journal-cancel-btn" onClick={this.cancelModal}>Cancel</button>
+                        <button className="journal-save-entry-btn" onClick={this.saveEntry}>Save Entry</button>
+
+
+                    </div>
 
                 </div>
             </div>
