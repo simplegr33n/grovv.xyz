@@ -236,7 +236,7 @@ class JournalAddEditModal extends Component {
                         <Dropzone
                             onDrop={this.onImageDrop.bind(this)}
                             accept="image/*"
-                            multiple={true}>
+                            multiple={false}>
                             {({ getRootProps, getInputProps }) => {
                                 return (
                                     <div

@@ -114,7 +114,8 @@ class GrowJournal extends Component {
 
             <div id="Journal-Page">
                 <div id="Journal-Main">
-                    <h1>Grow Journal</h1>
+                    <div id="Grow-Journal-Entry-Area">
+                    <div id="Grow-Journal-Header-Text">Grow Journal</div>
                     {(() => {
                         if (this.state.currentEntry) {
                             return <div className="Journal-Post-View">
@@ -154,6 +155,8 @@ class GrowJournal extends Component {
                             )
                         }
                     })()}
+                    </div>
+                    
 
                     <div id="Timeline-Container">
                         <div id="Timeline-Line" />
