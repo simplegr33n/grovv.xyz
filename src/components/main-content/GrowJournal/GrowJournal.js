@@ -89,6 +89,9 @@ class GrowJournal extends Component {
 
             this.getThumbs(tempImages)
 
+            tempEntriesList.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
+            
+
             this.setState({
                 currentEntry: tempChild,
                 timelineEntries: tempEntriesList
@@ -215,7 +218,7 @@ class GrowJournal extends Component {
             renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
         } 
 
-        this.state.timelineEntries.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
+        //this.state.timelineEntries.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
         var renderedTimeline = this.state.timelineEntries.map((item, i) => <button key={i} data-value={item.id} className="Timeline-Dot" onClick={this.setEntryContent} />)
 
         var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
