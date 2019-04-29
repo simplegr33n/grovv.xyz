@@ -3,6 +3,7 @@ import '../../../styles/App.css';
 
 import JournalAddEditModal from './JournalAddEditModal'
 import JournalCreateModal from './JournalCreateModal'
+import JournalTimelineButton from './JournalTimelineButton'
 
 import Firebase from '../../../config/firebaseConfig.js'
 
@@ -137,28 +138,16 @@ class GrowJournal extends Component {
         this.watchEntries(id);
     }
 
-    setEntryContent = (ev) => {
-
-        let val = ev.target.dataset.value;
-
-        console.log(val)
-
-        this.state.timelineEntries.forEach((timelineEntry) => {
-            if (timelineEntry.id === val) {
-                console.log("AFFIRM!")
-                this.getThumbs(timelineEntry.images);
-                this.setState({
-                    currentEntry: timelineEntry
-                });
-                return;
-            }
-        })
-    }
-
     setEntry = (entry) => {
         if (!entry) {
             return;
         }
+
+        if (!entry) {
+            return;
+        }
+
+        console.log("!entry! " + entry.id)
 
         this.getThumbs(entry.images)
 
@@ -218,7 +207,7 @@ class GrowJournal extends Component {
             renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
         } 
 
-        var renderedTimeline = this.state.timelineEntries.map((item, i) => <button key={i} data-value={item.id} className="Timeline-Dot" onClick={this.setEntryContent} />)
+        var renderedTimelineDots = this.state.timelineEntries.map((entry, i) => <JournalTimelineButton key={entry.id} setEntry={this.setEntry} entry={entry}/>)
 
         var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
 
@@ -305,7 +294,7 @@ class GrowJournal extends Component {
                                     {/* Generate dots from firebase entries... */}
                                     <div id="Timeline-Spots">
 
-                                        {renderedTimeline}
+                                        {renderedTimelineDots}
 
                                         <button id="Timeline-Add-Dot" onClick={this.addTimelineEntry}>+</button>
                                     </div>
