@@ -636,6 +636,7 @@
 
 .journal-modal-edit-body {
     max-height: 200px;
+    min-height: 120px;
     margin-top: 4px;
     margin-bottom: 4px;
     flex: 1;
@@ -731,7 +732,7 @@
 }
 
 #Grow-Journal-Header-Text {
-    text-align: right;
+    /* text-align: right; */
     padding: 4px;
     margin-right: 10px;
     font-size: 24px;
@@ -790,4 +791,27 @@
     font-size: 24px;
     text-align: center;
     font-weight: bolder;
+}
+
+#Grow-Journal-Title-Select {
+    font-size: 20px;
+    width: 70%;
+    margin-left: 28%;
+}
+
+#Grow-Journal-Header-Area {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.New-Journal-Btn {
+    margin-right: 13px;
+    font-size: 24px;
+}
+.New-Journal-Btn:hover {
+    background-color: rgb(130, 231, 130);
+}
+.New-Journal-Btn:active {
+    background-color: rgb(11, 218, 11);
 }

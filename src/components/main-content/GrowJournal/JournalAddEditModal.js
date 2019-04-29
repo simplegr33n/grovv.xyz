@@ -18,11 +18,12 @@ class JournalAddEditModal extends Component {
             title: '',
             content: '',
             images: [],
+            journalID: this.props.journalID,
             postDate: new Date(),
             trueDate: new Date(),
             growStage: 'veg', // pre, seedling, veg, flower, post
             published: false,
-            key: ''
+            entryID: ''
         };
 
         this.firebase = new Firebase();
@@ -30,11 +31,14 @@ class JournalAddEditModal extends Component {
     }
 
     componentDidMount() {
+
+        console.log(this.props.editPost)
+        console.log(this.state.journalID)
+
         if (this.props.editPost === 'new') {
-            var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
-            var entryRef = ref.push();
-            var entryKey = entryRef.key;
-            this.setState({ key: entryKey });
+            var ref = this.firebase.db.ref().child('journals').child(this.props.journalID).push();
+            var entryKey = ref.key;
+            this.setState({ entryID: entryKey });
             return;
         }
 
@@ -78,7 +82,7 @@ class JournalAddEditModal extends Component {
             this.deleteAllImages();
         }
 
-        this.props.closeModal(this.state.key);
+        this.props.closeModal(this.state.entryID);
     }
 
     saveEntry = () => {
@@ -89,11 +93,11 @@ class JournalAddEditModal extends Component {
         this.setState({ published: true });
 
         // Journal data in firebase // TODO scalable.
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('journal')
+        var ref = this.firebase.db.ref().child('journals').child(this.state.journalID).child('entries')
 
 
-        ref.child(this.state.key).set({
-            'id': this.state.key,
+        ref.child(this.state.entryID).set({
+            'id': this.state.entryID,
             'title': this.state.title,
             'published': true,
             'content': this.state.content,
@@ -101,12 +105,13 @@ class JournalAddEditModal extends Component {
             'datetime_post': this.state.postDate.getTime(),
             'datetime_edit': 'last edit datetime',
             'datetime_true': this.state.trueDate.getTime(),
+            'journal_id': this.state.journalID,
             'images': this.state.images
         })
 
-        console.log('set journal entry ' + this.state.key)
+        console.log('set journal entry ' + this.state.entryID)
 
-        this.props.closeModal(this.state.key);
+        this.props.closeModal(this.state.entryID);
     }
 
     onImageDrop(files) {
@@ -271,8 +276,6 @@ class JournalAddEditModal extends Component {
                     <div id="journal-cancel-save-btns">
                         <button className="journal-cancel-btn" onClick={this.cancelModal}>Cancel</button>
                         <button className="journal-save-entry-btn" onClick={this.saveEntry}>Save Entry</button>
-
-
                     </div>
 
                 </div>
