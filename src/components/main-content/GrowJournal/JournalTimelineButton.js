@@ -23,10 +23,12 @@ class JournalTimelineButton extends Component {
 
     render() {
         var idVar = "Timeline-Dot-" + this.props.entry.grow_stage
+        var timelineDate = new Date(this.props.entry.datetime_true)
+        var dayMonth = timelineDate.getMonth() + "-" + timelineDate.getDay() + "-" + timelineDate.getFullYear()
 
         return (
             <div>
-                <div className="Timeline-Dot-Connector"></div>
+                <div className="Timeline-Dot-Connector"><div className="Dot-Connector-Text-rotate-180">{dayMonth}</div></div>
                 <button data-value={this.props.entry.id} id={idVar} className="Timeline-Dot" onClick={this.setEntry} />
             </div>        
         );

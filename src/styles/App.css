@@ -1,7 +1,12 @@
 /* App's static wrapper */
 
+html {
+    overflow-x: hidden;
+}
+
 .App {
     text-align: center;
+    overflow-x: hidden;
 }
 
 #Grovv-Logo {
@@ -99,6 +104,7 @@
     margin-top: 21px;
     z-index: 100;
     position: relative;
+    background-color: #76a86f;
 }
 
 .Left-Menu-Btn {
@@ -402,7 +408,7 @@
 }
 
 #Journal-Main {
-    background: rgb(12, 68, 21);
+    background: rgb(11, 46, 17);
     color: #FFF;
     font-size: 18px;
     display: flex;
@@ -803,21 +809,20 @@
 
 #Timeline-Container {
     position: relative;
-    margin: 2.5%;
+    margin: 5%;
     transform: rotate(180deg);
 }
 
 #Timeline-Line {
     height: 98%;
     width: 6px;
-    margin-right: -2.5px;
     position: relative;
     background-color: #ceac16;
 }
 
 #Timeline-Spots {
     height: 100%;
-    right: -290%;
+    left: -400%;
     position: absolute;
     bottom: 0;
     display: flex;
@@ -825,9 +830,16 @@
     justify-content: space-between;
 }
 
+.Dot-Connector-Text-rotate-180 {
+    transform: rotate(180deg);
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(252, 252, 252);
+}
+
 .Timeline-Dot-Connector {
     height: 6px;
-    min-width: 80px;
+    min-width: 120px;
     background-color: rgb(103, 156, 78);
     position: absolute;
     left: 28px;
