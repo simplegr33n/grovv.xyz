@@ -93,11 +93,11 @@ class GrowJournal extends Component {
             
 
             this.setState({
-                currentEntry: tempChild,
+                currentEntry: tempEntriesList[tempEntriesList.length - 1],
                 timelineEntries: tempEntriesList
             });
 
-            this.setEntry(tempChild);
+            this.setEntry(tempEntriesList[tempEntriesList.length - 1]);
 
         }, function (errorObject) {
             console.log("follow journal failed: " + errorObject.code);
@@ -218,7 +218,6 @@ class GrowJournal extends Component {
             renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
         } 
 
-        //this.state.timelineEntries.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
         var renderedTimeline = this.state.timelineEntries.map((item, i) => <button key={i} data-value={item.id} className="Timeline-Dot" onClick={this.setEntryContent} />)
 
         var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
