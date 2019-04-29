@@ -415,67 +415,6 @@
     text-align: center;
 }
 
-#Timeline-Container {
-    position: relative;
-    margin: 2.5%;
-    transform: rotate(180deg);
-}
-
-#Timeline-Line {
-    height: 98%;
-    width: 6px;
-    position: relative;
-    background-color: #ceac16;
-}
-
-#Timeline-Spots {
-    height: 100%;
-    right: -290%;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-#Timeline-Add-Dot {
-    height: 40px;
-    width: 40px;
-    background-color: #191466;
-    border-radius: 50%;
-
-    position: relative;
-    color: #FFFFFF;
-    user-select: none;
-}
-
-.Timeline-Dot {
-    height: 33px;
-    width: 33px;
-    right: -10%;
-    background-color: #0afc0a;
-    border-radius: 50%;
-    position: relative;
-    color: #FFFFFF;
-    user-select: none;
-}
-
-.Timeline-Dot:hover {
-    background-color: #bbfc0a;
-}
-
-.Timeline-Dot:active {
-    background-color: #aecfae;
-}
-
-#Timeline-Add-Dot:hover {
-    background-color: #302a8a;
-}
-
-#Timeline-Add-Dot:active {
-    background-color: #6962ca;
-}
-
 
 /* JOURNAL MODAL */
 
@@ -680,11 +619,14 @@
     color: #000;
     flex: 1;
     padding: 20px;
-    margin: 5%;
-    /* margin-left: 260px; */
+    z-index: 1;
+    margin: 1%;
+    position: relative;
     display: flex;
     flex-direction: column;
 }
+
+
 
 .Journal-Post-Header {
     display: flex;
@@ -711,13 +653,21 @@
 .Journal-Post-Images {
     width: 100%;
     flex: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     background-color: #92b83b;;
+}
+
+.Journal-Post-Images-Wrapper {
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .Journal-Edit-Post-Images {
     width: 100%;
     display: flex;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
     flex: 1;
     background-color: #92b83b;;
@@ -725,6 +675,9 @@
 
 .Journal-Entry-Thumbnail {
     padding: 4px;
+    object-fit: contain;
+    max-height: 200px;
+    max-width: 200px;
 }
 
 .Journal-Entry-Preview-Thumbnail {
@@ -796,6 +749,7 @@
 #Grow-Journal-Title-Select {
     font-size: 20px;
     width: 70%;
+    margin: 1%;
     margin-left: 28%;
 }
 
@@ -803,10 +757,10 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    margin: 1%;
 }
 
 .New-Journal-Btn {
-    margin-right: 13px;
     font-size: 24px;
 }
 .New-Journal-Btn:hover {
@@ -842,4 +796,98 @@
 
 .journal-create-journal-btn {
     
+}
+
+/* TIMELINE */
+
+
+#Timeline-Container {
+    position: relative;
+    margin: 2.5%;
+    transform: rotate(180deg);
+}
+
+#Timeline-Line {
+    height: 98%;
+    width: 6px;
+    margin-right: -2.5px;
+    position: relative;
+    background-color: #ceac16;
+}
+
+#Timeline-Spots {
+    height: 100%;
+    right: -290%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.Timeline-Dot-Connector {
+    height: 6px;
+    min-width: 80px;
+    background-color: rgb(103, 156, 78);
+    position: absolute;
+    left: 28px;
+    margin-top: 6px;
+    color: #FFFFFF;
+    user-select: none;
+}
+
+.Timeline-Dot {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    position: absolute;
+    color: #FFFFFF;
+    user-select: none;
+}
+
+#Timeline-Dot-seedling {
+    background-color: #5dff5d;
+}
+
+#Timeline-Dot-veg {
+    background-color: #099b09;
+}
+
+#Timeline-Dot-flower {
+    background-color: #da0dc8;
+}
+
+#Timeline-Dot-pre {
+    background-color: #854520;
+}
+
+#Timeline-Dot-post {
+    background-color: #a1a862;
+}
+
+#Timeline-Dot-seedling:hover, #Timeline-Dot-veg:hover, #Timeline-Dot-pre:hover,  #Timeline-Dot-post:hover, #Timeline-Dot-flower:hover  {
+    background-color: #00ff2a;
+}
+
+#Timeline-Dot-seedling:active, #Timeline-Dot-veg:active, #Timeline-Dot-pre:active,  #Timeline-Dot-post:active, #Timeline-Dot-flower:active {
+    background-color: #aecfae;
+}
+
+#Timeline-Add-Dot {
+    height: 40px;
+    width: 40px;
+    background-color: #f3d216;
+    border-radius: 50%;
+    left: 10px;
+    position: relative;
+    color: rgb(0, 0, 0);
+    user-select: none;
+}
+
+#Timeline-Add-Dot:hover {
+    background-color: rgb(48, 226, 57);
+}
+
+#Timeline-Add-Dot:active {
+    background-color: #fdfcbf;
 }

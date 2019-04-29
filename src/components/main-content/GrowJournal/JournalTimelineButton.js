@@ -22,9 +22,13 @@ class JournalTimelineButton extends Component {
     }
 
     render() {
+        var idVar = "Timeline-Dot-" + this.props.entry.grow_stage
 
         return (
-            <button data-value={this.props.entry.id} className="Timeline-Dot" onClick={this.setEntry} />
+            <div>
+                <div className="Timeline-Dot-Connector"></div>
+                <button data-value={this.props.entry.id} id={idVar} className="Timeline-Dot" onClick={this.setEntry} />
+            </div>        
         );
     }
 }

@@ -266,8 +266,10 @@ class GrowJournal extends Component {
                                         {(() => {
                                             if (renderedThumbnails) {
                                                 return (
-                                                    <div className="Journal-Post-Images">
-                                                        {renderedThumbnails}
+                                                    <div className="Journal-Post-Images-Wrapper">
+                                                        <div className="Journal-Post-Images">
+                                                            {renderedThumbnails}
+                                                        </div>
                                                     </div>
                                                 )
                                             }
