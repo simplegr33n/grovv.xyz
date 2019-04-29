@@ -53,7 +53,7 @@ class JournalAddEditModal extends Component {
             tempImages = []
         }
         var tempGrowStage = this.props.editPost.grow_stage
-        var tempKey = this.props.editPost.id
+        var tempPostId = this.props.editPost.id
 
         this.setState({
             title: tempTitle,
@@ -62,7 +62,7 @@ class JournalAddEditModal extends Component {
             postDate: tempPostDate,
             growStage: tempGrowStage,
             images: tempImages,
-            key: tempKey,
+            entryID: tempPostId,
             published: true
         });
 

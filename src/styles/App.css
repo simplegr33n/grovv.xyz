@@ -815,3 +815,31 @@
 .New-Journal-Btn:active {
     background-color: rgb(11, 218, 11);
 }
+
+#Journal-Create-Modal {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 4%;
+    background-color: #29a343;
+    padding: 6px;
+}
+
+.journal-modal-journal-name {
+
+}
+
+#journal-create-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.journal-cancel-create-btn{
+
+}
+
+.journal-create-journal-btn {
+    
+}
