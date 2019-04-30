@@ -625,6 +625,7 @@ html {
     color: #000;
     flex: 1;
     padding: 20px;
+    max-height: 80vh;
     z-index: 1;
     margin: 1%;
     position: relative;

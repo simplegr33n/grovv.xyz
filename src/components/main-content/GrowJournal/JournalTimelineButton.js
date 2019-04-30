@@ -34,7 +34,6 @@ class JournalTimelineButton extends Component {
     }
 
     render() {
-        var idVar = "Timeline-Dot-" + this.props.entry.grow_stage
         var growStage = this.props.entry.grow_stage
         var idVar = "Timeline-Dot-" + growStage.charAt(0).toUpperCase() + growStage.slice(1)
 

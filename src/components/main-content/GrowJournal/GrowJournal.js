@@ -4,6 +4,8 @@ import '../../../styles/App.css';
 import JournalAddEditModal from './JournalAddEditModal'
 import JournalCreateModal from './JournalCreateModal'
 import JournalTimelineButton from './JournalTimelineButton'
+import JournalEntry from './JournalEntry'
+
 
 import Firebase from '../../../config/firebaseConfig.js'
 
@@ -14,18 +16,16 @@ class GrowJournal extends Component {
         super(props);
         this.state = {
             displayContent: "main",
+            displayEntries: [], // list of entries at selected date
             currentEntry: null,
             currentEntryID: null,
             testContent: '',
             timelineEntries: [],
-            entryThumbnails: [],
             userJournals: [],
             journalID: null
         };
 
         this.firebase = new Firebase();
-
-        //this.watchJournals();
 
     }
 
@@ -112,7 +112,6 @@ class GrowJournal extends Component {
         this.setState({ displayContent: "main" });
         this.state.timelineEntries.forEach((timelineEntry) => {
             if (timelineEntry.id === key) {
-                this.getThumbs(timelineEntry.images);
                 this.setState({
                     currentEntry: timelineEntry,
                     currentEntryID: timelineEntry.id
@@ -137,55 +136,17 @@ class GrowJournal extends Component {
             return;
         }
 
-        if (!entry) {
-            return;
-        }
-
-        console.log("!entry! " + entry.id)
-
-        this.getThumbs(entry.images)
+        console.log("entry! " + entry.id)
 
         this.setState({
             currentEntry: entry,
             currentEntryID: entry.id
         });
-
     }
-
-    displayFullImage = (ev) => {
-        let val = ev.target.dataset.value;
-        window.open(val);
-    }
-
-    getThumbs = (thmbObj) => {
-
-        if (thmbObj === null) {
-            if (this.state.currentEntry === null) {
-                return;
-            } else {
-                thmbObj = this.state.currentEntry.images;
-            }
-        }
-
-        var thumbList = [];
-
-        for (var key in thmbObj) {
-            // skip loop if the property is from prototype
-            if (!thmbObj.hasOwnProperty(key)) continue;
-
-            thumbList.push(thmbObj[key])
-        }
-
-        this.setState({ entryThumbnails: thumbList });
-
-    }
-
-
 
     handleJournalChange = (ev) => {
         console.log(ev.target.value)
         this.setState({
-            entryThumbnails: [],
             journalID: ev.target.value
         });
         this.watchEntries(ev.target.value)
@@ -203,13 +164,6 @@ class GrowJournal extends Component {
         }
 
         var renderedTimelineDots = this.state.timelineEntries.map((entry, i) => <JournalTimelineButton key={entry.id} currentEntryID={this.state.currentEntryID} setEntry={this.setEntry} entry={entry}/>)
-
-        var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
-
-        var datetimeTrue = null;
-        if (this.state.currentEntry && (this.state.currentEntry !== '')) {
-            datetimeTrue = new Date(this.state.currentEntry.datetime_true)
-        }
 
         return (
 
@@ -236,48 +190,12 @@ class GrowJournal extends Component {
 
                         {(() => {
                             if (this.state.currentEntry) {
-                                return (
-                                    <div className="Journal-Post-View">
-
-                                        <div className="Journal-Post-Header">
-                                            <div className="Journal-Post-Date">
-                                                {datetimeTrue.toDateString()}
-                                            </div>
-
-                                            <div className="Journal-Post-Title">
-                                                {this.state.currentEntry.title}
-                                            </div>
-
-                                            <button className="Journal-Edit-Post-Btn" onClick={this.editTimelineEntry}>
-                                                edit &#9998;
-                                            </button>
-                                        </div>
-
-                                        <div className="Journal-Post-Content">
-                                            {this.state.currentEntry.content}
-                                        </div>
-
-
-                                        {(() => {
-                                            if (renderedThumbnails) {
-                                                return (
-                                                    <div className="Journal-Post-Images-Wrapper">
-                                                        <div className="Journal-Post-Images">
-                                                            {renderedThumbnails}
-                                                        </div>
-                                                    </div>
-                                                )
-                                            }
-                                        })()}
-
-
-                                    </div>
-                                )
+                                return <JournalEntry currentEntry={this.state.currentEntry} />
                             } else {
                                 return (
                                     <div className="Journal-Post-View" >
                                         Let's get some journal entries...
-                                </div>
+                                    </div>
                                 )
                             }
                         })()}
