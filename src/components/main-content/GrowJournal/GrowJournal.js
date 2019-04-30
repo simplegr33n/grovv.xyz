@@ -75,20 +75,11 @@ class GrowJournal extends Component {
         ref.on('value', (snapshot) => {
 
             var tempEntriesList = []
-            var tempChild = null;
-            var tempImages = [];
 
             snapshot.forEach((child) => {
-                console.log('watchin... entry')
-                console.log(child.val())
-                console.log(child.child('images').val())
-
                 tempEntriesList.push(child.val())
-                tempImages = child.child('images').val()
-                tempChild = child.val()
             });
 
-            this.getThumbs(tempImages)
 
             tempEntriesList.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
             

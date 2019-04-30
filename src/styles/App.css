@@ -822,7 +822,7 @@ html {
 
 #Timeline-Spots {
     height: 100%;
-    left: -400%;
+    left: -450%;
     position: absolute;
     bottom: 0;
     display: flex;
@@ -832,8 +832,10 @@ html {
 
 .Dot-Connector-Text-rotate-180 {
     transform: rotate(180deg);
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
+    text-align: right;
+    padding-right: 12px;
     color: rgb(252, 252, 252);
 }
 

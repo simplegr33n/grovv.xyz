@@ -18,6 +18,7 @@ class JournalAddEditModal extends Component {
             title: '',
             content: '',
             images: [],
+            addedImages: [],
             journalID: this.props.journalID,
             postDate: new Date(),
             trueDate: new Date(),
@@ -77,10 +78,8 @@ class JournalAddEditModal extends Component {
     }
 
     cancelModal = () => {
-        // If unpublished, delete any queued images when canceling out of window
-        if (this.state.published === false) {
-            this.deleteAllImages();
-        }
+
+        this.deleteAllAddedImages();
 
         this.props.closeModal(this.state.entryID);
     }
@@ -95,6 +94,8 @@ class JournalAddEditModal extends Component {
         // Journal data in firebase // TODO scalable.
         var ref = this.firebase.db.ref().child('journals').child(this.state.journalID).child('entries')
 
+        var editDate = new Date().getTime()
+
 
         ref.child(this.state.entryID).set({
             'id': this.state.entryID,
@@ -103,7 +104,7 @@ class JournalAddEditModal extends Component {
             'content': this.state.content,
             'grow_stage': this.state.growStage,
             'datetime_post': this.state.postDate.getTime(),
-            'datetime_edit': 'last edit datetime',
+            'datetime_edit': editDate,
             'datetime_true': this.state.trueDate.getTime(),
             'journal_id': this.state.journalID,
             'images': this.state.images
@@ -152,8 +153,13 @@ class JournalAddEditModal extends Component {
                 console.log(thumbUrl)
 
                 var tempImages = this.state.images;
+                var tempAddedImages = this.state.addedImages;
                 tempImages.push({ 'url': url, 'thumb': thumbUrl })
-                this.setState({ images: tempImages });
+                tempAddedImages.push({ 'url': url, 'thumb': thumbUrl })
+                this.setState({
+                    images: tempImages,
+                    addedImages: tempAddedImages
+                });
 
             }).then(() => {
                 //this.props.goto('studio');
@@ -180,9 +186,9 @@ class JournalAddEditModal extends Component {
 
     }
 
-    deleteAllImages = () => {
-        let imagesToDelete = this.state.images;
-        this.setState({ images: [] });
+    deleteAllAddedImages = () => {
+        let imagesToDelete = this.state.addedImages;
+        // this.setState({ images: [] });
 
         imagesToDelete.forEach((img) => {
             this.deleteImageFromFirebase(img.url);
@@ -245,7 +251,7 @@ class JournalAddEditModal extends Component {
                     <div className="journal-add-images-area">
 
                         <Dropzone
-                        className="journal-add-images-dropzone"
+                            className="journal-add-images-dropzone"
                             onDrop={this.onImageDrop.bind(this)}
                             accept="image/*"
                             multiple={true}>
