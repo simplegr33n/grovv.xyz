@@ -860,31 +860,31 @@ html {
     user-select: none;
 }
 
-#Timeline-Dot-seedling {
+#Timeline-Dot-Seedling {
     background-color: #5dff5d;
 }
 
-#Timeline-Dot-veg {
+#Timeline-Dot-Veg {
     background-color: #099b09;
 }
 
-#Timeline-Dot-flower {
+#Timeline-Dot-Flower {
     background-color: #da0dc8;
 }
 
-#Timeline-Dot-pre {
+#Timeline-Dot-Pre {
     background-color: #854520;
 }
 
-#Timeline-Dot-post {
+#Timeline-Dot-Post {
     background-color: #a1a862;
 }
 
-#Timeline-Dot-seedling:hover, #Timeline-Dot-veg:hover, #Timeline-Dot-pre:hover,  #Timeline-Dot-post:hover, #Timeline-Dot-flower:hover  {
+#Timeline-Dot-Seedling:hover, #Timeline-Dot-Veg:hover, #Timeline-Dot-Pre:hover,  #Timeline-Dot-Post:hover, #Timeline-Dot-Flower:hover  {
     background-color: #00ff2a;
 }
 
-#Timeline-Dot-seedling:active, #Timeline-Dot-veg:active, #Timeline-Dot-pre:active,  #Timeline-Dot-post:active, #Timeline-Dot-flower:active {
+#Timeline-Dot-Seedling:active, #Timeline-Dot-Veg:active, #Timeline-Dot-Pre:active,  #Timeline-Dot-Post:active, #Timeline-Dot-Flower:active {
     background-color: #aecfae;
 }
 
