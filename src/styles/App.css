@@ -841,7 +841,7 @@ html {
 
 .Timeline-Dot-Connector {
     height: 6px;
-    min-width: 120px;
+    min-width: 50vw;
     background-color: rgb(103, 156, 78);
     position: absolute;
     left: 28px;
@@ -854,6 +854,7 @@ html {
     height: 20px;
     width: 20px;
     border-radius: 50%;
+    border: none;
     position: absolute;
     color: #FFFFFF;
     user-select: none;

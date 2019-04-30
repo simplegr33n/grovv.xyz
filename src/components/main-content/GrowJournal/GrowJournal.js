@@ -15,6 +15,7 @@ class GrowJournal extends Component {
         this.state = {
             displayContent: "main",
             currentEntry: null,
+            currentEntryID: null,
             testContent: '',
             timelineEntries: [],
             entryThumbnails: [],
@@ -86,6 +87,7 @@ class GrowJournal extends Component {
 
             this.setState({
                 currentEntry: tempEntriesList[tempEntriesList.length - 1],
+                currentEntryID: tempEntriesList[tempEntriesList.length - 1].id,
                 timelineEntries: tempEntriesList
             });
 
@@ -112,7 +114,8 @@ class GrowJournal extends Component {
             if (timelineEntry.id === key) {
                 this.getThumbs(timelineEntry.images);
                 this.setState({
-                    currentEntry: timelineEntry
+                    currentEntry: timelineEntry,
+                    currentEntryID: timelineEntry.id
                 });
                 return;
             }
@@ -143,7 +146,8 @@ class GrowJournal extends Component {
         this.getThumbs(entry.images)
 
         this.setState({
-            currentEntry: entry
+            currentEntry: entry,
+            currentEntryID: entry.id
         });
 
     }
@@ -196,9 +200,9 @@ class GrowJournal extends Component {
         var renderedJournalOptions = '';
         if (this.state.userJournals.length > 0) {
             renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
-        } 
+        }
 
-        var renderedTimelineDots = this.state.timelineEntries.map((entry, i) => <JournalTimelineButton key={entry.id} setEntry={this.setEntry} entry={entry}/>)
+        var renderedTimelineDots = this.state.timelineEntries.map((entry, i) => <JournalTimelineButton key={entry.id} currentEntryID={this.state.currentEntryID} setEntry={this.setEntry} entry={entry}/>)
 
         var renderedThumbnails = this.state.entryThumbnails.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
 
