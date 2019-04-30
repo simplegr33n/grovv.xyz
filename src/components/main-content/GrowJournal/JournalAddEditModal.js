@@ -96,6 +96,13 @@ class JournalAddEditModal extends Component {
 
         var editDate = new Date().getTime()
 
+        var temptTrueDate = this.state.trueDate
+        var shortMonth = (temptTrueDate.getMonth() + 1) + "-"
+        if (shortMonth.length === 2) {
+            shortMonth = "0" + shortMonth;
+        }
+        var shortDateVar = shortMonth + temptTrueDate.getDate() + "-" + temptTrueDate.getFullYear()
+
 
         ref.child(this.state.entryID).set({
             'id': this.state.entryID,
@@ -106,6 +113,7 @@ class JournalAddEditModal extends Component {
             'datetime_post': this.state.postDate.getTime(),
             'datetime_edit': editDate,
             'datetime_true': this.state.trueDate.getTime(),
+            'datetime_short': shortDateVar,
             'journal_id': this.state.journalID,
             'images': this.state.images
         })

@@ -24,11 +24,15 @@ class JournalEntry extends Component {
 
     }
 
-
-
     displayFullImage = (ev) => {
         let val = ev.target.dataset.value;
         window.open(val);
+    }
+
+    editEntryByID = (ev) => {
+        console.log("uh")
+        console.log(ev.target.dataset.value)
+        this.props.editEntryByID(ev.target.dataset.value);
     }
 
     render() {
@@ -54,7 +58,7 @@ class JournalEntry extends Component {
                         {this.props.currentEntry.title}
                     </div>
 
-                    <button className="Journal-Edit-Post-Btn" onClick={this.editTimelineEntry}>
+                    <button className="Journal-Edit-Post-Btn" data-value={this.props.currentEntry.id} onClick={this.editEntryByID}>
                         edit &#9998;
                     </button>
                 </div>

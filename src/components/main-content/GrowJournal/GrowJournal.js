@@ -103,8 +103,28 @@ class GrowJournal extends Component {
         this.setState({ displayContent: "add" });
     }
 
-    editTimelineEntry = () => {
-        this.setState({ displayContent: "edit" });
+    editEntryByID = (entryID) => {
+        console.log("edit: " + entryID)
+        console.log(entryID)
+
+        this.state.timelineEntries.forEach((timelineEntry) => {
+            if (timelineEntry.id === entryID) {
+                this.setState({
+                    currentEntry: timelineEntry,
+                    currentEntryID: timelineEntry.id,
+                    displayContent: "edit"
+                });
+                return;
+            }
+        })
+
+
+
+        // this.setState({ 
+        //     currentEntry: entry,
+        //     currentEntryID: entry.id,
+        //     displayContent: "edit" 
+        // });
     }
 
 
@@ -190,7 +210,7 @@ class GrowJournal extends Component {
 
                         {(() => {
                             if (this.state.currentEntry) {
-                                return <JournalEntry currentEntry={this.state.currentEntry} />
+                                return <JournalEntry editEntryByID={this.editEntryByID} currentEntry={this.state.currentEntry} />
                             } else {
                                 return (
                                     <div className="Journal-Post-View" >
