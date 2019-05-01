@@ -76,17 +76,13 @@ class GrowJournal extends Component {
         ref.on('value', (snapshot) => {
 
             var tempEntriesList = []
-
             snapshot.forEach((child) => {
                 tempEntriesList.push(child.val())
             });
 
-
             tempEntriesList.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
 
-
             var tempDotsList = [];
-
             tempEntriesList.forEach((entry) => {
                 if (!tempDotsList.includes(entry.datetime_short)) {
                     tempDotsList[tempDotsList.length] = entry.datetime_short;
@@ -176,28 +172,10 @@ class GrowJournal extends Component {
         this.watchEntries(id);
     }
 
-    setEntry = (entry) => {
-        if (!entry) {
-            return;
-        }
-
-        console.log("entry! " + entry.id)
-
-        this.setState({
-            currentEntry: entry,
-            currentEntryID: entry.id
-        });
-    }
-
     setEntries = (entries) => {
         if (!entries) {
             return;
         }
-
-        console.log("SET ENTRIES!!")
-        console.log(entries)
-
-        // console.log("entry! " + entry.id)
 
         this.setState({
             currentEntry: entries[0],
