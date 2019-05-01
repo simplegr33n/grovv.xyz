@@ -823,14 +823,12 @@ html {
     flex-direction: column;
     justify-content: center;
 
-    /* position: relative;
-    margin: 5%;
-    transform: rotate(180deg); */
 }
 
 #Timeline-Inner-Container {
     position: relative;
     display: flex;
+    z-index: 999;
     justify-content: center;
     height: 95%;
     width: 100%;
