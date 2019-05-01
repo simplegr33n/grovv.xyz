@@ -906,6 +906,7 @@ html {
     visibility: visible;
 }
 
+
 #Timeline-Dot-Seedling {
     background-color: #5dff5d;
 }
@@ -928,10 +929,6 @@ html {
 
 #Timeline-Dot-Seedling:hover, #Timeline-Dot-Veg:hover, #Timeline-Dot-Pre:hover,  #Timeline-Dot-Post:hover, #Timeline-Dot-Flower:hover  {
     background-color: #00ff2a;
-}
-
-#Timeline-Dot-Seedling:hover + div {
-    background-color: blue;
 }
 
 #Timeline-Dot-Seedling:active, #Timeline-Dot-Veg:active, #Timeline-Dot-Pre:active,  #Timeline-Dot-Post:active, #Timeline-Dot-Flower:active {

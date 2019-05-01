@@ -72,22 +72,29 @@ class JournalTimelineButton extends Component {
                     }
                 })()}
                 <button data-value={this.props.entries} id={idVar} className="Timeline-Dot" onClick={this.setEntries}>
-                    <div className="Dot-Preview-rotate-180">
-                        <div className="Dot-Preview-Window">
 
-                        <div className="Dot-Preview-Date-String">
-                            {dateString}
-                            </div>
+                    {(() => {
+                        if (!isActiveEntry) {
+                            return (
+                                <div className="Dot-Preview-rotate-180">
+                                    <div className="Dot-Preview-Window">
+                                        <div className="Dot-Preview-Date-String">
+                                            {dateString}
+                                        </div>
 
-                            {(() => {
-                                if (previewImage) {
-                                    return <img alt="journal preview" src={previewImage} className="Preview-Image-Thumbnail" onClick={this.displayFullImage} />
-                                }
-                            })()}
+                                        {(() => {
+                                            if (previewImage) {
+                                                return <img alt="journal preview" src={previewImage} className="Preview-Image-Thumbnail" onClick={this.displayFullImage} />
+                                            }
+                                        })()}
+                                    </div>
+                                </div>
+                            )
+                        }
+                    })()}
 
-                        </div>
 
-                    </div>
+
                 </button>
             </div>
         );
