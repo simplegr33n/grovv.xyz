@@ -365,13 +365,14 @@ class App extends Component {
 														<button className="Humid-Gauge-Btn" onClick={this.openVeggerPlotly} ref={this.veggerHumidityRef}>{this.state.sVeggerHumidity}%</button>
 													</div>
 
+													<button className="Left-Menu-Btn" onClick={this.openConfig}>CONFIG <b>&#9881;</b></button>
 													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI <span role="img" aria-label="multi cam">&#128200;&#128250;</span></button>
-													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNAL <span role="img" aria-label="journal">&#128214;</span></button>
+													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
 													<div id="Left-Chart-Btns">
 														<button className="EditChart-Menu-Btn" onClick={this.editChart}>EDIT &#9998; CHART</button>
 														<button className="Left-Menu-Btn" onClick={this.openChart}>CHART &#9619;&#9619;</button>
 													</div>
-													<button className="Left-Menu-Btn" onClick={this.openConfig}>CONFIG <b>&#9881;</b></button>
+													
 												</div>
 
 											</div>

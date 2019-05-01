@@ -124,7 +124,7 @@ html {
     font-weight: bold;
     text-align: right;
     border: none;
-    min-height: 67px;
+    min-height: 40px;
     margin-bottom: 2px;
     flex: 1;
 }
