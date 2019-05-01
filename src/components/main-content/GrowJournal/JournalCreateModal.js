@@ -47,8 +47,8 @@ class JournalCreateModal extends Component {
 
         this.setState({ journalID: journalId });
 
-        ref.set({ 'id': journalId, 'name': journalName, 'createdAt': nowDate.getTime() })
-        userRef.set({ 'id': journalId, 'name': journalName })
+        ref.set({ 'id': journalId, 'name': journalName, 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
+        userRef.set({ 'id': journalId, 'name': journalName, 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
 
         this.props.setJournalID(journalId);
     }

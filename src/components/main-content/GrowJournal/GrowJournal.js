@@ -5,6 +5,7 @@ import JournalAddEditModal from './JournalAddEditModal'
 import FullImageModal from './FullImageModal'
 import JournalCreateModal from './JournalCreateModal'
 import JournalTimelineButton from './JournalTimelineButton'
+import JournalBoxItem from './JournalBoxItem'
 import JournalEntry from './JournalEntry'
 
 
@@ -54,13 +55,13 @@ class GrowJournal extends Component {
 
             console.log(journalsList)
 
-            if (journalsList.length > 0) {
-                this.watchEntries(journalsList[0].id);
+            // if (journalsList.length > 0) {
+            //     this.watchEntries(journalsList[0].id);
 
-                this.setState({
-                    journalID: journalsList[0].id
-                });
-            }
+            //     this.setState({
+            //         journalID: journalsList[0].id
+            //     });
+            // }
 
             this.setState({
                 userJournals: journalsList
@@ -153,9 +154,6 @@ class GrowJournal extends Component {
 
     openFullImageModal = (images) => {
 
-        console.log("openfullmodal")
-        console.log(images)
-
         this.setState({
             displayContent: "full-image",
             fullImageModalImages: images
@@ -215,6 +213,7 @@ class GrowJournal extends Component {
     }
 
     handleJournalChange = (ev) => {
+        console.log("JOURNAL CHANGE!!!!")
         console.log(ev.target.value)
         this.setState({
             currentEntry: null,
@@ -229,11 +228,35 @@ class GrowJournal extends Component {
         this.setState({ displayContent: "create-journal" });
     }
 
+    openJournal = (journal) => {
+        this.watchEntries(journal.id);
+
+        this.setState({
+            journalID: journal.id
+        });
+    }
+
     render() {
 
         var renderedJournalOptions = '';
         if (this.state.userJournals.length > 0) {
             renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
+        }
+
+        var renderedUserJournals = null;
+        if (this.state.userJournals) {
+            renderedUserJournals = this.state.userJournals.map((journal) =>
+                <div className="Journal-Box-Item-Container">
+                    <JournalBoxItem journal={journal} openJournal={this.openJournal} />
+                </div>
+            )
+        }
+
+        var renderedJournalEntries = null;
+        if (this.state.displayEntries) {
+            renderedJournalEntries = this.state.displayEntries.map((entry) =>
+                <JournalEntry key={entry.id} editEntryByID={this.editEntryByID} currentEntry={entry} currentFullImage={this.openFullImage} displayFullImage={this.openFullImageModal} />
+            )
         }
 
         var renderedTimelineDots = null;
@@ -243,23 +266,14 @@ class GrowJournal extends Component {
             )
         }
 
-        var renderedJournalEntries = null;
-        if (this.state.displayEntries) {
-            console.log("display entries")
-            console.log(this.state.displayEntries)
-            renderedJournalEntries = this.state.displayEntries.map((entry) =>
-                <JournalEntry editEntryByID={this.editEntryByID} currentEntry={entry} currentFullImage={this.openFullImage} displayFullImage={this.openFullImageModal} />
-            )
-        }
-
-
-
         return (
 
 
             <div id="Journal-Page">
                 <div id="Journal-Main">
-                    <div id="Grow-Journal-Entry-Area">
+                    <div id="Grow-Journal-Main-Area">
+
+
 
                         {(() => {
                             if (this.state.journalID === null) {
@@ -274,12 +288,22 @@ class GrowJournal extends Component {
                             }
                         })()}
 
+                        {(() => {
+                            if (renderedUserJournals && !this.state.journalID) {
+                                return (
+                                    <div id="Journal-Box-Area">
+                                        {renderedUserJournals}
+                                    </div>
+                                )
+                            }
+                        })()}
+
 
                         {(() => {
-                            if (this.state.userJournals.length > 0) {
+                            if (renderedJournalOptions && this.state.journalID) {
                                 return (
                                     <div className="Grow-Journal-Title-Div">
-                                        <select id="Grow-Journal-Title-Select" onChange={this.handleJournalChange} value={this.state.journalId}>
+                                        <select id="Grow-Journal-Title-Select" onChange={this.handleJournalChange} value={this.state.journalID}>
                                             {renderedJournalOptions}
                                         </select>
                                         <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
@@ -289,29 +313,41 @@ class GrowJournal extends Component {
                                 )
                             }
                         })()}
-                        <div id="Journal-Posts-Container">
-                            {(() => {
-                                if (renderedJournalEntries) {
-                                    return (
-                                        <div>
-                                            {renderedJournalEntries}
-                                        </div>
-                                    )
-                                } else {
-                                    return (
-                                        <div className="Journal-Post-View" >
-                                            Let's get some journal entries...
-                                        </div>
-                                    )
-                                }
-                            })()}
-                        </div>
-                    </div>
 
-                    <div id="Timeline-Container">
                         {(() => {
                             if (this.state.journalID) {
                                 return (
+                                    <div id="Journal-Posts-Container">
+                                        {(() => {
+                                            if (renderedJournalEntries) {
+                                                return (
+                                                    <div>
+                                                        {renderedJournalEntries}
+                                                    </div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div className="Journal-Post-View" >
+                                                        Let's get some journal entries...
+                                                    </div>
+                                                )
+                                            }
+                                        })()}
+                                    </div>
+                                )
+                            }
+                        })()}
+
+                    </div>
+
+
+
+
+                    {(() => {
+                        if (this.state.journalID) {
+                            return (
+                                <div id="Timeline-Container">
+
                                     <div id="Timeline-Inner-Container">
                                         <div id="Timeline-Line" />
                                         {/* Generate dots from firebase entries... */}
@@ -322,11 +358,12 @@ class GrowJournal extends Component {
                                             <button id="Timeline-Add-Dot" onClick={this.addTimelineEntry}>+</button>
                                         </div>
                                     </div>
-                                )
 
-                            }
-                        })()}
-                    </div>
+                                </div>
+                            )
+
+                        }
+                    })()}
 
                 </div>
 
@@ -341,7 +378,7 @@ class GrowJournal extends Component {
                         case 'edit':
                             return <JournalAddEditModal journalID={this.state.journalID} closeModal={this.closeModal} editPost={this.state.currentEntry} />;
                         case 'full-image':
-                            return <FullImageModal closeModal={this.closeModal} imageList={this.state.fullImageModalImages} setCurrentFullImage={this.openFullImage} currentFullImage={this.state.currentFullImage}/>;
+                            return <FullImageModal closeModal={this.closeModal} imageList={this.state.fullImageModalImages} currentFullImage={this.state.currentFullImage} />;
                         case 'create-journal':
                             return <JournalCreateModal journalID={this.state.journalID} setJournalID={this.setJournalID} />;
                         case 'main':

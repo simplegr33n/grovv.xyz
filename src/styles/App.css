@@ -704,7 +704,7 @@ html {
     font-size: 24px;
 }
 
-#Grow-Journal-Entry-Area {
+#Grow-Journal-Main-Area {
     color: #FFF;
     font-size: 18px;
     display: flex;
@@ -961,7 +961,8 @@ html {
     margin-bottom: 10px;
     overflow-y: auto; 
     background-color: rgb(103, 156, 78);
-    margin-left: 20px;
+    margin: 1%;
+    margin-top: 0;
     flex: 1;
 }
 
@@ -1018,4 +1019,60 @@ html {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
+}
+
+/* JOURNAL BOX ITEM */
+
+#Journal-Box-Area {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.Journal-Box-Item-Container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.Journal-Box-Item {
+    width: 520px;
+    max-width: 90%;
+    height: 120px;
+    background-color: rgb(32, 112, 21);
+    color: #FFF;
+    margin: 1%;
+    position: relative;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+}
+
+.Journal-Box-Item-Main {
+    flex: 1;
+    padding: 1%;
+}
+
+.Journal-Box-Item-Header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.Journal-Box-Preview-Image {
+    position: relative;
+    /* right: 0; */
+    max-height: 100%;
+}
+
+.Journal-Box-Created {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.Journal-Box-Info {
+    font-size: 16px;
+    font-weight: normal;
 }
