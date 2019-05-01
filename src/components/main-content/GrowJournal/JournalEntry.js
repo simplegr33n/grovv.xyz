@@ -37,8 +37,11 @@ class JournalEntry extends Component {
 
     render() {
 
+        var renderedThumbnails = null;
         if (this.props.currentEntry) {
-            var renderedThumbnails = this.props.currentEntry.images.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
+            if (this.props.currentEntry.images) {
+                renderedThumbnails = this.props.currentEntry.images.map((image, i) => <img key={i} alt="grow img" data-value={image.url} src={image.thumb} className="Journal-Entry-Thumbnail" onClick={this.displayFullImage} />)
+            }
         }
 
         var datetimeTrue = null;

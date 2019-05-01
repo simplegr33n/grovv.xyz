@@ -884,6 +884,7 @@ html {
 .Dot-Preview-Window {
     background-color: rgb(18, 41, 15);
     position: fixed;
+    min-width: 130px;
     bottom: 0px;
     padding: 6px;
     right: 0px;
