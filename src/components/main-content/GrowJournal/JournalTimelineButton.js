@@ -29,10 +29,6 @@ class JournalTimelineButton extends Component {
 
     }
 
-    setEntry = () => {
-        this.props.setEntry(this.props.entry);
-    }
-
     setEntries = () => {
         this.props.setEntries(this.props.entries);
     }
@@ -50,16 +46,49 @@ class JournalTimelineButton extends Component {
         var array = (this.props.entry.datetime_short).split("-");
         var datetimeShortMD = array[0] + "-" + array[1]
 
+        var dateString = new Date(this.props.entry.datetime_true).toDateString()
+
+        var previewImage = null;
+        if (this.props.entries[0].images) {
+            previewImage = this.props.entries[0].images[0].thumb;
+        }
+
         return (
             <div>
                 {(() => {
                     if (isActiveEntry) {
                         return (
-                            <div className="Timeline-Dot-Connector"><div className="Dot-Connector-Text-rotate-180">{datetimeShortMD}</div></div>
+                            <div className="Timeline-Dot-Connector">
+                                <div className="Dot-Connector-Text-rotate-180">
+
+                                    {datetimeShortMD}
+
+
+
+                                </div>
+
+                            </div>
                         )
                     }
                 })()}
-                <button data-value={this.props.entries} id={idVar} className="Timeline-Dot" onClick={this.setEntries} />
+                <button data-value={this.props.entries} id={idVar} className="Timeline-Dot" onClick={this.setEntries}>
+                    <div className="Dot-Preview-rotate-180">
+                        <div className="Dot-Preview-Window">
+
+                        <div className="Dot-Preview-Date-String">
+                            {dateString}
+                            </div>
+
+                            {(() => {
+                                if (previewImage) {
+                                    return <img alt="journal preview" src={previewImage} className="Preview-Image-Thumbnail" onClick={this.displayFullImage} />
+                                }
+                            })()}
+
+                        </div>
+
+                    </div>
+                </button>
             </div>
         );
     }

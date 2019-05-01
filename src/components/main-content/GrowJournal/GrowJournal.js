@@ -113,7 +113,7 @@ class GrowJournal extends Component {
                 displayEntries: tempDeepDotsList[tempDeepDotsList.length - 1]
             });
 
-            this.setEntry(tempEntriesList[tempEntriesList.length - 1]);
+            this.setEntries(tempDeepDotsList[tempDeepDotsList.length - 1]);
 
         }, function (errorObject) {
             console.log("follow journal failed: " + errorObject.code);
@@ -187,8 +187,6 @@ class GrowJournal extends Component {
         console.log("SET ENTRIES!!")
         console.log(entries)
 
-
-
         // console.log("entry! " + entry.id)
 
         this.setState({
@@ -217,12 +215,10 @@ class GrowJournal extends Component {
             renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
         }
 
-        // var renderedTimelineDots = this.state.timelineEntries.map((entry, i) => <JournalTimelineButton key={entry.id} currentEntryID={this.state.currentEntryID} setEntry={this.setEntry} entry={entry} />)
-
         var renderedTimelineDots = null;
         if (this.state.timelineDots) {
             renderedTimelineDots = this.state.timelineDots.map((dot) =>
-                <JournalTimelineButton key={dot[0].datetime_short} currentEntryID={this.state.currentEntryID} setEntry={this.setEntry} setEntries={this.setEntries} entry={dot[0]} entries={dot} />
+                <JournalTimelineButton key={dot[0].datetime_short} currentEntryID={this.state.currentEntryID} setEntries={this.setEntries} entry={dot[0]} entries={dot} />
             )
         }
 
@@ -253,9 +249,14 @@ class GrowJournal extends Component {
                         {(() => {
                             if (this.state.userJournals.length > 0) {
                                 return (
-                                    <select id="Grow-Journal-Title-Select" onChange={this.handleJournalChange} value={this.state.journalId}>
-                                        {renderedJournalOptions}
-                                    </select>
+                                    <div className="Grow-Journal-Title-Div">
+                                        <select id="Grow-Journal-Title-Select" onChange={this.handleJournalChange} value={this.state.journalId}>
+                                            {renderedJournalOptions}
+                                        </select>
+                                        <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
+                                            +
+                                        </button>
+                                    </div>
                                 )
                             }
                         })()}
@@ -278,24 +279,25 @@ class GrowJournal extends Component {
                         </div>
                     </div>
 
-                    {(() => {
-                        if (this.state.journalID) {
-                            return (
-                                <div id="Timeline-Container">
-                                    <div id="Timeline-Line" />
-                                    {/* Generate dots from firebase entries... */}
-                                    <div id="Timeline-Spots">
+                    <div id="Timeline-Container">
+                        {(() => {
+                            if (this.state.journalID) {
+                                return (
+                                    <div id="Timeline-Inner-Container">
+                                        <div id="Timeline-Line" />
+                                        {/* Generate dots from firebase entries... */}
+                                        <div id="Timeline-Spots">
 
-                                        {renderedTimelineDots}
+                                            {renderedTimelineDots}
 
-                                        <button id="Timeline-Add-Dot" onClick={this.addTimelineEntry}>+</button>
+                                            <button id="Timeline-Add-Dot" onClick={this.addTimelineEntry}>+</button>
+                                        </div>
                                     </div>
-                                </div>
-                            )
+                                )
 
-                        }
-
-                    })()}
+                            }
+                        })()}
+                    </div>
 
                 </div>
 

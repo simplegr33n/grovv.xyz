@@ -622,7 +622,6 @@ html {
     flex: 1;
     padding: 2%;
     max-height: 75vh;
-    z-index: 1;
     margin: 1%;
     position: relative;
     display: flex;
@@ -751,7 +750,7 @@ html {
 
 #Grow-Journal-Title-Select {
     font-size: 20px;
-    width: 70%;
+    width: 50%;
     margin: 1%;
     margin-left: 28%;
 }
@@ -805,13 +804,30 @@ html {
 
 
 #Timeline-Container {
+    width: 100px;
+    height: 100%;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    /* position: relative;
+    margin: 5%;
+    transform: rotate(180deg); */
+}
+
+#Timeline-Inner-Container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 95%;
+    width: 100%;
     margin: 5%;
     transform: rotate(180deg);
 }
 
 #Timeline-Line {
-    height: 98%;
+    height: 100%;
     width: 6px;
     position: relative;
     background-color: #ceac16;
@@ -819,9 +835,9 @@ html {
 
 #Timeline-Spots {
     height: 102%;
-    left: -450%;
+    left: 17%;
     position: absolute;
-    bottom: 0;
+    bottom: -1%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -838,13 +854,34 @@ html {
 
 .Timeline-Dot-Connector {
     height: 6px;
-    min-width: 50vw;
     background-color: rgb(103, 156, 78);
     position: absolute;
+    min-width: 150%;
     left: 28px;
     margin-top: 6px;
     color: #FFFFFF;
     user-select: none;
+}
+
+.Dot-Preview-rotate-180 {
+    transform: rotate(180deg);
+    position: fixed;
+    top: 5vh;
+    right: 40px;
+    z-index: 999;
+    visibility: hidden;
+}
+
+.Dot-Preview-Window {
+    /* width: 200px;
+    height: 200px; */
+    background-color: rgb(18, 41, 15);
+    position: fixed;
+    bottom: 0px;
+    padding: 6px;
+    right: 0px;
+    color: #FFF;
+    margin-right: 20px;
 }
 
 .Timeline-Dot {
@@ -855,6 +892,10 @@ html {
     position: absolute;
     color: #FFFFFF;
     user-select: none;
+}
+
+.Timeline-Dot:hover > .Dot-Preview-rotate-180 {
+    visibility: visible;
 }
 
 #Timeline-Dot-Seedling {
@@ -881,6 +922,10 @@ html {
     background-color: #00ff2a;
 }
 
+#Timeline-Dot-Seedling:hover + div {
+    background-color: blue;
+}
+
 #Timeline-Dot-Seedling:active, #Timeline-Dot-Veg:active, #Timeline-Dot-Pre:active,  #Timeline-Dot-Post:active, #Timeline-Dot-Flower:active {
     background-color: #aecfae;
 }
@@ -888,7 +933,9 @@ html {
 #Timeline-Add-Dot {
     height: 40px;
     width: 40px;
-    background-color: #f3d216;
+    font-size: 24px;
+    font-weight: bold;
+    background-color: #d5d80a;
     border-radius: 50%;
     left: 10px;
     position: relative;
@@ -897,7 +944,7 @@ html {
 }
 
 #Timeline-Add-Dot:hover {
-    background-color: rgb(48, 226, 57);
+    background-color: #ecf012;
 }
 
 #Timeline-Add-Dot:active {
@@ -909,6 +956,22 @@ html {
     overflow-y: auto; 
     background-color: rgb(103, 156, 78);
     margin-left: 20px;
-    z-index: 100;
     flex: 1;
+}
+
+.Grow-Journal-Title-Div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.Preview-Image-Thumbnail {
+    padding: 4px;
+    object-fit: contain;
+    max-height: 160px;
+    max-width: 160px;
+}
+
+.Dot-Preview-Date-String {
+    font-weight: bolder;
 }
