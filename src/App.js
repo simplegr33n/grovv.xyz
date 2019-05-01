@@ -285,13 +285,13 @@ class App extends Component {
 	openConfig = () => {
 		if (this.state.mainContent !== 'config') {
 			this.setState({ mainContent: 'config' });
-		}	
+		}
 	}
 
 	openJournal = () => {
 		if (this.state.mainContent !== 'journal') {
 			this.setState({ mainContent: 'journal' });
-		}	
+		}
 	}
 
 	render() {
@@ -300,6 +300,43 @@ class App extends Component {
 				<header className="App-body">
 					<div id="App-Inner-Body">
 						<div id="App-Body-Content">
+
+							{(() => {
+								if (this.state.UID) {
+									switch (this.state.mainContent) {
+										case 'editprofile':
+											return <EditProfile UID={this.state.UID} username={this.state.username} />;
+										case 'resizeview':
+											return <ResizeDraggableView urls={this.state.urls} />
+										case 'journal':
+											return <GrowJournal />
+										case 'chart':
+											return <FeedChart />
+										case 'config':
+											return <GrowConfig />
+										case 'maincontent':
+											return (
+												<div id="Main-Content">
+													<object className="Site-View-Update" style={{ zIndex: this.state.zPlotly }} type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="plotly" />
+													<object className="Site-View-Update" style={{ zIndex: this.state.zLivecam }} type="text/html" data={this.state.URL_livecam} width="100%" height="100%" aria-label="live cam" />
+													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerPlotly }} type="text/html" data={this.state.URL_vegger_plotly} width="100%" height="100%" aria-label="vegger plotly" />
+													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerLivecam }} type="text/html" data={this.state.URL_vegger_livecam} width="100%" height="100%" aria-label="vegger live cam" />
+												</div>
+											);
+										default:
+											return <GrowJournal />
+									}
+								} else {
+									switch (this.state.mainContent) {
+										case 'signin':
+											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
+										case 'signup':
+											return <SignUp gotoSignIn={this.setMainContent} />;
+										default:
+											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
+									}
+								}
+							})()}
 
 							{(() => {
 								if (this.state.UID) {
@@ -345,43 +382,7 @@ class App extends Component {
 									);
 								}
 							})()}
-
-							{(() => {
-								if (this.state.UID) {
-									switch (this.state.mainContent) {
-										case 'editprofile':
-											return <EditProfile UID={this.state.UID} username={this.state.username} />;
-										case 'resizeview':
-											return <ResizeDraggableView urls={this.state.urls} />
-										case 'journal':
-											return <GrowJournal />
-										case 'chart':
-											return <FeedChart />
-										case 'config':
-											return <GrowConfig />
-										case 'maincontent':
-											return (
-												<div id="Main-Content">
-													<object className="Site-View-Update" style={{ zIndex: this.state.zPlotly }} type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="plotly" />
-													<object className="Site-View-Update" style={{ zIndex: this.state.zLivecam }} type="text/html" data={this.state.URL_livecam} width="100%" height="100%" aria-label="live cam" />
-													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerPlotly }} type="text/html" data={this.state.URL_vegger_plotly} width="100%" height="100%" aria-label="vegger plotly" />
-													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerLivecam }} type="text/html" data={this.state.URL_vegger_livecam} width="100%" height="100%" aria-label="vegger live cam" />
-												</div>
-											);
-										default:
-											return <GrowJournal />
-									}
-								} else {
-									switch (this.state.mainContent) {
-										case 'signin':
-											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
-										case 'signup':
-											return <SignUp gotoSignIn={this.setMainContent} />;
-										default:
-											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
-									}
-								}
-							})()}
+							
 						</div>
 					</div>
 				</header>

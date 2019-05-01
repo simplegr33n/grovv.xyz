@@ -33,6 +33,10 @@ class JournalTimelineButton extends Component {
         this.props.setEntry(this.props.entry);
     }
 
+    setEntries = () => {
+        this.props.setEntries(this.props.entries);
+    }
+
     render() {
         var growStage = this.props.entry.grow_stage
         var idVar = "Timeline-Dot-" + growStage.charAt(0).toUpperCase() + growStage.slice(1)
@@ -43,16 +47,19 @@ class JournalTimelineButton extends Component {
             isActiveEntry = true;
         }
 
+        var array = (this.props.entry.datetime_short).split("-");
+        var datetimeShortMD = array[0] + "-" + array[1]
+
         return (
             <div>
                 {(() => {
                     if (isActiveEntry) {
                         return (
-                            <div className="Timeline-Dot-Connector"><div className="Dot-Connector-Text-rotate-180">{this.state.monthDayDate}</div></div>
+                            <div className="Timeline-Dot-Connector"><div className="Dot-Connector-Text-rotate-180">{datetimeShortMD}</div></div>
                         )
                     }
                 })()}
-                <button data-value={this.props.entry.id} id={idVar} className="Timeline-Dot" onClick={this.setEntry} />
+                <button data-value={this.props.entries} id={idVar} className="Timeline-Dot" onClick={this.setEntries} />
             </div>
         );
     }

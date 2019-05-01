@@ -83,12 +83,34 @@ class GrowJournal extends Component {
 
 
             tempEntriesList.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
-            
+
+
+            var tempDotsList = [];
+
+            tempEntriesList.forEach((entry) => {
+                if (!tempDotsList.includes(entry.datetime_short)) {
+                    tempDotsList[tempDotsList.length] = entry.datetime_short;
+                }
+            });
+
+            var tempDeepDotsList = [];
+            tempDotsList.forEach((dotDate) => {
+                var dotValue = []
+                tempEntriesList.forEach((entry) => {
+                    if (dotDate === entry.datetime_short) {
+                        dotValue[dotValue.length] = entry;
+                    }
+                });
+
+                tempDeepDotsList[tempDeepDotsList.length] = dotValue;
+            });
 
             this.setState({
                 currentEntry: tempEntriesList[tempEntriesList.length - 1],
                 currentEntryID: tempEntriesList[tempEntriesList.length - 1].id,
-                timelineEntries: tempEntriesList
+                timelineEntries: tempEntriesList,
+                timelineDots: tempDeepDotsList,
+                displayEntries: tempDeepDotsList[tempDeepDotsList.length - 1]
             });
 
             this.setEntry(tempEntriesList[tempEntriesList.length - 1]);
@@ -118,13 +140,6 @@ class GrowJournal extends Component {
             }
         })
 
-
-
-        // this.setState({ 
-        //     currentEntry: entry,
-        //     currentEntryID: entry.id,
-        //     displayContent: "edit" 
-        // });
     }
 
 
@@ -164,6 +179,25 @@ class GrowJournal extends Component {
         });
     }
 
+    setEntries = (entries) => {
+        if (!entries) {
+            return;
+        }
+
+        console.log("SET ENTRIES!!")
+        console.log(entries)
+
+
+
+        // console.log("entry! " + entry.id)
+
+        this.setState({
+            currentEntry: entries[0],
+            currentEntryID: entries[0].id,
+            displayEntries: entries
+        });
+    }
+
     handleJournalChange = (ev) => {
         console.log(ev.target.value)
         this.setState({
@@ -183,7 +217,25 @@ class GrowJournal extends Component {
             renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
         }
 
-        var renderedTimelineDots = this.state.timelineEntries.map((entry, i) => <JournalTimelineButton key={entry.id} currentEntryID={this.state.currentEntryID} setEntry={this.setEntry} entry={entry}/>)
+        // var renderedTimelineDots = this.state.timelineEntries.map((entry, i) => <JournalTimelineButton key={entry.id} currentEntryID={this.state.currentEntryID} setEntry={this.setEntry} entry={entry} />)
+
+        var renderedTimelineDots = null;
+        if (this.state.timelineDots) {
+            renderedTimelineDots = this.state.timelineDots.map((dot) =>
+                <JournalTimelineButton key={dot[0].datetime_short} currentEntryID={this.state.currentEntryID} setEntry={this.setEntry} setEntries={this.setEntries} entry={dot[0]} entries={dot} />
+            )
+        }
+
+        var renderedJournalEntries = null;
+        if (this.state.displayEntries) {
+            console.log("display entries")
+            console.log(this.state.displayEntries)
+            renderedJournalEntries = this.state.displayEntries.map((entry) =>
+                <JournalEntry editEntryByID={this.editEntryByID} currentEntry={entry} />
+            )
+        }
+
+
 
         return (
 
@@ -207,18 +259,23 @@ class GrowJournal extends Component {
                                 )
                             }
                         })()}
-
-                        {(() => {
-                            if (this.state.currentEntry) {
-                                return <JournalEntry editEntryByID={this.editEntryByID} currentEntry={this.state.currentEntry} />
-                            } else {
-                                return (
-                                    <div className="Journal-Post-View" >
-                                        Let's get some journal entries...
-                                    </div>
-                                )
-                            }
-                        })()}
+                        <div id="Journal-Posts-Container">
+                            {(() => {
+                                if (renderedJournalEntries) {
+                                    return (
+                                        <div>
+                                            {renderedJournalEntries}
+                                        </div>
+                                    )
+                                } else {
+                                    return (
+                                        <div className="Journal-Post-View" >
+                                            Let's get some journal entries...
+                                        </div>
+                                    )
+                                }
+                            })()}
+                        </div>
                     </div>
 
                     {(() => {
