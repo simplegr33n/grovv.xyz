@@ -291,8 +291,10 @@ class GrowJournal extends Component {
                         {(() => {
                             if (renderedUserJournals && !this.state.journalID) {
                                 return (
-                                    <div id="Journal-Box-Area">
-                                        {renderedUserJournals}
+                                    <div id="Journal-Box-Area-Scroll">
+                                        <div id="Journal-Box-Area">
+                                            {renderedUserJournals}
+                                        </div>
                                     </div>
                                 )
                             }
