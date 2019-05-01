@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../../../styles/App.css';
 
 import JournalAddEditModal from './JournalAddEditModal'
+import FullImageModal from './FullImageModal'
 import JournalCreateModal from './JournalCreateModal'
 import JournalTimelineButton from './JournalTimelineButton'
 import JournalEntry from './JournalEntry'
@@ -22,7 +23,9 @@ class GrowJournal extends Component {
             testContent: '',
             timelineEntries: [],
             userJournals: [],
-            journalID: null
+            journalID: null,
+            fullImageModalImages: null,
+            currentFullImage: null
         };
 
         this.firebase = new Firebase();
@@ -148,8 +151,35 @@ class GrowJournal extends Component {
 
     }
 
+    openFullImageModal = (images) => {
+
+        console.log("openfullmodal")
+        console.log(images)
+
+        this.setState({
+            displayContent: "full-image",
+            fullImageModalImages: images
+        });
+    }
+
+    openFullImage = (imageUrl) => {
+
+        console.log("imageURL")
+        console.log(imageUrl)
+
+        this.setState({
+            currentFullImage: imageUrl
+        });
+    }
+
 
     closeModal = (key) => {
+
+        if (!key || key === '') {
+            this.setState({ displayContent: "main" });
+            return;
+        }
+
         this.setState({ displayContent: "main" });
         this.state.timelineEntries.forEach((timelineEntry) => {
             if (timelineEntry.id === key) {
@@ -218,7 +248,7 @@ class GrowJournal extends Component {
             console.log("display entries")
             console.log(this.state.displayEntries)
             renderedJournalEntries = this.state.displayEntries.map((entry) =>
-                <JournalEntry editEntryByID={this.editEntryByID} currentEntry={entry} />
+                <JournalEntry editEntryByID={this.editEntryByID} currentEntry={entry} currentFullImage={this.openFullImage} displayFullImage={this.openFullImageModal} />
             )
         }
 
@@ -310,6 +340,8 @@ class GrowJournal extends Component {
                             return <JournalAddEditModal journalID={this.state.journalID} closeModal={this.closeModal} editPost="new" />;
                         case 'edit':
                             return <JournalAddEditModal journalID={this.state.journalID} closeModal={this.closeModal} editPost={this.state.currentEntry} />;
+                        case 'full-image':
+                            return <FullImageModal closeModal={this.closeModal} imageList={this.state.fullImageModalImages} setCurrentFullImage={this.openFullImage} currentFullImage={this.state.currentFullImage}/>;
                         case 'create-journal':
                             return <JournalCreateModal journalID={this.state.journalID} setJournalID={this.setJournalID} />;
                         case 'main':
@@ -319,8 +351,6 @@ class GrowJournal extends Component {
                     }
 
                 })()}
-
-
 
             </div>
 

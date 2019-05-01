@@ -25,13 +25,15 @@ class JournalEntry extends Component {
     }
 
     displayFullImage = (ev) => {
-        let val = ev.target.dataset.value;
-        window.open(val);
+        this.props.displayFullImage(this.props.currentEntry.images)
+        this.props.currentFullImage(ev.target.dataset.value)
+        // let val = ev.target.dataset.value;
+        // window.open(val);
     }
 
     editEntryByID = (ev) => {
-        console.log("uh")
-        console.log(ev.target.dataset.value)
+        // console.log("uh")
+        // console.log(ev.target.dataset.value)
         this.props.editEntryByID(ev.target.dataset.value);
     }
 

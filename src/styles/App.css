@@ -982,3 +982,40 @@ html {
 .Dot-Preview-Date-String {
     font-weight: bolder;
 }
+
+/* FULL IMAGE MODAL */
+
+#Full-Image-Modal-Space {
+    width: 100%;
+    height: 100%;
+    z-index: 9999999;
+    background-color: #000000;
+    position: absolute;
+}
+
+#Full-Image-Close-Btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 30px;
+}
+
+#Full-Image-Last-Btn {
+    position: absolute;
+    left: 10px;
+    top: 50vh;
+    font-size: 30px;
+}
+
+#Full-Image-Next-Btn {
+    position: absolute;
+    right: 10px;
+    top: 50vh;
+    font-size: 30px;
+}
+
+#Full-Image-Image {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
