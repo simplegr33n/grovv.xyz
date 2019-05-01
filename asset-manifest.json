@@ -1,5 +1,5 @@
 {
-  "main.css": "/static/css/main.5016d95f.chunk.css",
+  "main.css": "/static/css/main.22b579d5.chunk.css",
   "main.js": "/static/js/main.f63c2cbc.chunk.js",
   "main.js.map": "/static/js/main.f63c2cbc.chunk.js.map",
   "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
@@ -8,9 +8,9 @@
   "static/js/2.1113b391.chunk.js": "/static/js/2.1113b391.chunk.js",
   "static/js/2.1113b391.chunk.js.map": "/static/js/2.1113b391.chunk.js.map",
   "index.html": "/index.html",
-  "precache-manifest.53c09473b8edc623a8dca00914fc4b1e.js": "/precache-manifest.53c09473b8edc623a8dca00914fc4b1e.js",
+  "precache-manifest.3ef2f2759a4f4b41b75b3a7d7a229e30.js": "/precache-manifest.3ef2f2759a4f4b41b75b3a7d7a229e30.js",
   "service-worker.js": "/service-worker.js",
   "static/css/2.a56e1b11.chunk.css.map": "/static/css/2.a56e1b11.chunk.css.map",
-  "static/css/main.5016d95f.chunk.css.map": "/static/css/main.5016d95f.chunk.css.map",
+  "static/css/main.22b579d5.chunk.css.map": "/static/css/main.22b579d5.chunk.css.map",
   "static/media/corner-logo.png": "/static/media/corner-logo.5ece3763.png"
 }
