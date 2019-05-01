@@ -105,13 +105,23 @@ class GrowJournal extends Component {
                 tempDeepDotsList[tempDeepDotsList.length] = dotValue;
             });
 
-            this.setState({
-                currentEntry: tempEntriesList[tempEntriesList.length - 1],
-                currentEntryID: tempEntriesList[tempEntriesList.length - 1].id,
-                timelineEntries: tempEntriesList,
-                timelineDots: tempDeepDotsList,
-                displayEntries: tempDeepDotsList[tempDeepDotsList.length - 1]
-            });
+            if (tempEntriesList.length > 0) {
+                this.setState({
+                    currentEntry: tempEntriesList[tempEntriesList.length - 1],
+                    currentEntryID: tempEntriesList[tempEntriesList.length - 1].id,
+                    timelineEntries: tempEntriesList,
+                    timelineDots: tempDeepDotsList,
+                    displayEntries: tempDeepDotsList[tempDeepDotsList.length - 1]
+                });
+            } else {
+                this.setState({
+                    currentEntry: null,
+                    currentEntryID: null,
+                    timelineEntries: [],
+                    timelineDots: [],
+                    displayEntries: []
+                });
+            }
 
             this.setEntries(tempDeepDotsList[tempDeepDotsList.length - 1]);
 
@@ -199,6 +209,9 @@ class GrowJournal extends Component {
     handleJournalChange = (ev) => {
         console.log(ev.target.value)
         this.setState({
+            currentEntry: null,
+            currentEntryID: null,
+            displayEntries: [],
             journalID: ev.target.value
         });
         this.watchEntries(ev.target.value)
@@ -239,12 +252,20 @@ class GrowJournal extends Component {
             <div id="Journal-Page">
                 <div id="Journal-Main">
                     <div id="Grow-Journal-Entry-Area">
-                        <div id="Grow-Journal-Header-Area">
-                            <div id="Grow-Journal-Header-Text">Grow Journal</div>
-                            <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
-                                +
-                            </button>
-                        </div>
+
+                        {(() => {
+                            if (this.state.journalID === null) {
+                                return (
+                                    <div id="Grow-Journal-Header-Area">
+                                        <div id="Grow-Journal-Header-Text">Grow Journal</div>
+                                        <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
+                                            +
+                                        </button>
+                                    </div>
+                                )
+                            }
+                        })()}
+
 
                         {(() => {
                             if (this.state.userJournals.length > 0) {
