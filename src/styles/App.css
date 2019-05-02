@@ -231,7 +231,6 @@ html {
     color: #61dafb;
 }
 
-
 /* Website view  */
 
 .Site-View {
@@ -244,7 +243,6 @@ html {
     height: 100%;
     position: fixed;
 }
-
 
 /* Auth */
 
@@ -306,7 +304,6 @@ html {
     width: 100%;
     height: 100%;
 }
-
 
 /* Config Page */
 
@@ -406,7 +403,6 @@ html {
     margin-bottom: 4px;
 }
 
-
 /* Journal Page */
 
 #Journal-Page {
@@ -427,7 +423,6 @@ html {
     align-content: center;
     text-align: center;
 }
-
 
 /* JOURNAL MODAL */
 
@@ -500,14 +495,11 @@ html {
     font-size: 16px;
 }
 
-.modal-date-li:hover>ul,
-.modal-date-li:focus-within>ul,
-.journal-entry-date-dropdown:hover {
+.modal-date-li:hover>ul, .modal-date-li:focus-within>ul, .journal-entry-date-dropdown:hover {
     visibility: visible;
     opacity: 1;
     display: block;
 }
-
 
 #Journal-Edit-Topline {
     display: flex;
@@ -566,9 +558,7 @@ html {
     font-size: 16px;
 }
 
-.modal-stage-li:hover>ul,
-.modal-stage-li:focus-within>ul,
-.journal-entry-stage-dropdown:hover {
+.modal-stage-li:hover>ul, .modal-stage-li:focus-within>ul, .journal-entry-stage-dropdown:hover {
     visibility: visible;
     opacity: 1;
     display: block;
@@ -580,7 +570,7 @@ html {
 
 .journal-modal-edit-stage-container {
     flex: 1;
-}    
+}
 
 .journal-modal-edit-title {
     flex: 1.5;
@@ -640,8 +630,6 @@ html {
     flex-direction: column;
 }
 
-
-
 .Journal-Post-Header {
     display: flex;
     flex-direction: row;
@@ -670,7 +658,8 @@ html {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background-color: #92b83b;;
+    background-color: #92b83b;
+    ;
 }
 
 .Journal-Post-Images-Wrapper {
@@ -684,7 +673,8 @@ html {
     overflow-x: auto;
     overflow-y: hidden;
     flex: 1;
-    background-color: #92b83b;;
+    background-color: #92b83b;
+    ;
 }
 
 .Journal-Entry-Thumbnail {
@@ -699,10 +689,10 @@ html {
 }
 
 #Grow-Journal-Header-Text {
-    /* text-align: right; */
     padding: 4px;
     margin-right: 10px;
     font-size: 24px;
+    user-select: none;
 }
 
 #Grow-Journal-Main-Area {
@@ -778,9 +768,11 @@ html {
     font-size: 24px;
     margin-left: 0.5%;
 }
+
 .New-Journal-Btn:hover {
     background-color: rgb(130, 231, 130);
 }
+
 .New-Journal-Btn:active {
     background-color: rgb(11, 218, 11);
 }
@@ -810,7 +802,7 @@ html {
     justify-content: center;
 }
 
-.journal-cancel-create-btn{
+.journal-cancel-create-btn {
     background-color: rgb(212, 75, 75);
 }
 
@@ -820,7 +812,6 @@ html {
 
 /* TIMELINE */
 
-
 #Timeline-Container {
     width: 100px;
     height: 100%;
@@ -828,7 +819,6 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
 }
 
 #Timeline-Inner-Container {
@@ -909,10 +899,9 @@ html {
     user-select: none;
 }
 
-.Timeline-Dot:hover > .Dot-Preview-rotate-180 {
+.Timeline-Dot:hover>.Dot-Preview-rotate-180 {
     visibility: visible;
 }
-
 
 #Timeline-Dot-Seedling {
     background-color: #5dff5d;
@@ -934,11 +923,11 @@ html {
     background-color: #a1a862;
 }
 
-#Timeline-Dot-Seedling:hover, #Timeline-Dot-Veg:hover, #Timeline-Dot-Pre:hover,  #Timeline-Dot-Post:hover, #Timeline-Dot-Flower:hover  {
+#Timeline-Dot-Seedling:hover, #Timeline-Dot-Veg:hover, #Timeline-Dot-Pre:hover, #Timeline-Dot-Post:hover, #Timeline-Dot-Flower:hover {
     background-color: #00ff2a;
 }
 
-#Timeline-Dot-Seedling:active, #Timeline-Dot-Veg:active, #Timeline-Dot-Pre:active,  #Timeline-Dot-Post:active, #Timeline-Dot-Flower:active {
+#Timeline-Dot-Seedling:active, #Timeline-Dot-Veg:active, #Timeline-Dot-Pre:active, #Timeline-Dot-Post:active, #Timeline-Dot-Flower:active {
     background-color: #aecfae;
 }
 
@@ -965,7 +954,7 @@ html {
 
 #Journal-Posts-Container {
     margin-bottom: 10px;
-    overflow-y: auto; 
+    overflow-y: auto;
     background-color: rgb(103, 156, 78);
     margin: 1%;
     margin-top: 0;
@@ -1067,6 +1056,7 @@ html {
 .Journal-Box-Item-Main {
     flex: 1;
     padding: 1%;
+    user-select: none;
 }
 
 .Journal-Box-Item-Header {
@@ -1090,7 +1080,6 @@ html {
     font-size: 16px;
     font-weight: normal;
 }
-
 
 /* GROWS PAGE */
 
@@ -1161,8 +1150,8 @@ html {
 .Grow-Box-Item {
     width: 1000px;
     max-width: 100%;
-    height: 400px;
-    max-height: 40vh;
+    /* height: 400px; */
+    /* max-height: 40vh; */
     background-color: rgb(121, 163, 115);
     color: #FFF;
     margin: 1%;
@@ -1171,6 +1160,7 @@ html {
     text-align: left;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .Grow-Box-Item-Main {
@@ -1190,7 +1180,7 @@ html {
     text-align: right;
 }
 
-.Grow-Box-Info-Text {
+.Grow-Box-Info-Text-Area {
     flex: 1;
     padding: 1%;
 }
@@ -1205,8 +1195,6 @@ html {
     max-height: 200px;
 }
 
-
-
 .Grow-Box-Item-Header {
     display: flex;
     flex-direction: row;
@@ -1215,14 +1203,45 @@ html {
 }
 
 .Grow-Box-Cam-Div {
-    max-width: 50%;
+    max-height: 40vh;
     height: 100%;
     background-color: #FFF;
     flex: 1;
     overflow: hidden;
+    min-width: 300px;
 }
 
 .Grow-Box-Cam {
     width: 100%;
     height: 100%;
+}
+
+.Grow-Box-Info-Section {
+    display: flex;
+    flex-direction: row;
+}
+
+.Grow-Box-Info-Type {
+    /* flex: 1; */
+}
+
+.Grow-Box-Dot-Lead {
+    flex: 1;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.Grow-Box-Dot-Lead-Dots {
+    position: absolute;
+}
+
+.Grow-Box-Dot-Lead-Dots::before {
+    content: '................................................................................';
+}
+
+.Grow-Box-Info-Data {
+    /* flex: 1; */
+    width: 120px;
+    text-align: center;
+    background-color: gray;
 }

@@ -87,9 +87,11 @@ class GrowBoxItem extends Component {
         var lastUpdate = null;
         if (this.state.liveData) {
             cTemp = this.state.liveData.cTemp
+            cTemp = Math.round( cTemp * 10 ) / 10;
             fanSpeed = this.state.liveData.fanSpeed
             humiPower = this.state.liveData.humiPower
             humidity = this.state.liveData.humidity
+            humidity = Math.round( humidity * 10 ) / 10;
 
             // TODO... simplify below.
             var updatedAtDate = new Date(this.state.liveData.time)
@@ -109,59 +111,6 @@ class GrowBoxItem extends Component {
 
         return (
             <div className="Grow-Box-Item" onClick={this.openGrow}>
-                <div className="Grow-Box-Item-Main">
-                    <div className="Grow-Box-Item-Header">
-
-                        <div>
-                            {this.props.grow.name}
-                        </div>
-                        <div className="Grow-Box-Created">
-                            updated: <i><b>{lastUpdate}</b></i>
-                        </div>
-                    </div>
-
-                    <div className="Grow-Box-Info">
-                        <div className="Grow-Box-Info-Text">
-                            {(() => {
-                                if (cTemp) {
-                                    return (
-                                        <div>TEMP ........ <b>{cTemp}°C</b></div>
-                                    )
-                                }
-                            })()}
-
-                            {(() => {
-                                if (fanSpeed) {
-                                    return (
-                                        <div>FAN  ........  <b>{fanSpeed}%</b></div>
-                                    )
-                                }
-                            })()}
-
-                            {(() => {
-                                if (humidity) {
-                                    return (
-                                        <div>HUMIDITY .... <b>{humidity}%RH</b></div>
-                                    )
-                                }
-                            })()}
-
-                            {(() => {
-                                if (humiPower) {
-                                    return (
-                                        <div>HUMIDIFIER ... <b>{humiPower}%</b></div>
-                                    )
-                                }
-                            })()}
-
-                        </div>
-
-                        <img alt="preview" src={this.props.grow.previewImage} className="Grow-Box-Preview-Image" />
-                    </div>
-
-
-
-                </div>
 
                 <div className="Grow-Box-Cam-Div">
 
@@ -179,6 +128,77 @@ class GrowBoxItem extends Component {
                     })()}
 
                 </div>
+
+                <div className="Grow-Box-Item-Main">
+                    <div className="Grow-Box-Item-Header">
+
+                        <div>
+                            {this.props.grow.name}
+                        </div>
+                        <div className="Grow-Box-Created">
+                            updated: <i><b>{lastUpdate}</b></i>
+                        </div>
+                    </div>
+
+                    <div className="Grow-Box-Info">
+                        <div className="Grow-Box-Info-Text-Area">
+                            {(() => {
+                                if (cTemp) {
+                                    return (
+                                        <div className="Grow-Box-Info-Section">
+                                            <div className="Grow-Box-Info-Type">TEMP</div>
+                                            <div className="Grow-Box-Dot-Lead"><div className="Grow-Box-Dot-Lead-Dots" /></div>
+                                            <div className="Grow-Box-Info-Data"><b>{cTemp}°C</b></div>
+                                        </div>
+                                    )
+                                }
+                            })()}
+
+                            {(() => {
+                                if (fanSpeed) {
+                                    return (
+                                        <div className="Grow-Box-Info-Section">
+                                            <div className="Grow-Box-Info-Type">FAN SPEED</div>
+                                            <div className="Grow-Box-Dot-Lead"><div className="Grow-Box-Dot-Lead-Dots" /></div>
+                                            <div className="Grow-Box-Info-Data"><b>{fanSpeed}%</b></div>
+                                        </div>
+                                    )
+                                }
+                            })()}
+
+                            {(() => {
+                                if (humidity) {
+                                    return (
+                                        <div className="Grow-Box-Info-Section">
+                                            <div className="Grow-Box-Info-Type">HUMIDITY</div>
+                                            <div className="Grow-Box-Dot-Lead"><div className="Grow-Box-Dot-Lead-Dots" /></div>
+                                            <div className="Grow-Box-Info-Data"><b>{humidity}%RH</b></div>
+                                        </div>
+                                    )
+                                }
+                            })()}
+
+                            {(() => {
+                                if (humiPower) {
+                                    return (
+                                        <div className="Grow-Box-Info-Section">
+                                            <div className="Grow-Box-Info-Type">HUMIDIFIER</div>
+                                            <div className="Grow-Box-Dot-Lead"><div className="Grow-Box-Dot-Lead-Dots" /></div>
+                                            <div className="Grow-Box-Info-Data"><b>{humiPower}%</b></div>
+                                        </div>
+                                    )
+                                }
+                            })()}
+
+                        </div>
+
+                        <img alt="preview" src={this.props.grow.previewImage} className="Grow-Box-Preview-Image" />
+                    </div>
+
+
+
+                </div>
+
             </div>
         );
     }
