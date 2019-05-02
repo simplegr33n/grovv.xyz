@@ -19,8 +19,20 @@ class JournalBoxItem extends Component {
     render() {
 
         var createdAt = new Date(this.props.journal.createdAt).toDateString()
+
+        // TODO... simplify below.
         var updatedAtDate = new Date(this.props.journal.updatedAt)
-        var updatedAt = updatedAtDate.toDateString() + " - " + updatedAtDate.getHours() + ":" + updatedAtDate.getMinutes()
+        var updatedAtHoursString = updatedAtDate.getHours().toString()
+        if (updatedAtHoursString.length === 1) {
+            updatedAtHoursString = "0" + updatedAtHoursString
+        }
+        var updatedAtMinutesString = updatedAtDate.getMinutes().toString()
+        if (updatedAtMinutesString.length === 1) {
+            updatedAtMinutesString = "0" + updatedAtMinutesString
+        }
+        var updatedAt = updatedAtDate.toDateString() + " - " + updatedAtHoursString + ":" + updatedAtMinutesString
+
+
 
         return (
             <div className="Journal-Box-Item" onClick={this.openJournal}>

@@ -1161,10 +1161,12 @@ html {
 .Grow-Box-Item {
     width: 1000px;
     max-width: 100%;
-    height: 300px;
+    height: 400px;
+    max-height: 40vh;
     background-color: rgb(121, 163, 115);
     color: #FFF;
     margin: 1%;
+    margin-top: 0;
     position: relative;
     text-align: left;
     display: flex;
@@ -1179,9 +1181,31 @@ html {
 }
 
 .Grow-Box-Info {
+    padding: 1%;
     background-color: rgb(12, 49, 2);
+    display: flex;
+    flex-direction: row;
     flex: 1;
+    font-weight: normal;
+    text-align: right;
 }
+
+.Grow-Box-Info-Text {
+    flex: 1;
+    padding: 1%;
+}
+
+.Grow-Box-Info-Image {
+    position: relative;
+    height: 100%;
+}
+
+.Grow-Box-Preview-Image {
+    position: relative;
+    max-height: 200px;
+}
+
+
 
 .Grow-Box-Item-Header {
     display: flex;
@@ -1190,15 +1214,12 @@ html {
     flex-wrap: wrap;
 }
 
-.Grow-Box-Preview-Image {
-    position: relative;
-    max-height: 100px;
-}
-
 .Grow-Box-Cam-Div {
-    width: 300px;
+    max-width: 50%;
     height: 100%;
-    background-color: blue;
+    background-color: #FFF;
+    flex: 1;
+    overflow: hidden;
 }
 
 .Grow-Box-Cam {

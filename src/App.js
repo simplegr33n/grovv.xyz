@@ -331,7 +331,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-											return <GrowJournal />
+											return <GrowPage />
 									}
 								} else {
 									switch (this.state.mainContent) {

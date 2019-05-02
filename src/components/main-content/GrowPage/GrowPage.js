@@ -37,8 +37,10 @@ class GrowPage extends Component {
 
             var userGrowIDs = [];
 
-            snapshot.forEach((child) => {
-                if (typeof child.val() === "string") {
+            snapshot.forEach((child) => {          
+                if (!child.val().sensors_live) {
+                    console.log("through filter...")
+                    console.log(child.val())
                     userGrowIDs[child.key] = child.val()
                 }
             });
