@@ -120,6 +120,14 @@ class JournalAddEditModal extends Component {
 
         console.log('set journal entry ' + this.state.entryID)
 
+        // update updatedAt
+        var jRef = this.firebase.db.ref().child('journals').child(this.state.journalID)
+        var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(this.state.journalID)
+        var nowDate = new Date()
+        jRef.set({ 'updatedAt': nowDate.getTime() })
+        userRef.set({ 'updatedAt': nowDate.getTime() })
+
+
         this.props.closeModal(this.state.entryID);
     }
 

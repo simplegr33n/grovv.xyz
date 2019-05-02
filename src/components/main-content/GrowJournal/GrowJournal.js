@@ -53,15 +53,10 @@ class GrowJournal extends Component {
                 journalsList.push(child.val())
             });
 
+            console.log("Journals List:")
             console.log(journalsList)
 
-            // if (journalsList.length > 0) {
-            //     this.watchEntries(journalsList[0].id);
-
-            //     this.setState({
-            //         journalID: journalsList[0].id
-            //     });
-            // }
+            journalsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
 
             this.setState({
                 userJournals: journalsList
@@ -279,7 +274,7 @@ class GrowJournal extends Component {
                             if (this.state.journalID === null) {
                                 return (
                                     <div id="Grow-Journal-Header-Area">
-                                        <div id="Grow-Journal-Header-Text">Grow Journal</div>
+                                        <div id="Grow-Journal-Header-Text">Grow Journals</div>
                                         <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
                                             +
                                         </button>

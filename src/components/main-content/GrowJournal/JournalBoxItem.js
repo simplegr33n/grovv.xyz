@@ -19,6 +19,8 @@ class JournalBoxItem extends Component {
     render() {
 
         var createdAt = new Date(this.props.journal.createdAt).toDateString()
+        var updatedAtDate = new Date(this.props.journal.updatedAt)
+        var updatedAt = updatedAtDate.toDateString() + " - " + updatedAtDate.getHours() + ":" + updatedAtDate.getMinutes()
 
         return (
             <div className="Journal-Box-Item" onClick={this.openJournal}>
@@ -28,17 +30,14 @@ class JournalBoxItem extends Component {
                             {this.props.journal.name}
                         </div>
                         <div className="Journal-Box-Created">
-                            created: <i>{createdAt}</i>
+                            updated: <i><b>{updatedAt}</b></i>
                         </div>
                     </div>
 
                     <div className="Journal-Box-Info">
-                        <b>grow status:</b> (TODO)
+                        created: <i><b>{createdAt}</b></i>
                     </div>
 
-                    <div className="Journal-Box-Info">
-                        <b>last update:</b> (TODO)
-                    </div>
                 </div>
 
                 <img alt="preview" src={this.props.journal.previewImage} className="Journal-Box-Preview-Image" />
