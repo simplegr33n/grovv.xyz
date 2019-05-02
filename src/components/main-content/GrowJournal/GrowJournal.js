@@ -248,7 +248,7 @@ class GrowJournal extends Component {
         var renderedUserJournals = null;
         if (this.state.userJournals) {
             renderedUserJournals = this.state.userJournals.map((journal) =>
-                <div className="Journal-Box-Item-Container">
+                <div key={journal.id} className="Journal-Box-Item-Container">
                     <JournalBoxItem journal={journal} openJournal={this.openJournal} />
                 </div>
             )

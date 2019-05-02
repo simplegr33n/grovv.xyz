@@ -240,7 +240,7 @@ html {
 
 .Site-View-Update {
     overflow: auto;
-    /* width: calc(100% - 240px); */
+    background-color: green;
     height: 100%;
     position: fixed;
 }
@@ -1159,10 +1159,10 @@ html {
 /* GROW BOX ITEM */
 
 .Grow-Box-Item {
-    width: 520px;
-    max-width: 90%;
-    height: 120px;
-    background-color: rgb(32, 112, 21);
+    width: 1000px;
+    max-width: 100%;
+    height: 300px;
+    background-color: rgb(121, 163, 115);
     color: #FFF;
     margin: 1%;
     position: relative;
@@ -1171,13 +1171,16 @@ html {
     flex-direction: row;
 }
 
-.Grow-Box-Item:hover {
-    background-color: rgb(38, 148, 23);
-}
-
 .Grow-Box-Item-Main {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     padding: 1%;
+}
+
+.Grow-Box-Info {
+    background-color: rgb(12, 49, 2);
+    flex: 1;
 }
 
 .Grow-Box-Item-Header {
@@ -1187,3 +1190,18 @@ html {
     flex-wrap: wrap;
 }
 
+.Grow-Box-Preview-Image {
+    position: relative;
+    max-height: 100px;
+}
+
+.Grow-Box-Cam-Div {
+    width: 300px;
+    height: 100%;
+    background-color: blue;
+}
+
+.Grow-Box-Cam {
+    width: 100%;
+    height: 100%;
+}

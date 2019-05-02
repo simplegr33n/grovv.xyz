@@ -200,8 +200,6 @@ class App extends Component {
 	}
 
 	handleMenuHandle = () => {
-		console.log("Yup...pressed.")
-
 		if (this.leftMenuRef.current.style.left !== "-240px") {
 			this.leftMenuRef.current.style.left = '-240px';
 		} else {
@@ -329,7 +327,7 @@ class App extends Component {
 													<object className="Site-View-Update" style={{ zIndex: this.state.zPlotly }} type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="plotly" />
 													<object className="Site-View-Update" style={{ zIndex: this.state.zLivecam }} type="text/html" data={this.state.URL_livecam} width="100%" height="100%" aria-label="live cam" />
 													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerPlotly }} type="text/html" data={this.state.URL_vegger_plotly} width="100%" height="100%" aria-label="vegger plotly" />
-													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerLivecam }} type="text/html" data={this.state.URL_vegger_livecam} width="100%" height="100%" aria-label="vegger live cam" />
+													<img className="Site-View-Update" alt="cam" style={{ zIndex: this.state.zVeggerLivecam, objectFit: 'contain' }} src={this.state.URL_vegger_livecam} width="100%" height="100%" />										
 												</div>
 											);
 										default:

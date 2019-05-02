@@ -81,7 +81,7 @@ class ResizeDraggableView extends Component {
                                 height: "100%",
                             }}>
                             <div className="moveHandle">&#10500;</div>
-                            <object className="Rnd-View-Vegger" style={{ zIndex: this.state.zVeggerLivecam }} type="text/html" data={this.props.urls.vegger_livecam} width="100%" height="100%" aria-label="vegger live cam" />
+							<img className="Rnd-View-Vegger" alt="cam" style={{ zIndex: this.state.zVeggerLivecam, objectFit: 'contain' }} src={this.props.urls.vegger_livecam} width="100%" height="100%" />										
 
                         </Rnd>
                     </div>

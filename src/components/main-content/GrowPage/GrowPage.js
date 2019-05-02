@@ -23,43 +23,51 @@ class GrowPage extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-        this.watchgrows = this.watchGrows();
+        this.getUserGrows = this.getUserGrowIDs();
     }
 
     componentWillUnmount() {
         this._ismounted = false;
     }
 
-    watchGrows = () => {
+    getUserGrowIDs = () => {
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows')
 
         ref.on('value', (snapshot) => {
 
+            var userGrowIDs = [];
 
-            console.log("watch grows!")
-            console.log(snapshot.val())
+            snapshot.forEach((child) => {
+                if (typeof child.val() === "string") {
+                    userGrowIDs[child.key] = child.val()
+                }
+            });
 
-            // var growsList = [];
+            // TODO: make own function...?
+            var setUserGrows = []
+            for (var key of Object.keys(userGrowIDs)) {
+                var growRef = this.firebase.db.ref().child('grows').child(key)
+                
+                growRef.on('value', (snapshot) => {
+                    if (!setUserGrows.includes(snapshot.val())) {
+                        setUserGrows[setUserGrows.length] = snapshot.val()
+                    }
 
-            // snapshot.forEach((child) => {
-            //     growsList.push(child.val())
-            // });
-
-            // console.log("grows List:")
-            // console.log(growsList)
-
-            // growsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
-
-            // this.setState({
-            //     userGrows: growsList
-            // });
+                    setUserGrows.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
+    
+                    this.setState({
+                        userGrows: setUserGrows
+                    });
+    
+                }, function (errorObject) {
+                    console.log("watch grow failed: " + errorObject.code);
+                });
+            }
 
         }, function (errorObject) {
             console.log("watch user grows failed: " + errorObject.code);
         });
     }
-
-
 
     closeModal = (key) => {
         if (!key || key === '') {
@@ -82,7 +90,7 @@ class GrowPage extends Component {
 
     openCreateGrowModal = () => {
         alert("GrowPage.js TODO")
-        this.firebase.db.ref().child('grows').push({'name':'Ganja Grove'})
+        //this.firebase.db.ref().child('grows').push({'name':'Ganja Grove'})
         // this.setState({ displayContent: "create-grow" });
     }
 
@@ -91,7 +99,7 @@ class GrowPage extends Component {
         var renderedGrowBoxes = null;
         if (this.state.userGrows) {
             renderedGrowBoxes = this.state.userGrows.map((grow) =>
-                <div className="Grow-Box-Item-Container">
+                <div key={grow.id} className="Grow-Box-Item-Container">
                     <GrowBoxItem grow={grow} openGrow={this.openGrow} />
                 </div>
             )
