@@ -27,7 +27,7 @@ class JournalCreateModal extends Component {
     }
 
     cancelModal = () => {
-        this.props.setJournalID(this.state.journalID);
+        this.props.setJournalID(null);
     }
 
     createJournal = () => {
@@ -41,16 +41,16 @@ class JournalCreateModal extends Component {
         // user object ref to journal key
         var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(ref.key)
 
-        var journalId = ref.key
+        var journalID = ref.key
         var journalName = this.state.journalName
         var nowDate = new Date()
 
-        this.setState({ journalID: journalId });
+        this.setState({ journalID: journalID });
 
-        ref.set({ 'id': journalId, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
-        userRef.set({ 'id': journalId, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
+        ref.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
+        userRef.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
 
-        this.props.setJournalID(journalId);
+        this.props.setJournalID(journalID);
     }
 
     render() {

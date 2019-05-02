@@ -187,6 +187,13 @@ class GrowJournal extends Component {
     }
 
     setJournalID = (id) => {
+        if (id === null) {
+            this.setState({
+                displayContent: "main",
+            });
+            return;
+        }
+
         this.setState({
             displayContent: "main",
             journalID: id

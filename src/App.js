@@ -15,6 +15,7 @@ import EditProfile from './components/main-content/EditProfile.js'
 import FeedChart from './components/main-content/FeedChart/FeedChart.js'
 import GrowConfig from './components/main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './components/main-content/GrowJournal/GrowJournal.js'
+import GrowPage from './components/main-content/GrowPage/GrowPage.js'
 import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 // QuickBar Indicator Colors (green/orange/red)
@@ -27,7 +28,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, etc.
+			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, grows, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
@@ -294,6 +295,12 @@ class App extends Component {
 		}
 	}
 
+	openGrows = () => {
+		if (this.state.mainContent !== 'grows') {
+			this.setState({ mainContent: 'grows' });
+		}
+	}
+
 	render() {
 		return (
 			<div className="App">
@@ -310,6 +317,8 @@ class App extends Component {
 											return <ResizeDraggableView urls={this.state.urls} />
 										case 'journal':
 											return <GrowJournal />
+										case 'grows':
+											return <GrowPage />
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -368,6 +377,7 @@ class App extends Component {
 													<button className="Left-Menu-Btn" onClick={this.openConfig}>CONFIG <b>&#9881;</b></button>
 													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI <span role="img" aria-label="multi cam">&#128200;&#128250;</span></button>
 													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
+													<button className="Left-Menu-Btn" onClick={this.openGrows}>GROWS <span role="img" aria-label="journal">&#127809;</span></button>
 													<div id="Left-Chart-Btns">
 														<button className="EditChart-Menu-Btn" onClick={this.editChart}>EDIT &#9998; CHART</button>
 														<button className="Left-Menu-Btn" onClick={this.openChart}>CHART &#9619;&#9619;</button>
