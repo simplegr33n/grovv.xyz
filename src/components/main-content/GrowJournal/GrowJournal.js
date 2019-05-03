@@ -24,7 +24,7 @@ class GrowJournal extends Component {
             testContent: '',
             timelineEntries: [],
             userJournals: [],
-            journalID: null,
+            journalID: this.props.journalID,
             fullImageModalImages: null,
             currentFullImage: null
         };
@@ -67,7 +67,7 @@ class GrowJournal extends Component {
         });
     }
 
-    watchEntries = (journalId = this.state.journalID) => {
+    watchEntries = (journalId = this.props.journalID) => {
         var ref = this.firebase.db.ref().child('journals').child(journalId).child('entries')
 
         console.log('watchin... ' + journalId)
@@ -191,6 +191,7 @@ class GrowJournal extends Component {
             this.setState({
                 displayContent: "main",
             });
+            this.props.setJournalID(null)
             return;
         }
 
@@ -198,7 +199,7 @@ class GrowJournal extends Component {
             displayContent: "main",
             journalID: id
         });
-
+        this.props.setJournalID(id)
         this.watchEntries(id);
     }
 
@@ -223,6 +224,7 @@ class GrowJournal extends Component {
             displayEntries: [],
             journalID: ev.target.value
         });
+        this.props.setJournalID(ev.target.value)
         this.watchEntries(ev.target.value)
     }
 
@@ -231,11 +233,14 @@ class GrowJournal extends Component {
     }
 
     openJournal = (journal) => {
-        this.watchEntries(journal.id);
+        
 
         this.setState({
             journalID: journal.id
         });
+        this.props.setJournalID(journal.id);
+        this.watchEntries(journal.id);
+        
     }
 
     render() {
@@ -278,7 +283,7 @@ class GrowJournal extends Component {
 
 
                         {(() => {
-                            if (this.state.journalID === null) {
+                            if (this.props.journalID === null) {
                                 return (
                                     <div id="Grow-Journal-Header-Area">
                                         <div id="Grow-Journal-Header-Text">Grow Journals</div>
@@ -291,7 +296,7 @@ class GrowJournal extends Component {
                         })()}
 
                         {(() => {
-                            if (renderedUserJournals && !this.state.journalID) {
+                            if (renderedUserJournals && !this.props.journalID) {
                                 return (
                                     <div id="Journal-Box-Area-Scroll">
                                         <div id="Journal-Box-Area">
@@ -304,10 +309,10 @@ class GrowJournal extends Component {
 
 
                         {(() => {
-                            if (renderedJournalOptions && this.state.journalID) {
+                            if (renderedJournalOptions && this.props.journalID) {
                                 return (
                                     <div className="Grow-Journal-Title-Div">
-                                        <select id="Grow-Journal-Title-Select" onChange={this.handleJournalChange} value={this.state.journalID}>
+                                        <select id="Grow-Journal-Title-Select" onChange={this.handleJournalChange} value={this.props.journalID}>
                                             {renderedJournalOptions}
                                         </select>
                                         <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
@@ -319,7 +324,7 @@ class GrowJournal extends Component {
                         })()}
 
                         {(() => {
-                            if (this.state.journalID) {
+                            if (this.props.journalID) {
                                 return (
                                     <div id="Journal-Posts-Container">
                                         {(() => {
@@ -348,7 +353,7 @@ class GrowJournal extends Component {
 
 
                     {(() => {
-                        if (this.state.journalID) {
+                        if (this.props.journalID) {
                             return (
                                 <div id="Timeline-Container">
 
@@ -378,13 +383,13 @@ class GrowJournal extends Component {
 
                     switch (this.state.displayContent) {
                         case 'add':
-                            return <JournalAddEditModal journalID={this.state.journalID} closeModal={this.closeModal} editPost="new" />;
+                            return <JournalAddEditModal journalID={this.props.journalID} closeModal={this.closeModal} editPost="new" />;
                         case 'edit':
-                            return <JournalAddEditModal journalID={this.state.journalID} closeModal={this.closeModal} editPost={this.state.currentEntry} />;
+                            return <JournalAddEditModal journalID={this.props.journalID} closeModal={this.closeModal} editPost={this.state.currentEntry} />;
                         case 'full-image':
                             return <FullImageModal closeModal={this.closeModal} imageList={this.state.fullImageModalImages} currentFullImage={this.state.currentFullImage} />;
                         case 'create-journal':
-                            return <JournalCreateModal journalID={this.state.journalID} setJournalID={this.setJournalID} />;
+                            return <JournalCreateModal journalID={this.props.journalID} setJournalID={this.setJournalID} />;
                         case 'main':
                             return <div />;
                         default:

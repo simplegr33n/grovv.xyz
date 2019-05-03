@@ -1259,6 +1259,7 @@ html {
 .Grow-Box-Grow-Name {
     font-size: 24px;
     user-select: none;
+    cursor: pointer;
 }
 
 .Grow-Box-Cam-Full-Btn {
@@ -1273,6 +1274,7 @@ html {
     right: 1%;
     top: 1%;
     user-select: none;
+    cursor: pointer;
 }
 
 .Grow-Box-Cam-Full-Btn:hover {
@@ -1300,6 +1302,7 @@ html {
     margin: 1%;
     padding: 1%;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .Grow-Box-Function-Btn-Feed {
@@ -1308,6 +1311,7 @@ html {
     margin-right: 0;
     padding: 1%;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .Grow-Box-Function-Btn-Edit-Feed {
@@ -1318,6 +1322,7 @@ html {
     margin-right: 0;
     padding: 1%;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .Grow-Active-Indicator-Circle {

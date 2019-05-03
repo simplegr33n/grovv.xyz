@@ -9,143 +9,173 @@ import Firebase from '../../../config/firebaseConfig.js'
 
 class GrowPage extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            displayContent: "main",
-            userGrows: [],
-            growID: null,
-        };
+	constructor(props) {
+		super(props);
+		this.state = {
+			displayContent: "main",
+			userGrows: [],
+			growID: this.props.growID
+		};
 
-        this.firebase = new Firebase();
+		this.firebase = new Firebase();
 
-    }
+	}
 
-    componentDidMount() {
-        this._ismounted = true;
-        this.getUserGrows = this.getUserGrowIDs();
-    }
+	componentDidMount() {
+		this._ismounted = true;
+		this.getUserGrows = this.getUserGrowIDs();
 
-    componentWillUnmount() {
-        this._ismounted = false;
-    }
+		if (this.props.growID) {
+			console.log("SETGROWID")
+			console.log(this.props.growID)
+		}
+	}
 
-    getUserGrowIDs = () => {
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows')
+	componentWillUnmount() {
+		this._ismounted = false;
+	}
 
-        ref.on('value', (snapshot) => {
+	getUserGrowIDs = () => {
+		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows')
 
-            var userGrowIDs = [];
+		ref.on('value', (snapshot) => {
 
-            console.log("TODO: remove filter.")
-            snapshot.forEach((child) => {          
-                if (!child.val().sensors_live) {
-                    userGrowIDs[child.key] = child.val()
-                }
-            });
+			var userGrowIDs = [];
 
-            // TODO: make own function...?
-            var setUserGrows = []
-            for (var key of Object.keys(userGrowIDs)) {
-                var growRef = this.firebase.db.ref().child('grows').child(key)
-                
-                growRef.on('value', (snapshot) => {
-                    if (!setUserGrows.includes(snapshot.val())) {
-                        setUserGrows[setUserGrows.length] = snapshot.val()
-                    }
+			console.log("TODO: remove filter.")
+			snapshot.forEach((child) => {
+				if (!child.val().sensors_live) {
+					userGrowIDs[child.key] = child.val()
+				}
+			});
 
-                    setUserGrows.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
-    
-                    this.setState({
-                        userGrows: setUserGrows
-                    });
-    
-                }, function (errorObject) {
-                    console.log("watch grow failed: " + errorObject.code);
-                });
-            }
+			// TODO: make own function...?
+			var setUserGrows = []
+			for (var key of Object.keys(userGrowIDs)) {
+				var growRef = this.firebase.db.ref().child('grows').child(key)
 
-        }, function (errorObject) {
-            console.log("watch user grows failed: " + errorObject.code);
-        });
-    }
+				growRef.on('value', (snapshot) => {
+					if (!setUserGrows.includes(snapshot.val())) {
+						setUserGrows[setUserGrows.length] = snapshot.val()
+					}
 
-    closeModal = (key) => {
-        if (!key || key === '') {
-            this.setState({ displayContent: "main" });
-            return;
-        }
+					setUserGrows.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
 
-        this.setState({ displayContent: "main" });
-    }
+					this.setState({
+						userGrows: setUserGrows
+					});
 
-    openMainPage = (page) => {
-        this.props.openMainPage(page)
-    }
+				}, function (errorObject) {
+					console.log("watch grow failed: " + errorObject.code);
+				});
+			}
 
-    handleGrowChange = (ev) => {
-        console.log("grow CHANGE!!!!")
-        console.log(ev.target.value)
-        this.setState({
-            userGrows: [],
-            growID: ev.target.value
-        });
-        this.watchEntries(ev.target.value)
-    }
+		}, function (errorObject) {
+			console.log("watch user grows failed: " + errorObject.code);
+		});
+	}
 
-    openCreateGrowModal = () => {
-        alert("GrowPage.js TODO")
-        //this.firebase.db.ref().child('grows').push({'name':'Ganja Grove'})
-        // this.setState({ displayContent: "create-grow" });
-    }
+	closeModal = (key) => {
+		if (!key || key === '') {
+			this.setState({ displayContent: "main" });
+			return;
+		}
 
-    render() {
+		this.setState({ displayContent: "main" });
+	}
 
-        var renderedGrowBoxes = null;
-        if (this.state.userGrows) {
-            renderedGrowBoxes = this.state.userGrows.map((grow) =>
-                <div key={grow.id} className="Grow-Box-Item-Container">
-                    <GrowBoxItem grow={grow} openGrow={this.openGrow} openMainPage={this.openMainPage} />
-                </div>
-            )
-        }
+	openMainPage = (page) => {
+		this.props.openMainPage(page)
+	}
 
-        return (
+	handleGrowChange = (ev) => {
+		console.log("grow CHANGE!!!!")
+		console.log(ev.target.value)
+		this.setState({
+			growID: ev.target.value
+		});
+		this.watchEntries(ev.target.value)
+	}
 
-            <div id="Grow-Page">
-                <div id="Grow-Main">
-                    <div id="Grow-Main-Area">
+	openCreateGrowModal = () => {
+		alert("GrowPage.js openCreateGrowModal() TODO")
+	}
 
-                        {(() => {
-                            if (this.state.growID === null) {
-                                return (
-                                    <div id="Grow-Header-Area">
-                                        <div id="Grow-Header-Text">Grows</div>
-                                        <button className="New-Grow-Btn" onClick={this.openCreateGrowModal}>
-                                            +
-                                        </button>
-                                    </div>
-                                )
-                            }
-                        })()}
+	openGrow = (growID) => {	
+		if (!growID) {
+			this.props.setGrowID(null)
+		}
 
-                        {(() => {
-                            if (renderedGrowBoxes) {
-                                return (
-                                    <div id="Grow-Box-Area-Scroll">
-                                        <div id="Grow-Box-Area">
-                                            {renderedGrowBoxes}
-                                        </div>
-                                    </div>
-                                )
-                            }
-                        })()}
+		this.props.setGrowID(growID)
+	}
 
-                    </div>
-                </div>
-            </div>
-        );
-    }
+	render() {
+
+		// console.log("SET GROW ID")
+		// console.log(this.props.setGrowID)
+
+		console.log("GrowPage render growID")
+		console.log(this.props.growID)
+
+		var renderedGrowBoxes = null;
+		if (this.state.growID === null && this.state.userGrows) {
+			renderedGrowBoxes = this.state.userGrows.map((grow) =>
+				<div key={grow.id} className="Grow-Box-Item-Container">
+					<GrowBoxItem grow={grow} openGrow={this.openGrow} openMainPage={this.openMainPage} />
+				</div>
+			)
+		}
+
+		return (
+
+			<div id="Grow-Page">
+				<div id="Grow-Main">
+					<div id="Grow-Main-Area">
+
+						{(() => {
+							if (this.props.growID === null) {
+								return (
+									<div id="Grow-List-Main-Area">
+										<div id="Grow-Header-Area">
+											<div id="Grow-Header-Text">Grows</div>
+											<button className="New-Grow-Btn" onClick={this.openCreateGrowModal}>
+												+
+											</button>
+										</div>
+
+										{(() => {
+											if (renderedGrowBoxes) {
+												return (
+													<div id="Grow-Box-Area-Scroll">
+														<div id="Grow-Box-Area">
+															{renderedGrowBoxes}
+														</div>
+													</div>
+												)
+											}
+										})()}
+									</div>
+								)
+							}
+						})()}
+
+						{(() => {
+							if (this.props.growID) {
+								return (
+									<div id="Grow-List-Main-Area">
+										{this.props.growID}
+									</div>
+								)
+							}
+						})()}
+
+
+
+					</div>
+				</div>
+			</div>
+		);
+	}
 }
 
 export default GrowPage;

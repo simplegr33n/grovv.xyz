@@ -42,7 +42,9 @@ class App extends Component {
 			sFlowerTemp: '',
 			sFlowerHumidity: '',
 			sVeggerTemp: '',
-			sVeggerHumidity: ''
+			sVeggerHumidity: '',
+			growID: null,
+			journalID: null
 		};
 
 		this.firebase = new Firebase()
@@ -288,16 +290,44 @@ class App extends Component {
 	}
 
 	openJournal = () => {
+
 		if (this.state.mainContent !== 'journal') {
-			this.setState({ mainContent: 'journal' });
+			this.setState({ 
+				mainContent: 'journal',
+				journalID: null
+			});
+		} else {
+			this.setState({ 
+				journalID: null
+			});
 		}
 	}
 
 	openGrows = () => {
 		if (this.state.mainContent !== 'grows') {
-			this.setState({ mainContent: 'grows' });
+			this.setState({ 
+				mainContent: 'grows',
+				growID: null
+			});
+		} else {
+			this.setState({ 
+				growID: null
+			});
 		}
 	}
+
+	setGrowID = (growID) => {
+		console.log("APP Setgrowid")
+		console.log(growID)
+		this.setState({ growID: growID });
+	}
+
+	setJournalID = (journalID) => {
+		console.log("APP SetJournalID")
+		console.log(journalID)
+		this.setState({ journalID: journalID });
+	}
+
 
 	openMainPageFromExternal = (page) => {
 		console.log("todo: get rid of this system...")
@@ -344,9 +374,9 @@ class App extends Component {
 										case 'resizeview':
 											return <ResizeDraggableView urls={this.state.urls} />
 										case 'journal':
-											return <GrowJournal />
+											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID}/>
 										case 'grows':
-											return <GrowPage openMainPage={this.openMainPageFromExternal} />
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrowID={this.setGrowID} growID={this.state.growID}/>
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -361,7 +391,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal} />
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrowID={this.setGrowID} growID={this.state.growID}/>
 									}
 								} else {
 									switch (this.state.mainContent) {

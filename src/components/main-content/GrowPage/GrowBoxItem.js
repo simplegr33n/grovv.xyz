@@ -27,12 +27,6 @@ class GrowBoxItem extends Component {
 			this.getVeggerData()
 		}
 
-		if (this.props.grow.urls.cam) {
-			this.setState({
-				piCamImageUrl: this.props.grow.urls.cam,
-			});
-		}
-
 	}
 
 
@@ -79,15 +73,15 @@ class GrowBoxItem extends Component {
 		this.props.openMainPage(ev.target.dataset.value)
 	}
 
+	openGrow = (ev) => {
+		this.props.openGrow(ev.target.dataset.value)
+	}
+
 	checkActive = (lastUpdateTime) => {
-		var now = new Date();
-		console.log("COMPARE ACTIVE TIME")
 
 		if (lastUpdateTime) {
-			console.log("DIFFERENCE!")
+			var now = new Date();
 			var difference = now - (new Date(lastUpdateTime).getTime())
-			console.log(difference)
-
 			
 				if (difference >= 3000000){
 					this.setState({
@@ -112,9 +106,6 @@ class GrowBoxItem extends Component {
 						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
 					});
 				}
-
-			
-
 		
 		} else {
 			console.log("NO LAST UPDATE ERROR")
@@ -171,7 +162,7 @@ class GrowBoxItem extends Component {
 				<div className="Grow-Box-Item-Main">
 					<div className="Grow-Box-Item-Header">
 
-						<div className="Grow-Box-Grow-Name">
+						<div className="Grow-Box-Grow-Name"  data-value={this.props.grow.id} onClick={this.openGrow}>
 							{this.props.grow.name}
 						</div>
 						<div className="Grow-Box-Updated">
