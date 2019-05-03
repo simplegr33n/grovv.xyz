@@ -239,7 +239,7 @@ html {
 
 .Site-View-Update {
     overflow: auto;
-    background-color: green;
+    background-color: #000;
     height: 100%;
     position: fixed;
 }
@@ -1175,7 +1175,7 @@ html {
     padding: 1%;
     background-color: rgb(12, 49, 2);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex: 1;
     font-weight: normal;
     flex-wrap: wrap;
@@ -1194,7 +1194,9 @@ html {
 
 .Grow-Box-Preview-Image {
     position: relative;
-    max-height: 200px;
+    max-height: 160px;
+    max-width: 160px;
+    object-fit: contain;
 }
 
 .Grow-Box-Item-Header {
@@ -1206,7 +1208,7 @@ html {
 
 .Grow-Box-Cam-Div {
     position: relative;
-    background-color: #FFF;
+    background-color: #000;
     min-height: 230px;
     flex: 1;
     overflow: hidden;
@@ -1244,10 +1246,14 @@ html {
 }
 
 .Grow-Box-Info-Data {
-    /* flex: 1; */
+    padding: 1%;
+    font-weight: bold;
     width: 120px;
     text-align: center;
-    background-color: gray;
+    color: #000;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
 
 .Grow-Box-Grow-Name {
@@ -1308,4 +1314,34 @@ html {
     margin-right: 0;
     padding: 1%;
     font-weight: bold;
+}
+
+.Data-Optimal-Background {
+    background-color: #91eebb;
+}
+
+.Data-Warning-Background {
+    background-color: #FFA500;
+}
+
+.Data-Danger-Background {
+    background-color: #FF0000;
+}
+
+.Data-Neutral-Background {
+    background-color: rgb(129, 129, 129);
+}
+
+.Grow-Box-Data-Raw {
+    flex: 1;
+    text-align: right;
+}
+
+.Grow-Box-Data-Unit {
+    flex: 1;
+    text-align: left;
+}
+
+.Horizontal-20px-Gap {
+    width: 20px;
 }
