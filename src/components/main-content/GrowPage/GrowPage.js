@@ -37,10 +37,9 @@ class GrowPage extends Component {
 
             var userGrowIDs = [];
 
+            console.log("TODO: remove filter.")
             snapshot.forEach((child) => {          
                 if (!child.val().sensors_live) {
-                    console.log("through filter...")
-                    console.log(child.val())
                     userGrowIDs[child.key] = child.val()
                 }
             });
@@ -80,6 +79,10 @@ class GrowPage extends Component {
         this.setState({ displayContent: "main" });
     }
 
+    openMainPage = (page) => {
+        this.props.openMainPage(page)
+    }
+
     handleGrowChange = (ev) => {
         console.log("grow CHANGE!!!!")
         console.log(ev.target.value)
@@ -102,7 +105,7 @@ class GrowPage extends Component {
         if (this.state.userGrows) {
             renderedGrowBoxes = this.state.userGrows.map((grow) =>
                 <div key={grow.id} className="Grow-Box-Item-Container">
-                    <GrowBoxItem grow={grow} openGrow={this.openGrow} />
+                    <GrowBoxItem grow={grow} openGrow={this.openGrow} openMainPage={this.openMainPage} />
                 </div>
             )
         }

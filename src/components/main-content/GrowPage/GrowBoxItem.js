@@ -18,9 +18,6 @@ class GrowBoxItem extends Component {
     }
 
     componentDidMount() {
-        console.log("Grow box grow props")
-        console.log(this.props.grow)
-
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
             this.getLiveData()
@@ -36,9 +33,6 @@ class GrowBoxItem extends Component {
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('flower')
 
         ref.on('value', (snapshot) => {
-
-            console.log("LIVE DATA GROW BOX")
-            console.log(snapshot.val())
 
             var growData = snapshot.val()
 
@@ -58,9 +52,6 @@ class GrowBoxItem extends Component {
 
         ref.on('value', (snapshot) => {
 
-            console.log("LIVE DATA GROW BOX")
-            console.log(snapshot.val())
-
             var growData = snapshot.val()
 
             this.setState({
@@ -72,10 +63,8 @@ class GrowBoxItem extends Component {
         });
     }
 
-
-    openGrow = () => {
-        console.log("GrowBoxItem openGrow() TODO")
-        //this.props.openGrow(this.props.grow)
+    openFullGrowCam = (ev) => {
+        this.props.openMainPage(ev.target.dataset.value)
     }
 
     render() {
@@ -87,11 +76,11 @@ class GrowBoxItem extends Component {
         var lastUpdate = null;
         if (this.state.liveData) {
             cTemp = this.state.liveData.cTemp
-            cTemp = Math.round( cTemp * 10 ) / 10;
+            cTemp = Math.round(cTemp * 10) / 10;
             fanSpeed = this.state.liveData.fanSpeed
             humiPower = this.state.liveData.humiPower
             humidity = this.state.liveData.humidity
-            humidity = Math.round( humidity * 10 ) / 10;
+            humidity = Math.round(humidity * 10) / 10;
 
             // TODO... simplify below.
             var updatedAtDate = new Date(this.state.liveData.time)
@@ -107,12 +96,11 @@ class GrowBoxItem extends Component {
 
         }
 
-
-
         return (
-            <div className="Grow-Box-Item" onClick={this.openGrow}>
+            <div className="Grow-Box-Item">
 
                 <div className="Grow-Box-Cam-Div">
+                    <div className="Grow-Box-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullGrowCam}>&#9974;</div>
 
                     {/* TODO: Just get the actual image location for the Ganja Grove cam.. */}
                     {(() => {
@@ -132,11 +120,11 @@ class GrowBoxItem extends Component {
                 <div className="Grow-Box-Item-Main">
                     <div className="Grow-Box-Item-Header">
 
-                        <div>
+                        <div className="Grow-Box-Grow-Name">
                             {this.props.grow.name}
                         </div>
-                        <div className="Grow-Box-Created">
-                            updated: <i><b>{lastUpdate}</b></i>
+                        <div className="Grow-Box-Updated">
+                            updt: <i><b>{lastUpdate}</b></i>
                         </div>
                     </div>
 

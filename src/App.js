@@ -299,6 +299,19 @@ class App extends Component {
 		}
 	}
 
+	openMainPageFromExternal = (page) => {
+		switch(page) {
+			case 'http://96.52.249.69:301':
+				this.openVeggerLiveCam()
+				break;
+			case 'http://96.52.249.69:300/html/':
+				this.openLiveCam()
+				break;
+			default:
+				break;
+		}
+    }
+
 	render() {
 		return (
 			<div className="App">
@@ -316,7 +329,7 @@ class App extends Component {
 										case 'journal':
 											return <GrowJournal />
 										case 'grows':
-											return <GrowPage />
+											return <GrowPage openMainPage={this.openMainPageFromExternal}/>
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -331,7 +344,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-											return <GrowPage />
+											return <GrowPage openMainPage={this.openMainPageFromExternal}/>
 									}
 								} else {
 									switch (this.state.mainContent) {
