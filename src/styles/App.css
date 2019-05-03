@@ -1132,6 +1132,7 @@ html {
     flex-direction: row;
     justify-content: flex-end;
     margin: 1%;
+    user-select: none;
 }
 
 .New-Grow-Btn {
@@ -1225,7 +1226,7 @@ html {
 }
 
 .Grow-Box-Info-Type {
-    /* flex: 1; */
+    user-select: none;
 }
 
 .Grow-Box-Dot-Lead {
@@ -1251,6 +1252,7 @@ html {
 
 .Grow-Box-Grow-Name {
     font-size: 24px;
+    user-select: none;
 }
 
 .Grow-Box-Cam-Full-Btn {
@@ -1274,6 +1276,7 @@ html {
 
 .Grow-Box-Updated {
     font-size: 12px;
+    user-select: none;
 }
 
 .Grow-Box-Function-Btns {
@@ -1302,6 +1305,7 @@ html {
     min-width: 30px;
     margin: 1%;
     margin-left: 0;
+    margin-right: 0;
     padding: 1%;
     font-weight: bold;
 }
