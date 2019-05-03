@@ -302,11 +302,11 @@ class App extends Component {
 	openMainPageFromExternal = (page) => {
 		console.log("todo: get rid of this system...")
 		console.log(page)
-		switch(page) {
+		switch (page) {
 			case 'http://96.52.249.69:301':
 				this.openVeggerLiveCam()
 				break;
-			case 'http://96.52.249.69:300/html/':
+			case 'http://96.52.249.69:300/html/cam_pic.php?time=0':
 				this.openLiveCam()
 				break;
 			case 'https://plot.ly/~bgolda89/0/raspberry-pi-streaming-sensor-data/':
@@ -327,7 +327,7 @@ class App extends Component {
 			default:
 				break;
 		}
-    }
+	}
 
 	render() {
 		return (
@@ -346,7 +346,7 @@ class App extends Component {
 										case 'journal':
 											return <GrowJournal />
 										case 'grows':
-											return <GrowPage openMainPage={this.openMainPageFromExternal}/>
+											return <GrowPage openMainPage={this.openMainPageFromExternal} />
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -357,11 +357,11 @@ class App extends Component {
 													<object className="Site-View-Update" style={{ zIndex: this.state.zPlotly }} type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="plotly" />
 													<object className="Site-View-Update" style={{ zIndex: this.state.zLivecam }} type="text/html" data={this.state.URL_livecam} width="100%" height="100%" aria-label="live cam" />
 													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerPlotly }} type="text/html" data={this.state.URL_vegger_plotly} width="100%" height="100%" aria-label="vegger plotly" />
-													<img className="Site-View-Update" alt="cam" style={{ zIndex: this.state.zVeggerLivecam, objectFit: 'contain' }} src={this.state.URL_vegger_livecam} width="100%" height="100%" />										
+													<img className="Site-View-Update" alt="cam" style={{ zIndex: this.state.zVeggerLivecam, objectFit: 'contain' }} src={this.state.URL_vegger_livecam} width="100%" height="100%" />
 												</div>
 											);
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal}/>
+											return <GrowPage openMainPage={this.openMainPageFromExternal} />
 									}
 								} else {
 									switch (this.state.mainContent) {
@@ -404,9 +404,9 @@ class App extends Component {
 
 													<button className="Left-Menu-Btn" onClick={this.openGrows}>GROWS <span role="img" aria-label="journal">&#127809;</span></button>
 													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
-													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI <span role="img" aria-label="multi cam">&#128200;&#128250;</span></button>													
-													
-													
+													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI <span role="img" aria-label="multi cam">&#128200;&#128250;</span></button>
+
+
 												</div>
 
 											</div>
@@ -417,7 +417,7 @@ class App extends Component {
 									);
 								}
 							})()}
-							
+
 						</div>
 					</div>
 				</header>

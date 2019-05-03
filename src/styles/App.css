@@ -1283,6 +1283,10 @@ html {
 .Grow-Box-Updated {
     font-size: 12px;
     user-select: none;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: flex-end;
 }
 
 .Grow-Box-Function-Btns {
@@ -1316,6 +1320,15 @@ html {
     font-weight: bold;
 }
 
+.Grow-Active-Indicator-Circle {
+    border-width: 1px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: #FFF;
+    margin-left: 1%;
+}
+
 .Data-Optimal-Background {
     background-color: #91eebb;
 }
@@ -1345,3 +1358,4 @@ html {
 .Horizontal-20px-Gap {
     width: 20px;
 }
+

@@ -11,12 +11,12 @@ class GrowBoxItem extends Component {
 		this.state = {
 			grow: this.props.grow,
 			liveData: [],
-			piCamImageUrl: null,
-			lastPiCamUpdate: 0
+			activeIndicatorStyle: 'Grow-Active-Indicator-Circle'
 		};
 
 
 		this.firebase = new Firebase();
+
 	}
 
 	componentDidMount() {
@@ -27,9 +27,7 @@ class GrowBoxItem extends Component {
 			this.getVeggerData()
 		}
 
-		if (this.props.grow.urls.cam === 'http://96.52.249.69:300/html/') {
-			this.watchPiCamFeed()
-		} else {
+		if (this.props.grow.urls.cam) {
 			this.setState({
 				piCamImageUrl: this.props.grow.urls.cam,
 			});
@@ -44,11 +42,13 @@ class GrowBoxItem extends Component {
 
 		ref.on('value', (snapshot) => {
 
-			var growData = snapshot.val()
+			var tempLiveData = snapshot.val()
 
 			this.setState({
-				liveData: growData
+				liveData: tempLiveData
 			});
+
+			this.checkActive(tempLiveData.time)
 
 		}, function (errorObject) {
 			console.log("grow box get live data failed: " + errorObject.code);
@@ -62,11 +62,13 @@ class GrowBoxItem extends Component {
 
 		ref.on('value', (snapshot) => {
 
-			var growData = snapshot.val()
+			var tempLiveData = snapshot.val()
 
 			this.setState({
-				liveData: growData
+				liveData: tempLiveData
 			});
+
+			this.checkActive(tempLiveData.time)
 
 		}, function (errorObject) {
 			console.log("grow box get live data failed: " + errorObject.code);
@@ -77,26 +79,48 @@ class GrowBoxItem extends Component {
 		this.props.openMainPage(ev.target.dataset.value)
 	}
 
-	watchPiCamFeed = () => {
+	checkActive = (lastUpdateTime) => {
+		var now = new Date();
+		console.log("COMPARE ACTIVE TIME")
 
-		setInterval(() => {
+		if (lastUpdateTime) {
+			console.log("DIFFERENCE!")
+			var difference = now - (new Date(lastUpdateTime).getTime())
+			console.log(difference)
 
-			this.updatePiCamState()
+			
+				if (difference >= 3000000){
+					this.setState({
+						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Neutral-Background'
+					});
+				}
 
-		}, 5000);
+				if (difference >= 240000){
+					this.setState({
+						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
+					});
+				}
+
+				if (difference >= 120000){
+					this.setState({
+						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
+					});
+				}
+
+				if (difference < 120000){
+					this.setState({
+						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
+					});
+				}
+
+			
+
+		
+		} else {
+			console.log("NO LAST UPDATE ERROR")
+		}
+
 	}
-
-	updatePiCamState = () => {
-		var millis = new Date();
-		var reducedMillis = millis - 5000;
-		var tempURL = "http://96.52.249.69:300/html/cam_pic.php?time=" + reducedMillis
-		this.setState({
-			piCamImageUrl: tempURL,
-			lastPiCamUpdate: millis
-		});
-	}
-
-
 
 	render() {
 
@@ -137,7 +161,7 @@ class GrowBoxItem extends Component {
 					{(() => {
 						if (this.state.piCamImageUrl !== null) {
 							return (
-								<img className="Grow-Box-Cam" alt="cam" src={this.state.piCamImageUrl} width="100%" height="100%" style={{ objectFit: 'contain' }} />
+								<img className="Grow-Box-Cam" alt="cam" src={this.props.grow.urls.cam} width="100%" height="100%" style={{ objectFit: 'contain' }} />
 							)
 						}
 					})()}
@@ -152,6 +176,7 @@ class GrowBoxItem extends Component {
 						</div>
 						<div className="Grow-Box-Updated">
 							updt: <i><b>{lastUpdate}</b></i>
+							<div className={this.state.activeIndicatorStyle} />
 						</div>
 					</div>
 					<div className="Grow-Box-Function-Btns">
