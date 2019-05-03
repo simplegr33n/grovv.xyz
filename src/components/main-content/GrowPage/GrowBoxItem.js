@@ -29,6 +29,10 @@ class GrowBoxItem extends Component {
 
         if (this.props.grow.urls.cam === 'http://96.52.249.69:300/html/') {
             this.watchPiCamFeed()
+        } else {
+            this.setState({
+                piCamImageUrl: this.props.grow.urls.cam,
+            });
         }
 
     }
@@ -69,7 +73,7 @@ class GrowBoxItem extends Component {
         });
     }
 
-    openFullGrowCam = (ev) => {
+    openMainPage = (ev) => {
         this.props.openMainPage(ev.target.dataset.value)
     }
 
@@ -127,22 +131,14 @@ class GrowBoxItem extends Component {
             <div className="Grow-Box-Item">
 
                 <div className="Grow-Box-Cam-Div">
-                    <div className="Grow-Box-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullGrowCam}>&#9974;</div>
+                    <div className="Grow-Box-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openMainPage}>&#9974;</div>
 
-                    {/* TODO: Just get the actual image location for the Ganja Grove cam.. */}
+                    {/* TODO: Just get the actual image location for the Ganja Grove cam[not static..].. */}
                     {(() => {
-
                         if (this.state.piCamImageUrl !== null) {
                             return (
                                 <img className="Grow-Box-Cam" alt="cam" src={this.state.piCamImageUrl} width="100%" height="100%" style={{ objectFit: 'contain' }} />
                             )
-
-                        } else {
-                            if (this.props.grow.urls.cam !== 'http://96.52.249.69:300/html/') {
-                            return (
-                                <img className="Grow-Box-Cam" alt="cam" src={this.props.grow.urls.cam} width="100%" height="100%" style={{ objectFit: 'contain' }} />
-                            )
-                            }
                         }
                     })()}
 
@@ -158,6 +154,12 @@ class GrowBoxItem extends Component {
                             updt: <i><b>{lastUpdate}</b></i>
                         </div>
                     </div>
+                    <div className="Grow-Box-Function-Btns">
+                        <button className="Grow-Box-Function-Btn" data-value={this.props.grow.urls.plotly} onClick={this.openMainPage} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                        <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openMainPage} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                        <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openMainPage} >FEED &#9619;&#9619;</button>
+						<button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openMainPage} >&#9998;</button>
+					</div>
 
                     <div className="Grow-Box-Info">
                         <div className="Grow-Box-Info-Text-Area">

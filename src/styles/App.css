@@ -1210,6 +1210,8 @@ html {
     flex: 1;
     overflow: hidden;
     min-width: 300px;
+    margin: 1%;
+    margin-right: 0;
 }
 
 .Grow-Box-Cam {
@@ -1272,4 +1274,34 @@ html {
 
 .Grow-Box-Updated {
     font-size: 12px;
+}
+
+.Grow-Box-Function-Btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.Grow-Box-Function-Btn {
+    min-width: 90px;
+    margin: 1%;
+    padding: 1%;
+    font-weight: bold;
+}
+
+.Grow-Box-Function-Btn-Feed {
+    min-width: 90px;
+    margin: 1%;
+    margin-right: 0;
+    padding: 1%;
+    font-weight: bold;
+}
+
+.Grow-Box-Function-Btn-Edit-Feed {
+    background-color: rgb(204, 175, 10);
+    min-width: 30px;
+    margin: 1%;
+    margin-left: 0;
+    padding: 1%;
+    font-weight: bold;
 }

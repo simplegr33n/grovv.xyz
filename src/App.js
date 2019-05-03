@@ -300,12 +300,29 @@ class App extends Component {
 	}
 
 	openMainPageFromExternal = (page) => {
+		console.log("todo: get rid of this system...")
+		console.log(page)
 		switch(page) {
 			case 'http://96.52.249.69:301':
 				this.openVeggerLiveCam()
 				break;
 			case 'http://96.52.249.69:300/html/':
 				this.openLiveCam()
+				break;
+			case 'https://plot.ly/~bgolda89/0/raspberry-pi-streaming-sensor-data/':
+				this.openPlotly()
+				break;
+			case 'https://plot.ly/~bmgolda/5/ganja-grovv-vegger-data/#/':
+				this.openVeggerPlotly()
+				break;
+			case 'config':
+				this.openConfig()
+				break;
+			case 'feed':
+				this.openChart()
+				break;
+			case 'edit-feed':
+				this.editChart()
 				break;
 			default:
 				break;
@@ -385,14 +402,10 @@ class App extends Component {
 														<button className="Humid-Gauge-Btn" onClick={this.openVeggerPlotly} ref={this.veggerHumidityRef}>{this.state.sVeggerHumidity}%</button>
 													</div>
 
-													<button className="Left-Menu-Btn" onClick={this.openConfig}>CONFIG <b>&#9881;</b></button>
-													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI <span role="img" aria-label="multi cam">&#128200;&#128250;</span></button>
-													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
 													<button className="Left-Menu-Btn" onClick={this.openGrows}>GROWS <span role="img" aria-label="journal">&#127809;</span></button>
-													<div id="Left-Chart-Btns">
-														<button className="EditChart-Menu-Btn" onClick={this.editChart}>EDIT &#9998; CHART</button>
-														<button className="Left-Menu-Btn" onClick={this.openChart}>CHART &#9619;&#9619;</button>
-													</div>
+													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
+													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI <span role="img" aria-label="multi cam">&#128200;&#128250;</span></button>													
+													
 													
 												</div>
 
