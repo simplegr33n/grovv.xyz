@@ -10,7 +10,9 @@ class GrowBoxItem extends Component {
         super(props);
         this.state = {
             grow: this.props.grow,
-            liveData: []
+            liveData: [],
+            piCamImageUrl: null,
+            lastPiCamUpdate: 0
         };
 
 
@@ -23,6 +25,10 @@ class GrowBoxItem extends Component {
             this.getLiveData()
         } else {
             this.getVeggerData()
+        }
+
+        if (this.props.grow.urls.cam === 'http://96.52.249.69:300/html/') {
+            this.watchPiCamFeed()
         }
 
     }
@@ -67,6 +73,27 @@ class GrowBoxItem extends Component {
         this.props.openMainPage(ev.target.dataset.value)
     }
 
+    watchPiCamFeed = () => {
+
+        setInterval(() => {
+
+            this.updatePiCamState()
+
+        }, 5000);
+    }
+
+    updatePiCamState = () => {
+        var millis = new Date();
+        var reducedMillis = millis - 5000;
+        var tempURL = "http://96.52.249.69:300/html/cam_pic.php?time=" + reducedMillis
+        this.setState({
+            piCamImageUrl: tempURL,
+            lastPiCamUpdate: millis
+        });
+    }
+
+
+
     render() {
 
         var cTemp = null;
@@ -104,14 +131,18 @@ class GrowBoxItem extends Component {
 
                     {/* TODO: Just get the actual image location for the Ganja Grove cam.. */}
                     {(() => {
-                        if (this.props.grow.urls.cam === 'http://96.52.249.69:300/html/') {
+
+                        if (this.state.piCamImageUrl !== null) {
                             return (
-                                <object className="Grow-Box-Cam" type="text/html" data={this.props.grow.urls.cam} width="100%" height="100%" aria-label="cam" />
+                                <img className="Grow-Box-Cam" alt="cam" src={this.state.piCamImageUrl} width="100%" height="100%" style={{ objectFit: 'contain' }} />
                             )
+
                         } else {
+                            if (this.props.grow.urls.cam !== 'http://96.52.249.69:300/html/') {
                             return (
                                 <img className="Grow-Box-Cam" alt="cam" src={this.props.grow.urls.cam} width="100%" height="100%" style={{ objectFit: 'contain' }} />
                             )
+                            }
                         }
                     })()}
 
