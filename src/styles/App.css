@@ -1395,7 +1395,10 @@ html {
 }
 
 .Grow-Details-Page-Panel {
-    flex: 3;
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
     padding: 1%;
 }
 
@@ -1403,10 +1406,12 @@ html {
     flex: 5;
     display: flex;
     flex-direction: column;
+    min-width: 50vw;
 }
 
 .Grow-Details-Content-Cam {
-    /* flex: 1; */
+    flex: 1;
+    min-width: 65vw;
 }
 
 .Grow-Details-Header {
@@ -1416,10 +1421,12 @@ html {
     justify-content: flex-end;
 }
 
-.Grow-Details-Content-Plotly {
-    flex: 1;
+.Grow-Details-Content-Bottom {
+    min-height: 35vh;
     width: 100%;
     background-color: #FFF;
+    flex: 1;
+    display: flex;
 }
 
 .Grow-Details-Data-Display {
@@ -1428,4 +1435,68 @@ html {
 
 .Grow-Data-Display {
     width: 100%;
+}
+
+.Grow-Details-Page-Content-Top {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: 64vh;
+}
+
+.Grow-Details-Main-Btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+/* Grow Config */
+
+#Grow-Details-Config-Header-Text {
+    padding: 8px;
+    margin-right: 10px;
+    text-align: right;
+    font-size: 24px;
+    user-select: none;
+}
+
+#Grow-Details-Config-Page {
+    background: rgb(12, 68, 21);
+    color: #FFF;
+    font-size: 18px;
+    font-weight: bolder;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* height: 100%; */
+    align-content: center;
+    text-align: center;
+    position: relative;
+}
+
+#Grow-Details-Config-Scroll {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* max-height: 100%; */
+    flex: 1;
+    position: relative;
+    overflow-y: scroll;
+}
+
+#GROW-DETAILS-SAVE-CONFIG-BTN {
+    max-height: 60px;
+    background-color: #f1ff34;
+    color: #000;
+    margin-left: 40px;
+    margin-right: 40px;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    user-select: none;
+    cursor: pointer;
+}
+
+#GROW-DETAILS-SAVE-CONFIG-BTN:hover {
+    background-color: #63ff34;
 }

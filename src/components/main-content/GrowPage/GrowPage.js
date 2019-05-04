@@ -103,18 +103,6 @@ class GrowPage extends Component {
 
 	render() {
 
-		// console.log("SET GROW ID")
-		// console.log(this.props.setGrowID)
-
-		if (this.props.grow) {
-
-			console.log("GrowPage render growID")
-			console.log(this.props.grow.id)
-			console.log(this.props.grow)
-
-		}
-		
-
 		var renderedGrowBoxes = null;
 		if (this.state.grow === null && this.state.userGrows) {
 			renderedGrowBoxes = this.state.userGrows.map((grow) =>
