@@ -43,8 +43,8 @@ class App extends Component {
 			sFlowerHumidity: '',
 			sVeggerTemp: '',
 			sVeggerHumidity: '',
-			growID: null,
-			journalID: null
+			journalID: null,
+			currentGrow: null
 		};
 
 		this.firebase = new Firebase()
@@ -202,10 +202,10 @@ class App extends Component {
 	}
 
 	handleMenuHandle = () => {
-		if (this.leftMenuRef.current.style.left !== "-240px") {
-			this.leftMenuRef.current.style.left = '-240px';
+		if (this.leftMenuRef.current.style.left !== '0px') {
+			this.leftMenuRef.current.style.left = '0px';
 		} else {
-			this.leftMenuRef.current.style.left = '0';
+			this.leftMenuRef.current.style.left = '-240px';
 		}
 	}
 
@@ -307,19 +307,19 @@ class App extends Component {
 		if (this.state.mainContent !== 'grows') {
 			this.setState({ 
 				mainContent: 'grows',
-				growID: null
+				currentGrow: null
 			});
 		} else {
 			this.setState({ 
-				growID: null
+				currentGrow: null
 			});
 		}
 	}
 
-	setGrowID = (growID) => {
-		console.log("APP Setgrowid")
-		console.log(growID)
-		this.setState({ growID: growID });
+	setGrow = (grow) => {
+		console.log("APP Setgrow")
+		console.log(grow)
+		this.setState({ currentGrow: grow });
 	}
 
 	setJournalID = (journalID) => {
@@ -376,7 +376,7 @@ class App extends Component {
 										case 'journal':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID}/>
 										case 'grows':
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrowID={this.setGrowID} growID={this.state.growID}/>
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow}/>
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -391,7 +391,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrowID={this.setGrowID} growID={this.state.growID}/>
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow}/>
 									}
 								} else {
 									switch (this.state.mainContent) {
@@ -408,7 +408,7 @@ class App extends Component {
 							{(() => {
 								if (this.state.UID) {
 									return (
-										<div id="Main-Left-Wrapper" ref={this.leftMenuRef}>
+										<div id="Main-Left-Wrapper" style={{left: '-240px'}} ref={this.leftMenuRef}>
 											<div id="Main-Left">
 												<div id="Home-Div">
 													<img src={cornerLogo} id="Grovv-Logo" alt="grovv logo" />

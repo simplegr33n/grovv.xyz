@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../../../styles/App.css';
 
 import GrowBoxItem from './GrowBoxItem'
+import GrowDetailsPage from './GrowDetailsPage'
 
 
 import Firebase from '../../../config/firebaseConfig.js'
@@ -14,7 +15,7 @@ class GrowPage extends Component {
 		this.state = {
 			displayContent: "main",
 			userGrows: [],
-			growID: this.props.growID
+			grow: this.props.grow
 		};
 
 		this.firebase = new Firebase();
@@ -25,9 +26,9 @@ class GrowPage extends Component {
 		this._ismounted = true;
 		this.getUserGrows = this.getUserGrowIDs();
 
-		if (this.props.growID) {
+		if (this.props.grow) {
 			console.log("SETGROWID")
-			console.log(this.props.growID)
+			console.log(this.props.grow)
 		}
 	}
 
@@ -88,25 +89,16 @@ class GrowPage extends Component {
 		this.props.openMainPage(page)
 	}
 
-	handleGrowChange = (ev) => {
-		console.log("grow CHANGE!!!!")
-		console.log(ev.target.value)
-		this.setState({
-			growID: ev.target.value
-		});
-		this.watchEntries(ev.target.value)
-	}
-
 	openCreateGrowModal = () => {
 		alert("GrowPage.js openCreateGrowModal() TODO")
 	}
 
-	openGrow = (growID) => {	
-		if (!growID) {
+	openGrow = (grow) => {	
+		if (!grow) {
 			this.props.setGrowID(null)
 		}
 
-		this.props.setGrowID(growID)
+		this.props.setGrow(grow)
 	}
 
 	render() {
@@ -114,11 +106,17 @@ class GrowPage extends Component {
 		// console.log("SET GROW ID")
 		// console.log(this.props.setGrowID)
 
-		console.log("GrowPage render growID")
-		console.log(this.props.growID)
+		if (this.props.grow) {
+
+			console.log("GrowPage render growID")
+			console.log(this.props.grow.id)
+			console.log(this.props.grow)
+
+		}
+		
 
 		var renderedGrowBoxes = null;
-		if (this.state.growID === null && this.state.userGrows) {
+		if (this.state.grow === null && this.state.userGrows) {
 			renderedGrowBoxes = this.state.userGrows.map((grow) =>
 				<div key={grow.id} className="Grow-Box-Item-Container">
 					<GrowBoxItem grow={grow} openGrow={this.openGrow} openMainPage={this.openMainPage} />
@@ -133,7 +131,7 @@ class GrowPage extends Component {
 					<div id="Grow-Main-Area">
 
 						{(() => {
-							if (this.props.growID === null) {
+							if (this.props.grow === null) {
 								return (
 									<div id="Grow-List-Main-Area">
 										<div id="Grow-Header-Area">
@@ -160,11 +158,9 @@ class GrowPage extends Component {
 						})()}
 
 						{(() => {
-							if (this.props.growID) {
+							if (this.props.grow) {
 								return (
-									<div id="Grow-List-Main-Area">
-										{this.props.growID}
-									</div>
+										<GrowDetailsPage grow={this.props.grow} />
 								)
 							}
 						})()}
