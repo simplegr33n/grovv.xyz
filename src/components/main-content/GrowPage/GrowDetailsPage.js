@@ -142,7 +142,7 @@ class GrowDetailsPage extends Component {
             <div className="Grow-Details-Page">
 
                 <div className="Grow-Details-Page-Content">
-                    <div className="Grow-Details-Page-Content-Top">
+                   
                         <div className="Grow-Details-Content-Cam">
                             <img alt="cam" style={{ objectFit: 'contain' }} src={this.props.grow.urls.cam} width="100%" height="100%" />
                         </div>
@@ -184,7 +184,6 @@ class GrowDetailsPage extends Component {
                             })()}
                         </div>
 
-                    </div>
 
 
 

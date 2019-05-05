@@ -1407,18 +1407,11 @@ html {
     padding: 1%;
 }
 
-.Grow-Details-Page-Content {
-    flex: 5;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    min-width: 50vw;
-}
-
 .Grow-Details-Content-Cam {
     flex: 1;
     min-width: 65vw;
     max-height: 75vh;
+    background-color: #000;
 }
 
 .Grow-Details-Header {
@@ -1445,8 +1438,9 @@ html {
     width: 100%;
 }
 
-.Grow-Details-Page-Content-Top {
+.Grow-Details-Page-Content {
     display: flex;
+    min-height: 100%;
     flex-direction: row;
     flex-wrap: wrap;
     max-height: 64vh;
