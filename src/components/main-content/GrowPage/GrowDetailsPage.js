@@ -167,25 +167,27 @@ class GrowDetailsPage extends Component {
                             </div>
                         </div>
 
+                        <div className="Grow-Details-Content-Bottom">
+                            {(() => {
+                                switch (this.state.displayBottom) {
+                                    case 'data':
+                                        return <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" />
+                                    case 'feed':
+                                        return <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
+                                    case 'edit-feed':
+                                        return <object type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
+                                    case 'config':
+                                        return <GrowDetailsConfig />
+                                    default:
+                                        break;
+                                }
+                            })()}
+                        </div>
+
                     </div>
 
 
-                    <div className="Grow-Details-Content-Bottom">
-                        {(() => {
-                            switch (this.state.displayBottom) {
-                                case 'data':
-                                    return <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" />
-                                case 'feed':
-                                    return <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
-                                case 'edit-feed':
-                                    return <object type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
-                                case 'config':
-                                    return <GrowDetailsConfig />
-                                default:
-                                    break;
-                            }
-                        })()}
-                    </div>
+
                 </div>
 
 
