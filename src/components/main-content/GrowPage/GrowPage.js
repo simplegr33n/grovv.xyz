@@ -92,7 +92,7 @@ class GrowPage extends Component {
 
 	openGrow = (grow) => {
 		if (!grow) {
-			this.props.setGrowID(null)
+			this.props.setGrow(null)
 		}
 
 		this.props.setGrow(grow)
@@ -114,11 +114,19 @@ class GrowPage extends Component {
 
 	render() {
 
+		if (this.props.growID) {
+			this.state.userGrows.forEach((grow) =>{
+				if (grow.id === this.props.growID) {
+					this.props.setGrow(grow)
+				}
+			})
+		}
+
 		var renderedGrowBoxes = null;
 		if (this.state.grow === null && this.state.userGrows) {
 			renderedGrowBoxes = this.state.userGrows.map((grow) =>
 				<div key={grow.id} className="Grow-Box-Item-Container">
-					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} />
+					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} />
 				</div>
 			)
 		}
@@ -159,7 +167,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} />
+									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage}/>
 								)
 							}
 						})()}
@@ -175,7 +183,7 @@ class GrowPage extends Component {
 				{(() => {
 					if (this.state.displayContent === 'full-cam') {
 						return (
-							<GrowCamFull closeFullCam={this.closeFullCam} camURL={this.state.camURL} />
+							<GrowCamFull closeFullCam={this.closeFullCam} camURL={this.state.camURL}  />
 						)
 					}
 				})()}

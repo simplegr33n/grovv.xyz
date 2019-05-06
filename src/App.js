@@ -16,7 +16,6 @@ import FeedChart from './components/main-content/FeedChart/FeedChart.js'
 import GrowConfig from './components/main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './components/main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './components/main-content/GrowPage/GrowPage.js'
-import ResizeDraggableView from './components/main-content/ResizeDraggableView.js'
 
 // QuickBar Indicator Colors (green/orange/red)
 const optimalIndication = '#91eebb';
@@ -35,16 +34,13 @@ class App extends Component {
 			URL_plotly: null,
 			URL_vegger_livecam: null,
 			URL_vegger_plotly: null,
-			zPlotly: 0,
-			zLivecam: 0,
-			zVeggerLivecam: 0,
-			zVeggerPlotly: 0,
 			sFlowerTemp: '',
 			sFlowerHumidity: '',
 			sVeggerTemp: '',
 			sVeggerHumidity: '',
 			journalID: null,
-			currentGrow: null
+			currentGrow: null,
+			growID: null //todo: remove, use currentGrow
 		};
 
 		this.firebase = new Firebase()
@@ -213,26 +209,32 @@ class App extends Component {
 		this.setState({ mainContent: setValue });
 	}
 
+	// TODO: consolidate functions into setGrow()
+	openGanjaGrove = () => {
+		// TODO: Send actual grow
+		this.setState({
+			mainContent: 'grows',
+			currentGrow: null, // until we can pass actual grow instead of ID
+			growID: '-LdtfBTlG6Fgg-ADD8-b'
+		});
+
+	}
+	openVegger = () => {
+		// TODO: Send actual grow
+		this.setState({
+			mainContent: 'grows',
+			currentGrow: null, // until we can pass actual grow instead of ID
+			growID: '-LdtkOvSXRrm1zIZ6EOx'
+		});
+
+	}
+
 	openPlotly = () => {
 		if (this.state.mainContent !== 'maincontent') {
 			this.setState({ mainContent: 'maincontent' });
 		}
 		this.setState({
 			zPlotly: 1,
-			zLivecam: 0,
-			zVeggerLivecam: 0,
-			zVeggerPlotly: 0
-		});
-	}
-
-	openLiveCam = () => {
-		if (this.state.mainContent !== 'maincontent') {
-			this.setState({ mainContent: 'maincontent' });
-		}
-		this.setState({
-			zPlotly: 0,
-			zLivecam: 1,
-			zVeggerLivecam: 0,
 			zVeggerPlotly: 0
 		});
 	}
@@ -243,33 +245,13 @@ class App extends Component {
 		}
 		this.setState({
 			zPlotly: 0,
-			zLivecam: 0,
-			zVeggerLivecam: 0,
 			zVeggerPlotly: 1
-		});
-	}
-
-	openVeggerLiveCam = () => {
-		if (this.state.mainContent !== 'maincontent') {
-			this.setState({ mainContent: 'maincontent' });
-		}
-		this.setState({
-			zPlotly: 0,
-			zLivecam: 0,
-			zVeggerLivecam: 1,
-			zVeggerPlotly: 0
 		});
 	}
 
 	openEditProfile = () => {
 		if (this.state.mainContent !== 'editprofile') {
 			this.setState({ mainContent: 'editprofile' });
-		}
-	}
-
-	openResizeView = () => {
-		if (this.state.mainContent !== 'resizeview') {
-			this.setState({ mainContent: 'resizeview' });
 		}
 	}
 
@@ -292,12 +274,12 @@ class App extends Component {
 	openJournal = () => {
 
 		if (this.state.mainContent !== 'journal') {
-			this.setState({ 
+			this.setState({
 				mainContent: 'journal',
 				journalID: null
 			});
 		} else {
-			this.setState({ 
+			this.setState({
 				journalID: null
 			});
 		}
@@ -305,12 +287,12 @@ class App extends Component {
 
 	openGrows = () => {
 		if (this.state.mainContent !== 'grows') {
-			this.setState({ 
+			this.setState({
 				mainContent: 'grows',
 				currentGrow: null
 			});
 		} else {
-			this.setState({ 
+			this.setState({
 				currentGrow: null
 			});
 		}
@@ -319,7 +301,10 @@ class App extends Component {
 	setGrow = (grow) => {
 		console.log("APP Setgrow")
 		console.log(grow)
-		this.setState({ currentGrow: grow });
+		this.setState({ 
+			growID: null,
+			currentGrow: grow
+		 });
 	}
 
 	setJournalID = (journalID) => {
@@ -333,12 +318,6 @@ class App extends Component {
 		console.log("todo: get rid of this system...")
 		console.log(page)
 		switch (page) {
-			case 'http://96.52.249.69:301':
-				this.openVeggerLiveCam()
-				break;
-			case 'http://96.52.249.69:300/html/cam_pic.php?time=0':
-				this.openLiveCam()
-				break;
 			case 'https://plot.ly/~bgolda89/0/raspberry-pi-streaming-sensor-data/':
 				this.openPlotly()
 				break;
@@ -371,12 +350,10 @@ class App extends Component {
 									switch (this.state.mainContent) {
 										case 'editprofile':
 											return <EditProfile UID={this.state.UID} username={this.state.username} />;
-										case 'resizeview':
-											return <ResizeDraggableView urls={this.state.urls} />
 										case 'journal':
-											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID}/>
+											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} />
 										case 'grows':
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow}/>
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -385,13 +362,11 @@ class App extends Component {
 											return (
 												<div id="Main-Content">
 													<object className="Site-View-Update" style={{ zIndex: this.state.zPlotly }} type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="plotly" />
-													<object className="Site-View-Update" style={{ zIndex: this.state.zLivecam }} type="text/html" data={this.state.URL_livecam} width="100%" height="100%" aria-label="live cam" />
 													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerPlotly }} type="text/html" data={this.state.URL_vegger_plotly} width="100%" height="100%" aria-label="vegger plotly" />
-													<img className="Site-View-Update" alt="cam" style={{ zIndex: this.state.zVeggerLivecam, objectFit: 'contain' }} src={this.state.URL_vegger_livecam} width="100%" height="100%" />
 												</div>
 											);
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow}/>
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
 									}
 								} else {
 									switch (this.state.mainContent) {
@@ -408,7 +383,7 @@ class App extends Component {
 							{(() => {
 								if (this.state.UID) {
 									return (
-										<div id="Main-Left-Wrapper" style={{left: '-240px'}} ref={this.leftMenuRef}>
+										<div id="Main-Left-Wrapper" style={{ left: '-240px' }} ref={this.leftMenuRef}>
 											<div id="Main-Left">
 												<div id="Home-Div">
 													<img src={cornerLogo} id="Grovv-Logo" alt="grovv logo" />
@@ -422,20 +397,18 @@ class App extends Component {
 
 
 													<div className="QuickTemp-Row">
-														<button className="Grow-Area-Btn" onClick={this.openLiveCam}>GG <span role="img" aria-label="live cam">&#128250;</span></button>
-														<button className="Temp-Gauge-Btn" onClick={this.openPlotly} ref={this.flowerTempRef}>{this.state.sFlowerTemp}°C</button>
-														<button className="Humid-Gauge-Btn" onClick={this.openPlotly} ref={this.flowerHumidityRef}>{this.state.sFlowerHumidity}%</button>
+														<button className="Grow-Area-Btn" onClick={this.openGanjaGrove}>GG <span role="img" aria-label="open ganja grove">&#128250;&#128200;</span></button>
+														<button className="Temp-Gauge-Btn" ref={this.flowerTempRef}>{this.state.sFlowerTemp}°C</button>
+														<button className="Humid-Gauge-Btn" ref={this.flowerHumidityRef}>{this.state.sFlowerHumidity}%</button>
 													</div>
 													<div className="QuickTemp-Row">
-														<button className="Grow-Area-Btn" onClick={this.openVeggerLiveCam}>VG <span role="img" aria-label="live cam">&#128250;</span></button>
-														<button className="Temp-Gauge-Btn" onClick={this.openVeggerPlotly} ref={this.veggerTempRef}>{this.state.sVeggerTemp}°C</button>
-														<button className="Humid-Gauge-Btn" onClick={this.openVeggerPlotly} ref={this.veggerHumidityRef}>{this.state.sVeggerHumidity}%</button>
+														<button className="Grow-Area-Btn" onClick={this.openVegger}>VG <span role="img" aria-label="open vegger">&#128250;&#128200;</span></button>
+														<button className="Temp-Gauge-Btn" ref={this.veggerTempRef}>{this.state.sVeggerTemp}°C</button>
+														<button className="Humid-Gauge-Btn" ref={this.veggerHumidityRef}>{this.state.sVeggerHumidity}%</button>
 													</div>
 
 													<button className="Left-Menu-Btn" onClick={this.openGrows}>GROWS <span role="img" aria-label="journal">&#127809;</span></button>
 													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
-													<button className="Left-Menu-Btn" onClick={this.openResizeView}>MULTI <span role="img" aria-label="multi cam">&#128200;&#128250;</span></button>
-
 
 												</div>
 

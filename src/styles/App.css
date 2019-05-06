@@ -148,7 +148,7 @@ html {
     width: 80px;
     height: 24px;
     margin-left: 4px;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .Humid-Gauge-Btn {
@@ -160,11 +160,7 @@ html {
     width: 80px;
     height: 24px;
     margin-left: 4px;
-    cursor: pointer;
-}
-
-.Humid-Gauge-Btn:hover {
-    background: #eaebb4;
+    /* cursor: pointer; */
 }
 
 .Grow-Area-Btn {

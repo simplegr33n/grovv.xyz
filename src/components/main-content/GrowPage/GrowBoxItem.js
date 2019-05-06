@@ -75,8 +75,14 @@ class GrowBoxItem extends Component {
 		this.props.openFullCam(ev.target.dataset.value)
 	}
 
-	openGrow = (ev) => {
+	openGrow = () => {
 		this.props.openGrow(this.props.grow)
+	}
+
+	openMainPage = (ev) => {
+		console.log("openMainPage")
+		console.log(ev.target.dataset.value)
+		this.props.openMainPage(ev.target.dataset.value)
 	}
 
 	checkActive = (lastUpdateTime) => {
