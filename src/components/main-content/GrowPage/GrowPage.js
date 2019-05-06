@@ -112,6 +112,12 @@ class GrowPage extends Component {
 		 });
 	}
 
+	setJournalID = (journalID) => {
+		console.log("GROW PAGE!")
+		console.log(journalID)
+		this.props.setJournalID(journalID)
+	}
+
 	render() {
 
 		if (this.props.growID) {
@@ -167,7 +173,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage}/>
+									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} setJournalID={this.setJournalID}/>
 								)
 							}
 						})()}

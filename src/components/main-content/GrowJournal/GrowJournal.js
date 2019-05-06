@@ -36,6 +36,10 @@ class GrowJournal extends Component {
     componentDidMount() {
         this._ismounted = true;
         this.watchJournals = this.watchJournals();
+
+        if (this.props.journalID) {
+            this.watchEntries(this.props.journalID)
+        }
     }
 
     componentWillUnmount() {
@@ -200,7 +204,8 @@ class GrowJournal extends Component {
             journalID: id
         });
         this.props.setJournalID(id)
-        this.watchEntries(id);
+        this.watchEntries(id)
+        // this.watchEntries(id);
     }
 
     setEntries = (entries) => {
@@ -213,6 +218,7 @@ class GrowJournal extends Component {
             currentEntryID: entries[0].id,
             displayEntries: entries
         });
+        
     }
 
     handleJournalChange = (ev) => {
@@ -221,26 +227,24 @@ class GrowJournal extends Component {
         this.setState({
             currentEntry: null,
             currentEntryID: null,
-            displayEntries: [],
-            journalID: ev.target.value
+            displayEntries: []
         });
         this.props.setJournalID(ev.target.value)
         this.watchEntries(ev.target.value)
+
+        // this.watchEntries = this.watchEntries(ev.target.value)
     }
 
     openCreateJournalModal = () => {
         this.setState({ displayContent: "create-journal" });
     }
 
-    openJournal = (journal) => {
-        
-
+    openJournal = (journal) => {        
         this.setState({
             journalID: journal.id
         });
         this.props.setJournalID(journal.id);
-        this.watchEntries(journal.id);
-        
+        this.watchEntries(journal.id);       
     }
 
     render() {

@@ -35,7 +35,7 @@ class JournalBoxItem extends Component {
 
 
         return (
-            <div className="Journal-Box-Item" onClick={this.openJournal}>
+            <div className="Journal-Box-Item" data-value={this.props.journal.id} onClick={this.openJournal}>
                 <div className="Journal-Box-Item-Main">
                     <div className="Journal-Box-Item-Header">
                         <div>

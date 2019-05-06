@@ -310,7 +310,10 @@ class App extends Component {
 	setJournalID = (journalID) => {
 		console.log("APP SetJournalID")
 		console.log(journalID)
-		this.setState({ journalID: journalID });
+		this.setState({ 
+			mainContent: 'journal',
+			journalID: journalID
+		 });
 	}
 
 
@@ -353,7 +356,7 @@ class App extends Component {
 										case 'journal':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} />
 										case 'grows':
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -366,7 +369,7 @@ class App extends Component {
 												</div>
 											);
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
 									}
 								} else {
 									switch (this.state.mainContent) {

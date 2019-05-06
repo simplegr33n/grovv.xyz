@@ -1262,7 +1262,7 @@ html {
 }
 
 .Grow-Box-Dot-Lead-Dots::before {
-    content: '................................................................................';
+    content: '................................................................................................................................................................';
 }
 
 .Grow-Box-Info-Data {
@@ -1319,17 +1319,12 @@ html {
 
 .Grow-Box-Function-Btn {
     min-width: 90px;
-    margin: 1%;
-    padding: 1%;
     font-weight: bold;
     cursor: pointer;
 }
 
 .Grow-Box-Function-Btn-Feed {
     min-width: 90px;
-    margin: 1%;
-    margin-right: 0;
-    padding: 1%;
     font-weight: bold;
     cursor: pointer;
 }
@@ -1337,10 +1332,6 @@ html {
 .Grow-Box-Function-Btn-Edit-Feed {
     background-color: rgb(204, 175, 10);
     min-width: 30px;
-    margin: 1%;
-    margin-left: 0;
-    margin-right: 0;
-    padding: 1%;
     font-weight: bold;
     cursor: pointer;
 }
@@ -1474,7 +1465,7 @@ html {
 }
 
 #Grow-Details-Config-Page {
-    background: rgb(12, 68, 21);
+    background: rgb(42, 63, 44);
     color: #FFF;
     font-size: 18px;
     font-weight: bolder;
@@ -1565,4 +1556,17 @@ html {
 .Grow-Cam-Full-Exit-Btn:hover {
     background: rgb(219, 94, 36);
     color: #000;
+}
+
+.Grow-Details-Journals {
+    background-color: rgb(50, 73, 6);
+    width: 100%;
+}
+
+.Grow-Details-Journals-Header {
+    padding: 4px;
+    margin-right: 2%;
+    font-size: 24px;
+    user-select: none;
+    text-align: right;
 }
