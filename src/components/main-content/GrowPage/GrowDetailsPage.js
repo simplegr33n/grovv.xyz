@@ -137,57 +137,98 @@ class GrowDetailsPage extends Component {
 
 
     render() {
+        var zIndexOne = { zIndex: '1', position: 'absolute' }
+        var zIndexZero = { zIndex: '0', position: 'absolute' }
+
+        var graphsStyle = zIndexOne
+        var feedStyle = zIndexZero
+        var editFeedStyle = zIndexZero
+        var configStyle = zIndexZero
+
+        if (this.state.displayBottom) {
+            switch (this.state.displayBottom) {
+                case 'data':
+                    graphsStyle = zIndexOne
+                    feedStyle = zIndexZero
+                    editFeedStyle = zIndexZero
+                    configStyle = zIndexZero
+                    break;
+                case 'feed':
+                    graphsStyle = zIndexZero
+                    feedStyle = zIndexOne
+                    editFeedStyle = zIndexZero
+                    configStyle = zIndexZero
+                    break;
+                case 'edit-feed':
+                    graphsStyle = zIndexZero
+                    feedStyle = zIndexZero
+                    editFeedStyle = zIndexOne
+                    configStyle = zIndexZero
+                    break;
+                case 'config':
+                    graphsStyle = zIndexZero
+                    feedStyle = zIndexZero
+                    editFeedStyle = zIndexZero
+                    configStyle = zIndexOne
+                    break;
+                default:
+                    break;
+            }
+        }
 
         return (
             <div className="Grow-Details-Page">
 
                 <div className="Grow-Details-Page-Content">
-                   
-                        <div className="Grow-Details-Content-Cam">
-                            <img alt="cam" style={{ objectFit: 'contain' }} src={this.props.grow.urls.cam} width="100%" height="100%" />
-                        </div>
 
-                        <div className="Grow-Details-Page-Panel">
-                            <div className="Grow-Details-Header">
-                                <div id="Grow-Header-Text">{this.props.grow.name}</div>
-                                <div className={this.state.activeIndicatorStyle} />
-                            </div>
-                            <div id="Grow-Details-Data-Display">
-                                {(() => {
-                                    if (this.state.liveData) {
-                                        return <GrowDataDisplay liveData={this.state.liveData} />
-                                    }
-                                })()}
-                            </div>
-                            <div className="Grow-Details-Main-Btns">
-                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                            </div>
-                        </div>
+                    <div className="Grow-Details-Content-Cam">
+                        <img alt="cam" style={{ objectFit: 'contain' }} src={this.props.grow.urls.cam} width="100%" height="100%" />
+                    </div>
 
-                        <div className="Grow-Details-Content-Bottom">
+                    <div className="Grow-Details-Page-Panel">
+                        <div className="Grow-Details-Header">
+                            <div id="Grow-Header-Text">{this.props.grow.name}</div>
+                            <div className={this.state.activeIndicatorStyle} />
+                        </div>
+                        <div id="Grow-Details-Data-Display">
                             {(() => {
-                                switch (this.state.displayBottom) {
-                                    case 'data':
-                                        return <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" />
-                                    case 'feed':
-                                        return <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
-                                    case 'edit-feed':
-                                        return <object type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
-                                    case 'config':
-                                        return <GrowDetailsConfig />
-                                    default:
-                                        break;
+                                if (this.state.liveData) {
+                                    return <GrowDataDisplay liveData={this.state.liveData} />
                                 }
                             })()}
                         </div>
+                        <div className="Grow-Details-Main-Btns">
+                            <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                            <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                            <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                            <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                        </div>
+                    </div>
 
 
+                    <div className="Grow-Details-Content-Bottom">
+
+                        <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
+                            <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" />
+                        </div>
+
+                        <div className="Grow-Details-Bottom-Item" style={feedStyle} >
+                            <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
+                        </div>
+
+                        <div className="Grow-Details-Bottom-Item" style={editFeedStyle} >
+                            <object type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
+                        </div>
+
+                        <div className="Grow-Details-Bottom-Item" style={configStyle} >
+                            <GrowDetailsConfig />
+                        </div>
+
+                    </div>
 
 
                 </div>
+
 
 
 
