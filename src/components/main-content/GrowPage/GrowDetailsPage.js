@@ -135,6 +135,10 @@ class GrowDetailsPage extends Component {
 
     }
 
+    openFullCam = (ev) => {
+		this.props.openFullCam(ev.target.dataset.value)
+	}
+
 
     render() {
         var zIndexOne = { zIndex: '1', position: 'absolute' }
@@ -182,6 +186,7 @@ class GrowDetailsPage extends Component {
                 <div className="Grow-Details-Page-Content">
 
                     <div className="Grow-Details-Content-Cam">
+                        <div className="Grow-Details-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullCam}>&#9974;</div>
                         <img alt="cam" style={{ objectFit: 'contain' }} src={this.props.grow.urls.cam} width="100%" height="100%" />
                     </div>
 

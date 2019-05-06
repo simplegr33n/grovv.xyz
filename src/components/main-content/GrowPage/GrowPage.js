@@ -3,6 +3,7 @@ import '../../../styles/App.css';
 
 import GrowBoxItem from './GrowBoxItem'
 import GrowDetailsPage from './GrowDetailsPage'
+import GrowCamFull from './GrowCamFull'
 
 
 import Firebase from '../../../config/firebaseConfig.js'
@@ -13,9 +14,10 @@ class GrowPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			displayContent: "main",
+			displayContent: "main", // main, full-cam
 			userGrows: [],
-			grow: this.props.grow
+			grow: this.props.grow,
+			camURL: null
 		};
 
 		this.firebase = new Firebase();
@@ -25,11 +27,6 @@ class GrowPage extends Component {
 	componentDidMount() {
 		this._ismounted = true;
 		this.getUserGrows = this.getUserGrowIDs();
-
-		if (this.props.grow) {
-			console.log("SETGROWID")
-			console.log(this.props.grow)
-		}
 	}
 
 	componentWillUnmount() {
@@ -93,12 +90,26 @@ class GrowPage extends Component {
 		alert("GrowPage.js openCreateGrowModal() TODO")
 	}
 
-	openGrow = (grow) => {	
+	openGrow = (grow) => {
 		if (!grow) {
 			this.props.setGrowID(null)
 		}
 
 		this.props.setGrow(grow)
+	}
+
+	openFullCam = (url) => {
+		this.setState({ 
+			displayContent: "full-cam",
+			camURL: url
+		 });
+	}
+
+	closeFullCam = () => {
+		this.setState({ 
+			displayContent: "main",
+			camURL: null
+		 });
 	}
 
 	render() {
@@ -107,7 +118,7 @@ class GrowPage extends Component {
 		if (this.state.grow === null && this.state.userGrows) {
 			renderedGrowBoxes = this.state.userGrows.map((grow) =>
 				<div key={grow.id} className="Grow-Box-Item-Container">
-					<GrowBoxItem grow={grow} openGrow={this.openGrow} openMainPage={this.openMainPage} />
+					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} />
 				</div>
 			)
 		}
@@ -148,7 +159,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-										<GrowDetailsPage grow={this.props.grow} />
+									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} />
 								)
 							}
 						})()}
@@ -156,7 +167,18 @@ class GrowPage extends Component {
 
 
 					</div>
+
+
+
+
 				</div>
+				{(() => {
+					if (this.state.displayContent === 'full-cam') {
+						return (
+							<GrowCamFull closeFullCam={this.closeFullCam} camURL={this.state.camURL} />
+						)
+					}
+				})()}
 			</div>
 		);
 	}

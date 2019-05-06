@@ -71,8 +71,8 @@ class GrowBoxItem extends Component {
 		});
 	}
 
-	openMainPage = (ev) => {
-		this.props.openMainPage(ev.target.dataset.value)
+	openFullCam = (ev) => {
+		this.props.openFullCam(ev.target.dataset.value)
 	}
 
 	openGrow = (ev) => {
@@ -137,7 +137,7 @@ class GrowBoxItem extends Component {
 			<div className="Grow-Box-Item">
 
 				<div className="Grow-Box-Cam-Div">
-					<div className="Grow-Box-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openMainPage}>&#9974;</div>
+					<div className="Grow-Box-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullCam}>&#9974;</div>
 					<img className="Grow-Box-Cam" alt="cam" src={this.props.grow.urls.cam} width="100%" height="100%" style={{ objectFit: 'contain', cursor: 'pointer' }} onClick={this.openGrow} />
 				</div>
 
