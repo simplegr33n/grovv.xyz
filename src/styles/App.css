@@ -1554,7 +1554,7 @@ html {
 }
 
 .Grow-Cam-Full-Exit-Btn:hover {
-    background: rgb(219, 94, 36);
+    background-color: #db5e24;
     color: #000;
 }
 
@@ -1569,4 +1569,20 @@ html {
     font-size: 24px;
     user-select: none;
     text-align: right;
+}
+
+/* CHART PAGE */
+#Chart-Page {
+
+}
+
+.Chart-Container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #FFF;
+}
+
+.recharts-tooltip-label {
+    color: #000;
 }
