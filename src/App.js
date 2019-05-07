@@ -16,6 +16,9 @@ import FeedChart from './components/main-content/FeedChart/FeedChart.js'
 import GrowConfig from './components/main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './components/main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './components/main-content/GrowPage/GrowPage.js'
+// Testing... for now
+import GraphPage from './components/main-content/GraphPage/GraphPage.js'
+
 
 // QuickBar Indicator Colors (green/orange/red)
 const optimalIndication = '#91eebb';
@@ -27,7 +30,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, grows, etc.
+			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, grows, graph, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
@@ -341,6 +344,12 @@ class App extends Component {
 		}
 	}
 
+	openGraphs = () => {
+		this.setState({
+			mainContent: 'graphs',
+		});
+	}
+
 	render() {
 		return (
 			<div className="App">
@@ -361,6 +370,8 @@ class App extends Component {
 											return <FeedChart />
 										case 'config':
 											return <GrowConfig />
+										case 'graphs':
+											return <GraphPage />
 										case 'maincontent':
 											return (
 												<div id="Main-Content">
@@ -412,6 +423,7 @@ class App extends Component {
 
 													<button className="Left-Menu-Btn" onClick={this.openGrows}>GROWS <span role="img" aria-label="journal">&#127809;</span></button>
 													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
+													<button className="Left-Menu-Btn" onClick={this.openGraphs}>(beta) GRAPHS <span role="img" aria-label="graphs">&#128200;</span></button>
 
 												</div>
 

@@ -205,7 +205,6 @@ class GrowJournal extends Component {
         });
         this.props.setJournalID(id)
         this.watchEntries(id)
-        // this.watchEntries(id);
     }
 
     setEntries = (entries) => {
@@ -231,8 +230,6 @@ class GrowJournal extends Component {
         });
         this.props.setJournalID(ev.target.value)
         this.watchEntries(ev.target.value)
-
-        // this.watchEntries = this.watchEntries(ev.target.value)
     }
 
     openCreateJournalModal = () => {

@@ -91,21 +91,21 @@ class GrowBoxItem extends Component {
 			var now = new Date();
 			var difference = now - (new Date(lastUpdateTime).getTime())
 
-			if (difference >= 3000000) {
+			// if (difference >= 3000000) {
+			// 	this.setState({
+			// 		activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Neutral-Background'
+			// 	});
+			// }
+
+			if (difference >= 120000) {
 				this.setState({
-					activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Neutral-Background'
+					activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
 				});
 			}
 
 			if (difference >= 240000) {
 				this.setState({
 					activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
-				});
-			}
-
-			if (difference >= 120000) {
-				this.setState({
-					activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
 				});
 			}
 
