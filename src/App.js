@@ -16,8 +16,11 @@ import FeedChart from './components/main-content/FeedChart/FeedChart.js'
 import GrowConfig from './components/main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './components/main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './components/main-content/GrowPage/GrowPage.js'
+
 // Testing... for now
 import GraphPage from './components/main-content/GraphPage/GraphPage.js'
+import TESTTwoFourGraph from './components/main-content/GraphPage/TESTTwoFourGraph.js'
+import GraphPageOld from './components/main-content/GraphPage/GraphPageOld.js'
 
 
 // QuickBar Indicator Colors (green/orange/red)
@@ -304,19 +307,19 @@ class App extends Component {
 	setGrow = (grow) => {
 		console.log("APP Setgrow")
 		console.log(grow)
-		this.setState({ 
+		this.setState({
 			growID: null,
 			currentGrow: grow
-		 });
+		});
 	}
 
 	setJournalID = (journalID) => {
 		console.log("APP SetJournalID")
 		console.log(journalID)
-		this.setState({ 
+		this.setState({
 			mainContent: 'journal',
 			journalID: journalID
-		 });
+		});
 	}
 
 
@@ -371,7 +374,13 @@ class App extends Component {
 										case 'config':
 											return <GrowConfig />
 										case 'graphs':
-											return <GraphPage />
+											return (
+												<div>
+													<GraphPage />
+													<TESTTwoFourGraph/>
+													<GraphPageOld/>
+												</div>
+											)
 										case 'maincontent':
 											return (
 												<div id="Main-Content">

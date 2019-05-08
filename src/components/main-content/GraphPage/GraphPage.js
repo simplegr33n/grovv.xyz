@@ -14,17 +14,13 @@ class GraphPage extends Component {
             data: []
         };
 
-
-        this.data = [{ name: 'Page A', uv: 400, pv: 2400, amt: 2400 },
-        { name: 'Page B', uv: 300, pv: 2900, amt: 2000 },
-        { name: 'Page C', uv: 100, pv: 1900, amt: 2300 }];
-
         this.firebase = new Firebase()
+        this.getGraphData();
     }
 
     componentDidMount() {
         this._ismounted = true;
-        this.getGraphData = this.getGraphData();
+        // this.getGraphData = this.getGraphData();
     }
 
     componentWillUnmount() {
@@ -45,39 +41,81 @@ class GraphPage extends Component {
         if (day.length < 2) {
             day = '0' + day
         }
-        var hour = date.getHours().toString()
-        if (hour.length < 2) {
-            hour = '0' + hour
+        var hours = []
+        var tempHour = null
+        var hr = date.getHours()
+
+        if ((hr - 2) >= 0) {
+            tempHour = hr - 2
+            if (tempHour.toString().length < 2) {
+                tempHour = '0' + tempHour
+            }
+            hours[hours.length] = tempHour
         }
+        if ((hr - 1) >= 0) {
+            tempHour = hr - 1
+            if (tempHour.toString().length < 2) {
+                tempHour = '0' + tempHour
+            }
+            hours[hours.length] = tempHour
+        }
+        if (hr.toString().length < 2) {
+            hr = '0' + hr
+        }
+        hours[hours.length] = hr
 
-        console.log(year + " " + month + " " + day + " " + hour)
+        var tempData = []
 
-        ref.child(year).child(month).child(day).child(hour).on('value', (snapshot) => {
+        hours.forEach((hour) => {
+            console.log("read time!")
+            console.log(hour)
+            ref.child(year).child(month).child(day).child(hour).on("value", (snapshot) => {
 
-            var tempData = []
+                snapshot.forEach((child) => {
+                    tempData[tempData.length] = child.val();
+                });
 
-            snapshot.forEach((child) => {
-                tempData[tempData.length] = child.val();
+                tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+
+                // tempData.forEach((dataPoint) => { 
+                //     var itemDate = new Date(dataPoint.time);
+                //     console.log(itemDate.getTime())
+                //     dataPoint.time = new Date(dataPoint.time)
+                //     dataPoint.time = itemDate.toLocaleTimeString(navigator.language, {
+                //       hour: '2-digit',
+                //       minute:'2-digit'
+                //     });
+                // })
+
+                if (hour === hr) {
+
+                    console.log("Test 3-hour Datapoints to render...")
+                    console.log(tempData.length);
+                    console.log(tempData[0]);
+
+                    this.setState({
+                        data: tempData
+                    });
+                }
+
             });
 
-            console.log("Datapoints to render...")
-            console.log(tempData.length);
-
-            this.setState({
-                data: tempData
-            });
-
-            // this.render();
-
-        }, function (errorObject) {
-            console.log("getGraphData failed: " + errorObject.code);
         });
     }
 
     render() {
 
-        const renderLineChart = (
+        const renderGraph = (
             <LineChart width={800} height={400} data={this.state.data}>
+
+                {(() => {
+                    console.log("Inside the chart render")
+                    console.log(this.state.data.length)
+                    console.log(this.state.data[0])
+                    console.log(this.state.data[this.state.data.length - 1])
+                    console.log(this.state.data)
+                })()}
+
                 <Line type="monotone" dataKey="cTemp" stroke="#ca2014" />
                 <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" />
                 <Line type="monotone" dataKey="humidity" stroke="#131366" />
@@ -92,9 +130,9 @@ class GraphPage extends Component {
         return (
 
             <div id="Chart-Page">
-                Grow Chart...(beta)<br></br>
+                Grow Graph [Last 3 hours (ish)]<br></br>
                 <div className="Chart-Container">
-                    {renderLineChart}
+                    {renderGraph}
                 </div>
             </div>
 
