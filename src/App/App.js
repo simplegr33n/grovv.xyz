@@ -16,9 +16,6 @@ import FeedChart from './main-content/FeedChart/FeedChart.js'
 import GrowConfig from './main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './main-content/GrowPage/GrowPage.js'
-
-// Testing... for now
-import GraphThreeHour from './main-content/Graphs/GraphThreeHour.js'
 import GraphSensors from './main-content/Graphs/GraphSensors.js'
 
 
@@ -358,8 +355,10 @@ class App extends Component {
 										case 'graphs':
 											return (
 												<div>
-													<GraphThreeHour />
-													<GraphSensors />
+													flower 3 day
+													<GraphSensors parentSize={[800,300]} grow={'flower'} />
+													vegger 3 day
+													<GraphSensors parentSize={[800,300]} grow={'vegger'} />
 												</div>
 											)
 										case 'maincontent':

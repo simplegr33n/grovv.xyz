@@ -9,7 +9,8 @@ class GrowDetailsGraphs extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            elementSize: []
+            elementSize: [],
+            growDeprecate: null
         };
 
         this.sizeUpdated = 0
@@ -33,18 +34,19 @@ class GrowDetailsGraphs extends Component {
         var dateNow = new Date()
         if ((dateNow.getTime() - this.sizeUpdated) > 5000) {
             var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight]
-            console.log("TEMPSIZE UPDATE")       
-            console.log(tempSize)
 
             if (tempSize !== this.state.elementSize) {
                 this.setState({ elementSize: tempSize });
                 this.sizeUpdated = dateNow.getTime();
             }
         }
-    }
 
-    componentDidCatch() {
+        if (this.props.growDeprecate) {
+            if (this.state.growDeprecate !== this.props.growDeprecate) {
+                this.setState({ growDeprecate: this.props.growDeprecate });
 
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -55,7 +57,7 @@ class GrowDetailsGraphs extends Component {
         return (
 
             <div id="Grow-Details-Graphs-Page" ref={element => this.divRef = element}>
-                <GraphSensors parentSize={this.state.elementSize} />
+                <GraphSensors parentSize={this.state.elementSize} growDeprecate={this.state.growDeprecate} />
             </div>
 
         );

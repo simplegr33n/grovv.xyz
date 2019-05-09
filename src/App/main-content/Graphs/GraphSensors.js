@@ -19,16 +19,30 @@ class GraphSensors extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-        this.getGraphData = this.getGraphData();
+
     }
 
     componentWillUnmount() {
         this._ismounted = false;
     }
 
+    componentDidUpdate() {
+
+        if (this.props.growDeprecate) {
+            if (this.props.growDeprecate !== this.growDeprecate) {
+                console.log("GRAPH SENSORS GROW DEPRECATE (TODO: REMOVE)!")
+                console.log(this.props.growDeprecate)
+                this.growDeprecate = this.props.growDeprecate;
+                this.getGraphData = this.getGraphData()
+            }
+    
+        }
+
+    }
+
     getGraphData = () => {
         // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('sensor_data').child('flower')
+        var ref = this.firebase.db.ref().child('sensor_data').child(this.props.growDeprecate)
 
         var date = new Date();
         var year = date.getFullYear().toString()

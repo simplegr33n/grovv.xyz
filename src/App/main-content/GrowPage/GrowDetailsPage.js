@@ -23,7 +23,9 @@ class GrowDetailsPage extends Component {
             liveData: [],
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
             linkedJournals: [],
-            camURL: null
+            camURL: null,
+            growDeprecate: null // TODO Remove
+            
         };
 
         this.firebase = new Firebase();
@@ -35,14 +37,17 @@ class GrowDetailsPage extends Component {
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
             this.getLiveData()
             this.watchPiCam()
+
+            // todo remove
+            this.setState({ growDeprecate: 'flower' });        
         } else {
             this.getVeggerData()
+            // todo remove
+            this.setState({ growDeprecate: 'vegger' });
         }
 
         if (this.props.grow.urls.cam) {
-            this.setState({
-                camURL: this.props.grow.urls.cam
-            });
+            this.setState({ camURL: this.props.grow.urls.cam });
         }
 
         this.getJournalsInfo = this.getJournalsInfo()
@@ -320,7 +325,7 @@ class GrowDetailsPage extends Component {
 
                         <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
                             {/* <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" /> */}
-                            <GrowDetailsGraphs />
+                            <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} />
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={feedStyle} >
