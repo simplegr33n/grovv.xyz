@@ -6,12 +6,12 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 import Firebase from '../../../config/firebaseConfig.js'
 
 
-class TESTTwoFourGraph extends Component {
+class GraphSensors extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: [],
         };
 
         this.firebase = new Firebase()
@@ -24,50 +24,6 @@ class TESTTwoFourGraph extends Component {
 
     componentWillUnmount() {
         this._ismounted = false;
-    }
-
-    getDayGraphData = () => {
-        // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('sensor_data').child('flower')
-
-        var date = new Date();
-        var year = date.getFullYear().toString()
-        var month = (date.getMonth() + 1).toString()
-        if (month.length < 2) {
-            month = '0' + month
-        }
-        var day = date.getDate().toString()
-        if (day.length < 2) {
-            day = '0' + day
-        }
-        var hour = date.getHours().toString()
-        if (hour.length < 2) {
-            hour = '0' + hour
-        }
-
-        ref.child(year).child(month).child(day).on("value", (snapshot) => {
-
-            var tempData = []
-            var i = 0;
-
-            snapshot.forEach((child) => {
-                child.forEach((gChild) => {
-                    i++;
-                    if (i % 10 === 0 || i === 0) {
-                        tempData[tempData.length] = gChild.val();
-                    }
-                });
-
-                tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-
-            });
-
-            this.setState({
-                dayData: tempData
-            });
-
-        });
     }
 
     getGraphData = () => {
@@ -153,26 +109,29 @@ class TESTTwoFourGraph extends Component {
     render() {
         var renderDayGraph = null
         if (this.state.data) {
+            if (this.props.parentSize) {
+                var xSize = Math.floor(this.props.parentSize[0] * 0.95)
+                var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
-            renderDayGraph = (
-                <LineChart width={800} height={400} data={this.state.data}>
-                    <Line type="monotone" dataKey="cTemp" stroke="#ca2014" />
-                    <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" />
-                    <Line type="monotone" dataKey="humidity" stroke="#131366" />
-                    <Line type="monotone" dataKey="humiPower" stroke="#8884d8" />
-                    <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                    <XAxis dataKey="time" />
-                    <YAxis />
-                    <Tooltip />
-                </LineChart>
-            );
+                renderDayGraph = (
+                    <LineChart width={xSize} height={ySize} data={this.state.data}>
+                        <Line type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
+                        <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
+                        <Line type="monotone" dataKey="humidity" stroke="#131366" dot={false} />
+                        <Line type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <XAxis dataKey="time" />
+                        <YAxis />
+                        <Tooltip />
+                    </LineChart>
+                );
+            }
         }
 
 
         return (
 
-            <div id="Chart-Page">
-                Grow Graph [3-Day]<br></br>
+            <div className="Chart-Page">
                 <div className="Chart-Container">
                     {renderDayGraph}
                 </div>
@@ -182,4 +141,4 @@ class TESTTwoFourGraph extends Component {
     }
 }
 
-export default TESTTwoFourGraph;
+export default GraphSensors;

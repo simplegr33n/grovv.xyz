@@ -506,7 +506,8 @@ html {
 #Journal-Edit-Topline {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .journal-modal-edit-stage {
@@ -1396,7 +1397,7 @@ html {
 
 .Grow-Details-Content-Cam {
     flex: 1;
-    min-width: 65vw;
+    min-width: 55vw;
     max-height: 75vh;
     background-color: #000;
     position: relative;
@@ -1571,18 +1572,30 @@ html {
     text-align: right;
 }
 
-/* CHART PAGE */
-#Chart-Page {
+/* GRAPHS PAGE */
 
+#Grow-Details-Graphs-Page {
+    width: 100%;
+    max-height: 100%;
+}
+
+.Chart-Page {
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    height: 100%;
+    width: 100%;
 }
 
 .Chart-Container {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    background-color: #FFF;
+    background-color: #000;
 }
 
 .recharts-tooltip-label {
     color: #000;
 }
+

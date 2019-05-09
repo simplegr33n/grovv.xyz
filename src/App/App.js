@@ -18,9 +18,8 @@ import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './main-content/GrowPage/GrowPage.js'
 
 // Testing... for now
-import GraphPage from './main-content/GraphPage/GraphPage.js'
-import TESTTwoFourGraph from './main-content/GraphPage/TESTTwoFourGraph.js'
-import GraphPageOld from './main-content/GraphPage/GraphPageOld.js'
+import GraphThreeHour from './main-content/Graphs/GraphThreeHour.js'
+import GraphSensors from './main-content/Graphs/GraphSensors.js'
 
 
 // QuickBar Indicator Colors (green/orange/red)
@@ -33,7 +32,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, grows, graph, etc.
+			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, grows, graphs, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
@@ -235,26 +234,6 @@ class App extends Component {
 
 	}
 
-	openPlotly = () => {
-		if (this.state.mainContent !== 'maincontent') {
-			this.setState({ mainContent: 'maincontent' });
-		}
-		this.setState({
-			zPlotly: 1,
-			zVeggerPlotly: 0
-		});
-	}
-
-	openVeggerPlotly = () => {
-		if (this.state.mainContent !== 'maincontent') {
-			this.setState({ mainContent: 'maincontent' });
-		}
-		this.setState({
-			zPlotly: 0,
-			zVeggerPlotly: 1
-		});
-	}
-
 	openEditProfile = () => {
 		if (this.state.mainContent !== 'editprofile') {
 			this.setState({ mainContent: 'editprofile' });
@@ -342,6 +321,9 @@ class App extends Component {
 			case 'edit-feed':
 				this.editChart()
 				break;
+			case 'graphs':
+				this.openGraphs()
+				break;
 			default:
 				break;
 		}
@@ -376,9 +358,8 @@ class App extends Component {
 										case 'graphs':
 											return (
 												<div>
-													<GraphPage />
-													<TESTTwoFourGraph/>
-													<GraphPageOld/>
+													<GraphThreeHour />
+													<GraphSensors />
 												</div>
 											)
 										case 'maincontent':

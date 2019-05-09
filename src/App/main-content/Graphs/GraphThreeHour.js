@@ -6,7 +6,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 import Firebase from '../../../config/firebaseConfig.js'
 
 
-class GraphPage extends Component {
+class GraphThreeHour extends Component {
 
     constructor(props) {
         super(props);
@@ -77,16 +77,6 @@ class GraphPage extends Component {
 
                 tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
-                // tempData.forEach((dataPoint) => { 
-                //     var itemDate = new Date(dataPoint.time);
-                //     console.log(itemDate.getTime())
-                //     dataPoint.time = new Date(dataPoint.time)
-                //     dataPoint.time = itemDate.toLocaleTimeString(navigator.language, {
-                //       hour: '2-digit',
-                //       minute:'2-digit'
-                //     });
-                // })
-
                 if (hour === hr) {
 
                     console.log("Test 3-hour Datapoints to render...")
@@ -106,7 +96,7 @@ class GraphPage extends Component {
     render() {
 
         const renderGraph = (
-            <LineChart width={800} height={400} data={this.state.data}>
+            <LineChart width={800} height={300} data={this.state.data}>
 
                 {(() => {
                     console.log("Inside the chart render")
@@ -116,10 +106,10 @@ class GraphPage extends Component {
                     console.log(this.state.data)
                 })()}
 
-                <Line type="monotone" dataKey="cTemp" stroke="#ca2014" />
-                <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" />
-                <Line type="monotone" dataKey="humidity" stroke="#131366" />
-                <Line type="monotone" dataKey="humiPower" stroke="#8884d8" />
+                <Line type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
+                <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
+                <Line type="monotone" dataKey="humidity" stroke="#131366" dot={false} />
+                <Line type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
                 <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                 <XAxis dataKey="time" />
                 <YAxis />
@@ -128,16 +118,14 @@ class GraphPage extends Component {
         );
 
         return (
-
-            <div id="Chart-Page">
-                Grow Graph [Last 3 hours (ish)]<br></br>
+            <div className="Chart-Page">
+                Grow Graph [Last 3 hours]<br></br>
                 <div className="Chart-Container">
                     {renderGraph}
                 </div>
             </div>
-
         );
     }
 }
 
-export default GraphPage;
+export default GraphThreeHour;

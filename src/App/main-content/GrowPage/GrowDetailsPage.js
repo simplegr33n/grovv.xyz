@@ -4,7 +4,9 @@ import '../../../styles/App.css';
 import Firebase from '../../../config/firebaseConfig.js'
 
 import GrowDataDisplay from './GrowDataDisplay'
+
 import GrowDetailsConfig from './GrowDetailsConfig'
+import GrowDetailsGraphs from './GrowDetailsGraphs'
 
 import JournalBoxItem from '../GrowJournal/JournalBoxItem'
 
@@ -17,7 +19,7 @@ class GrowDetailsPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayBottom: 'journals', // data, config, feed, edit-feed, journals
+            displayBottom: 'data', // data, config, feed, edit-feed, journals
             liveData: [],
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
             linkedJournals: [],
@@ -39,8 +41,8 @@ class GrowDetailsPage extends Component {
 
         if (this.props.grow.urls.cam) {
             this.setState({
-				camURL: this.props.grow.urls.cam
-			});
+                camURL: this.props.grow.urls.cam
+            });
         }
 
         this.getJournalsInfo = this.getJournalsInfo()
@@ -49,18 +51,18 @@ class GrowDetailsPage extends Component {
 
     }
 
-    	// TODO: remove function
-	watchPiCam = () => {
-		var tempURL = 'http://96.52.249.69:300/html/cam_pic.php?time='
-		var i = 0
-		setInterval(() => {
-			i++
-			tempURL = tempURL + i.toString()
-			this.setState({
-				camURL: tempURL
-			});
-		}, 5000);
-	}
+    // TODO: remove function
+    watchPiCam = () => {
+        var tempURL = 'http://96.52.249.69:300/html/cam_pic.php?time='
+        var i = 0
+        setInterval(() => {
+            i++
+            var tempCamURL = tempURL + i.toString()
+            this.setState({
+                camURL: tempCamURL
+            });
+        }, 5000);
+    }
 
     getJournalsInfo = () => {
 
@@ -143,7 +145,7 @@ class GrowDetailsPage extends Component {
             //         activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Neutral-Background'
             //     });
             // }
-            
+
             if (difference >= 120000) {
                 this.setState({
                     activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
@@ -267,8 +269,6 @@ class GrowDetailsPage extends Component {
 
         var renderedLinkedJournals = null;
         if (this.state.linkedJournals.length !== 0) {
-            console.log("GDP linked journals")
-            console.log(this.state.linkedJournals)
             renderedLinkedJournals = this.state.linkedJournals.map((journal) =>
                 <div key={journal.id} className="Journal-Box-Item-Container">
                     <JournalBoxItem journal={journal} openJournal={this.openJournal} />
@@ -299,8 +299,8 @@ class GrowDetailsPage extends Component {
                             })()}
                         </div>
                         <div className="Grow-Details-Main-Btns">
-                            <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
                             <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                            <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
                             <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
                             <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
                             <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
@@ -319,7 +319,8 @@ class GrowDetailsPage extends Component {
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
-                            <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" />
+                            {/* <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" /> */}
+                            <GrowDetailsGraphs />
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={feedStyle} >
