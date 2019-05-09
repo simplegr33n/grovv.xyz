@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
-import './styles/App.css';
-import Firebase from './config/firebaseConfig.js'
+import '../styles/App.css';
+import Firebase from '../config/firebaseConfig.js'
 
 // Assets
-import cornerLogo from './assets/corner-logo.png'
-import menuHandle from './assets/menu-handle.png'
+import cornerLogo from '../assets/corner-logo.png'
+import menuHandle from '../assets/menu-handle.png'
 
 // Auth
-import SignIn from './components/auth/SignIn.js'
-import SignUp from './components/auth/SignUp.js'
+import SignIn from './auth/SignIn.js'
+import SignUp from './auth/SignUp.js'
 
 // Main Content
-import EditProfile from './components/main-content/EditProfile.js'
-import FeedChart from './components/main-content/FeedChart/FeedChart.js'
-import GrowConfig from './components/main-content/GrowConfig/GrowConfig.js'
-import GrowJournal from './components/main-content/GrowJournal/GrowJournal.js'
-import GrowPage from './components/main-content/GrowPage/GrowPage.js'
+import EditProfile from './main-content/EditProfile.js'
+import FeedChart from './main-content/FeedChart/FeedChart.js'
+import GrowConfig from './main-content/GrowConfig/GrowConfig.js'
+import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
+import GrowPage from './main-content/GrowPage/GrowPage.js'
 
 // Testing... for now
-import GraphPage from './components/main-content/GraphPage/GraphPage.js'
-import TESTTwoFourGraph from './components/main-content/GraphPage/TESTTwoFourGraph.js'
-import GraphPageOld from './components/main-content/GraphPage/GraphPageOld.js'
+import GraphPage from './main-content/GraphPage/GraphPage.js'
+import TESTTwoFourGraph from './main-content/GraphPage/TESTTwoFourGraph.js'
+import GraphPageOld from './main-content/GraphPage/GraphPageOld.js'
 
 
 // QuickBar Indicator Colors (green/orange/red)

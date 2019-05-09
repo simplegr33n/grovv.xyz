@@ -20,7 +20,8 @@ class GrowDetailsPage extends Component {
             displayBottom: 'journals', // data, config, feed, edit-feed, journals
             liveData: [],
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
-            linkedJournals: []
+            linkedJournals: [],
+            camURL: null
         };
 
         this.firebase = new Firebase();
@@ -31,13 +32,35 @@ class GrowDetailsPage extends Component {
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
             this.getLiveData()
+            this.watchPiCam()
         } else {
             this.getVeggerData()
         }
 
+        if (this.props.grow.urls.cam) {
+            this.setState({
+				camURL: this.props.grow.urls.cam
+			});
+        }
+
         this.getJournalsInfo = this.getJournalsInfo()
 
+
+
     }
+
+    	// TODO: remove function
+	watchPiCam = () => {
+		var tempURL = 'http://96.52.249.69:300/html/cam_pic.php?time='
+		var i = 0
+		setInterval(() => {
+			i++
+			tempURL = tempURL + i.toString()
+			this.setState({
+				camURL: tempURL
+			});
+		}, 5000);
+	}
 
     getJournalsInfo = () => {
 
@@ -260,7 +283,7 @@ class GrowDetailsPage extends Component {
 
                     <div className="Grow-Details-Content-Cam">
                         <div className="Grow-Details-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullCam}>&#9974;</div>
-                        <img alt="cam" style={{ objectFit: 'contain' }} src={this.props.grow.urls.cam} width="100%" height="100%" />
+                        <img alt="cam" style={{ objectFit: 'contain' }} src={this.state.camURL} width="100%" height="100%" />
                     </div>
 
                     <div className="Grow-Details-Page-Panel">
