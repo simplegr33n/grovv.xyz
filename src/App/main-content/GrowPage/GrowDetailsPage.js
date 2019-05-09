@@ -220,7 +220,7 @@ class GrowDetailsPage extends Component {
 
 
     render() {
-        //TODO: below in less code... or get rid of zIndex after removing Plotly
+        //TODO: below in less code... or not using zIndex.
         var zIndexOne = { zIndex: '1', position: 'absolute' }
         var zIndexZero = { zIndex: '0', position: 'absolute' }
 
@@ -324,7 +324,6 @@ class GrowDetailsPage extends Component {
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
-                            {/* <object type="text/html" data={this.props.grow.urls.plotly} width="100%" height="100%" aria-label="plotly" /> */}
                             <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} />
                         </div>
 

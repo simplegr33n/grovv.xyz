@@ -33,9 +33,7 @@ class App extends Component {
 			UID: null,
 			username: '',
 			URL_livecam: null,
-			URL_plotly: null,
 			URL_vegger_livecam: null,
-			URL_vegger_plotly: null,
 			sFlowerTemp: '',
 			sFlowerHumidity: '',
 			sVeggerTemp: '',
@@ -164,9 +162,7 @@ class App extends Component {
 		ref.on("value", (snapshot) => {
 			this.setState({
 				URL_livecam: snapshot.val().livecam,
-				URL_plotly: snapshot.val().plotly,
 				URL_vegger_livecam: snapshot.val().vegger_livecam,
-				URL_vegger_plotly: snapshot.val().vegger_plotly,
 				urls: snapshot.val(),
 				//mainContent: 'journal'
 			});
@@ -180,7 +176,6 @@ class App extends Component {
 		this.setState({
 			UID: null,
 			URL_livecam: null,
-			URL_plotly: null
 		});
 		this.firebase.auth.signOut().then(function () {
 			// Sign-out successful.
@@ -189,14 +184,6 @@ class App extends Component {
 			// An error happened.
 			console.log(`Error signing out: ${error}`)
 		});
-	}
-
-	handleSignIn = () => {
-		// ??
-		// set UID, page to plotly
-		// this.setState({
-		// 	mainContent: 'resizeview'
-		// });
 	}
 
 	handleMenuHandle = () => {
@@ -303,12 +290,6 @@ class App extends Component {
 		console.log("todo: get rid of this system...")
 		console.log(page)
 		switch (page) {
-			case 'https://plot.ly/~bgolda89/0/raspberry-pi-streaming-sensor-data/':
-				this.openPlotly()
-				break;
-			case 'https://plot.ly/~bmgolda/5/ganja-grovv-vegger-data/#/':
-				this.openVeggerPlotly()
-				break;
 			case 'config':
 				this.openConfig()
 				break;
@@ -322,6 +303,7 @@ class App extends Component {
 				this.openGraphs()
 				break;
 			default:
+				this.openGraphs()
 				break;
 		}
 	}
@@ -354,20 +336,13 @@ class App extends Component {
 											return <GrowConfig />
 										case 'graphs':
 											return (
-												<div>
+												<div className="Chart-Page">
 													flower 3 day
-													<GraphSensors parentSize={[800,300]} grow={'flower'} />
+													<GraphSensors parentSize={[800, 300]} growDeprecate={'flower'} />
 													vegger 3 day
-													<GraphSensors parentSize={[800,300]} grow={'vegger'} />
+													<GraphSensors parentSize={[800, 300]} growDeprecate={'vegger'} />
 												</div>
 											)
-										case 'maincontent':
-											return (
-												<div id="Main-Content">
-													<object className="Site-View-Update" style={{ zIndex: this.state.zPlotly }} type="text/html" data={this.state.URL_plotly} width="100%" height="100%" aria-label="plotly" />
-													<object className="Site-View-Update" style={{ zIndex: this.state.zVeggerPlotly }} type="text/html" data={this.state.URL_vegger_plotly} width="100%" height="100%" aria-label="vegger plotly" />
-												</div>
-											);
 										default:
 											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
 									}

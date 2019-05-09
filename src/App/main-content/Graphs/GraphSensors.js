@@ -145,11 +145,11 @@ class GraphSensors extends Component {
 
         return (
 
-            <div className="Chart-Page">
+
                 <div className="Chart-Container">
                     {renderDayGraph}
                 </div>
-            </div>
+           
 
         );
     }

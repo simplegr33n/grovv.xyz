@@ -57,7 +57,7 @@ class GrowDetailsGraphs extends Component {
         return (
 
             <div id="Grow-Details-Graphs-Page" ref={element => this.divRef = element}>
-                <GraphSensors parentSize={this.state.elementSize} growDeprecate={this.state.growDeprecate} />
+                <GraphSensors parentSize={this.state.elementSize} growDeprecate={this.props.growDeprecate} />
             </div>
 
         );
