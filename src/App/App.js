@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import '../styles/App.css';
-import Firebase from '../config/firebaseConfig.js'
 
-// Assets
-import cornerLogo from '../assets/corner-logo.png'
-import menuHandle from '../assets/menu-handle.png'
+
+import Firebase from '../config/firebaseConfig.js'
 
 // Auth
 import SignIn from './auth/SignIn.js'
@@ -21,11 +19,6 @@ import GraphSensors from './main-content/Graphs/GraphSensors.js'
 // Top Bar
 import AppBar from './app-bar/AppBar.js'
 
-
-// QuickBar Indicator Colors (green/orange/red)
-const optimalIndication = '#91eebb';
-const warningIndication = '#FFA500';
-const dangerIndication = '#FF0000';
 
 class App extends Component {
 
@@ -52,98 +45,13 @@ class App extends Component {
 				this.setState({ UID: user.uid });
 				this.getUrls();
 				this.getUsername();
-				this.watchSensorsLive();
 			}
 		});
-
-		this.flowerTempRef = React.createRef()
-		this.flowerHumidityRef = React.createRef()
-		this.veggerTempRef = React.createRef()
-		this.veggerHumidityRef = React.createRef()
 
 		this.leftMenuRef = React.createRef()
 	}
 
-	watchSensorsLive = () => {
-		this.watchFlowerLiveData();
-		this.watchVeggerLiveData();
-	}
-
-	watchFlowerLiveData = () => {
-		// Sensor data in firebase
-		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('flower')
-
-		ref.on('value', (snapshot) => {
-			let flowerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
-			let flowerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
-
-			console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
-
-			// SET safe ranges here 
-			if (flowerTemp > 20 && flowerTemp < 27) {
-				this.flowerTempRef.current.style.background = optimalIndication;
-			} else if (flowerTemp < 19 || flowerTemp > 28) {
-				this.flowerTempRef.current.style.background = dangerIndication;
-			} else {
-				this.flowerTempRef.current.style.background = warningIndication;
-			}
-
-			if (flowerHumidity > 30 && flowerHumidity < 43) {
-				this.flowerHumidityRef.current.style.background = optimalIndication;
-			} else if (flowerHumidity < 27 || flowerHumidity > 45) {
-				this.flowerHumidityRef.current.style.background = dangerIndication;
-			} else {
-				this.flowerHumidityRef.current.style.background = warningIndication;
-			}
-
-			this.setState({
-				sFlowerTemp: flowerTemp,
-				sFlowerHumidity: flowerHumidity
-			});
-
-		}, function (errorObject) {
-			console.log("follow flower hour failed: " + errorObject.code);
-		});
-
-	}
-
-	watchVeggerLiveData = () => {
-		// Sensor data in firebase
-		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('vegger')
-
-
-		ref.on('value', (snapshot) => {
-			let veggerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
-			let veggerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
-
-			console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
-
-			// SET safe ranges here 
-			if (veggerTemp > 22 && veggerTemp < 29) {
-				this.veggerTempRef.current.style.background = optimalIndication;
-			} else if (veggerTemp < 20 || veggerTemp > 30) {
-				this.veggerTempRef.current.style.background = dangerIndication;
-			} else {
-				this.veggerTempRef.current.style.background = warningIndication;
-			}
-
-			if (veggerHumidity > 40 && veggerHumidity < 80) {
-				this.veggerHumidityRef.current.style.background = optimalIndication;
-			} else if (veggerHumidity < 35 || veggerHumidity > 85) {
-				this.veggerHumidityRef.current.style.background = dangerIndication;
-			} else {
-				this.veggerHumidityRef.current.style.background = warningIndication;
-			}
-
-			this.setState({
-				sVeggerTemp: veggerTemp,
-				sVeggerHumidity: veggerHumidity
-			});
-
-		}, function (errorObject) {
-			console.log("follow vegger failed: " + errorObject.code);
-		});
-	}
+	
 
 	getUsername = () => {
 		// Users location in tree
@@ -167,7 +75,7 @@ class App extends Component {
 				URL_livecam: snapshot.val().livecam,
 				URL_vegger_livecam: snapshot.val().vegger_livecam,
 				urls: snapshot.val(),
-				//mainContent: 'journal'
+				//mainContent: 'journals'
 			});
 		}, function (errorObject) {
 			console.log("The url read failed: " + errorObject.code);
@@ -198,7 +106,12 @@ class App extends Component {
 	}
 
 	setMainContent = (setValue) => {
-		this.setState({ mainContent: setValue });
+		this.setState({
+			mainContent: setValue,
+			currentGrow: null,
+			growID: null,
+			journalID: null
+		});
 	}
 
 	// TODO: consolidate functions into setGrow()
@@ -243,11 +156,10 @@ class App extends Component {
 		}
 	}
 
-	openJournal = () => {
-
-		if (this.state.mainContent !== 'journal') {
+	openJournals = () => {
+		if (this.state.mainContent !== 'journals') {
 			this.setState({
-				mainContent: 'journal',
+				mainContent: 'journals',
 				journalID: null
 			});
 		} else {
@@ -283,7 +195,7 @@ class App extends Component {
 		console.log("APP SetJournalID")
 		console.log(journalID)
 		this.setState({
-			mainContent: 'journal',
+			mainContent: 'journals',
 			journalID: journalID
 		});
 	}
@@ -322,10 +234,14 @@ class App extends Component {
 			<div className="App">
 				<header className="App-body">
 
-					<AppBar />
+					{(() => {
+						if (this.state.UID) {
+							return <AppBar mainContent={this.state.mainContent} openGanjaGrove={this.openGanjaGrove} openVegger={this.openVegger} setMainContent={this.setMainContent} />
+						}
+					})()}
 
 					<div id="App-Inner-Body">
-			
+
 
 						<div id="App-Body-Content">
 							{(() => {
@@ -333,7 +249,7 @@ class App extends Component {
 									switch (this.state.mainContent) {
 										case 'editprofile':
 											return <EditProfile UID={this.state.UID} username={this.state.username} />;
-										case 'journal':
+										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} />
 										case 'grows':
 											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
@@ -356,54 +272,12 @@ class App extends Component {
 								} else {
 									switch (this.state.mainContent) {
 										case 'signin':
-											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
+											return <SignIn gotoSignUp={this.setMainContent} />;
 										case 'signup':
 											return <SignUp gotoSignIn={this.setMainContent} />;
 										default:
-											return <SignIn gotoSignUp={this.setMainContent} signIn={this.handleSignIn} />;
+											return <SignIn gotoSignUp={this.setMainContent} />;
 									}
-								}
-							})()}
-
-							{(() => {
-								if (this.state.UID) {
-									return (
-										<div id="Main-Left-Wrapper" style={{ left: '-240px' }} ref={this.leftMenuRef}>
-											<div id="Main-Left">
-												<div id="Home-Div">
-													<img src={cornerLogo} id="Grovv-Logo" alt="grovv logo" />
-												</div>
-												<div id="Main-Left-Menu">
-
-													<div id="Footer-Btns">
-														<button id="Profile-Btn" onClick={this.openEditProfile}>Profile</button>
-														<button id="Logout-Btn" onClick={this.handleSignOut}>Logout</button>
-													</div>
-
-
-													<div className="QuickTemp-Row">
-														<button className="Grow-Area-Btn" onClick={this.openGanjaGrove}>GG <span role="img" aria-label="open ganja grove">&#128250;&#128200;</span></button>
-														<button className="Temp-Gauge-Btn" ref={this.flowerTempRef}>{this.state.sFlowerTemp}°C</button>
-														<button className="Humid-Gauge-Btn" ref={this.flowerHumidityRef}>{this.state.sFlowerHumidity}%</button>
-													</div>
-													<div className="QuickTemp-Row">
-														<button className="Grow-Area-Btn" onClick={this.openVegger}>VG <span role="img" aria-label="open vegger">&#128250;&#128200;</span></button>
-														<button className="Temp-Gauge-Btn" ref={this.veggerTempRef}>{this.state.sVeggerTemp}°C</button>
-														<button className="Humid-Gauge-Btn" ref={this.veggerHumidityRef}>{this.state.sVeggerHumidity}%</button>
-													</div>
-
-													<button className="Left-Menu-Btn" onClick={this.openGrows}>GROWS <span role="img" aria-label="journal">&#127809;</span></button>
-													<button className="Left-Menu-Btn" onClick={this.openJournal}>JOURNALS <span role="img" aria-label="journal">&#128214;</span></button>
-													<button className="Left-Menu-Btn" onClick={this.openGraphs}>(beta) GRAPHS <span role="img" aria-label="graphs">&#128200;</span></button>
-
-												</div>
-
-											</div>
-											<div onClick={this.handleMenuHandle}>
-												<img src={menuHandle} id="Menu-Handle" alt="menu handle" />
-											</div>
-										</div>
-									);
 								}
 							})()}
 

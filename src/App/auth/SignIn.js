@@ -72,7 +72,7 @@ class SignIn extends Component {
         });
 
         console.log(`username ${username} - logged in`)
-        this.props.signIn("journal");
+        // this.props.signIn();
         return;
 
     }
