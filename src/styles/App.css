@@ -1607,6 +1607,123 @@ html {
 /* APP BAR */
 #App-Bar {
     width: 100%;
-    height: 60px;
-    background-color: pink;
+    max-width: 100vw;
+    height: 50px;
+    background-color: #404840;
+    display: flex;
+    flex-direction: row;
+}
+
+#App-Bar-Logo {
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bolder;
+    padding-left: 8px;
+    padding-right: 8px;    
+    user-select: none;
+    background-color: rgb(38, 41, 35);
+
+}
+
+.App-Bar-Button {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 14px;
+    height: 100%;
+    background-color: black;
+    user-select: none;
+    margin-left: 2px;
+}
+
+.App-Bar-Button:hover {
+    font-weight: bolder;
+    background-color: rgb(26, 36, 19);
+    margin-top: 1px;
+}
+
+.App-Bar-Button:active {
+    background-color: rgb(45, 61, 34);
+}
+
+.App-Bar-Button-Grow {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 8px;
+    height: 100%;
+    max-height: 100%;
+    background-color: rgb(69, 143, 40);
+    user-select: none;
+    margin-left: 2px;
+}
+
+.App-Bar-Button-Grow:hover {
+    background-color: rgb(78, 170, 42);
+    margin-top: 1px;
+}
+
+.App-Bar-Button-Grow:active {
+    background-color: rgb(65, 85, 57);
+    color: #FFF;
+}
+
+.App-Bar-Button-Grow-Name {
+    display: flex;
+    font-size: 13px;
+    font-weight: bolder;
+    padding-right: 8px;
+    user-select: none;
+}
+
+
+.App-Bar-Button-Grow-Temp {
+    font-size: 11px;
+    font-weight: bold;
+    padding-left: 2px;
+    padding-right: 2px;
+    max-height: 100%;
+    background-color: rgb(201, 86, 20);
+    user-select: none;
+    color: #FFF;
+}
+
+.App-Bar-Button-Grow-Humidity {
+    font-size: 11px;
+    font-weight: bold;
+    padding-left: 2px;
+    padding-right: 2px;
+    max-height: 100%;
+    background-color: rgb(40, 102, 143);
+    user-select: none;
+    color: #FFF;
+}
+
+
+.App-Bar-Filler-Div {
+    flex: 1;
+}
+
+.App-Bar-Logout-Button {
+    color: #FFF;
+    display: flex;
+    font-size: 50px;
+    margin-top: -11px;
+    font-weight: bolder;
+    padding-right: 8px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.App-Bar-Logout-Button:hover {
+    color: #000;
+    margin-top: -9px;
+}
+
+.App-Bar-Logout-Button:active {
+    color: rgb(26, 25, 25);
 }
