@@ -18,6 +18,9 @@ import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './main-content/GrowPage/GrowPage.js'
 import GraphSensors from './main-content/Graphs/GraphSensors.js'
 
+// Top Bar
+import AppBar from './app-bar/AppBar.js'
+
 
 // QuickBar Indicator Colors (green/orange/red)
 const optimalIndication = '#91eebb';
@@ -318,9 +321,13 @@ class App extends Component {
 		return (
 			<div className="App">
 				<header className="App-body">
-					<div id="App-Inner-Body">
-						<div id="App-Body-Content">
 
+					<AppBar />
+
+					<div id="App-Inner-Body">
+			
+
+						<div id="App-Body-Content">
 							{(() => {
 								if (this.state.UID) {
 									switch (this.state.mainContent) {

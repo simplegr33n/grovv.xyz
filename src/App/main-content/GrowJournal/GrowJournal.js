@@ -217,7 +217,7 @@ class GrowJournal extends Component {
             currentEntryID: entries[0].id,
             displayEntries: entries
         });
-        
+
     }
 
     handleJournalChange = (ev) => {
@@ -236,12 +236,12 @@ class GrowJournal extends Component {
         this.setState({ displayContent: "create-journal" });
     }
 
-    openJournal = (journal) => {        
+    openJournal = (journal) => {
         this.setState({
             journalID: journal.id
         });
         this.props.setJournalID(journal.id);
-        this.watchEntries(journal.id);       
+        this.watchEntries(journal.id);
     }
 
     render() {
@@ -281,28 +281,32 @@ class GrowJournal extends Component {
                 <div id="Journal-Main">
                     <div id="Grow-Journal-Main-Area">
 
-
-
                         {(() => {
-                            if (this.props.journalID === null) {
+                            if (renderedUserJournals && !this.props.journalID) {
+                                return (
+                                    <div id="Journal-Box-Area-Scroll">
+
+
+                                        <div id="Grow-Journal-Header-Area">
+                                            <div id="Grow-Journal-Header-Text">Grow Journals</div>
+                                            <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
+                                                +
+                                            </button>
+                                        </div>
+
+
+                                        <div id="Journal-Box-Area">
+                                            {renderedUserJournals}
+                                        </div>
+                                    </div>
+                                )
+                            } else if (!this.props.journalID) {
                                 return (
                                     <div id="Grow-Journal-Header-Area">
                                         <div id="Grow-Journal-Header-Text">Grow Journals</div>
                                         <button className="New-Journal-Btn" onClick={this.openCreateJournalModal}>
                                             +
                                         </button>
-                                    </div>
-                                )
-                            }
-                        })()}
-
-                        {(() => {
-                            if (renderedUserJournals && !this.props.journalID) {
-                                return (
-                                    <div id="Journal-Box-Area-Scroll">
-                                        <div id="Journal-Box-Area">
-                                            {renderedUserJournals}
-                                        </div>
                                     </div>
                                 )
                             }

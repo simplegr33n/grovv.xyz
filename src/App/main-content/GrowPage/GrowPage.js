@@ -99,17 +99,17 @@ class GrowPage extends Component {
 	}
 
 	openFullCam = (url) => {
-		this.setState({ 
+		this.setState({
 			displayContent: "full-cam",
 			camURL: url
-		 });
+		});
 	}
 
 	closeFullCam = () => {
-		this.setState({ 
+		this.setState({
 			displayContent: "main",
 			camURL: null
-		 });
+		});
 	}
 
 	setJournalID = (journalID) => {
@@ -121,7 +121,7 @@ class GrowPage extends Component {
 	render() {
 
 		if (this.props.growID) {
-			this.state.userGrows.forEach((grow) =>{
+			this.state.userGrows.forEach((grow) => {
 				if (grow.id === this.props.growID) {
 					this.props.setGrow(grow)
 				}
@@ -147,20 +147,30 @@ class GrowPage extends Component {
 							if (this.props.grow === null) {
 								return (
 									<div id="Grow-List-Main-Area">
-										<div id="Grow-Header-Area">
-											<div id="Grow-Header-Text">Grows</div>
-											<button className="New-Grow-Btn" onClick={this.openCreateGrowModal}>
-												+
-											</button>
-										</div>
 
 										{(() => {
 											if (renderedGrowBoxes) {
 												return (
 													<div id="Grow-Box-Area-Scroll">
+														<div id="Grow-Header-Area">
+															<div id="Grow-Header-Text">Grows</div>
+															<button className="New-Grow-Btn" onClick={this.openCreateGrowModal}>
+																+
+															</button>
+														</div>
+
 														<div id="Grow-Box-Area">
 															{renderedGrowBoxes}
 														</div>
+													</div>
+												)
+											} else {
+												return (
+													<div id="Grow-Header-Area">
+														<div id="Grow-Header-Text">Grows</div>
+														<button className="New-Grow-Btn" onClick={this.openCreateGrowModal}>
+															+
+														</button>
 													</div>
 												)
 											}
@@ -173,7 +183,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} setJournalID={this.setJournalID}/>
+									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} setJournalID={this.setJournalID} />
 								)
 							}
 						})()}
@@ -189,7 +199,7 @@ class GrowPage extends Component {
 				{(() => {
 					if (this.state.displayContent === 'full-cam') {
 						return (
-							<GrowCamFull closeFullCam={this.closeFullCam} camURL={this.state.camURL}  />
+							<GrowCamFull closeFullCam={this.closeFullCam} camURL={this.state.camURL} />
 						)
 					}
 				})()}

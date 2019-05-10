@@ -1,12 +1,12 @@
 /* App's static wrapper */
 
 html {
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .App {
     text-align: center;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
 }
 
 #Grovv-Logo {
@@ -22,7 +22,7 @@ html {
     background-color: #5a5252;
     min-height: 100vh;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     font-size: calc(10px + 2vmin);
     color: white;
 }
@@ -72,6 +72,7 @@ html {
 
 #App-Inner-Body {
     width: 100vw;
+    height: calc(100vh - 60px);
 }
 
 #Main-Left-Wrapper {
@@ -419,7 +420,6 @@ html {
     display: flex;
     flex-direction: row;
     font-weight: bolder;
-    position: absolute;
     width: 100%;
     height: 100%;
     align-content: center;
@@ -434,6 +434,7 @@ html {
     z-index: 9999999;
     background-color: #000000a9;
     position: absolute;
+    top: 0;
 }
 
 #Journal-Edit-Entry-Modal {
@@ -1000,6 +1001,7 @@ html {
     z-index: 9999999;
     background-color: #000000;
     position: absolute;
+    top: 0;
 }
 
 #Full-Image-Close-Btn {
@@ -1109,9 +1111,8 @@ html {
     display: flex;
     flex-direction: row;
     font-weight: bolder;
-    position: absolute;
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     align-content: center;
     text-align: center;
     overflow-y: hidden;
@@ -1125,7 +1126,7 @@ html {
     font-weight: bolder;
     position: relative;
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     align-content: center;
     text-align: center;
 }
@@ -1137,6 +1138,7 @@ html {
 #Grow-Box-Area-Scroll {
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .Grow-Box-Item-Container {
@@ -1587,6 +1589,7 @@ html {
     align-self: center;
     height: 100%;
     width: 100%;
+    overflow: auto;
 }
 
 .Chart-Container {
@@ -1600,3 +1603,10 @@ html {
     color: #000;
 }
 
+
+/* APP BAR */
+#App-Bar {
+    width: 100%;
+    height: 60px;
+    background-color: pink;
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import Firebase from '../../../config/firebaseConfig.js'
 
@@ -133,7 +133,6 @@ class GraphSensors extends Component {
                         <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
                         <Line type="monotone" dataKey="humidity" stroke="#131366" dot={false} />
                         <Line type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
-                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                         <XAxis dataKey="time" />
                         <YAxis />
                         <Tooltip />
