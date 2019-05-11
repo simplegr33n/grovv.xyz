@@ -245,8 +245,6 @@ class JournalAddEditModal extends Component {
             <div id="Journal-Modal-Space">
                 <div id="Journal-Edit-Entry-Modal">
                     <div id="Journal-Edit-Topline">
-                        {/* TITLE INPUT  */}
-                        <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange} />
                         {/* DATE PICKER  */}
                         <DatePicker
                             id="journal-edit-datepicker"
@@ -260,6 +258,8 @@ class JournalAddEditModal extends Component {
                             <option value="seedling">Seedling</option>
                             <option value="pre">Pre</option>
                         </select>
+                        {/* TITLE INPUT  */}
+                        <input className="journal-modal-edit-title" placeholder="enter title..." value={this.state.title} onChange={this.handleTitleChange} />
                     </div>
                     {/* BODY INPUT  */}
                     <textarea className="journal-modal-edit-body" placeholder="enter body content..." value={this.state.content} onChange={this.handleContentChange} />

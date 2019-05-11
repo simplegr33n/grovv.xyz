@@ -145,39 +145,39 @@ class AppBar extends Component {
                 <div id="App-Bar-Logo" onClick={this.openGrows}>
                     grovv
                 </div>
+
+                <div className="App-Bar-Button" onClick={this.openJournals}>
+                    JRNLS
+                </div>
+
                 <div className="App-Bar-Button" onClick={this.openGrows}>
                     GROWS
                 </div>
+
                 <div className="App-Bar-Button-Grow" onClick={this.openGanjaGrove}>
                     <div className="App-Bar-Button-Grow-Name">
                         GG
                     </div>
-
                     <div ref={this.flowerTempRef} className="App-Bar-Button-Grow-Temp">
                         {this.state.sFlowerTemp}°C
                     </div>
                     <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity">
                         {this.state.sFlowerHumidity}%
-                        </div>
-
+                    </div>
                 </div>
 
                 <div className="App-Bar-Button-Grow" onClick={this.openVegger}>
                     <div className="App-Bar-Button-Grow-Name">
                         VG
                     </div>
-
                     <div ref={this.veggerTempRef} className="App-Bar-Button-Grow-Temp">
                         {this.state.sVeggerTemp}°C
                     </div>
                     <div ref={this.veggerHumidityRef} className="App-Bar-Button-Grow-Humidity">
                         {this.state.sVeggerHumidity}%
                     </div>
+                </div>
 
-                </div>
-                <div className="App-Bar-Button" onClick={this.openJournals}>
-                    JRNLS
-                </div>
                 <div className="App-Bar-Filler-Div"></div>
                 <div className="App-Bar-Logout-Button" onClick={this.handleSignOut}>
                     &#10162;

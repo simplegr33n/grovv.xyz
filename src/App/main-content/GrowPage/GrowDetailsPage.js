@@ -25,7 +25,7 @@ class GrowDetailsPage extends Component {
             linkedJournals: [],
             camURL: null,
             growDeprecate: null // TODO Remove
-            
+
         };
 
         this.firebase = new Firebase();
@@ -39,7 +39,7 @@ class GrowDetailsPage extends Component {
             this.watchPiCam()
 
             // todo remove
-            this.setState({ growDeprecate: 'flower' });        
+            this.setState({ growDeprecate: 'flower' });
         } else {
             this.getVeggerData()
             // todo remove
@@ -303,13 +303,6 @@ class GrowDetailsPage extends Component {
                                 }
                             })()}
                         </div>
-                        <div className="Grow-Details-Main-Btns">
-                            <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                            <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
-                            <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                            <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                            <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                        </div>
                     </div>
 
 
@@ -317,6 +310,14 @@ class GrowDetailsPage extends Component {
 
                         <div className="Grow-Details-Bottom-Item" style={journalsStyle} >
                             <div className="Grow-Details-Journals">
+                                {/* TODO: Make Component */}
+                                <div className="Grow-Details-Bottom-Btns">
+                                    <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                                    <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
+                                    <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                                    <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                                    <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                                </div>
                                 <div className="Grow-Details-Journals-Header">Connected Journals</div>
                                 {renderedLinkedJournals}
 
@@ -324,19 +325,55 @@ class GrowDetailsPage extends Component {
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
+                            {/* TODO: Make Component */}
+                            <div className="Grow-Details-Bottom-Btns">
+                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                            </div>
                             <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} />
+
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={feedStyle} >
+                            {/* TODO: Make Component */}
+                            <div className="Grow-Details-Bottom-Btns">
+                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                            </div>
                             <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
+
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={editFeedStyle} >
-                            <object type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
+                            {/* TODO: Make Component */}
+                            <div className="Grow-Details-Bottom-Btns">
+                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                            </div>
+                            <object id="Edit-Food-Chart" type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
+
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={configStyle} >
+                            {/* TODO: Make Component */}
+                            <div className="Grow-Details-Bottom-Btns">
+                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
+                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                            </div>
                             <GrowDetailsConfig />
+
                         </div>
 
                     </div>

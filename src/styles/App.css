@@ -72,7 +72,7 @@ html {
 
 #App-Inner-Body {
     width: 100vw;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 50px);
 }
 
 #Main-Left-Wrapper {
@@ -305,7 +305,12 @@ html {
 
 #Food-Chart {
     width: 100%;
-    height: 100%;
+    flex: 1;
+}
+
+#Edit-Food-Chart {
+    width: 100%;
+    flex: 1;
 }
 
 /* Config Page */
@@ -507,7 +512,7 @@ html {
 #Journal-Edit-Topline {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     flex-wrap: wrap;
 }
 
@@ -1046,6 +1051,7 @@ html {
 
 .Journal-Box-Item-Container {
     width: 100%;
+    flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -1112,6 +1118,7 @@ html {
     flex-direction: row;
     font-weight: bolder;
     width: 100%;
+    height: 100%;
     max-height: 100%;
     align-content: center;
     text-align: center;
@@ -1176,13 +1183,14 @@ html {
     max-width: 100%;
     background-color: rgb(14, 31, 12);
     color: #FFF;
-    margin: 1%;
+    margin: 3%;
     margin-top: 0;
     position: relative;
     text-align: left;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    box-shadow: 2px 2px 4px rgb(3, 14, 3);
 }
 
 .Grow-Box-Item-Main {
@@ -1227,6 +1235,7 @@ html {
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
+    background-color: #293522;
 }
 
 .Grow-Box-Cam-Div {
@@ -1236,8 +1245,7 @@ html {
     flex: 1;
     overflow: hidden;
     min-width: 300px;
-    margin: 1%;
-    margin-right: 0;
+
 }
 
 .Grow-Box-Cam {
@@ -1318,6 +1326,7 @@ html {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    background-color: #293522;
 }
 
 .Grow-Box-Function-Btn {
@@ -1413,13 +1422,13 @@ html {
 }
 
 .Grow-Details-Content-Bottom {
-    min-height: 350px;
+    min-height: 370px;
     min-width: 100vw;
     width: 100%;
     max-height: 100%;
     flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     position: relative;
     background-color: #FFF;
 }
@@ -1428,6 +1437,8 @@ html {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
     flex: 1;
     background-color: #FFF;
 
@@ -1478,7 +1489,7 @@ html {
     height: 100%;
     align-content: center;
     text-align: center;
-    /* position: fixed; */
+    flex: 1;
     overflow-x: hidden;
 }
 
@@ -1564,6 +1575,9 @@ html {
 .Grow-Details-Journals {
     background-color: rgb(50, 73, 6);
     width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .Grow-Details-Journals-Header {
@@ -1578,7 +1592,7 @@ html {
 
 #Grow-Details-Graphs-Page {
     width: 100%;
-    max-height: 100%;
+    height: calc(100% - 30px);
     background-color: #000;
 }
 
@@ -1613,6 +1627,8 @@ html {
     display: flex;
     flex-direction: row;
     overflow-y: hidden;
+    box-shadow: 1px 2px 5px grey;
+    z-index: 1;
 }
 
 #App-Bar-Logo {
@@ -1721,10 +1737,24 @@ html {
 }
 
 .App-Bar-Logout-Button:hover {
-    color: #000;
+    background-color: rgb(107, 112, 107);
     margin-top: -9px;
 }
 
 .App-Bar-Logout-Button:active {
+    background-color: rgb(150, 160, 150);
     color: rgb(26, 25, 25);
+}
+
+
+ /* ...else.. */
+
+
+ .Grow-Details-Bottom-Btns {
+    display: flex;
+    height: 30px;
+    width: 100vw;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    background-color: rgb(11, 46, 17); 
 }
