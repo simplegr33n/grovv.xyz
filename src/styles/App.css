@@ -1404,7 +1404,7 @@ html {
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
-    padding: 1%;
+    padding: 3%;
     background-color: rgb(27, 65, 23);
 }
 
@@ -1759,4 +1759,5 @@ html {
     flex-wrap: wrap;
     justify-content: flex-end;
     background-color: #000;
+    z-index: 1;
 }

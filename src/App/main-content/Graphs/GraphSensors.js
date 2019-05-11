@@ -3,6 +3,8 @@ import '../../../styles/App.css';
 
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
+import moment from 'moment'
+
 import Firebase from '../../../config/firebaseConfig.js'
 
 
@@ -35,7 +37,7 @@ class GraphSensors extends Component {
                 this.growDeprecate = this.props.growDeprecate;
                 this.getGraphData = this.getGraphData()
             }
-    
+
         }
 
     }
@@ -85,7 +87,10 @@ class GraphSensors extends Component {
                     child.forEach((gChild) => {
                         i++;
                         if (i % 10 === 0 || i === 0) {
-                            tempData[tempData.length] = gChild.val();
+                            var dataPoint = gChild.val()
+                            var dataTime = new Date(dataPoint.time).getTime()
+                            dataPoint.time = dataTime
+                            tempData[tempData.length] = dataPoint;
                         }
                     });
                 });
@@ -121,8 +126,12 @@ class GraphSensors extends Component {
 
 
     render() {
+        console.log("kjh")
+
+        console.log(this.state.data[0])
+
         var renderDayGraph = null
-        if (this.state.data) {
+        if (this.state.data[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 0.95)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
@@ -131,9 +140,13 @@ class GraphSensors extends Component {
                     <LineChart width={xSize} height={ySize} data={this.state.data}>
                         <Line type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
                         <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
-                        <Line type="monotone" dataKey="humidity" stroke="#131366" dot={false} />
+                        <Line type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
                         <Line type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
-                        <XAxis dataKey="time" />
+                        <XAxis
+                            dataKey="time"
+                            type="number"
+                            domain={[new Date(this.state.data[0].time).getTime(), new Date(this.state.data[this.state.data.length - 1].time).getTime()]}
+                            tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')} />
                         <YAxis />
                         <Tooltip />
                     </LineChart>
@@ -145,10 +158,10 @@ class GraphSensors extends Component {
         return (
 
 
-                <div className="Chart-Container">
-                    {renderDayGraph}
-                </div>
-           
+            <div className="Chart-Container">
+                {renderDayGraph}
+            </div>
+
 
         );
     }

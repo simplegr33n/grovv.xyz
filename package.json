@@ -7,6 +7,7 @@
     "@firebase/database": "^0.3.13",
     "firebase": "^5.8.5",
     "gh-pages": "^2.0.1",
+    "moment": "^2.24.0",
     "react": "^16.8.3",
     "react-datepicker": "^2.5.0",
     "react-dom": "^16.8.3",
