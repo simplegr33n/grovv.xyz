@@ -1211,6 +1211,7 @@ html {
     font-weight: normal;
     flex-wrap: wrap;
     text-align: right;
+    overflow: hidden;
 }
 
 .Grow-Box-Info-Text-Area {
@@ -1757,7 +1758,7 @@ html {
     height: 30px;
     width: 100vw;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    justify-content: flex-start;
     background-color: #000;
     z-index: 1;
 }

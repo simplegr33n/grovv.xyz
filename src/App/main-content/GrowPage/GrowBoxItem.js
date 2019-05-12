@@ -3,6 +3,8 @@ import '../../../styles/App.css';
 
 import GrowDataDisplay from './GrowDataDisplay'
 
+import GraphSensorsBox from '../Graphs/GraphSensorsBox'
+
 
 import Firebase from '../../../config/firebaseConfig.js'
 
@@ -14,7 +16,8 @@ class GrowBoxItem extends Component {
 			grow: this.props.grow,
 			liveData: [],
 			activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
-			camURL: null
+			camURL: null,
+			growDeprecate: ''
 		};
 
 
@@ -29,8 +32,12 @@ class GrowBoxItem extends Component {
 		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
 			this.getLiveData()
 			this.watchPiCam()
+
+			this.setState({ growDeprecate: 'flower' });
 		} else {
 			this.getVeggerData()
+
+			this.setState({ growDeprecate: 'vegger' });
 		}
 
 		if(this.props.grow.urls.cam) {
@@ -201,6 +208,8 @@ class GrowBoxItem extends Component {
 							})()}
 
 						</div>
+
+						<GraphSensorsBox parentSize={[150, 75]} growDeprecate={this.state.growDeprecate} />
 
 						<img alt="preview" src={this.props.grow.previewImage} className="Grow-Box-Preview-Image" />
 					</div>
