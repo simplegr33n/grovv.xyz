@@ -5,6 +5,9 @@ import GrowDataDisplay from './GrowDataDisplay'
 
 import GraphSensorsBox from '../Graphs/GraphSensorsBox'
 
+import moment from 'moment'
+
+
 
 import Firebase from '../../../config/firebaseConfig.js'
 
@@ -168,7 +171,9 @@ class GrowBoxItem extends Component {
 			if (updatedAtMinutesString.length === 1) {
 				updatedAtMinutesString = "0" + updatedAtMinutesString
 			}
-			lastUpdate = updatedAtDate.toDateString() + " - " + updatedAtHoursString + ":" + updatedAtMinutesString
+			// lastUpdate = updatedAtDate.toDateString() + " - " + updatedAtHoursString + ":" + updatedAtMinutesString
+		
+			lastUpdate = moment(updatedAtDate).fromNow()
 		}
 
 
@@ -187,7 +192,7 @@ class GrowBoxItem extends Component {
 							{this.props.grow.name}
 						</div>
 						<div className="Grow-Box-Updated">
-							updt: <i><b>{lastUpdate}</b></i>
+							update<i><b>: {lastUpdate}</b></i>
 							<div className={this.state.activeIndicatorStyle} />
 						</div>
 					</div>

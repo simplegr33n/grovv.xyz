@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import { LineChart, Line, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
+
+import moment from 'moment'
 
 import Firebase from '../../../config/firebaseConfig.js'
 
@@ -137,6 +139,12 @@ class GraphSensorsBox extends Component {
                         <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
                         <Line type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
                         <Line type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                        <XAxis
+                            dataKey="time"
+                            type="number"
+                            domain={[new Date(this.state.data[0].time).getTime(), new Date(this.state.data[this.state.data.length - 1].time).getTime()]}
+                            tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')} 
+                            hide={true}/>
                         <YAxis />
                         <Tooltip />
                     </LineChart>

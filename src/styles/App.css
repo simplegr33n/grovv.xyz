@@ -1762,3 +1762,18 @@ html {
     background-color: #000;
     z-index: 1;
 }
+
+
+/* GROW DETAILS GRAPH TOOLTIP */
+.Grow-Details-Graph-Tooltip {
+    width: 120px;
+    height: 120px;
+    background-color: rgb(150, 233, 150);
+    color: #000;
+    display: flex;
+    flex-direction: column;
+}
+
+.Grow-Details-Graph-Tooltip-Data {
+    font-size: 13px;
+}

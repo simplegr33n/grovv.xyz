@@ -163,7 +163,6 @@ class JournalAddEditModal extends Component {
                 console.log(url)
                 // Create thumb url from url (thumbs automatically created via cloud function on upload)
                 var urlSplit = url.split("%2F")
-                //var urlName = urlSplit[2];
                 var thumbUrl = urlSplit[0] + "%2F" + urlSplit[1] + "%2Fthumb_" + urlSplit[2]
 
                 console.log(thumbUrl)
@@ -177,9 +176,7 @@ class JournalAddEditModal extends Component {
                     addedImages: tempAddedImages
                 });
 
-            }).then(() => {
-                //this.props.goto('studio');
-            });
+            })
     }
 
     deleteImage = (ev) => {
