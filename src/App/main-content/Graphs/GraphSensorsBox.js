@@ -121,17 +121,88 @@ class GraphSensorsBox extends Component {
     }
 
 
+    renderTooltip(props) {
+        var rawContent = props.payload
+        if (rawContent.length === 0) {
+            return;
+        }
+
+        var readableTime = moment(props.payload[0].payload.time).fromNow()
+
+        var tempTemp = null;
+        var tempTempColor = "#000"
+        var tempFanPower = null;
+        var tempFanSpdColor = "#000"
+        var tempHumidity = null;
+        var tempHumidityColor = "#000"
+        var tempHumidifierPower = null;
+        var tempHumiPwrColor = "#000"
+
+        rawContent.forEach((line) => {
+            if (line.dataKey === "cTemp") {
+                tempTempColor = line.stroke
+                tempTemp = rawContent[0].payload.cTemp
+            }
+
+            if (line.dataKey === "fanSpeed") {
+                tempFanSpdColor = line.stroke
+                tempFanPower = rawContent[0].payload.fanSpeed
+            }
+
+            if (line.dataKey === "humidity") {
+                tempHumidityColor = line.stroke
+                tempHumidity = rawContent[0].payload.humidity
+            }
+
+            if (line.dataKey === "humiPower") {
+                tempHumiPwrColor = line.stroke
+                tempHumidifierPower = rawContent[0].payload.humiPower
+            }
+        })
+
+        return (
+            <div className="Grow-Details-Graph-Tooltip">
+                <div>{readableTime}</div>
+
+                {(() => {
+                    if (tempTemp) {
+                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempTempColor }}>TEMP: {tempTemp}°C </div>
+                    }
+                })()}
+
+                {(() => {
+                    if (tempFanPower) {
+                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempFanSpdColor }}>FAN-PWR: {tempFanPower}% </div>
+                    }
+                })()}
+
+                {(() => {
+                    if (tempHumidity) {
+                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumidityColor }}>HUMID: {tempHumidity}% RH </div>
+                    }
+                })()}
+
+                {(() => {
+                    if (tempHumidifierPower) {
+                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumiPwrColor }}>HUM-PWR: {tempHumidifierPower}% </div>
+                    }
+                })()}
+
+            </div>
+
+        )
+    }
 
     render() {
-        console.log("kjh")
-
-        console.log(this.state.data[0])
 
         var renderDayGraph = null
         if (this.state.data[0]) {
             if (this.props.parentSize) {
-                var xSize = Math.floor(this.props.parentSize[0] * 0.95)
+                var xSize = Math.floor(this.props.parentSize[0] * 1)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
+
+                console.log("GRAPH SENSORS BOX SIZE:")
+                console.log(this.props.parentSize)
 
                 renderDayGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.data}>
@@ -146,7 +217,7 @@ class GraphSensorsBox extends Component {
                             tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')} 
                             hide={true}/>
                         <YAxis />
-                        <Tooltip />
+                        <Tooltip content={this.renderTooltip} />
                     </LineChart>
                 );
             }

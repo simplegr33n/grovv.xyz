@@ -20,12 +20,14 @@ class GrowBoxItem extends Component {
 			liveData: [],
 			activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
 			camURL: null,
-			growDeprecate: ''
+			growDeprecate: '',
+			graphElementSize: [150, 150],
 		};
 
 
 		this.firebase = new Firebase();
 
+		this.graphSizeUpdated = 0;
 
 
 	}
@@ -43,14 +45,36 @@ class GrowBoxItem extends Component {
 			this.setState({ growDeprecate: 'vegger' });
 		}
 
-		if(this.props.grow.urls.cam) {
+		if (this.props.grow.urls.cam) {
 			this.setState({
 				camURL: this.props.grow.urls.cam
 			});
 		}
 
-		
+
 	}
+
+	componentDidUpdate() {
+
+		console.log("HMM1 " + this.divRef.clientWidth)
+		console.log("HMM2 " + this.state.graphElementSize[0])
+
+		var dateNow = new Date()
+		
+		console.log("NOW " + this.divRef.clientWidth)
+		console.log("LUP " + this.state.graphElementSize[0])
+
+        if (((this.state.graphElementSize[0] !== this.divRef.clientWidth) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
+            var tempSize = [this.divRef.clientWidth, 150]
+
+            if (tempSize !== this.state.graphElementSize) {
+                this.setState({ graphElementSize: tempSize });
+                this.graphSizeUpdated = dateNow.getTime();
+			}
+			
+			console.log("Dafuq?" + this.state.graphElementSize)
+        }
+    }
 
 	// TODO: remove function
 	watchPiCam = () => {
@@ -172,7 +196,7 @@ class GrowBoxItem extends Component {
 				updatedAtMinutesString = "0" + updatedAtMinutesString
 			}
 			// lastUpdate = updatedAtDate.toDateString() + " - " + updatedAtHoursString + ":" + updatedAtMinutesString
-		
+
 			lastUpdate = moment(updatedAtDate).fromNow()
 		}
 
@@ -214,9 +238,12 @@ class GrowBoxItem extends Component {
 
 						</div>
 
-						<GraphSensorsBox parentSize={[150, 75]} growDeprecate={this.state.growDeprecate} />
+						<div className="Grow-Box-Info-Graph-Area" ref={element => this.divRef = element}>
+							<GraphSensorsBox parentSize={this.state.graphElementSize} growDeprecate={this.state.growDeprecate} />
+						</div>
 
-						<img alt="preview" src={this.props.grow.previewImage} className="Grow-Box-Preview-Image" />
+
+						{/* <img alt="preview" src={this.props.grow.previewImage} className="Grow-Box-Preview-Image" /> */}
 					</div>
 
 

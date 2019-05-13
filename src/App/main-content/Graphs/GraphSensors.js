@@ -123,7 +123,7 @@ class GraphSensors extends Component {
         });
     }
 
-    renderTooltip(props) {
+    renderTooltip = (props) => {
         var rawContent = props.payload
         if (rawContent.length === 0) {
             return;

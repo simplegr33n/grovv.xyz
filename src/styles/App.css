@@ -1278,9 +1278,9 @@ html {
 }
 
 .Grow-Box-Info-Data {
-    padding: 1%;
     font-weight: bold;
-    width: 120px;
+    width: 124px;
+    max-width: 124px;
     text-align: center;
     color: #000;
     display: flex;
@@ -1331,20 +1331,20 @@ html {
 }
 
 .Grow-Box-Function-Btn {
-    min-width: 90px;
+    min-width: 70px;
     font-weight: bold;
     cursor: pointer;
 }
 
 .Grow-Box-Function-Btn-Feed {
-    min-width: 90px;
+    min-width: 70px;
     font-weight: bold;
     cursor: pointer;
 }
 
 .Grow-Box-Function-Btn-Edit-Feed {
     background-color: rgb(204, 175, 10);
-    min-width: 30px;
+    max-width: 27px;
     font-weight: bold;
     cursor: pointer;
 }
