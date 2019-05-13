@@ -28,7 +28,7 @@ class GraphSensors extends Component {
         this._ismounted = false;
     }
 
-    componentDidUpdate() {
+    componentDidUpdate = () => {
 
         if (this.props.growDeprecate) {
             if (this.props.growDeprecate !== this.growDeprecate) {
@@ -37,9 +37,7 @@ class GraphSensors extends Component {
                 this.growDeprecate = this.props.growDeprecate;
                 this.getGraphData = this.getGraphData()
             }
-
         }
-
     }
 
     getGraphData = () => {
@@ -96,16 +94,6 @@ class GraphSensors extends Component {
                 });
 
                 tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                // tempData.forEach((dataPoint) => { 
-                //     var itemDate = new Date(dataPoint.time);
-                //     console.log(itemDate.getTime())
-                //     dataPoint.time = new Date(dataPoint.time)
-                //     dataPoint.time = itemDate.toLocaleTimeString(navigator.language, {
-                //       hour: '2-digit',
-                //       minute:'2-digit'
-                //     });
-                // })
 
                 if (day === dy) {
 

@@ -28,19 +28,19 @@ class GrowBoxItem extends Component {
 		this.firebase = new Firebase();
 
 		this.graphSizeUpdated = 0;
-
-
 	}
 
-	componentDidMount() {
+	componentDidMount = () => {
+		this._ismounted = true;
+
 		//TODO: Remove condition
 		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
-			this.getLiveData()
-			this.watchPiCam()
+			this.getLiveData = this.getLiveData()
+			this.getLiveCam = this.watchPiCam()
 
 			this.setState({ growDeprecate: 'flower' });
 		} else {
-			this.getVeggerData()
+			this.getData = this.getVeggerData()
 
 			this.setState({ growDeprecate: 'vegger' });
 		}
@@ -50,29 +50,31 @@ class GrowBoxItem extends Component {
 				camURL: this.props.grow.urls.cam
 			});
 		}
-
-
 	}
 
-	componentDidUpdate() {
+	componentWillUnmount = () => {
+        this._ismounted = false;
 
-		console.log("HMM1 " + this.divRef.clientWidth)
-		console.log("HMM2 " + this.state.graphElementSize[0])
+        // Unsubscribe from listeners...
+		this.getLiveData = null
+		this.getLiveCam = null
+		this.getData = null
+    }
+
+	componentDidUpdate() {
+		if (this._ismounted === false) {
+            return;
+        }
 
 		var dateNow = new Date()
-		
-		console.log("NOW " + this.divRef.clientWidth)
-		console.log("LUP " + this.state.graphElementSize[0])
 
-        if (((this.state.graphElementSize[0] !== this.divRef.clientWidth) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
+        if (this._ismounted && ((this.state.graphElementSize[0] !== this.divRef.clientWidth) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
             var tempSize = [this.divRef.clientWidth, 150]
 
             if (tempSize !== this.state.graphElementSize) {
                 this.setState({ graphElementSize: tempSize });
                 this.graphSizeUpdated = dateNow.getTime();
 			}
-			
-			console.log("Dafuq?" + this.state.graphElementSize)
         }
     }
 
@@ -128,7 +130,6 @@ class GrowBoxItem extends Component {
 			console.log("grow box get live data failed: " + errorObject.code);
 		});
 	}
-
 
 
 	openFullCam = (ev) => {
@@ -187,16 +188,6 @@ class GrowBoxItem extends Component {
 		if (this.state.liveData) {
 			// TODO... simplify below.
 			var updatedAtDate = new Date(this.state.liveData.time)
-			var updatedAtHoursString = updatedAtDate.getHours().toString()
-			if (updatedAtHoursString.length === 1) {
-				updatedAtHoursString = "0" + updatedAtHoursString
-			}
-			var updatedAtMinutesString = updatedAtDate.getMinutes().toString()
-			if (updatedAtMinutesString.length === 1) {
-				updatedAtMinutesString = "0" + updatedAtMinutesString
-			}
-			// lastUpdate = updatedAtDate.toDateString() + " - " + updatedAtHoursString + ":" + updatedAtMinutesString
-
 			lastUpdate = moment(updatedAtDate).fromNow()
 		}
 

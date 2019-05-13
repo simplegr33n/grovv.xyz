@@ -26,11 +26,14 @@ class GraphSensorsBox extends Component {
 
     componentWillUnmount() {
         this._ismounted = false;
+
+        // Unsubscribe from listeners...
+        this.getGraphData = null;
     }
 
-    componentDidUpdate() {
+    componentDidUpdate = () => {
 
-        if (this.props.growDeprecate) {
+        if (this.props.growDeprecate && this._ismounted) {
             if (this.props.growDeprecate !== this.growDeprecate) {
                 console.log("GRAPH SENSORS GROW DEPRECATE (TODO: REMOVE)!")
                 console.log(this.props.growDeprecate)
@@ -73,7 +76,6 @@ class GraphSensorsBox extends Component {
         hoursList[hoursList.length] = hour
 
         var tempData = []
-        // var i = 0;
 
         hoursList.forEach((hr) => {
             console.log("read hr!")
@@ -81,28 +83,13 @@ class GraphSensorsBox extends Component {
             ref.child(year).child(month).child(day).child(hr).on("value", (snapshot) => {
 
                 snapshot.forEach((child) => {
-                    // child.forEach((gChild) => {
-                    //     i++;
-                    //     if (i % 10 === 0 || i === 0) {
                     var dataPoint = child.val()
                     var dataTime = new Date(dataPoint.time).getTime()
                     dataPoint.time = dataTime
                     tempData[tempData.length] = dataPoint;
-                    //     }
-                    // });
                 });
 
                 tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                // tempData.forEach((dataPoint) => { 
-                //     var itemDate = new Date(dataPoint.time);
-                //     console.log(itemDate.getTime())
-                //     dataPoint.time = new Date(dataPoint.time)
-                //     dataPoint.time = itemDate.toLocaleTimeString(navigator.language, {
-                //       hour: '2-digit',
-                //       minute:'2-digit'
-                //     });
-                // })
 
                 if (hr === hour) {
 

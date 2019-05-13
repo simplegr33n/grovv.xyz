@@ -31,6 +31,13 @@ class GrowPage extends Component {
 
 	componentWillUnmount() {
 		this._ismounted = false;
+		this.getUserGrows = null;
+	}
+
+	componentDidUpdate = () => {
+		if (this._ismounted === false) {
+            return;
+        }
 	}
 
 	getUserGrowIDs = () => {
@@ -129,7 +136,7 @@ class GrowPage extends Component {
 		}
 
 		var renderedGrowBoxes = null;
-		if (this.state.grow === null && this.state.userGrows) {
+		if (this.props.grow === null && this.state.userGrows) {
 			renderedGrowBoxes = this.state.userGrows.map((grow) =>
 				<div key={grow.id} className="Grow-Box-Item-Container">
 					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} />

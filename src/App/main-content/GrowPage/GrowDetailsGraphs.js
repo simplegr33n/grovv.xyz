@@ -21,6 +21,10 @@ class GrowDetailsGraphs extends Component {
     }
 
     componentDidUpdate() {
+        if (this._ismounted === false) {
+            return;
+        }
+
         var dateNow = new Date()
         if (((this.state.elementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
             var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight]

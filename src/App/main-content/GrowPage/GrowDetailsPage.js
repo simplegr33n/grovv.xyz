@@ -378,11 +378,7 @@ class GrowDetailsPage extends Component {
 
                     </div>
 
-
                 </div>
-
-
-
 
             </div>
         );
