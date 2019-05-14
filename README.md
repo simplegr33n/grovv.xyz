@@ -28,7 +28,9 @@ Create optimized build and push to 'gh-pages' branch for deployment.
 
 ## Dependencies
 * Firebase Cloud Storage
-* Firebase Cloud Functions (for Thumbnailing: https://github.com/firebase/functions-samples/tree/master/generate-thumbnail)
+* Firebase Cloud Functions 
+* * for Thumbnailing: https://github.com/firebase/functions-samples/tree/master/generate-thumbnail)
+* * image Optimization: https://gist.github.com/mbove77/a082a9ff74dd625f45975848116418d7
 * https://github.com/react-dropzone/react-dropzone - **react-datepicker** simple dropzone for images/files
 * https://github.com/Hacker0x01/react-datepicker - **react-datepicker** simple datepicker
 * http://recharts.org/ - **recharts** for graphs
