@@ -33,27 +33,36 @@ class GrowDetailsPage extends Component {
     }
 
     componentDidMount() {
+        this._ismounted = true;
+
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
             this.getLiveData()
             this.watchPiCam()
 
             // todo remove
-            this.setState({ growDeprecate: 'flower' });
+            if (this._ismounted) {
+                this.setState({ growDeprecate: 'flower' });
+            }
         } else {
             this.getVeggerData()
             // todo remove
-            this.setState({ growDeprecate: 'vegger' });
+            if (this._ismounted) {
+                this.setState({ growDeprecate: 'vegger' });
+            }
         }
 
         if (this.props.grow.urls.cam) {
-            this.setState({ camURL: this.props.grow.urls.cam });
+            if (this._ismounted) {
+                this.setState({ camURL: this.props.grow.urls.cam });
+            }
         }
 
         this.getJournalsInfo = this.getJournalsInfo()
+    }
 
-
-
+    componentWillUnmount = () => {
+        this._ismounted = false;
     }
 
     // TODO: remove function
@@ -63,9 +72,11 @@ class GrowDetailsPage extends Component {
         setInterval(() => {
             i++
             var tempCamURL = tempURL + i.toString()
-            this.setState({
-                camURL: tempCamURL
-            });
+            if (this._ismounted) {
+                this.setState({
+                    camURL: tempCamURL
+                });
+            }
         }, 5000);
     }
 
@@ -89,9 +100,11 @@ class GrowDetailsPage extends Component {
 
             journalsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
 
-            this.setState({
-                linkedJournals: journalsList
-            });
+            if (this._ismounted) {
+                this.setState({
+                    linkedJournals: journalsList
+                });
+            }
 
         }, function (errorObject) {
             console.log("GrowDetails watch user journals failed: " + errorObject.code);
@@ -108,9 +121,11 @@ class GrowDetailsPage extends Component {
 
             var tempLiveData = snapshot.val()
 
-            this.setState({
-                liveData: tempLiveData
-            });
+            if (this._ismounted) {
+                this.setState({
+                    liveData: tempLiveData
+                });
+            }
 
             this.checkActive(tempLiveData.time)
 
@@ -128,9 +143,11 @@ class GrowDetailsPage extends Component {
 
             var tempLiveData = snapshot.val()
 
-            this.setState({
-                liveData: tempLiveData
-            });
+            if (this._ismounted) {
+                this.setState({
+                    liveData: tempLiveData
+                });
+            }
 
             this.checkActive(tempLiveData.time)
 
@@ -151,22 +168,25 @@ class GrowDetailsPage extends Component {
             //     });
             // }
 
-            if (difference >= 120000) {
-                this.setState({
-                    activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
-                });
-            }
+            if (this._ismounted) {
 
-            if (difference >= 240000) {
-                this.setState({
-                    activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
-                });
-            }
+                if (difference >= 120000) {
+                    this.setState({
+                        activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
+                    });
+                }
 
-            if (difference < 120000) {
-                this.setState({
-                    activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
-                });
+                if (difference >= 240000) {
+                    this.setState({
+                        activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
+                    });
+                }
+
+                if (difference < 120000) {
+                    this.setState({
+                        activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
+                    });
+                }
             }
 
         } else {
@@ -177,34 +197,44 @@ class GrowDetailsPage extends Component {
 
     openJournals = () => {
         console.log("GROWDETAILS OPEN JOURNALS!")
-        this.setState({
-            displayBottom: 'journals'
-        });
+        if (this._ismounted) {
+            this.setState({
+                displayBottom: 'journals'
+            });
+        }
     }
     openData = () => {
         console.log("GROWDETAILS OPEN DATA")
-        this.setState({
-            displayBottom: 'data'
-        });
+        if (this._ismounted) {
+            this.setState({
+                displayBottom: 'data'
+            });
+        }
     }
     openConfig = () => {
         console.log("GROWDETAILS OPEN CONFIG")
-        this.setState({
-            displayBottom: 'config'
-        });
+        if (this._ismounted) {
+            this.setState({
+                displayBottom: 'config'
+            });
+        }
     }
     openFeed = () => {
-        console.log("GROWDETAILS OPEN FEED")
-        this.setState({
-            displayBottom: 'feed'
-        });
+        if (this._ismounted) {
+            console.log("GROWDETAILS OPEN FEED")
+            this.setState({
+                displayBottom: 'feed'
+            });
+        }
 
     }
     openEditFeed = () => {
-        console.log("GROWDETAILS OPEN EDIT FEED")
-        this.setState({
-            displayBottom: 'edit-feed'
-        });
+        if (this._ismounted) {
+            console.log("GROWDETAILS OPEN EDIT FEED")
+            this.setState({
+                displayBottom: 'edit-feed'
+            });
+        }
 
     }
 

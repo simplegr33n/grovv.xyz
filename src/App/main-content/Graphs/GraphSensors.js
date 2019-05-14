@@ -77,8 +77,6 @@ class GraphSensors extends Component {
         var i = 0;
 
         days.forEach((day) => {
-            console.log("read day!")
-            console.log(day)
             ref.child(year).child(month).child(day).on("value", (snapshot) => {
 
                 snapshot.forEach((child) => {
@@ -101,9 +99,11 @@ class GraphSensors extends Component {
                     console.log(tempData.length);
                     console.log(tempData[0]);
 
-                    this.setState({
-                        data: tempData
-                    });
+                    if (this._ismounted) {
+                        this.setState({
+                            data: tempData
+                        });
+                    }
                 }
 
             });

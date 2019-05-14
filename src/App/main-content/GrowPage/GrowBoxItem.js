@@ -38,45 +38,50 @@ class GrowBoxItem extends Component {
 			this.getLiveData = this.getLiveData()
 			this.getLiveCam = this.watchPiCam()
 
-			this.setState({ growDeprecate: 'flower' });
+			if (this._ismounted) {
+				this.setState({ growDeprecate: 'flower' });
+			}
+
 		} else {
 			this.getData = this.getVeggerData()
 
-			this.setState({ growDeprecate: 'vegger' });
+			if (this._ismounted) {
+				this.setState({ growDeprecate: 'vegger' });
+			}
 		}
 
 		if (this.props.grow.urls.cam) {
-			this.setState({
-				camURL: this.props.grow.urls.cam
-			});
+
+			if (this._ismounted) {
+				this.setState({ camURL: this.props.grow.urls.cam });
+			}
+
 		}
 	}
 
 	componentWillUnmount = () => {
-        this._ismounted = false;
+		this._ismounted = false;
 
-        // Unsubscribe from listeners...
+		// Unsubscribe from listeners...
 		this.getLiveData = null
 		this.getLiveCam = null
 		this.getData = null
-    }
+	}
 
 	componentDidUpdate() {
-		if (this._ismounted === false) {
-            return;
-        }
-
 		var dateNow = new Date()
 
-        if (this._ismounted && ((this.state.graphElementSize[0] !== this.divRef.clientWidth) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
-            var tempSize = [this.divRef.clientWidth, 150]
+		if (((this.state.graphElementSize[0] !== this.divRef.clientWidth) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
+			var tempSize = [this.divRef.clientWidth, 150]
 
-            if (tempSize !== this.state.graphElementSize) {
-                this.setState({ graphElementSize: tempSize });
-                this.graphSizeUpdated = dateNow.getTime();
+			if (tempSize !== this.state.graphElementSize) {
+				if (this._ismounted) {
+					this.setState({ graphElementSize: tempSize });
+				}
+				this.graphSizeUpdated = dateNow.getTime();
 			}
-        }
-    }
+		}
+	}
 
 	// TODO: remove function
 	watchPiCam = () => {
@@ -85,9 +90,9 @@ class GrowBoxItem extends Component {
 		setInterval(() => {
 			i++
 			var tempCamURL = tempURL + i.toString()
-			this.setState({
-				camURL: tempCamURL
-			});
+			if (this._ismounted) {
+				this.setState({ camURL: tempCamURL });
+			}
 		}, 5000);
 	}
 
@@ -100,9 +105,9 @@ class GrowBoxItem extends Component {
 
 			var tempLiveData = snapshot.val()
 
-			this.setState({
-				liveData: tempLiveData
-			});
+			if (this._ismounted) {
+				this.setState({ liveData: tempLiveData });
+			}
 
 			this.checkActive(tempLiveData.time)
 
@@ -120,9 +125,9 @@ class GrowBoxItem extends Component {
 
 			var tempLiveData = snapshot.val()
 
-			this.setState({
-				liveData: tempLiveData
-			});
+			if (this._ismounted) {
+				this.setState({ liveData: tempLiveData });
+			}
 
 			this.checkActive(tempLiveData.time)
 
@@ -158,22 +163,27 @@ class GrowBoxItem extends Component {
 			// 	});
 			// }
 
-			if (difference >= 120000) {
-				this.setState({
-					activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
-				});
-			}
+			if (this._ismounted) {
 
-			if (difference >= 240000) {
-				this.setState({
-					activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
-				});
-			}
 
-			if (difference < 120000) {
-				this.setState({
-					activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
-				});
+				if (difference >= 120000) {
+					this.setState({
+						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
+					});
+				}
+
+				if (difference >= 240000) {
+					this.setState({
+						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
+					});
+				}
+
+				if (difference < 120000) {
+					this.setState({
+						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
+					});
+				}
+
 			}
 
 		} else {

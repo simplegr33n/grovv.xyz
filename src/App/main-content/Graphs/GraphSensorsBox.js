@@ -26,8 +26,7 @@ class GraphSensorsBox extends Component {
 
     componentWillUnmount() {
         this._ismounted = false;
-
-        // Unsubscribe from listeners...
+        
         this.getGraphData = null;
     }
 
@@ -35,8 +34,8 @@ class GraphSensorsBox extends Component {
 
         if (this.props.growDeprecate && this._ismounted) {
             if (this.props.growDeprecate !== this.growDeprecate) {
-                console.log("GRAPH SENSORS GROW DEPRECATE (TODO: REMOVE)!")
-                console.log(this.props.growDeprecate)
+                console.log("GRAPH SENSORS GROW DEPRECATE (TODO: REMOVE)! (" + this.props.growDeprecate + ")")
+                console.log()
                 this.growDeprecate = this.props.growDeprecate;
                 this.getGraphData = this.getGraphData()
             }
@@ -78,8 +77,6 @@ class GraphSensorsBox extends Component {
         var tempData = []
 
         hoursList.forEach((hr) => {
-            console.log("read hr!")
-            console.log(hr)
             ref.child(year).child(month).child(day).child(hr).on("value", (snapshot) => {
 
                 snapshot.forEach((child) => {
@@ -93,13 +90,15 @@ class GraphSensorsBox extends Component {
 
                 if (hr === hour) {
 
-                    console.log("Test 3-day Datapoints to render...")
+                    console.log("Test last hour Datapoints to render...")
                     console.log(tempData.length);
                     console.log(tempData[0]);
 
-                    this.setState({
-                        data: tempData
-                    });
+                    if (this._ismounted) {
+                        this.setState({
+                            data: tempData
+                        });
+                    }
                 }
 
             });
@@ -188,9 +187,6 @@ class GraphSensorsBox extends Component {
                 var xSize = Math.floor(this.props.parentSize[0] * 1)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
-                console.log("GRAPH SENSORS BOX SIZE:")
-                console.log(this.props.parentSize)
-
                 renderDayGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.data}>
                         <Line type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
@@ -201,8 +197,8 @@ class GraphSensorsBox extends Component {
                             dataKey="time"
                             type="number"
                             domain={[new Date(this.state.data[0].time).getTime(), new Date(this.state.data[this.state.data.length - 1].time).getTime()]}
-                            tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')} 
-                            hide={true}/>
+                            tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')}
+                            hide={true} />
                         <YAxis />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
