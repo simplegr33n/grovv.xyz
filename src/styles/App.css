@@ -1597,6 +1597,8 @@ html {
     width: 100%;
     height: calc(100% - 30px);
     background-color: #000;
+    position: relative;
+
 }
 
 .Chart-Page {
@@ -1613,6 +1615,7 @@ html {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    position: relative;
     /* background-color: #000; */
 }
 

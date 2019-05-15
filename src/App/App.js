@@ -14,7 +14,9 @@ import FeedChart from './main-content/FeedChart/FeedChart.js'
 import GrowConfig from './main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './main-content/GrowPage/GrowPage.js'
-import GraphSensors from './main-content/Graphs/GraphSensors.js'
+//import GraphSensors from './main-content/Graphs/GraphSensors.js'
+import GrowGraphsTest from './graphs/GrowGraphsTest.js'
+
 
 // Top Bar
 import AppBar from './app-bar/AppBar.js'
@@ -261,9 +263,14 @@ class App extends Component {
 											return (
 												<div className="Chart-Page">
 													flower 3 day
-													<GraphSensors parentSize={[800, 300]} growDeprecate={'flower'} />
+													<GrowGraphsTest growDeprecate={'flower'} />
+													{/* <GrowGraphsTest parentSize={[800, 300]} growDeprecate={'flower'} /> */}
+													
 													vegger 3 day
-													<GraphSensors parentSize={[800, 300]} growDeprecate={'vegger'} />
+													<GrowGraphsTest growDeprecate={'vegger'} />
+													{/* <GrowGraphsTest parentSize={[800, 300]} growDeprecate={'vegger'} /> */}
+
+
 												</div>
 											)
 										default:
