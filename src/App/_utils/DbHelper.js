@@ -6,14 +6,11 @@ class DbHelper {
     constructor() {
 
         this.firebase = new Firebase();
-        this.getThreeDaysAddedDays = [];
 
     }
 
     // Get 3 day data window from firebase
     async getThreeDays (growDeprecate, setData) {
-        console.log("DB HELPER! Get Three Days!")
-        console.log(growDeprecate)
 
         // Sensor data in firebase
         var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
@@ -47,18 +44,18 @@ class DbHelper {
         }
         days[days.length] = dy
 
-        var tempData = []
         var i = 0;
 
-        days.forEach((day) => {
-            console.log("WOWOWOWWO! " + day)
-            if (!this.getThreeDaysAddedDays.includes(day)) {
-                this.getThreeDaysAddedDays[this.getThreeDaysAddedDays.length] = day
-            }
-            console.log("days...! " + this.getThreeDaysAddedDays.length)
-            console.log(this.getThreeDaysAddedDays)
-            ref.child(year).child(month).child(day).on("value", (snapshot) => {
+        var getThreeDaysAddedDays = []
+        var tempThreeDayData = []
 
+        days.forEach((day) => {    
+            ref.child(year).child(month).child(day).on("value", (snapshot) => {
+                if (!getThreeDaysAddedDays.includes(day)) {
+                    getThreeDaysAddedDays[getThreeDaysAddedDays.length] = day
+                } else {
+                    return;
+                }
                 snapshot.forEach((child) => {
                     child.forEach((gChild) => {
                         i++;
@@ -66,24 +63,25 @@ class DbHelper {
                             var dataPoint = gChild.val()
                             var dataTime = new Date(dataPoint.time).getTime()
                             dataPoint.time = dataTime
-                            tempData[tempData.length] = dataPoint;
+                            tempThreeDayData[tempThreeDayData.length] = dataPoint;
                         }
                     });
                 });
 
-                // tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+                if ((getThreeDaysAddedDays.length === days.length)) {
 
-                if ((this.getThreeDaysAddedDays.length === days.length)) {
-
-                    this.getThreeDaysAddedDays = []
-
-                    tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+                    tempThreeDayData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
                     console.log("DBHELPER Test 3-day Datapoints to return..." + growDeprecate)
-                    console.log(tempData.length);
-                    console.log(tempData[0]);
+                    console.log(tempThreeDayData.length);
+                    console.log(tempThreeDayData[0]);
+                    console.log(tempThreeDayData[tempThreeDayData.length - 1]);
 
-                    setData(tempData);
+
+                    setData(tempThreeDayData);
+                    tempThreeDayData = [];
+                    getThreeDaysAddedDays = [];
+
 
                 }
             });
