@@ -11,7 +11,7 @@ class DbHelper {
 
 
     // .......... //
-    // Live Data  //
+    // LIVE DATA  //
     // .......... //
     // Get live data from firebase
     async getLiveData(growDeprecate, setData) {
@@ -231,6 +231,46 @@ class DbHelper {
 
     }
 
+    // ............ //
+    // GROW CONFIG  //
+    // ............ //
+    
+    // Watch Grow Config in firebase
+    watchGrowConfig(setData) {
+        // Sensor data in firebase
+        var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
+
+        ref.on('value', (snapshot) => {
+
+            setData({
+                temp_min: snapshot.val().temp_min,
+                temp_max: snapshot.val().temp_max,
+                temp_hyst: snapshot.val().temp_hyst,
+                fan_min: snapshot.val().fan_min,
+                fan_max: snapshot.val().fan_max,
+                humidity_min: snapshot.val().humidity_min,
+                humidity_max: snapshot.val().humidity_max,
+                humidity_hyst: snapshot.val().humidity_hyst,
+                humidifier_min: snapshot.val().humidifier_min,
+                humidifier_max: snapshot.val().humidifier_max
+            });
+
+        }, function (errorObject) {
+            console.log("watch config failed: " + errorObject.code);
+        });
+    }
+
+    // Set Grow Config in firebase
+    setGrowConfig(config) {
+
+        var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
+
+        ref.set(config)
+    }
+
 }
+
+
+
 
 export default DbHelper;

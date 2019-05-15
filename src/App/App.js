@@ -50,7 +50,6 @@ class App extends Component {
 			}
 		});
 
-		this.leftMenuRef = React.createRef()
 	}
 
 	
@@ -97,14 +96,6 @@ class App extends Component {
 			// An error happened.
 			console.log(`Error signing out: ${error}`)
 		});
-	}
-
-	handleMenuHandle = () => {
-		if (this.leftMenuRef.current.style.left !== '0px') {
-			this.leftMenuRef.current.style.left = '0px';
-		} else {
-			this.leftMenuRef.current.style.left = '-240px';
-		}
 	}
 
 	setMainContent = (setValue) => {

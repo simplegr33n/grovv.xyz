@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import Firebase from '../../../config/firebaseConfig.js'
+import DbHelper from '../../_utils/DbHelper.js'
+
 
 
 class GrowDetailsConfig extends Component {
@@ -21,12 +22,13 @@ class GrowDetailsConfig extends Component {
             humidifier_max: ''
         };
 
-        this.firebase = new Firebase()
+        this.dbHelper = new DbHelper()
+
     }
 
     componentDidMount() {
         this._ismounted = true;
-        this.watchConfig = this.watchConfig();
+        this.watchConfig = this.watchGrowConfig(this.setFetchedConfig);
     }
 
     componentWillUnmount() {
@@ -34,10 +36,7 @@ class GrowDetailsConfig extends Component {
     }
 
     saveConfig = () => {
-        console.log("Saving config... (TODO)")
-        var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
-
-        ref.set(
+        this.dbHelper.setGrowConfig(
             {
                 temp_min: this.state.temp_min,
                 temp_max: this.state.temp_max,
@@ -51,35 +50,33 @@ class GrowDetailsConfig extends Component {
                 humidifier_max: this.state.humidifier_max
             }
         )
-
     }
 
-    watchConfig = () => {
-        // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
+    watchGrowConfig = async (setData) => {
+        try {
+            await this.dbHelper.watchGrowConfig(setData)
+        } catch(e) {
+            console.log(e); 
+            return 'caught ' + e
+        }
+    }
 
-        ref.on('value', (snapshot) => {
-
-            console.log(snapshot.val());
-
-            this.setState({
-                temp_min: snapshot.val().temp_min,
-                temp_max: snapshot.val().temp_max,
-                temp_hyst: snapshot.val().temp_hyst,
-                fan_min: snapshot.val().fan_min,
-                fan_max: snapshot.val().fan_max,
-                humidity_min: snapshot.val().humidity_min,
-                humidity_max: snapshot.val().humidity_max,
-                humidity_hyst: snapshot.val().humidity_hyst,
-                humidifier_min: snapshot.val().humidifier_min,
-                humidifier_max: snapshot.val().humidifier_max
-            });
-
-            this.render();
-
-        }, function (errorObject) {
-            console.log("follow config failed: " + errorObject.code);
+    setFetchedConfig = (configObj) => {
+        
+        this.setState({
+            temp_min: configObj.temp_min,
+            temp_max: configObj.temp_max,
+            temp_hyst: configObj.temp_hyst,
+            fan_min: configObj.fan_min,
+            fan_max: configObj.fan_max,
+            humidity_min: configObj.humidity_min,
+            humidity_max: configObj.humidity_max,
+            humidity_hyst: configObj.humidity_hyst,
+            humidifier_min: configObj.humidifier_min,
+            humidifier_max: configObj.humidifier_max
         });
+
+        this.render();
     }
 
     handleTempMinChange = (event) => {
