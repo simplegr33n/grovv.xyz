@@ -146,8 +146,6 @@ class GrowBoxItem extends Component {
 	}
 
 	openMainPage = (ev) => {
-		console.log("openMainPage")
-		console.log(ev.target.dataset.value)
 		this.props.openMainPage(ev.target.dataset.value)
 	}
 

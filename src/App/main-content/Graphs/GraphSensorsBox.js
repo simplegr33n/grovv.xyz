@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment from 'moment'
 
-import Firebase from '../../../config/firebaseConfig.js'
+import DbHelper from '../../_utils/DbHelper.js'
 
 
 class GraphSensorsBox extends Component {
@@ -16,11 +16,18 @@ class GraphSensorsBox extends Component {
             data: [],
         };
 
-        this.firebase = new Firebase()
+        this.dbHelper = new DbHelper()
+
     }
 
     componentDidMount() {
         this._ismounted = true;
+        if (this.props.growDeprecate && this._ismounted) {
+            if (this.props.growDeprecate !== this.growDeprecate) {
+                this.growDeprecate = this.props.growDeprecate;
+                this.getData()                
+            }
+        }
 
     }
 
@@ -34,76 +41,32 @@ class GraphSensorsBox extends Component {
 
         if (this.props.growDeprecate && this._ismounted) {
             if (this.props.growDeprecate !== this.growDeprecate) {
-                console.log("GRAPH SENSORS GROW DEPRECATE (TODO: REMOVE)! (" + this.props.growDeprecate + ")")
-                console.log()
                 this.growDeprecate = this.props.growDeprecate;
-                this.getGraphData = this.getGraphData()
+                this.getData()                
             }
-
         }
 
     }
 
-    getGraphData = () => {
-        // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('sensor_data').child(this.props.growDeprecate)
-
-        var date = new Date();
-        var year = date.getFullYear().toString()
-        var month = (date.getMonth() + 1).toString()
-        if (month.length < 2) {
-            month = '0' + month
+    getData = async () => {
+        try {
+            await this.dbHelper.getBoxHour(this.props.growDeprecate, this.setData)
+        } catch(e) {
+            console.log(e); 
+            return 'caught ' + e
         }
+    }
 
-
-        var day = date.getDate().toString()
-
-        var hour = date.getHours()
-
-        var hoursList = []
-        var tempHour = null
-        if ((hour - 1) >= 0) {
-            tempHour = hour - 1
-            if (tempHour.toString().length < 2) {
-                tempHour = '0' + tempHour
-            }
-            hoursList[hoursList.length] = tempHour
-        }
-        if (hour.toString().length < 2) {
-            hour = '0' + hour
-        }
-        hoursList[hoursList.length] = hour
-
-        var tempData = []
-
-        hoursList.forEach((hr) => {
-            ref.child(year).child(month).child(day).child(hr).on("value", (snapshot) => {
-
-                snapshot.forEach((child) => {
-                    var dataPoint = child.val()
-                    var dataTime = new Date(dataPoint.time).getTime()
-                    dataPoint.time = dataTime
-                    tempData[tempData.length] = dataPoint;
-                });
-
-                tempData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                if (hr === hour) {
-
-                    console.log("Test last hour Datapoints to render...")
-                    console.log(tempData.length);
-                    console.log(tempData[0]);
-
-                    if (this._ismounted) {
-                        this.setState({
-                            data: tempData
-                        });
-                    }
-                }
-
+    setData = (data) => {
+        if (this._ismounted) {
+            this.setState({
+                data: data
             });
+        }
+    }
 
-        });
+    getGraphData = () => {
+       
     }
 
 
