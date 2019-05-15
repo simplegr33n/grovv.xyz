@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+
 import '../../styles/App.css';
 
-import Firebase from '../../config/firebaseConfig.js'
+import DbHelper from '../_utils/DbHelper.js'
 
 // QuickBar Indicator Colors (green/orange/red)
 const optimalIndication = '#91eebb';
@@ -16,7 +17,7 @@ class AppBar extends Component {
 
         };
 
-        this.firebase = new Firebase()
+        this.dbHelper = new DbHelper()
 
         this.flowerTempRef = React.createRef()
         this.flowerHumidityRef = React.createRef()
@@ -28,86 +29,76 @@ class AppBar extends Component {
 
 
     watchSensorsLive = () => {
-        this.watchFlowerLiveData();
-        this.watchVeggerLiveData();
+        this.getData('flower', this.setDataFlower);
+        this.getData('vegger', this.setDataVegger);
     }
 
-    watchFlowerLiveData = () => {
-        // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('flower')
-
-        ref.on('value', (snapshot) => {
-            let flowerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
-            let flowerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
-
-            console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
-
-            // SET safe ranges here 
-            if (flowerTemp > 20 && flowerTemp < 27) {
-                this.flowerTempRef.current.style.background = optimalIndication;
-            } else if (flowerTemp < 19 || flowerTemp > 28) {
-                this.flowerTempRef.current.style.background = dangerIndication;
-            } else {
-                this.flowerTempRef.current.style.background = warningIndication;
-            }
-
-            if (flowerHumidity > 30 && flowerHumidity < 43) {
-                this.flowerHumidityRef.current.style.background = optimalIndication;
-            } else if (flowerHumidity < 27 || flowerHumidity > 45) {
-                this.flowerHumidityRef.current.style.background = dangerIndication;
-            } else {
-                this.flowerHumidityRef.current.style.background = warningIndication;
-            }
-
-            this.setState({
-                sFlowerTemp: flowerTemp,
-                sFlowerHumidity: flowerHumidity
-            });
-
-        }, function (errorObject) {
-            console.log("follow flower hour failed: " + errorObject.code);
-        });
-
+    getData = async (growDeprecate, setData) => {
+        try {
+            await this.dbHelper.getLiveData(growDeprecate, setData)
+        } catch(e) {
+            console.log(e); 
+            return 'caught ' + e
+        }
     }
 
-    watchVeggerLiveData = () => {
-        // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('vegger')
+    setDataFlower = (data) => {
+        let flowerTemp = Math.round(data.cTemp * 10) / 10;
+        let flowerHumidity = Math.round(data.humidity * 10) / 10;
 
+        console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
 
-        ref.on('value', (snapshot) => {
-            let veggerTemp = Math.round(snapshot.val().cTemp * 10) / 10;
-            let veggerHumidity = Math.round(snapshot.val().humidity * 10) / 10;
+        // SET safe ranges here 
+        if (flowerTemp > 20 && flowerTemp < 27) {
+            this.flowerTempRef.current.style.background = optimalIndication;
+        } else if (flowerTemp < 19 || flowerTemp > 28) {
+            this.flowerTempRef.current.style.background = dangerIndication;
+        } else {
+            this.flowerTempRef.current.style.background = warningIndication;
+        }
 
-            console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
+        if (flowerHumidity > 30 && flowerHumidity < 43) {
+            this.flowerHumidityRef.current.style.background = optimalIndication;
+        } else if (flowerHumidity < 27 || flowerHumidity > 45) {
+            this.flowerHumidityRef.current.style.background = dangerIndication;
+        } else {
+            this.flowerHumidityRef.current.style.background = warningIndication;
+        }
 
-            // SET safe ranges here 
-            if (veggerTemp > 22 && veggerTemp < 29) {
-                this.veggerTempRef.current.style.background = optimalIndication;
-            } else if (veggerTemp < 20 || veggerTemp > 30) {
-                this.veggerTempRef.current.style.background = dangerIndication;
-            } else {
-                this.veggerTempRef.current.style.background = warningIndication;
-            }
-
-            if (veggerHumidity > 40 && veggerHumidity < 80) {
-                this.veggerHumidityRef.current.style.background = optimalIndication;
-            } else if (veggerHumidity < 35 || veggerHumidity > 85) {
-                this.veggerHumidityRef.current.style.background = dangerIndication;
-            } else {
-                this.veggerHumidityRef.current.style.background = warningIndication;
-            }
-
-            this.setState({
-                sVeggerTemp: veggerTemp,
-                sVeggerHumidity: veggerHumidity
-            });
-
-        }, function (errorObject) {
-            console.log("follow vegger failed: " + errorObject.code);
+        this.setState({
+            sFlowerTemp: flowerTemp,
+            sFlowerHumidity: flowerHumidity
         });
     }
 
+    setDataVegger = (data) => {
+        let veggerTemp = Math.round(data.cTemp * 10) / 10;
+        let veggerHumidity = Math.round(data.humidity * 10) / 10;
+
+        console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
+
+        // SET safe ranges here 
+        if (veggerTemp > 22 && veggerTemp < 29) {
+            this.veggerTempRef.current.style.background = optimalIndication;
+        } else if (veggerTemp < 20 || veggerTemp > 30) {
+            this.veggerTempRef.current.style.background = dangerIndication;
+        } else {
+            this.veggerTempRef.current.style.background = warningIndication;
+        }
+
+        if (veggerHumidity > 40 && veggerHumidity < 80) {
+            this.veggerHumidityRef.current.style.background = optimalIndication;
+        } else if (veggerHumidity < 35 || veggerHumidity > 85) {
+            this.veggerHumidityRef.current.style.background = dangerIndication;
+        } else {
+            this.veggerHumidityRef.current.style.background = warningIndication;
+        }
+
+        this.setState({
+            sVeggerTemp: veggerTemp,
+            sVeggerHumidity: veggerHumidity
+        });
+    }
 
     openJournals = () => {
         this.props.setMainContent('journals')
@@ -139,6 +130,7 @@ class AppBar extends Component {
 
 
     render() {
+
         return (
 
             <div id="App-Bar">

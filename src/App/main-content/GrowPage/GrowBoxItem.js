@@ -71,11 +71,18 @@ class GrowBoxItem extends Component {
 	componentDidUpdate() {
 		var dateNow = new Date()
 
-		if (((this.state.graphElementSize[0] !== this.divRef.clientWidth) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
-			var tempSize = [this.divRef.clientWidth, 150]
+		if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
+
+			// tODO: remove, hacky
+			if ((this.divRef.clientWidth - this.state.graphElementSize[0]) < 30)  {
+				return;
+			}
+
+			
+			var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight]
 
 			if (tempSize !== this.state.graphElementSize) {
-				if (this._ismounted) {
+				if (this._ismounted ) {
 					this.setState({ graphElementSize: tempSize });
 				}
 				this.graphSizeUpdated = dateNow.getTime();

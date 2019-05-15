@@ -9,6 +9,30 @@ class DbHelper {
 
     }
 
+
+    // .......... //
+    // Live Data  //
+    // .......... //
+    // Get live data from firebase
+    async getLiveData(growDeprecate, setData) {
+
+        // Sensor data in firebase
+        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(growDeprecate)
+
+        ref.on('value', (snapshot) => {
+            setData(snapshot.val())
+        }, function (errorObject) {
+            console.log("follow " + growDeprecate + " live failed: " + errorObject.code);
+        });
+
+    }
+
+
+
+    // ....... //
+    // GRAPHS  //
+    // ....... //
+
     // Get 3 day data window from firebase
     async getThreeDays(growDeprecate, setData) {
 
@@ -199,15 +223,13 @@ class DbHelper {
 
                         setData(fullData);
                     });
-                }
+                };
 
             });
 
         });
 
     }
-
-
 
 }
 

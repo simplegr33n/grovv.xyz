@@ -1215,6 +1215,11 @@ html {
 }
 
 .Grow-Box-Info-Text-Area {
+    padding: 1%;
+    width: 100%;
+}
+
+.Grow-Box-Info-Graph-Area{
     flex: 1;
     padding: 1%;
 }
@@ -1616,6 +1621,7 @@ html {
     flex-direction: row;
     justify-content: center;
     position: relative;
+    /* max-width: 400px; */
     /* background-color: #000; */
 }
 
@@ -1644,8 +1650,7 @@ html {
     max-width: 100px;
     font-weight: bolder;   
     user-select: none;
-    background-color: rgb(38, 41, 35);
-
+    background-color: #477915;
 }
 
 .App-Bar-Button {
