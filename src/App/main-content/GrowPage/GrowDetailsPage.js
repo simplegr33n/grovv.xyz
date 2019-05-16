@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import '../../../styles/App.css';
 
 
-import DbHelper from '../../_utils/DbHelper.js'
-
-
 import GrowDataDisplay from './GrowDataDisplay'
 
 import GrowDetailsConfig from './GrowDetailsConfig'
@@ -13,6 +10,7 @@ import GrowDetailsGraphs from './GrowDetailsGraphs'
 import JournalBoxItem from '../GrowJournal/JournalBoxItem'
 
 
+import DbHelper from '../../_utils/DbHelper.js'
 
 
 
@@ -32,7 +30,6 @@ class GrowDetailsPage extends Component {
 
 
         this.dbHelper = new DbHelper()
-
 
     }
 
@@ -106,13 +103,8 @@ class GrowDetailsPage extends Component {
         }
     }
 
-    getLinkedJournals = async (key, journals, setData) => {
-        try {
-            await this.dbHelper.getLinkedJournals(key, journals, setData)
-        } catch (e) {
-            console.log(e);
-            return 'caught ' + e
-        }
+    getLinkedJournals = (key, journals, setData) => {
+        this.dbHelper.getLinkedJournals(key, journals, setData)
     }
 
 

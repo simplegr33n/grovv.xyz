@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import Firebase from '../../../config/firebaseConfig.js'
+
+import DbHelper from '../../_utils/DbHelper.js'
+
 
 
 class JournalCreateModal extends Component {
@@ -13,12 +15,11 @@ class JournalCreateModal extends Component {
             journalID: this.props.journalID
         };
 
-        this.firebase = new Firebase();
+		this.dbHelper = new DbHelper();
 
     }
 
     componentDidMount() {
-
 
     }
 
@@ -30,26 +31,23 @@ class JournalCreateModal extends Component {
         this.props.setJournalID(null);
     }
 
-    createJournal = () => {
+    createJournal = async () => {
         if (this.state.journalName === '') {
             alert("Journal needs a name!")
             return;
         }
 
-        // ref for actual journal
-        var ref = this.firebase.db.ref().child('journals').push()
-        // user object ref to journal key
-        var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(ref.key)
+        try {
+            await this.dbHelper.createJournal(this.state.journalName, this.openJournal)
+        } catch (e) {
+            console.log(e);
+            return 'caught ' + e
+        }
 
-        var journalID = ref.key
-        var journalName = this.state.journalName
-        var nowDate = new Date()
+    }
 
+    openJournal = (journalID) => {
         this.setState({ journalID: journalID });
-
-        ref.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
-        userRef.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
-
         this.props.setJournalID(journalID);
     }
 

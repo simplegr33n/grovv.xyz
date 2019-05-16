@@ -7,7 +7,9 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import Dropzone from 'react-dropzone';
 
-import Firebase from '../../../config/firebaseConfig.js'
+
+import DbHelper from '../../_utils/DbHelper.js'
+
 
 
 class JournalAddEditModal extends Component {
@@ -27,23 +29,11 @@ class JournalAddEditModal extends Component {
             entryID: ''
         };
 
-        this.firebase = new Firebase();
+        this.dbHelper = new DbHelper();
 
     }
 
     componentDidMount() {
-
-        console.log(this.props.editPost)
-        console.log(this.state.journalID)
-
-        if (this.props.editPost === 'new') {
-            var ref = this.firebase.db.ref().child('journals').child(this.props.journalID).push();
-            var entryKey = ref.key;
-            this.setState({ entryID: entryKey });
-            return;
-        }
-
-        console.log(this.props.editPost)
 
         var tempTrueDate = new Date(this.props.editPost.datetime_true)
         var tempContent = this.props.editPost.content
@@ -84,51 +74,34 @@ class JournalAddEditModal extends Component {
         this.props.closeModal(this.state.entryID);
     }
 
-    saveEntry = () => {
+    saveEntry = async () => {
         if (this.state.content === '' && this.state.images.length === 0) {
             alert("Needs content or images!")
             return;
         }
         this.setState({ published: true });
 
-        // Journal data in firebase // TODO scalable.
-        var ref = this.firebase.db.ref().child('journals').child(this.state.journalID).child('entries')
-
-        var editDate = new Date().getTime()
-
-        var temptTrueDate = this.state.trueDate
-        var shortMonth = (temptTrueDate.getMonth() + 1) + "-"
-        if (shortMonth.length === 2) {
-            shortMonth = "0" + shortMonth;
+        try {
+            await this.dbHelper.saveJournalEntry(
+                this.state.journalID,
+                this.state.entryID,
+                this.state.trueDate,
+                this.state.title,
+                this.state.content,
+                this.state.growStage,
+                this.state.postDate,
+                this.state.images,
+                this.closeModal
+            )
+        } catch (e) {
+            console.log(e);
+            return 'caught ' + e
         }
-        var shortDateVar = shortMonth + temptTrueDate.getDate() + "-" + temptTrueDate.getFullYear()
 
+    }
 
-        ref.child(this.state.entryID).set({
-            'id': this.state.entryID,
-            'title': this.state.title,
-            'published': true,
-            'content': this.state.content,
-            'grow_stage': this.state.growStage,
-            'datetime_post': this.state.postDate.getTime(),
-            'datetime_edit': editDate,
-            'datetime_true': this.state.trueDate.getTime(),
-            'datetime_short': shortDateVar,
-            'journal_id': this.state.journalID,
-            'images': this.state.images
-        })
-
-        console.log('set journal entry ' + this.state.entryID)
-
-        // update updatedAt
-        var jRef = this.firebase.db.ref().child('journals').child(this.state.journalID)
-        var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(this.state.journalID)
-        var nowDate = new Date()
-        jRef.child('updatedAt').set(nowDate.getTime())
-        userRef.child('updatedAt').set(nowDate.getTime())
-
-
-        this.props.closeModal(this.state.entryID);
+    closeModal = (entryID) => {
+        this.props.closeModal(entryID);
     }
 
     onImageDrop(files) {
@@ -148,35 +121,24 @@ class JournalAddEditModal extends Component {
     }
 
 
-    handleImageUpload = (file) => {
+    handleImageUpload = async (file) => {
+        try {
+            await this.dbHelper.handleImageUpload(file, this.setImages)
+        } catch (e) {
+            console.log(e);
+            return 'caught ' + e
+        }
+    }
 
-        // Get storage reference and push file blob 
-        var storageRef = this.firebase.storage.ref().child('journals').child('-LdG6gTCNZxfu1wU5Xvx/');
-
-        console.log("filename:" + file.name)
-
-        const metadata = { contentType: file.type };
-        const storageTask = storageRef.child(this.state.postDate.getTime() + file.name).put(file, metadata);
-        storageTask
-            .then(snapshot => snapshot.ref.getDownloadURL())
-            .then(url => {
-                console.log(url)
-                // Create thumb url from url (thumbs automatically created via cloud function on upload)
-                var urlSplit = url.split("%2F")
-                var thumbUrl = urlSplit[0] + "%2F" + urlSplit[1] + "%2Fthumb_" + urlSplit[2]
-
-                console.log(thumbUrl)
-
-                var tempImages = this.state.images;
-                var tempAddedImages = this.state.addedImages;
-                tempImages.push({ 'url': url, 'thumb': thumbUrl })
-                tempAddedImages.push({ 'url': url, 'thumb': thumbUrl })
-                this.setState({
-                    images: tempImages,
-                    addedImages: tempAddedImages
-                });
-
-            })
+    setImages = (url, thumbURL) => {
+        var tempImages = this.state.images;
+        var tempAddedImages = this.state.addedImages;
+        tempImages.push({ 'url': url, 'thumb': thumbURL })
+        tempAddedImages.push({ 'url': url, 'thumb': thumbURL })
+        this.setState({
+            images: tempImages,
+            addedImages: tempAddedImages
+        });
     }
 
     deleteImage = (ev) => {
@@ -188,8 +150,8 @@ class JournalAddEditModal extends Component {
 
         this.state.images.forEach((img) => {
             if (img.url.toString() === val) {
-                this.deleteImageFromFirebase(img.url);
-                this.deleteImageFromFirebase(img.thumb)
+                this.handleImageDelete(img.url);
+                this.handleImageDelete(img.thumb)
             } else {
                 tempImages.push(img)
             }
@@ -204,23 +166,13 @@ class JournalAddEditModal extends Component {
         // this.setState({ images: [] });
 
         imagesToDelete.forEach((img) => {
-            this.deleteImageFromFirebase(img.url);
-            this.deleteImageFromFirebase(img.thumb)
+            this.handleImageDelete(img.url);
+            this.handleImageDelete(img.thumb);
         })
     }
 
-    deleteImageFromFirebase = (url) => {
-        // Create a reference to the file to delete
-        var desertRef = this.firebase.storage.refFromURL(url)
-
-        // Delete the file
-        desertRef.delete().then(function () {
-            // File deleted successfully
-            console.log("deleted " + url + "successfully :)")
-        }).catch(function (error) {
-            // Uh-oh, an error occurred!
-            console.log("deleted " + url + "error :(")
-        });
+    handleImageDelete = (url) => {
+        this.dbHelper.handleImageDelete(url);
     }
 
     handleDateChange = (dt) => {

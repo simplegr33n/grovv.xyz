@@ -32,8 +32,6 @@ class JournalEntry extends Component {
     }
 
     editEntryByID = (ev) => {
-        // console.log("uh")
-        // console.log(ev.target.dataset.value)
         this.props.editEntryByID(ev.target.dataset.value);
     }
 

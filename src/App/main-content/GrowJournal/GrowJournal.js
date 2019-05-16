@@ -9,7 +9,8 @@ import JournalBoxItem from './JournalBoxItem'
 import JournalEntry from './JournalEntry'
 
 
-import Firebase from '../../../config/firebaseConfig.js'
+import DbHelper from '../../_utils/DbHelper.js'
+
 
 
 class GrowJournal extends Component {
@@ -29,13 +30,13 @@ class GrowJournal extends Component {
             currentFullImage: null
         };
 
-        this.firebase = new Firebase();
+        this.dbHelper = new DbHelper();
 
     }
 
     componentDidMount() {
         this._ismounted = true;
-        this.watchJournals = this.watchJournals();
+        this.watchUserJournals = this.watchUserJournals();
 
         if (this.props.journalID) {
             this.watchEntries(this.props.journalID)
@@ -46,88 +47,42 @@ class GrowJournal extends Component {
         this._ismounted = false;
     }
 
-    watchJournals = () => {
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
-
-        ref.on('value', (snapshot) => {
-
-            var journalsList = [];
-
-            snapshot.forEach((child) => {
-                journalsList.push(child.val())
-            });
-
-            console.log("Journals List:")
-            console.log(journalsList)
-
-            journalsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
-
-            this.setState({
-                userJournals: journalsList
-            });
-
-        }, function (errorObject) {
-            console.log("watch user journals failed: " + errorObject.code);
-        });
+    watchUserJournals = () => {
+        this.dbHelper.watchUserJournals(this.setUserJournals)
     }
 
-    watchEntries = (journalId = this.props.journalID) => {
-        var ref = this.firebase.db.ref().child('journals').child(journalId).child('entries')
+    setUserJournals = (journalsList) => {
+        if (this._ismounted) {
+            this.setState({
+                userJournals: journalsList
+            }); 
+        }
+    }
 
-        console.log('watchin... ' + journalId)
+    watchEntries = (journalID = this.props.journalID) => {
+        this.dbHelper.watchJournalEntries(journalID, this.setJournalEntries)
+    }
 
-        ref.on('value', (snapshot) => {
-
-            var tempEntriesList = []
-            snapshot.forEach((child) => {
-                tempEntriesList.push(child.val())
+    setJournalEntries = (entriesList, dotsList) => {
+        if (entriesList.length > 0) {
+            this.setState({
+                currentEntry: entriesList[entriesList.length - 1],
+                currentEntryID: entriesList[entriesList.length - 1].id,
+                timelineEntries: entriesList,
+                timelineDots: dotsList,
+                displayEntries: dotsList[dotsList.length - 1]
             });
-
-            tempEntriesList.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
-
-            var tempDotsList = [];
-            tempEntriesList.forEach((entry) => {
-                if (!tempDotsList.includes(entry.datetime_short)) {
-                    tempDotsList[tempDotsList.length] = entry.datetime_short;
-                }
+        } else {
+            this.setState({
+                currentEntry: null,
+                currentEntryID: null,
+                timelineEntries: [],
+                timelineDots: [],
+                displayEntries: []
             });
+        }
 
-            var tempDeepDotsList = [];
-            tempDotsList.forEach((dotDate) => {
-                var dotValue = []
-                tempEntriesList.forEach((entry) => {
-                    if (dotDate === entry.datetime_short) {
-                        dotValue[dotValue.length] = entry;
-                    }
-                });
-
-                tempDeepDotsList[tempDeepDotsList.length] = dotValue;
-            });
-
-            if (tempEntriesList.length > 0) {
-                this.setState({
-                    currentEntry: tempEntriesList[tempEntriesList.length - 1],
-                    currentEntryID: tempEntriesList[tempEntriesList.length - 1].id,
-                    timelineEntries: tempEntriesList,
-                    timelineDots: tempDeepDotsList,
-                    displayEntries: tempDeepDotsList[tempDeepDotsList.length - 1]
-                });
-            } else {
-                this.setState({
-                    currentEntry: null,
-                    currentEntryID: null,
-                    timelineEntries: [],
-                    timelineDots: [],
-                    displayEntries: []
-                });
-            }
-
-            this.setEntries(tempDeepDotsList[tempDeepDotsList.length - 1]);
-
-        }, function (errorObject) {
-            console.log("follow journal failed: " + errorObject.code);
-        });
-
+        this.setEntries(dotsList[dotsList.length - 1]);
     }
 
     addTimelineEntry = () => {
@@ -364,7 +319,7 @@ class GrowJournal extends Component {
 
                                     <div id="Timeline-Inner-Container">
                                         <div id="Timeline-Line" />
-                                        {/* Generate dots from firebase entries... */}
+                                        
                                         <div id="Timeline-Spots">
 
                                             {renderedTimelineDots}

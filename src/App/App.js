@@ -9,7 +9,6 @@ import SignIn from './auth/SignIn.js'
 import SignUp from './auth/SignUp.js'
 
 // Main Content
-import EditProfile from './main-content/EditProfile.js'
 import FeedChart from './main-content/FeedChart/FeedChart.js'
 import GrowConfig from './main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
@@ -27,7 +26,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, editprofile, chart, config, journal, grows, graphs, etc.
+			mainContent: 'signin', // signin, signup, main, chart, config, journal, grows, graphs, etc.
 			UID: null,
 			username: '',
 			URL_livecam: null,
@@ -125,12 +124,6 @@ class App extends Component {
 			growID: '-LdtkOvSXRrm1zIZ6EOx'
 		});
 
-	}
-
-	openEditProfile = () => {
-		if (this.state.mainContent !== 'editprofile') {
-			this.setState({ mainContent: 'editprofile' });
-		}
 	}
 
 	openChart = () => {
@@ -240,8 +233,6 @@ class App extends Component {
 							{(() => {
 								if (this.state.UID) {
 									switch (this.state.mainContent) {
-										case 'editprofile':
-											return <EditProfile UID={this.state.UID} username={this.state.username} />;
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} />
 										case 'grows':
@@ -255,13 +246,9 @@ class App extends Component {
 												<div className="Chart-Page">
 													flower 3 day
 													<GrowGraphsTest growDeprecate={'flower'} />
-													{/* <GrowGraphsTest parentSize={[800, 300]} growDeprecate={'flower'} /> */}
 													
 													vegger 3 day
 													<GrowGraphsTest growDeprecate={'vegger'} />
-													{/* <GrowGraphsTest parentSize={[800, 300]} growDeprecate={'vegger'} /> */}
-
-
 												</div>
 											)
 										default:

@@ -268,6 +268,51 @@ class DbHelper {
         ref.set(config)
     }
 
+    // ........... //
+    // GROW PAGE   //
+    // ........... //
+
+    // Get live data from firebase
+    getUserGrows(setData) {
+
+        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows')
+
+        ref.on('value', (snapshot) => {
+
+            var userGrowIDs = [];
+
+            console.log("TODO: remove filter.")
+            snapshot.forEach((child) => {
+                if (!child.val().sensors_live) {
+                    userGrowIDs[child.key] = child.val()
+                }
+            });
+
+            // TODO: make own function...?
+            var setUserGrows = []
+            for (var key of Object.keys(userGrowIDs)) {
+                var growRef = this.firebase.db.ref().child('grows').child(key)
+
+                growRef.on('value', (snapshot) => {
+                    if (!setUserGrows.includes(snapshot.val())) {
+                        setUserGrows[setUserGrows.length] = snapshot.val()
+                    }
+
+                    setUserGrows.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
+
+                    setData(setUserGrows)
+
+                }, function (errorObject) {
+                    console.log("watch user grows grow failed: " + errorObject.code);
+                });
+            }
+
+        }, function (errorObject) {
+            console.log("watch user grows failed: " + errorObject.code);
+        });
+
+    }
+
 
 
     // ............ //
@@ -275,7 +320,7 @@ class DbHelper {
     // ............ //
 
     // Get live data from firebase
-    async getLinkedJournals(key, journals, setData) {
+    getLinkedJournals(key, journals, setData) {
 
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
 
@@ -300,19 +345,187 @@ class DbHelper {
         }, function (errorObject) {
             console.log("GrowDetails watch user journals failed: " + errorObject.code);
         });
-
-
-        // // Sensor data in firebase
-        // var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(growDeprecate)
-
-        // ref.on('value', (snapshot) => {
-        //     setData(snapshot.val())
-        // }, function (errorObject) {
-        //     console.log("follow " + growDeprecate + " live failed: " + errorObject.code);
-        // });
-
     }
 
+    // ............ //
+    // WATCH JRNLS  //
+    // ............ //
+
+    // Watch Journals
+    watchUserJournals(setUserJournals) {
+        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
+
+        ref.on('value', (snapshot) => {
+
+            var journalsList = [];
+
+            snapshot.forEach((child) => {
+                journalsList.push(child.val())
+            });
+
+            console.log("Journals List:")
+            console.log(journalsList)
+
+            journalsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
+
+            setUserJournals(journalsList)
+
+        }, function (errorObject) {
+            console.log("watch user journals failed: " + errorObject.code);
+        });
+    }
+
+    // Watch Entries
+    watchJournalEntries(journalID, setJournalEntries) {
+
+        var ref = this.firebase.db.ref().child('journals').child(journalID).child('entries')
+
+        console.log('watchin... ' + journalID)
+
+        ref.on('value', (snapshot) => {
+
+            var tempEntriesList = []
+            snapshot.forEach((child) => {
+                tempEntriesList.push(child.val())
+            });
+
+            tempEntriesList.sort((a, b) => (a.datetime_true > b.datetime_true) ? 1 : -1)
+
+            var tempDotsList = [];
+            tempEntriesList.forEach((entry) => {
+                if (!tempDotsList.includes(entry.datetime_short)) {
+                    tempDotsList[tempDotsList.length] = entry.datetime_short;
+                }
+            });
+
+            var tempDeepDotsList = [];
+            tempDotsList.forEach((dotDate) => {
+                var dotValue = []
+                tempEntriesList.forEach((entry) => {
+                    if (dotDate === entry.datetime_short) {
+                        dotValue[dotValue.length] = entry;
+                    }
+                });
+
+                tempDeepDotsList[tempDeepDotsList.length] = dotValue;
+            });
+
+            setJournalEntries(tempEntriesList, tempDeepDotsList)
+
+        }, function (errorObject) {
+            console.log("follow journal failed: " + errorObject.code);
+        });
+    }
+
+    // ............ //
+    // JRNL CREATE  //
+    // ............ //
+
+    // Get live data from firebase
+    async createJournal(journalName, openJournal) {
+        // ref for actual journal
+        var ref = this.firebase.db.ref().child('journals').push()
+        // user object ref to journal key
+        var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(ref.key)
+
+        var journalID = ref.key
+        var nowDate = new Date()
+
+        ref.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
+        userRef.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
+
+        openJournal(journalID)
+    }
+
+
+    // ................ //
+    // SAVE JRNL ENTRY  //
+    // ................ //
+
+    // Get live data from firebase
+    async saveJournalEntry(journalID, entryID, trueDate, title, content, growStage, postDate, images, closeModal) {
+        // Journal data in firebase // TODO scalable.
+        var ref = this.firebase.db.ref().child('journals').child(journalID).child('entries')
+
+        var editDate = new Date().getTime()
+
+        var temptTrueDate = trueDate
+        var shortMonth = (temptTrueDate.getMonth() + 1) + "-"
+        if (shortMonth.length === 2) {
+            shortMonth = "0" + shortMonth;
+        }
+        var shortDateVar = shortMonth + temptTrueDate.getDate() + "-" + temptTrueDate.getFullYear()
+
+
+        ref.child(entryID).set({
+            'id': entryID,
+            'title': title,
+            'published': true,
+            'content': content,
+            'grow_stage': growStage,
+            'datetime_post': postDate.getTime(),
+            'datetime_edit': editDate,
+            'datetime_true': trueDate.getTime(),
+            'datetime_short': shortDateVar,
+            'journal_id': journalID,
+            'images': images
+        })
+
+        console.log('set journal entry ' + entryID)
+
+        // update updatedAt
+        var jRef = this.firebase.db.ref().child('journals').child(journalID)
+        var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(journalID)
+        var nowDate = new Date()
+        jRef.child('updatedAt').set(nowDate.getTime())
+        userRef.child('updatedAt').set(nowDate.getTime())
+
+
+        closeModal(entryID);
+    }
+
+    // .................. //
+    // JRNL ENTRY IMAGES  //
+    // .................. //
+
+    // Upload Image
+    async handleImageUpload(file, setImages) {
+        // Get storage reference and push file blob 
+        var storageRef = this.firebase.storage.ref().child('journals').child('-LdG6gTCNZxfu1wU5Xvx/');
+
+        console.log("filename:" + file.name)
+
+        var dateNow = new Date()
+
+        const metadata = { contentType: file.type };
+        const storageTask = storageRef.child(dateNow.getTime() + file.name).put(file, metadata);
+        storageTask
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                // Create thumb url from url (thumbs automatically created via cloud function on upload)
+                var urlSplit = url.split("%2F")
+                var thumbURL = urlSplit[0] + "%2F" + urlSplit[1] + "%2Fthumb_" + urlSplit[2]
+
+                // URL AND THUMBURL
+                setImages(url, thumbURL)
+
+            })
+    }
+
+    // Delete Image
+    handleImageDelete(url) {
+        // Create a reference to the file to delete
+        var desertRef = this.firebase.storage.refFromURL(url)
+
+        // Delete the file
+        desertRef.delete().then(function () {
+            // File deleted successfully
+            console.log("deleted " + url + "successfully :)")
+        }).catch(function (error) {
+            // Uh-oh, an error occurred!
+            console.log("deleted " + url + "error :(")
+        });
+    }
 
 }
 

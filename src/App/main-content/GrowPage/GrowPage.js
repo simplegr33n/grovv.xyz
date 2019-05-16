@@ -6,7 +6,8 @@ import GrowDetailsPage from './GrowDetailsPage'
 import GrowCamFull from './GrowCamFull'
 
 
-import Firebase from '../../../config/firebaseConfig.js'
+import DbHelper from '../../_utils/DbHelper.js'
+
 
 
 class GrowPage extends Component {
@@ -20,13 +21,14 @@ class GrowPage extends Component {
 			camURL: null
 		};
 
-		this.firebase = new Firebase();
+
+		this.dbHelper = new DbHelper();
 
 	}
 
 	componentDidMount() {
 		this._ismounted = true;
-		this.getUserGrows = this.getUserGrowIDs();
+		this.getUserGrows(this.setUserGrows);
 	}
 
 	componentWillUnmount() {
@@ -35,49 +37,21 @@ class GrowPage extends Component {
 	}
 
 	componentDidUpdate = () => {
-		if (this._ismounted === false) {
-            return;
-        }
+		if (!this._ismounted) {
+			return;
+		}
 	}
 
-	getUserGrowIDs = () => {
-		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows')
+	getUserGrows = (setData) => {
+		this.dbHelper.getUserGrows(setData)
+	}
 
-		ref.on('value', (snapshot) => {
-
-			var userGrowIDs = [];
-
-			console.log("TODO: remove filter.")
-			snapshot.forEach((child) => {
-				if (!child.val().sensors_live) {
-					userGrowIDs[child.key] = child.val()
-				}
+	setUserGrows = (grows) => {
+		if (this._ismounted) {
+			this.setState({
+				userGrows: grows
 			});
-
-			// TODO: make own function...?
-			var setUserGrows = []
-			for (var key of Object.keys(userGrowIDs)) {
-				var growRef = this.firebase.db.ref().child('grows').child(key)
-
-				growRef.on('value', (snapshot) => {
-					if (!setUserGrows.includes(snapshot.val())) {
-						setUserGrows[setUserGrows.length] = snapshot.val()
-					}
-
-					setUserGrows.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
-
-					this.setState({
-						userGrows: setUserGrows
-					});
-
-				}, function (errorObject) {
-					console.log("watch grow failed: " + errorObject.code);
-				});
-			}
-
-		}, function (errorObject) {
-			console.log("watch user grows failed: " + errorObject.code);
-		});
+		}
 	}
 
 	closeModal = (key) => {
