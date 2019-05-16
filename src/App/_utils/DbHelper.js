@@ -234,7 +234,7 @@ class DbHelper {
     // ............ //
     // GROW CONFIG  //
     // ............ //
-    
+
     // Watch Grow Config in firebase
     watchGrowConfig(setData) {
         // Sensor data in firebase
@@ -268,9 +268,52 @@ class DbHelper {
         ref.set(config)
     }
 
+
+
+    // ............ //
+    // GROW JRNLS  //
+    // ............ //
+
+    // Get live data from firebase
+    async getLinkedJournals(key, journals, setData) {
+
+        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
+
+        ref.on('value', (snapshot) => {
+
+            var journalsList = [];
+
+            snapshot.forEach((child) => {
+                if (journals) {
+                    Object.keys(journals).forEach(function (key) {
+                        if (child.val().id === key) {
+                            journalsList.push(child.val())
+                        }
+                    });
+                }
+            });
+
+            journalsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
+
+            setData(journalsList)
+
+        }, function (errorObject) {
+            console.log("GrowDetails watch user journals failed: " + errorObject.code);
+        });
+
+
+        // // Sensor data in firebase
+        // var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(growDeprecate)
+
+        // ref.on('value', (snapshot) => {
+        //     setData(snapshot.val())
+        // }, function (errorObject) {
+        //     console.log("follow " + growDeprecate + " live failed: " + errorObject.code);
+        // });
+
+    }
+
+
 }
-
-
-
 
 export default DbHelper;

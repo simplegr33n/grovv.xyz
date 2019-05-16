@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import Firebase from '../../../config/firebaseConfig.js'
+
+import DbHelper from '../../_utils/DbHelper.js'
+
 
 import GrowDataDisplay from './GrowDataDisplay'
 
@@ -28,7 +30,9 @@ class GrowDetailsPage extends Component {
 
         };
 
-        this.firebase = new Firebase();
+
+        this.dbHelper = new DbHelper()
+
 
     }
 
@@ -37,7 +41,8 @@ class GrowDetailsPage extends Component {
 
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
-            this.getLiveData()
+            this.getLiveData('flower', this.setLiveData);
+            // this.getLiveData()
             this.watchPiCam()
 
             // todo remove
@@ -45,7 +50,8 @@ class GrowDetailsPage extends Component {
                 this.setState({ growDeprecate: 'flower' });
             }
         } else {
-            this.getVeggerData()
+            this.getLiveData('vegger', this.setLiveData);
+            // this.getVeggerData()
             // todo remove
             if (this._ismounted) {
                 this.setState({ growDeprecate: 'vegger' });
@@ -58,8 +64,9 @@ class GrowDetailsPage extends Component {
             }
         }
 
-        this.getJournalsInfo = this.getJournalsInfo()
+        this.getLinkedJournals(this.props.grow.id, this.props.grow.journals, this.setLinkedJournals)
     }
+
 
     componentWillUnmount = () => {
         this._ismounted = false;
@@ -79,82 +86,45 @@ class GrowDetailsPage extends Component {
             }
         }, 5000);
     }
+    
 
-    getJournalsInfo = () => {
+    getLiveData = async (growDeprecate, setData) => {
+        try {
+            await this.dbHelper.getLiveData(growDeprecate, setData)
+        } catch (e) {
+            console.log(e);
+            return 'caught ' + e
+        }
+    }
 
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
 
-        ref.on('value', (snapshot) => {
-
-            var journalsList = [];
-
-            snapshot.forEach((child) => {
-                if (this.props.grow.journals) {
-                    Object.keys(this.props.grow.journals).forEach(function (key) {
-                        if (child.val().id === key) {
-                            journalsList.push(child.val())
-                        }
-                    });
-                }
+    setLiveData = (data) => {
+        if (this._ismounted) {
+            this.setState({
+                liveData: data
             });
+        }
+    }
 
-            journalsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
-
-            if (this._ismounted) {
-                this.setState({
-                    linkedJournals: journalsList
-                });
-            }
-
-        }, function (errorObject) {
-            console.log("GrowDetails watch user journals failed: " + errorObject.code);
-        });
-
+    getLinkedJournals = async (key, journals, setData) => {
+        try {
+            await this.dbHelper.getLinkedJournals(key, journals, setData)
+        } catch (e) {
+            console.log(e);
+            return 'caught ' + e
+        }
     }
 
 
-    getLiveData = () => {
-        // TODO: change path
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('flower')
-
-        ref.on('value', (snapshot) => {
-
-            var tempLiveData = snapshot.val()
-
-            if (this._ismounted) {
-                this.setState({
-                    liveData: tempLiveData
-                });
-            }
-
-            this.checkActive(tempLiveData.time)
-
-        }, function (errorObject) {
-            console.log("grow box get live data failed: " + errorObject.code);
-        });
-
+    setLinkedJournals = (data) => {
+        if (this._ismounted) {
+            this.setState({
+                linkedJournals: data
+            });
+        }
     }
 
-    getVeggerData = () => {
-        // TODO: REMOVE function
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('vegger')
 
-        ref.on('value', (snapshot) => {
-
-            var tempLiveData = snapshot.val()
-
-            if (this._ismounted) {
-                this.setState({
-                    liveData: tempLiveData
-                });
-            }
-
-            this.checkActive(tempLiveData.time)
-
-        }, function (errorObject) {
-            console.log("grow box get live data failed: " + errorObject.code);
-        });
-    }
 
     checkActive = (lastUpdateTime) => {
 

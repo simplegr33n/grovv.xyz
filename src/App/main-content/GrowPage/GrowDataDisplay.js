@@ -13,14 +13,6 @@ class GrowDataDisplay extends Component {
 
 
     }
-
-    componentDidMount() {
-
-
-    }
-
-
-
    
     render() {
 

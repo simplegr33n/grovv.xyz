@@ -76,7 +76,6 @@ class GrowDetailsConfig extends Component {
             humidifier_max: configObj.humidifier_max
         });
 
-        this.render();
     }
 
     handleTempMinChange = (event) => {

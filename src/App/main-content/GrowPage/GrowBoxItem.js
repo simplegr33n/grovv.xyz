@@ -7,9 +7,8 @@ import GraphSensorsBox from '../Graphs/GraphSensorsBox'
 
 import moment from 'moment'
 
+import DbHelper from '../../_utils/DbHelper.js'
 
-
-import Firebase from '../../../config/firebaseConfig.js'
 
 class GrowBoxItem extends Component {
 
@@ -24,8 +23,7 @@ class GrowBoxItem extends Component {
 			graphElementSize: [150, 150],
 		};
 
-
-		this.firebase = new Firebase();
+        this.dbHelper = new DbHelper()
 
 		this.graphSizeUpdated = 0;
 	}
@@ -35,7 +33,8 @@ class GrowBoxItem extends Component {
 
 		//TODO: Remove condition
 		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
-			this.getLiveData = this.getLiveData()
+			this.getLiveData = this.getLiveData('flower', this.setLiveData)
+			
 			this.getLiveCam = this.watchPiCam()
 
 			if (this._ismounted) {
@@ -43,7 +42,7 @@ class GrowBoxItem extends Component {
 			}
 
 		} else {
-			this.getData = this.getVeggerData()
+			this.getLiveData = this.getLiveData('vegger', this.setLiveData)
 
 			if (this._ismounted) {
 				this.setState({ growDeprecate: 'vegger' });
@@ -61,11 +60,6 @@ class GrowBoxItem extends Component {
 
 	componentWillUnmount = () => {
 		this._ismounted = false;
-
-		// Unsubscribe from listeners...
-		this.getLiveData = null
-		this.getLiveCam = null
-		this.getData = null
 	}
 
 	componentDidUpdate() {
@@ -103,25 +97,24 @@ class GrowBoxItem extends Component {
 		}, 5000);
 	}
 
+	getLiveData = async (growDeprecate, setData) => {
+		console.log("GROW BOX!")
+		console.log(growDeprecate)
+        try {
+            await this.dbHelper.getLiveData(growDeprecate, setData)
+        } catch(e) {
+            console.log(e); 
+            return 'caught ' + e
+        }
+    }
 
-	getLiveData = () => {
-		// TODO: change path
-		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('flower')
-
-		ref.on('value', (snapshot) => {
-
-			var tempLiveData = snapshot.val()
+	setLiveData = (data) => {
 
 			if (this._ismounted) {
-				this.setState({ liveData: tempLiveData });
+				this.setState({ liveData: data });
 			}
 
-			this.checkActive(tempLiveData.time)
-
-		}, function (errorObject) {
-			console.log("grow box get live data failed: " + errorObject.code);
-		});
-
+			this.checkActive(data.time)
 	}
 
 	getVeggerData = () => {

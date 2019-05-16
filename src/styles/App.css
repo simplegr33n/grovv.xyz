@@ -1195,6 +1195,7 @@ html {
 
 .Grow-Box-Item-Main {
     height: 400px;
+    max-width: 100%;
     max-height: 45vh;
     display: flex;
     flex-direction: column;
