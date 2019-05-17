@@ -6,8 +6,6 @@ import GrowDetailsPage from './GrowDetailsPage'
 import GrowCamFull from './GrowCamFull'
 
 
-import DbHelper from '../../_utils/DbHelper.js'
-
 
 
 class GrowPage extends Component {
@@ -16,41 +14,22 @@ class GrowPage extends Component {
 		super(props);
 		this.state = {
 			displayContent: "main", // main, full-cam
-			userGrows: [],
 			grow: this.props.grow,
 			camURL: null
 		};
-
-
-		this.dbHelper = new DbHelper();
-
 	}
 
 	componentDidMount() {
 		this._ismounted = true;
-		this.getUserGrows(this.setUserGrows);
 	}
 
 	componentWillUnmount() {
 		this._ismounted = false;
-		this.getUserGrows = null;
 	}
 
 	componentDidUpdate = () => {
 		if (!this._ismounted) {
 			return;
-		}
-	}
-
-	getUserGrows = (setData) => {
-		this.dbHelper.getUserGrows(setData)
-	}
-
-	setUserGrows = (grows) => {
-		if (this._ismounted) {
-			this.setState({
-				userGrows: grows
-			});
 		}
 	}
 
@@ -101,8 +80,13 @@ class GrowPage extends Component {
 
 	render() {
 
+		console.log("logisippi")
+		console.log(this.props.userGrows)
+		console.log(this.props.growID)
+
+
 		if (this.props.growID) {
-			this.state.userGrows.forEach((grow) => {
+			this.props.userGrows.forEach((grow) => {
 				if (grow.id === this.props.growID) {
 					this.props.setGrow(grow)
 				}
@@ -110,8 +94,8 @@ class GrowPage extends Component {
 		}
 
 		var renderedGrowBoxes = null;
-		if (this.props.grow === null && this.state.userGrows) {
-			renderedGrowBoxes = this.state.userGrows.map((grow) =>
+		if (this.props.grow === null && this.props.userGrows) {
+			renderedGrowBoxes = this.props.userGrows.map((grow) =>
 				<div key={grow.id} className="Grow-Box-Item-Container">
 					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} />
 				</div>

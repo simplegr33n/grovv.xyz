@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 
 import '../../styles/App.css';
 
-import DbHelper from '../_utils/DbHelper.js'
-
-// QuickBar Indicator Colors (green/orange/red)
-const optimalIndication = '#91eebb';
-const warningIndication = '#FFA500';
-const dangerIndication = '#FF0000';
 
 class AppBar extends Component {
 
@@ -16,88 +10,6 @@ class AppBar extends Component {
         this.state = {
 
         };
-
-        this.dbHelper = new DbHelper()
-
-        this.flowerTempRef = React.createRef()
-        this.flowerHumidityRef = React.createRef()
-        this.veggerTempRef = React.createRef()
-        this.veggerHumidityRef = React.createRef()
-
-        this.watchSensorsLive();
-    }
-
-
-    watchSensorsLive = () => {
-        this.getData('flower', this.setDataFlower);
-        this.getData('vegger', this.setDataVegger);
-    }
-
-    getData = async (growDeprecate, setData) => {
-        try {
-            await this.dbHelper.getLiveData(growDeprecate, setData)
-        } catch(e) {
-            console.log(e); 
-            return 'caught ' + e
-        }
-    }
-
-    setDataFlower = (data) => {
-        let flowerTemp = Math.round(data.cTemp * 10) / 10;
-        let flowerHumidity = Math.round(data.humidity * 10) / 10;
-
-        console.log(`Flower cTemp: ${flowerTemp} // Flower Humidity ${flowerHumidity} `);
-
-        // SET safe ranges here 
-        if (flowerTemp > 20 && flowerTemp < 27) {
-            this.flowerTempRef.current.style.background = optimalIndication;
-        } else if (flowerTemp < 19 || flowerTemp > 28) {
-            this.flowerTempRef.current.style.background = dangerIndication;
-        } else {
-            this.flowerTempRef.current.style.background = warningIndication;
-        }
-
-        if (flowerHumidity > 30 && flowerHumidity < 43) {
-            this.flowerHumidityRef.current.style.background = optimalIndication;
-        } else if (flowerHumidity < 27 || flowerHumidity > 45) {
-            this.flowerHumidityRef.current.style.background = dangerIndication;
-        } else {
-            this.flowerHumidityRef.current.style.background = warningIndication;
-        }
-
-        this.setState({
-            sFlowerTemp: flowerTemp,
-            sFlowerHumidity: flowerHumidity
-        });
-    }
-
-    setDataVegger = (data) => {
-        let veggerTemp = Math.round(data.cTemp * 10) / 10;
-        let veggerHumidity = Math.round(data.humidity * 10) / 10;
-
-        console.log(`Vegger cTemp: ${veggerTemp} // Vegger Humidity ${veggerHumidity} `);
-
-        // SET safe ranges here 
-        if (veggerTemp > 22 && veggerTemp < 29) {
-            this.veggerTempRef.current.style.background = optimalIndication;
-        } else if (veggerTemp < 20 || veggerTemp > 30) {
-            this.veggerTempRef.current.style.background = dangerIndication;
-        } else {
-            this.veggerTempRef.current.style.background = warningIndication;
-        }
-
-        if (veggerHumidity > 40 && veggerHumidity < 80) {
-            this.veggerHumidityRef.current.style.background = optimalIndication;
-        } else if (veggerHumidity < 35 || veggerHumidity > 85) {
-            this.veggerHumidityRef.current.style.background = dangerIndication;
-        } else {
-            this.veggerHumidityRef.current.style.background = warningIndication;
-        }
-
-        this.setState({
-            sVeggerTemp: veggerTemp,
-            sVeggerHumidity: veggerHumidity
-        });
     }
 
     openJournals = () => {
@@ -146,29 +58,42 @@ class AppBar extends Component {
                     GROWS
                 </div>
 
-                <div className="App-Bar-Button-Grow" onClick={this.openGanjaGrove}>
-                    <div className="App-Bar-Button-Grow-Name">
-                        GG
-                    </div>
-                    <div ref={this.flowerTempRef} className="App-Bar-Button-Grow-Temp">
-                        {this.state.sFlowerTemp}°C
-                    </div>
-                    <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity">
-                        {this.state.sFlowerHumidity}%
-                    </div>
-                </div>
+                {(() => {
+                    if (this.props.liveGrowData.flower) {
+                        return (
+                            <div className="App-Bar-Button-Grow" onClick={this.openGanjaGrove}>
+                                <div className="App-Bar-Button-Grow-Name">
+                                    GG
+                                </div>
+                                <div ref={this.flowerTempRef} className="App-Bar-Button-Grow-Temp">
+                                    {Math.round(this.props.liveGrowData.flower.cTemp * 10) / 10}°C
+                                </div>
+                                <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity">
+                                    {Math.round(this.props.liveGrowData.flower.humidity * 10) / 10}%
+                                </div>
+                            </div>
+                        )
 
-                <div className="App-Bar-Button-Grow" onClick={this.openVegger}>
-                    <div className="App-Bar-Button-Grow-Name">
-                        VG
-                    </div>
-                    <div ref={this.veggerTempRef} className="App-Bar-Button-Grow-Temp">
-                        {this.state.sVeggerTemp}°C
-                    </div>
-                    <div ref={this.veggerHumidityRef} className="App-Bar-Button-Grow-Humidity">
-                        {this.state.sVeggerHumidity}%
-                    </div>
-                </div>
+                    }
+                })()}
+
+                {(() => {
+                    if (this.props.liveGrowData.vegger) {
+                        return (
+                            <div className="App-Bar-Button-Grow" onClick={this.openVegger}>
+                                <div className="App-Bar-Button-Grow-Name">
+                                    VG
+                                </div>
+                                <div ref={this.veggerTempRef} className="App-Bar-Button-Grow-Temp">
+                                    {Math.round(this.props.liveGrowData.vegger.cTemp * 10) / 10}°C
+                                </div>
+                                <div ref={this.veggerHumidityRef} className="App-Bar-Button-Grow-Humidity">
+                                    {Math.round(this.props.liveGrowData.vegger.humidity * 10) / 10}%
+                                </div>
+                            </div>
+                        )
+                    }
+                })()}
 
                 <div className="App-Bar-Filler-Div"></div>
                 <div className="App-Bar-Logout-Button" onClick={this.handleSignOut}>

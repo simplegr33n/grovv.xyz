@@ -24,7 +24,6 @@ class GrowJournal extends Component {
             currentEntryID: null,
             testContent: '',
             timelineEntries: [],
-            userJournals: [],
             journalID: this.props.journalID,
             fullImageModalImages: null,
             currentFullImage: null
@@ -36,7 +35,6 @@ class GrowJournal extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-        this.watchUserJournals = this.watchUserJournals();
 
         if (this.props.journalID) {
             this.watchEntries(this.props.journalID)
@@ -45,18 +43,6 @@ class GrowJournal extends Component {
 
     componentWillUnmount() {
         this._ismounted = false;
-    }
-
-    watchUserJournals = () => {
-        this.dbHelper.watchUserJournals(this.setUserJournals)
-    }
-
-    setUserJournals = (journalsList) => {
-        if (this._ismounted) {
-            this.setState({
-                userJournals: journalsList
-            }); 
-        }
     }
 
     watchEntries = (journalID = this.props.journalID) => {
@@ -202,13 +188,13 @@ class GrowJournal extends Component {
     render() {
 
         var renderedJournalOptions = '';
-        if (this.state.userJournals.length > 0) {
-            renderedJournalOptions = this.state.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
+        if (this.props.userJournals.length > 0) {
+            renderedJournalOptions = this.props.userJournals.map((journal) => <option key={journal.id} value={journal.id}>{journal.name}</option>)
         }
 
         var renderedUserJournals = null;
-        if (this.state.userJournals) {
-            renderedUserJournals = this.state.userJournals.map((journal) =>
+        if (this.props.userJournals) {
+            renderedUserJournals = this.props.userJournals.map((journal) =>
                 <div key={journal.id} className="Journal-Box-Item-Container">
                     <JournalBoxItem journal={journal} openJournal={this.openJournal} />
                 </div>

@@ -27,6 +27,27 @@ class DbHelper {
 
     }
 
+    // .......... //
+    // LIVE DATAS  //
+    // .......... //
+    // Get live data from firebase
+    // TODO: FIx when database is changed
+    async getLiveGrowDatas(userGrows, setData) {
+
+        var grows = ['flower', 'vegger']
+
+        grows.forEach((grow) => {
+            // Sensor data in firebase
+            var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(grow)
+
+            ref.on('value', (snapshot) => {
+                setData(grow, snapshot.val())
+            }, function (errorObject) {
+                console.log("follow " + grow + " live failed: " + errorObject.code);
+            });
+        })
+    }
+
 
 
     // ....... //
@@ -211,9 +232,8 @@ class DbHelper {
 
 
 
-                            console.log("Test last hour Datapoints to render...")
-                            console.log(tempData.length);
-                            console.log(tempData[0]);
+                            console.log("Test last hour Datapoints to render..." + tempData.length)
+                            console.log(tempData[tempData.length - 1]);
 
                         });
 
@@ -352,7 +372,7 @@ class DbHelper {
     // ............ //
 
     // Watch Journals
-    watchUserJournals(setUserJournals) {
+    getUserJournals(setUserJournals) {
         var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
 
         ref.on('value', (snapshot) => {

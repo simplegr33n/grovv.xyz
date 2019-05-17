@@ -4,6 +4,9 @@ import '../styles/App.css';
 
 import Firebase from '../config/firebaseConfig.js'
 
+import DbHelper from './_utils/DbHelper.js'
+
+
 // Auth
 import SignIn from './auth/SignIn.js'
 import SignUp from './auth/SignUp.js'
@@ -31,27 +34,62 @@ class App extends Component {
 			username: '',
 			URL_livecam: null,
 			URL_vegger_livecam: null,
-			sFlowerTemp: '',
-			sFlowerHumidity: '',
-			sVeggerTemp: '',
-			sVeggerHumidity: '',
 			journalID: null,
 			currentGrow: null,
-			growID: null //todo: remove, use currentGrow
+			growID: null, //todo: remove, use currentGrow
+
+			userGrows: [],
+			userJournals: [],
+			liveGrowData: []
 		};
 
-		this.firebase = new Firebase()
+		this.dbHelper = new DbHelper();
+
+		this.firebase = new Firebase();
+
 		this.firebase.auth.onAuthStateChanged((user) => {
 			if (user) {
 				this.setState({ UID: user.uid });
 				this.getUrls();
 				this.getUsername();
+
+				this.dbHelper.getUserGrows(this.setUserGrows)
+				this.dbHelper.getUserJournals(this.setUserJournals)
+
+
 			}
 		});
 
 	}
 
-	
+	setUserGrows = (userGrows) => {
+		console.log("USER GROWS IN APP.JS!")
+		console.log(userGrows)
+		this.setState({ userGrows: userGrows });
+
+		this.dbHelper.getLiveGrowDatas(userGrows, this.setLiveGrowDatas)
+	}
+
+	setUserJournals = (userJournals) => {
+		console.log("USER JOURNALS IN APP.JS!")
+		console.log(userJournals)
+		this.setState({ userJournals: userJournals });
+	}
+
+	setLiveGrowDatas = (dataID, newGrowDatas) => {
+		console.log("LIVE DATA IN APP.JS!")
+		console.log(dataID)
+		console.log(newGrowDatas)
+		console.log("STATE LIVE DATA")
+		console.log(this.state.liveGrowData)
+
+
+		var currentData = this.state.liveGrowData
+		currentData[dataID] = newGrowDatas
+
+		this.setState({ liveGrowDatas: currentData });
+	}
+
 
 	getUsername = () => {
 		// Users location in tree
@@ -80,7 +118,6 @@ class App extends Component {
 		}, function (errorObject) {
 			console.log("The url read failed: " + errorObject.code);
 		});
-
 	}
 
 	handleSignOut = () => {
@@ -216,13 +253,14 @@ class App extends Component {
 	}
 
 	render() {
+
 		return (
 			<div className="App">
 				<header className="App-body">
 
 					{(() => {
 						if (this.state.UID) {
-							return <AppBar mainContent={this.state.mainContent} openGanjaGrove={this.openGanjaGrove} openVegger={this.openVegger} setMainContent={this.setMainContent} />
+							return <AppBar mainContent={this.state.mainContent} openGanjaGrove={this.openGanjaGrove} openVegger={this.openVegger} setMainContent={this.setMainContent} liveGrowData={this.state.liveGrowData} />
 						}
 					})()}
 
@@ -234,9 +272,9 @@ class App extends Component {
 								if (this.state.UID) {
 									switch (this.state.mainContent) {
 										case 'journals':
-											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} />
+											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
 										case 'grows':
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} />
 										case 'chart':
 											return <FeedChart />
 										case 'config':
@@ -246,13 +284,13 @@ class App extends Component {
 												<div className="Chart-Page">
 													flower 3 day
 													<GrowGraphsTest growDeprecate={'flower'} />
-													
+
 													vegger 3 day
 													<GrowGraphsTest growDeprecate={'vegger'} />
 												</div>
 											)
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} />
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} />
 									}
 								} else {
 									switch (this.state.mainContent) {
