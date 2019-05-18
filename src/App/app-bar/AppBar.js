@@ -28,6 +28,7 @@ class AppBar extends Component {
         this.props.openVegger()
     }
 
+    //TODO: why is this here (also in App.js)?
     handleSignOut = () => {
         this.firebase.auth.signOut().then(function () {
             // Sign-out successful.

@@ -40,7 +40,9 @@ class App extends Component {
 
 			userGrows: [],
 			userJournals: [],
-			liveGrowData: []
+			liveGrowData: [],
+
+			threeDayData: []
 		};
 
 		this.dbHelper = new DbHelper();
@@ -56,6 +58,8 @@ class App extends Component {
 				this.dbHelper.getUserGrows(this.setUserGrows)
 				this.dbHelper.getUserJournals(this.setUserJournals)
 
+				this.dbHelper.getThreeDayData('flower', this.setThreeDayData)
+				this.dbHelper.getThreeDayData('vegger', this.setThreeDayData)
 
 			}
 		});
@@ -88,6 +92,26 @@ class App extends Component {
 		currentData[dataID] = newGrowDatas
 
 		this.setState({ liveGrowDatas: currentData });
+	}
+
+	setThreeDayData = (growDeprecate, data) => {
+		var previousData = this.state.threeDayData
+		var dayString = Object.keys(data)[0].toString()
+
+		var tempThreeDayData = []
+
+		if (previousData[growDeprecate]) {
+			tempThreeDayData = previousData[growDeprecate]
+		}
+
+		tempThreeDayData[dayString] = data
+
+		previousData[growDeprecate] = tempThreeDayData
+
+		console.log("Set3Day ########################### ")
+		console.log(previousData)
+
+		this.setState({ threeDayData: previousData });
 	}
 
 
