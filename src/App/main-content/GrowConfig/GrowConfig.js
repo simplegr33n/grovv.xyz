@@ -53,6 +53,24 @@ class GrowConfig extends Component {
 
     }
 
+    saveConfig = () => {
+        this.dbHelper.setGrowConfig(
+            {
+                temp_min: this.state.temp_min,
+                temp_max: this.state.temp_max,
+                temp_hyst: this.state.temp_hyst,
+                fan_min: this.state.fan_min,
+                fan_max: this.state.fan_max,
+                humidity_min: this.state.humidity_min,
+                humidity_max: this.state.humidity_max,
+                humidity_hyst: this.state.humidity_hyst,
+                humidifier_min: this.state.humidifier_min,
+                humidifier_max: this.state.humidifier_max
+            }
+        )
+
+    }
+
     watchGrowConfig = async (setData) => {
         try {
             await this.dbHelper.watchGrowConfig(setData)
@@ -118,7 +136,6 @@ class GrowConfig extends Component {
     handleHumidifierMaxChange = (event) => {
         this.setState({ humidifier_max: event.target.value });
     }
-
 
 
     render() {
@@ -189,6 +206,7 @@ class GrowConfig extends Component {
                 <div id="SAVE-CONFIG-BTN" onClick={this.saveConfig}>
                     SAVE
                 </div>
+
             </div>
 
         );

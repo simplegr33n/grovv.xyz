@@ -34,29 +34,44 @@ class JournalAddEditModal extends Component {
     }
 
     componentDidMount() {
+        if (this.props.editPost) {
+            var tempTrueDate = null
 
-        var tempTrueDate = new Date(this.props.editPost.datetime_true)
-        var tempContent = this.props.editPost.content
-        var tempTitle = this.props.editPost.title
-        var tempPostDate = new Date(this.props.editPost.datetime_post)
-        var tempImages = this.props.editPost.images
-        if (tempImages === null || tempImages === undefined) {
-            tempImages = []
+            if (this.props.editPost.datetime_true) {
+                tempTrueDate = new Date(this.props.editPost.datetime_true)
+            } else {
+                tempTrueDate = this.state.trueDate
+            }
+
+            var tempPostDate = null
+            tempPostDate = new Date(this.props.editPost.datetime_post)
+
+            var tempContent = this.props.editPost.content
+            var tempTitle = this.props.editPost.title
+            var tempImages = this.props.editPost.images
+            if (tempImages === null || tempImages === undefined) {
+                tempImages = []
+            }
+            var tempGrowStage = null
+            if (this.props.editPost.grow_stage) {
+                tempGrowStage = this.props.editPost.grow_stage
+            } else {
+                tempGrowStage = this.state.growStage
+            }
+
+            var tempPostId = this.props.editPost.id
+
+            this.setState({
+                title: tempTitle,
+                content: tempContent,
+                trueDate: tempTrueDate,
+                postDate: tempPostDate,
+                growStage: tempGrowStage,
+                images: tempImages,
+                entryID: tempPostId,
+                published: true
+            });
         }
-        var tempGrowStage = this.props.editPost.grow_stage
-        var tempPostId = this.props.editPost.id
-
-        this.setState({
-            title: tempTitle,
-            content: tempContent,
-            trueDate: tempTrueDate,
-            postDate: tempPostDate,
-            growStage: tempGrowStage,
-            images: tempImages,
-            entryID: tempPostId,
-            published: true
-        });
-
     }
 
     handleTitleChange = (event) => {
@@ -81,22 +96,18 @@ class JournalAddEditModal extends Component {
         }
         this.setState({ published: true });
 
-        try {
-            await this.dbHelper.saveJournalEntry(
-                this.state.journalID,
-                this.state.entryID,
-                this.state.trueDate,
-                this.state.title,
-                this.state.content,
-                this.state.growStage,
-                this.state.postDate,
-                this.state.images,
-                this.closeModal
-            )
-        } catch (e) {
-            console.log(e);
-            return 'caught ' + e
-        }
+        this.dbHelper.saveJournalEntry(
+            this.state.journalID,
+            this.state.entryID,
+            this.state.trueDate,
+            this.state.title,
+            this.state.content,
+            this.state.growStage,
+            this.state.postDate,
+            this.state.images,
+            this.closeModal
+        )
+
 
     }
 
@@ -185,6 +196,9 @@ class JournalAddEditModal extends Component {
 
 
     render() {
+
+        console.log("true DATE!!")
+        console.log(this.state.trueDate)
 
         if (this.state.images) {
             var renderedThumbnails = this.state.images.map((image, i) => <div className="Temp-Image-Div"><img key={i} alt="grow img" data-value={image.url} src={image.url} className="Journal-Entry-Preview-Thumbnail" onClick={this.displayFullImage} /><div data-value={image.url} onClick={this.deleteImage} className="Delete-Image-Btn">X</div></div>)

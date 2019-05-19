@@ -18,12 +18,7 @@ class DbHelper {
     // Get live data from firebase
     async getLiveData(growID, setData) {
 
-        // return;
-
-        // Live sensor data in firebase
-        // var ref = this.firebase.db.ref().child('users').child(this.userID).child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(growDeprecate)
-
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('live_data')
+        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('live_data')
 
         ref.on('value', (snapshot) => {
             setData(snapshot.val())
@@ -40,17 +35,12 @@ class DbHelper {
     // TODO: FIx when database is changed
     async getLiveGrowDatas(userGrows, setData) {
 
-        // var grows = ['flower', 'vegger']
-
-        // return;
-
-
         userGrows.forEach((grow) => {
             // Sensor data in firebase
             // var ref = this.firebase.db.ref().child('users').child(this.userID).child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(grow)
 
 
-            var ref = this.firebase.db.ref().child('grows').child(this.userID).child(grow.id).child('live_data')
+            var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('live_data')
 
 
             ref.on('value', (snapshot) => {
@@ -70,13 +60,7 @@ class DbHelper {
     // Get 3 day data window from firebase
     async getThreeDays(growID, setData) {
 
-        // return;
-
-
-        // Sensor data in firebase
-        // var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
-
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
+        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
 
 
         var date = new Date();
@@ -179,13 +163,8 @@ class DbHelper {
 
     // Get 3 day data window from firebase
     getThreeDayData(growID, setData) {
-        // return;
 
-
-        // Sensor data in firebase
-        // var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
-
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
+        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
 
 
         var date = new Date();
@@ -244,10 +223,6 @@ class DbHelper {
 
     // Get BoxHour data window from firebase
     async getBoxHour(growID, setData) {
-
-
-        // Sensor data in firebase
-        // var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
 
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
 
@@ -339,10 +314,14 @@ class DbHelper {
     // Watch Grow Config in firebase
     watchGrowConfig(setData) {
 
-        // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
+        // Config data in firebase // TODO... proper
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child('-LdtfBTlG6Fgg-ADD8-b').child('config')
 
         ref.on('value', (snapshot) => {
+
+            if (snapshot.val() === null) {
+                return;
+            }
 
             setData({
                 temp_min: snapshot.val().temp_min,
@@ -366,8 +345,10 @@ class DbHelper {
     setGrowConfig(config) {
 
 
-        var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child('-LdtfBTlG6Fgg-ADD8-b').child('config')
+        ref.set(config)
 
+        ref = this.firebase.db.ref().child('grows').child(this.userID).child('-LdtkOvSXRrm1zIZ6EOx').child('config')
         ref.set(config)
     }
 
@@ -395,14 +376,13 @@ class DbHelper {
             });
 
             // TODO: make own function...?
-            
+
             for (var key of userGrowIDs) {
                 var growRef = this.firebase.db.ref().child('grows').child(this.userID).child(key)
 
                 var setUserGrows = []
 
                 growRef.once('value', (snapshot) => {
-                    
 
                     if (!setUserGrows.includes(snapshot.val())) {
                         setUserGrows[setUserGrows.length] = snapshot.val()
@@ -488,7 +468,7 @@ class DbHelper {
     // Watch Entries
     watchJournalEntries(journalID, setJournalEntries) {
 
-        var ref = this.firebase.db.ref().child('journals').child(journalID).child('entries')
+        var ref = this.firebase.db.ref().child('journals').child(this.userID).child(journalID).child('entries')
 
         console.log('watchin... ' + journalID)
 
@@ -534,7 +514,7 @@ class DbHelper {
     // Get live data from firebase
     async createJournal(journalName, openJournal) {
         // ref for actual journal
-        var ref = this.firebase.db.ref().child('journals').push()
+        var ref = this.firebase.db.ref().child('journals').child(this.userID).push()
         // user object ref to journal key
         var userRef = this.firebase.db.ref().child('users').child(this.userID).child('journals').child(ref.key)
 
@@ -553,9 +533,9 @@ class DbHelper {
     // ................ //
 
     // Get live data from firebase
-    async saveJournalEntry(journalID, entryID, trueDate, title, content, growStage, postDate, images, closeModal) {
+    saveJournalEntry(journalID, entryID, trueDate, title, content, growStage, postDate, images, closeModal) {
         // Journal data in firebase // TODO scalable.
-        var ref = this.firebase.db.ref().child('journals').child(journalID).child('entries')
+        var ref = this.firebase.db.ref().child('journals').child(this.userID).child(journalID).child('entries')
 
         var editDate = new Date().getTime()
 
@@ -565,6 +545,20 @@ class DbHelper {
             shortMonth = "0" + shortMonth;
         }
         var shortDateVar = shortMonth + temptTrueDate.getDate() + "-" + temptTrueDate.getFullYear()
+
+        if (!entryID) {
+            // ref for actual journal
+            var refPush = ref.push()
+            entryID = refPush.key
+        }
+
+        if (!postDate) {
+            postDate = new Date()
+        }
+
+        if (!trueDate) {
+            trueDate = new Date()
+        }
 
 
         ref.child(entryID).set({
@@ -584,7 +578,7 @@ class DbHelper {
         console.log('set journal entry ' + entryID)
 
         // update updatedAt
-        var jRef = this.firebase.db.ref().child('journals').child(journalID)
+        var jRef = this.firebase.db.ref().child('journals').child(this.userID).child(journalID)
         var userRef = this.firebase.db.ref().child('users').child(this.userID).child('journals').child(journalID)
         var nowDate = new Date()
         jRef.child('updatedAt').set(nowDate.getTime())
@@ -601,7 +595,7 @@ class DbHelper {
     // Upload Image
     async handleImageUpload(file, setImages) {
         // Get storage reference and push file blob 
-        var storageRef = this.firebase.storage.ref().child('journals').child('-LdG6gTCNZxfu1wU5Xvx/');
+        var storageRef = this.firebase.storage.ref().child('journals').child(this.userID);
 
         console.log("filename:" + file.name)
 
@@ -633,7 +627,7 @@ class DbHelper {
             console.log("deleted " + url + "successfully :)")
         }).catch(function (error) {
             // Uh-oh, an error occurred!
-            console.log("deleted " + url + "error :(")
+            console.log("delete " + url + "error :(")
         });
     }
 
