@@ -7,6 +7,8 @@ class DbHelper {
 
         this.firebase = new Firebase();
 
+        this.userID = 'wR4QKyZ77mho1fL0FQWSMBQ170S2'
+
     }
 
 
@@ -14,15 +16,19 @@ class DbHelper {
     // LIVE DATA  //
     // .......... //
     // Get live data from firebase
-    async getLiveData(growDeprecate, setData) {
+    async getLiveData(growID, setData) {
 
-        // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(growDeprecate)
+        // return;
+
+        // Live sensor data in firebase
+        // var ref = this.firebase.db.ref().child('users').child(this.userID).child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(growDeprecate)
+
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('live_data')
 
         ref.on('value', (snapshot) => {
             setData(snapshot.val())
         }, function (errorObject) {
-            console.log("follow " + growDeprecate + " live failed: " + errorObject.code);
+            console.log("follow grow" + growID + " live failed: " + errorObject.code);
         });
 
     }
@@ -34,11 +40,18 @@ class DbHelper {
     // TODO: FIx when database is changed
     async getLiveGrowDatas(userGrows, setData) {
 
-        var grows = ['flower', 'vegger']
+        // var grows = ['flower', 'vegger']
 
-        grows.forEach((grow) => {
+        // return;
+
+
+        userGrows.forEach((grow) => {
             // Sensor data in firebase
-            var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(grow)
+            // var ref = this.firebase.db.ref().child('users').child(this.userID).child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(grow)
+
+
+            var ref = this.firebase.db.ref().child('grows').child(this.userID).child(grow.id).child('live_data')
+
 
             ref.on('value', (snapshot) => {
                 setData(grow, snapshot.val())
@@ -55,10 +68,16 @@ class DbHelper {
     // ....... //
 
     // Get 3 day data window from firebase
-    async getThreeDays(growDeprecate, setData) {
+    async getThreeDays(growID, setData) {
+
+        // return;
+
 
         // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
+        // var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
+
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
+
 
         var date = new Date();
         var year = date.getFullYear().toString()
@@ -140,7 +159,7 @@ class DbHelper {
 
                         tempCurrentData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
-                        console.log("DBHELPER Test 3-day Datapoints to return..." + growDeprecate)
+                        console.log("DBHELPER Test 3-day Datapoints to return... grow:" + growID)
                         console.log(tempCurrentData.length);
                         console.log(tempCurrentData[0]);
                         console.log(tempCurrentData[tempCurrentData.length - 1]);
@@ -159,10 +178,15 @@ class DbHelper {
     }
 
     // Get 3 day data window from firebase
-    getThreeDayData(growDeprecate, setData) {
+    getThreeDayData(growID, setData) {
+        // return;
+
 
         // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
+        // var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
+
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
+
 
         var date = new Date();
         var year = date.getFullYear().toString()
@@ -194,10 +218,11 @@ class DbHelper {
         days[days.length] = dy
 
         days.forEach((day) => {
-            
-            var dayData = []
 
             ref.child(year).child(month).child(day).on("value", (snapshot) => {
+
+                // TODO: on child added listener instead, this this var stored outside the "on()" event
+                var dayData = []
 
                 snapshot.forEach((child) => {
                     child.forEach((gChild) => {
@@ -209,25 +234,23 @@ class DbHelper {
                     });
                 });
 
-                console.log("Daydata!" + dayData.length)
-
                 dayData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
-                var dayDataProcessed = []
-                dayDataProcessed[day] = dayData
-
-
-                setData(growDeprecate, dayDataProcessed);
+                setData(growID, day, dayData);
             });
         });
     }
 
 
-    // Get 3 day data window from firebase
-    async getBoxHour(growDeprecate, setData) {
+    // Get BoxHour data window from firebase
+    async getBoxHour(growID, setData) {
+
 
         // Sensor data in firebase
-        var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
+        // var ref = this.firebase.db.ref().child('sensor_data').child(growDeprecate)
+
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
+
 
         var date = new Date();
         var year = date.getFullYear().toString()
@@ -291,16 +314,13 @@ class DbHelper {
                             dataPoint.time = dataTime
                             tempData[tempData.length] = dataPoint;
 
-
-
-                            console.log("Test last hour Datapoints to render..." + tempData.length)
-                            console.log(tempData[tempData.length - 1]);
-
                         });
 
                         var fullData = staticTwoHourData.concat(tempData);
-
                         fullData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+
+                        console.log("Test Box Data Datapoints to render..." + fullData.length)
+                        console.log(fullData[fullData.length - 1]);
 
                         setData(fullData);
                     });
@@ -318,6 +338,7 @@ class DbHelper {
 
     // Watch Grow Config in firebase
     watchGrowConfig(setData) {
+
         // Sensor data in firebase
         var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
 
@@ -344,6 +365,7 @@ class DbHelper {
     // Set Grow Config in firebase
     setGrowConfig(config) {
 
+
         var ref = this.firebase.db.ref().child('grow').child('-LdG6gTCNZxfu1wU5Xvx').child('config')
 
         ref.set(config)
@@ -356,25 +378,32 @@ class DbHelper {
     // Get live data from firebase
     getUserGrows(setData) {
 
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows')
+        var ref = this.firebase.db.ref().child('users').child(this.userID).child('grows')
 
         ref.on('value', (snapshot) => {
+
+            console.log('snapshot.val()')
+            console.log(snapshot.val())
 
             var userGrowIDs = [];
 
             console.log("TODO: remove filter.")
             snapshot.forEach((child) => {
                 if (!child.val().sensors_live) {
-                    userGrowIDs[child.key] = child.val()
+                    userGrowIDs[userGrowIDs.length] = child.key
                 }
             });
 
             // TODO: make own function...?
-            var setUserGrows = []
-            for (var key of Object.keys(userGrowIDs)) {
-                var growRef = this.firebase.db.ref().child('grows').child(key)
+            
+            for (var key of userGrowIDs) {
+                var growRef = this.firebase.db.ref().child('grows').child(this.userID).child(key)
 
-                growRef.on('value', (snapshot) => {
+                var setUserGrows = []
+
+                growRef.once('value', (snapshot) => {
+                    
+
                     if (!setUserGrows.includes(snapshot.val())) {
                         setUserGrows[setUserGrows.length] = snapshot.val()
                     }
@@ -403,7 +432,7 @@ class DbHelper {
     // Get live data from firebase
     getLinkedJournals(key, journals, setData) {
 
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
+        var ref = this.firebase.db.ref().child('users').child(this.userID).child('journals')
 
         ref.on('value', (snapshot) => {
 
@@ -434,7 +463,7 @@ class DbHelper {
 
     // Watch Journals
     getUserJournals(setUserJournals) {
-        var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals')
+        var ref = this.firebase.db.ref().child('users').child(this.userID).child('journals')
 
         ref.on('value', (snapshot) => {
 
@@ -507,7 +536,7 @@ class DbHelper {
         // ref for actual journal
         var ref = this.firebase.db.ref().child('journals').push()
         // user object ref to journal key
-        var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(ref.key)
+        var userRef = this.firebase.db.ref().child('users').child(this.userID).child('journals').child(ref.key)
 
         var journalID = ref.key
         var nowDate = new Date()
@@ -556,7 +585,7 @@ class DbHelper {
 
         // update updatedAt
         var jRef = this.firebase.db.ref().child('journals').child(journalID)
-        var userRef = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('journals').child(journalID)
+        var userRef = this.firebase.db.ref().child('users').child(this.userID).child('journals').child(journalID)
         var nowDate = new Date()
         jRef.child('updatedAt').set(nowDate.getTime())
         userRef.child('updatedAt').set(nowDate.getTime())

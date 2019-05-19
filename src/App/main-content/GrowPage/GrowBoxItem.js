@@ -23,7 +23,7 @@ class GrowBoxItem extends Component {
 			graphElementSize: [150, 150],
 		};
 
-        this.dbHelper = new DbHelper()
+		this.dbHelper = new DbHelper()
 
 		this.graphSizeUpdated = 0;
 	}
@@ -33,8 +33,8 @@ class GrowBoxItem extends Component {
 
 		//TODO: Remove condition
 		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
-			this.getLiveData = this.getLiveData('flower', this.setLiveData)
-			
+			this.getLiveData = this.getLiveData()
+
 			this.getLiveCam = this.watchPiCam()
 
 			if (this._ismounted) {
@@ -42,7 +42,7 @@ class GrowBoxItem extends Component {
 			}
 
 		} else {
-			this.getLiveData = this.getLiveData('vegger', this.setLiveData)
+			this.getLiveData = this.getLiveData()
 
 			if (this._ismounted) {
 				this.setState({ growDeprecate: 'vegger' });
@@ -68,15 +68,15 @@ class GrowBoxItem extends Component {
 		if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
 
 			// tODO: remove, hacky
-			if ((this.divRef.clientWidth - this.state.graphElementSize[0]) < 30)  {
+			if ((this.divRef.clientWidth - this.state.graphElementSize[0]) < 30) {
 				return;
 			}
 
-			
+
 			var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight]
 
 			if (tempSize !== this.state.graphElementSize) {
-				if (this._ismounted ) {
+				if (this._ismounted) {
 					this.setState({ graphElementSize: tempSize });
 				}
 				this.graphSizeUpdated = dateNow.getTime();
@@ -97,24 +97,22 @@ class GrowBoxItem extends Component {
 		}, 5000);
 	}
 
-	getLiveData = async (growDeprecate, setData) => {
-		console.log("GROW BOX!")
-		console.log(growDeprecate)
-        try {
-            await this.dbHelper.getLiveData(growDeprecate, setData)
-        } catch(e) {
-            console.log(e); 
-            return 'caught ' + e
-        }
-    }
+	getLiveData = () => {
+		this.dbHelper.getLiveData(this.props.grow.id, this.setLiveData)
+
+	}
 
 	setLiveData = (data) => {
 
-			if (this._ismounted) {
-				this.setState({ liveData: data });
-			}
+		if (this._ismounted) {
+			this.setState({ liveData: data });
+		}
 
-			this.checkActive(data.time)
+
+		console.log("DATA!!!")
+		console.log(data)
+
+		this.checkActive(data.time)
 	}
 
 	getVeggerData = () => {

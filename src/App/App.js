@@ -58,8 +58,8 @@ class App extends Component {
 				this.dbHelper.getUserGrows(this.setUserGrows)
 				this.dbHelper.getUserJournals(this.setUserJournals)
 
-				this.dbHelper.getThreeDayData('flower', this.setThreeDayData)
-				this.dbHelper.getThreeDayData('vegger', this.setThreeDayData)
+				// this.dbHelper.getThreeDayData('flower', this.setThreeDayData)
+				// this.dbHelper.getThreeDayData('vegger', this.setThreeDayData)
 
 			}
 		});
@@ -67,36 +67,31 @@ class App extends Component {
 	}
 
 	setUserGrows = (userGrows) => {
-		console.log("USER GROWS IN APP.JS!")
+		console.log("USER GROWS!")
 		console.log(userGrows)
+
+		userGrows.forEach((grow) => {
+			this.dbHelper.getThreeDayData(grow.id, this.setThreeDayData)
+		})
+
 		this.setState({ userGrows: userGrows });
 
-		this.dbHelper.getLiveGrowDatas(userGrows, this.setLiveGrowDatas)
+		this.dbHelper.getLiveGrowDatas(userGrows, this.setLiveGrowData)
 	}
 
 	setUserJournals = (userJournals) => {
-		console.log("USER JOURNALS IN APP.JS!")
-		console.log(userJournals)
 		this.setState({ userJournals: userJournals });
 	}
 
-	setLiveGrowDatas = (dataID, newGrowDatas) => {
-		console.log("LIVE DATA IN APP.JS!")
-		console.log(dataID)
-		console.log(newGrowDatas)
-		console.log("STATE LIVE DATA")
-		console.log(this.state.liveGrowData)
-
-
+	setLiveGrowData = (dataID, newGrowData) => {
 		var currentData = this.state.liveGrowData
-		currentData[dataID] = newGrowDatas
+		currentData[dataID.toString()] = newGrowData
 
-		this.setState({ liveGrowDatas: currentData });
+		this.setState({ liveGrowData: currentData });
 	}
 
-	setThreeDayData = (growDeprecate, data) => {
+	setThreeDayData = (growDeprecate, day, data) => {
 		var previousData = this.state.threeDayData
-		var dayString = Object.keys(data)[0].toString()
 
 		var tempThreeDayData = []
 
@@ -104,7 +99,22 @@ class App extends Component {
 			tempThreeDayData = previousData[growDeprecate]
 		}
 
-		tempThreeDayData[dayString] = data
+		if (tempThreeDayData[day]) {
+			console.log("HERE MAN! " + growDeprecate)
+			console.log(tempThreeDayData[day])
+
+			tempThreeDayData[day] = null
+			console.log("NULL IT!")
+			console.log(tempThreeDayData[day])
+
+		}
+
+		console.log("DATA length!")
+		console.log(data.length)
+
+		tempThreeDayData[day] = data
+		console.log("DATA IT!")
+		console.log(tempThreeDayData[day])
 
 		previousData[growDeprecate] = tempThreeDayData
 

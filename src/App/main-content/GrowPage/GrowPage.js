@@ -80,11 +80,6 @@ class GrowPage extends Component {
 
 	render() {
 
-		console.log("logisippi")
-		console.log(this.props.userGrows)
-		console.log(this.props.growID)
-
-
 		if (this.props.growID) {
 			this.props.userGrows.forEach((grow) => {
 				if (grow.id === this.props.growID) {
