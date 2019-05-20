@@ -44,7 +44,7 @@ class DbHelper {
 
 
             ref.on('value', (snapshot) => {
-                setData(grow, snapshot.val())
+                setData(grow.id, snapshot.val())
             }, function (errorObject) {
                 console.log("follow " + grow + " live failed: " + errorObject.code);
             });

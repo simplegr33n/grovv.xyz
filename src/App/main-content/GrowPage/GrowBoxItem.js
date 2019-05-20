@@ -151,7 +151,8 @@ class GrowBoxItem extends Component {
 
 		if (lastUpdateTime) {
 			var now = new Date();
-			var difference = now - (new Date(lastUpdateTime).getTime())
+
+			var difference = now - (new Date(lastUpdateTime).getTime() * 1000)
 
 			// if (difference >= 3000000) {
 			// 	this.setState({
@@ -192,8 +193,7 @@ class GrowBoxItem extends Component {
 
 		var lastUpdate = null;
 		if (this.state.liveData) {
-			// TODO... simplify below.
-			var updatedAtDate = new Date(this.state.liveData.time)
+			var updatedAtDate = new Date(this.state.liveData.time * 1000)
 			lastUpdate = moment(updatedAtDate).fromNow()
 		}
 

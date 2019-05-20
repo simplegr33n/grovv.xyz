@@ -35,8 +35,8 @@ class JournalAddEditModal extends Component {
 
     componentDidMount() {
         if (this.props.editPost) {
-            var tempTrueDate = null
 
+            var tempTrueDate = null
             if (this.props.editPost.datetime_true) {
                 tempTrueDate = new Date(this.props.editPost.datetime_true)
             } else {
@@ -44,7 +44,12 @@ class JournalAddEditModal extends Component {
             }
 
             var tempPostDate = null
-            tempPostDate = new Date(this.props.editPost.datetime_post)
+            if (this.props.editPost.datetime_post) {
+                tempPostDate = new Date(this.props.editPost.datetime_post)
+            } else {
+                tempPostDate = this.state.postDate
+            }
+  
 
             var tempContent = this.props.editPost.content
             var tempTitle = this.props.editPost.title

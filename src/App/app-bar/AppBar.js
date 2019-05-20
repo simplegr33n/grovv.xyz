@@ -28,6 +28,10 @@ class AppBar extends Component {
         this.props.openVegger()
     }
 
+    setGrow = (ev) => {
+        this.props.setGrowByID(ev.target.dataset.value)
+    }
+
     //TODO: why is this here (also in App.js)?
     handleSignOut = () => {
         this.firebase.auth.signOut().then(function () {
@@ -44,63 +48,64 @@ class AppBar extends Component {
 
     render() {
 
+        var renderedLiveGrowButtons = null;
+        if (this.props.userGrows !== null) {
+            renderedLiveGrowButtons = this.props.userGrows.map((grow) => {
+
+                var liveButtonData = null
+                if (this.props.liveGrowData[grow.id]) {
+                    liveButtonData = this.props.liveGrowData[grow.id]
+                }
+
+                return (
+                    <div className="App-Bar-Button-Grow" onClick={this.setGrow} data-value={grow.id}>
+                        <div className="App-Bar-Button-Grow-Name" data-value={grow.id}>
+                            {grow.name}
+                        </div>
+                        {(() => {
+                            if (liveButtonData) {
+                                return (
+                                    <div ref={this.flowerTempRef} className="App-Bar-Button-Grow-Temp" data-value={grow.id}>
+                                        {Math.round(liveButtonData.cTemp * 10) / 10}°C
+                                </div>
+                                )
+                            }
+                        })()}
+
+
+                        {(() => {
+                            if (liveButtonData) {
+                                return (
+                                    <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity" data-value={grow.id}>
+                                        {Math.round(liveButtonData.humidity * 10) / 10}°C
+                                </div>
+                                )
+                            }
+                        })()}
+
+                    </div>
+                )
+            })
+        }
+
         return (
 
-            <div id="App-Bar">
+            <div id="App-Bar" >
                 <div id="App-Bar-Logo" onClick={this.openGrows}>
                     grovv
                 </div>
+
+                {renderedLiveGrowButtons}
 
                 <div className="App-Bar-Button" onClick={this.openJournals}>
                     JRNLS
                 </div>
 
-                <div className="App-Bar-Button" onClick={this.openGrows}>
-                    GROWS
-                </div>
-
-                {(() => {
-                    if (this.props.liveGrowData.flower) {
-                        return (
-                            <div className="App-Bar-Button-Grow" onClick={this.openGanjaGrove}>
-                                <div className="App-Bar-Button-Grow-Name">
-                                    GG
-                                </div>
-                                <div ref={this.flowerTempRef} className="App-Bar-Button-Grow-Temp">
-                                    {Math.round(this.props.liveGrowData.flower.cTemp * 10) / 10}°C
-                                </div>
-                                <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity">
-                                    {Math.round(this.props.liveGrowData.flower.humidity * 10) / 10}%
-                                </div>
-                            </div>
-                        )
-
-                    }
-                })()}
-
-                {(() => {
-                    if (this.props.liveGrowData.vegger) {
-                        return (
-                            <div className="App-Bar-Button-Grow" onClick={this.openVegger}>
-                                <div className="App-Bar-Button-Grow-Name">
-                                    VG
-                                </div>
-                                <div ref={this.veggerTempRef} className="App-Bar-Button-Grow-Temp">
-                                    {Math.round(this.props.liveGrowData.vegger.cTemp * 10) / 10}°C
-                                </div>
-                                <div ref={this.veggerHumidityRef} className="App-Bar-Button-Grow-Humidity">
-                                    {Math.round(this.props.liveGrowData.vegger.humidity * 10) / 10}%
-                                </div>
-                            </div>
-                        )
-                    }
-                })()}
-
                 <div className="App-Bar-Filler-Div"></div>
                 <div className="App-Bar-Logout-Button" onClick={this.handleSignOut}>
                     &#10162;
                 </div>
-            </div>
+            </div >
 
         );
     }

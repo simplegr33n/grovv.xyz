@@ -100,21 +100,13 @@ class App extends Component {
 		}
 
 		if (tempThreeDayData[day]) {
-			console.log("HERE MAN! " + growDeprecate)
-			console.log(tempThreeDayData[day])
-
 			tempThreeDayData[day] = null
-			console.log("NULL IT!")
-			console.log(tempThreeDayData[day])
-
 		}
 
-		console.log("DATA length!")
+		console.log("set 3day DATA length!")
 		console.log(data.length)
 
 		tempThreeDayData[day] = data
-		console.log("DATA IT!")
-		console.log(tempThreeDayData[day])
 
 		previousData[growDeprecate] = tempThreeDayData
 
@@ -178,21 +170,31 @@ class App extends Component {
 	}
 
 	// TODO: consolidate functions into setGrow()
-	openGanjaGrove = () => {
-		// TODO: Send actual grow
-		this.setState({
-			mainContent: 'grows',
-			currentGrow: null, // until we can pass actual grow instead of ID
-			growID: '-LdtfBTlG6Fgg-ADD8-b'
-		});
+	// openGanjaGrove = () => {
+	// 	// TODO: Send actual grow
+	// 	this.setState({
+	// 		mainContent: 'grows',
+	// 		currentGrow: null, // until we can pass actual grow instead of ID
+	// 		growID: '-LdtfBTlG6Fgg-ADD8-b'
+	// 	});
 
-	}
-	openVegger = () => {
+	// }
+	// openVegger = () => {
+	// 	// TODO: Send actual grow
+	// 	this.setState({
+	// 		mainContent: 'grows',
+	// 		currentGrow: null, // until we can pass actual grow instead of ID
+	// 		growID: '-LdtkOvSXRrm1zIZ6EOx'
+	// 	});
+
+	// }
+
+	setGrowByID = (growID) => {
 		// TODO: Send actual grow
 		this.setState({
 			mainContent: 'grows',
-			currentGrow: null, // until we can pass actual grow instead of ID
-			growID: '-LdtkOvSXRrm1zIZ6EOx'
+			currentGrow: null,
+			growID: growID
 		});
 
 	}
@@ -294,7 +296,7 @@ class App extends Component {
 
 					{(() => {
 						if (this.state.UID) {
-							return <AppBar mainContent={this.state.mainContent} openGanjaGrove={this.openGanjaGrove} openVegger={this.openVegger} setMainContent={this.setMainContent} liveGrowData={this.state.liveGrowData} />
+							return <AppBar mainContent={this.state.mainContent} setGrowByID={this.setGrowByID} setMainContent={this.setMainContent} liveGrowData={this.state.liveGrowData} userGrows={this.state.userGrows} />
 						}
 					})()}
 
