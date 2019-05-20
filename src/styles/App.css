@@ -1210,7 +1210,6 @@ html {
     flex-direction: column;
     flex: 1;
     font-weight: normal;
-    flex-wrap: wrap;
     text-align: right;
     overflow: hidden;
 }
@@ -1222,8 +1221,11 @@ html {
 
 .Grow-Box-Info-Graph-Area{
     flex: 1;
-    padding: 1%;
-    max-height: 200px;
+    padding-right: 10px;
+    max-height: 50%;
+
+    /* max-height: 20px; */
+    /* max-width: 50%; */
 }
 
 .Grow-Box-Info-Image {
