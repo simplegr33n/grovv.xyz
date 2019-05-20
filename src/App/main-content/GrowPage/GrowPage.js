@@ -6,8 +6,6 @@ import GrowDetailsPage from './GrowDetailsPage'
 import GrowCamFull from './GrowCamFull'
 
 
-
-
 class GrowPage extends Component {
 
 	constructor(props) {
@@ -92,7 +90,7 @@ class GrowPage extends Component {
 		if (this.props.grow === null && this.props.userGrows) {
 			renderedGrowBoxes = this.props.userGrows.map((grow) =>
 				<div key={grow.id} className="Grow-Box-Item-Container">
-					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} />
+					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} rawGrowData={this.props.rawGrowData} />
 				</div>
 			)
 		}

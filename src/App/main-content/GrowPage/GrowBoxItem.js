@@ -103,37 +103,12 @@ class GrowBoxItem extends Component {
 	}
 
 	setLiveData = (data) => {
-
 		if (this._ismounted) {
 			this.setState({ liveData: data });
 		}
 
-
-		console.log("DATA!!!")
-		console.log(data)
-
 		this.checkActive(data.time)
 	}
-
-	getVeggerData = () => {
-		// TODO: REMOVE function
-		var ref = this.firebase.db.ref().child('users').child('wR4QKyZ77mho1fL0FQWSMBQ170S2').child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child('vegger')
-
-		ref.on('value', (snapshot) => {
-
-			var tempLiveData = snapshot.val()
-
-			if (this._ismounted) {
-				this.setState({ liveData: tempLiveData });
-			}
-
-			this.checkActive(tempLiveData.time)
-
-		}, function (errorObject) {
-			console.log("grow box get live data failed: " + errorObject.code);
-		});
-	}
-
 
 	openFullCam = (ev) => {
 		this.props.openFullCam(ev.target.dataset.value)
@@ -236,7 +211,7 @@ class GrowBoxItem extends Component {
 						</div>
 
 						<div className="Grow-Box-Info-Graph-Area" ref={element => this.divRef = element}>
-							<GraphSensorsBox parentSize={this.state.graphElementSize} growDeprecate={this.state.growDeprecate} />
+							<GraphSensorsBox parentSize={this.state.graphElementSize} growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} />
 						</div>
 
 

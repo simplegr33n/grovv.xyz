@@ -57,10 +57,16 @@ class AppBar extends Component {
                     liveButtonData = this.props.liveGrowData[grow.id]
                 }
 
+                var brokenName = grow.name.split(" ")
+                var acroName = ""
+                brokenName.forEach((piece) => {
+                    acroName += piece.charAt(0)
+                })
+
                 return (
-                    <div className="App-Bar-Button-Grow" onClick={this.setGrow} data-value={grow.id}>
+                    <div className="App-Bar-Button-Grow" key={grow.id} onClick={this.setGrow} data-value={grow.id}>
                         <div className="App-Bar-Button-Grow-Name" data-value={grow.id}>
-                            {grow.name}
+                            {acroName}
                         </div>
                         {(() => {
                             if (liveButtonData) {

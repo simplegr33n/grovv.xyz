@@ -1223,6 +1223,7 @@ html {
 .Grow-Box-Info-Graph-Area{
     flex: 1;
     padding: 1%;
+    max-height: 200px;
 }
 
 .Grow-Box-Info-Image {
@@ -1707,6 +1708,7 @@ html {
     font-weight: bolder;
     padding-right: 8px;
     user-select: none;
+    max-height: 20px;
 }
 
 

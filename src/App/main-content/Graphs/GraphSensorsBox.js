@@ -5,8 +5,6 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment from 'moment'
 
-import DbHelper from '../../_utils/DbHelper.js'
-
 
 class GraphSensorsBox extends Component {
 
@@ -16,57 +14,68 @@ class GraphSensorsBox extends Component {
             data: [],
         };
 
-        this.dbHelper = new DbHelper()
-
     }
 
     componentDidMount() {
         this._ismounted = true;
-        if (this.props.growDeprecate && this._ismounted) {
-            if (this.props.growDeprecate !== this.growDeprecate) {
-                this.growDeprecate = this.props.growDeprecate;
-                this.getData()                
+        if (this.props.growID && this._ismounted) {
+            if (this.props.growID !== this.growID) {
+                this.growID = this.props.growID;
             }
+
         }
 
     }
 
     componentWillUnmount() {
         this._ismounted = false;
-        
+
         this.getGraphData = null;
     }
 
     componentDidUpdate = () => {
 
-        if (this.props.growDeprecate && this._ismounted) {
-            if (this.props.growDeprecate !== this.growDeprecate) {
-                this.growDeprecate = this.props.growDeprecate;
-                this.getData()                
+        if (this.props.growID && this._ismounted) {
+            if (this.props.growID !== this.growID) {
+                this.growID = this.props.growID;
             }
         }
 
-    }
+        if (this.props.rawGrowData && this.props.growID) {
+            this.rawGrowData = this.props.rawGrowData
 
-    getData = async () => {
-        try {
-            await this.dbHelper.getBoxHour(this.props.growDeprecate, this.setData)
-        } catch(e) {
-            console.log(e); 
-            return 'caught ' + e
+            var gwID = this.props.growID
+            var rawData = this.props.rawGrowData
+
+            if (this.props.rawGrowData[gwID]) {
+                var setData = rawData[gwID][rawData[gwID].length - 1]
+
+                if (this.state.data !== setData) {
+
+                    this.setState({
+                        data: setData
+                    });
+
+                    var processedData = []
+                    setData.forEach((dataPoint) => {
+                        var processedPoint = dataPoint
+                        processedPoint.time = processedPoint.time * 1000
+
+                        if (new Date().getTime() - processedPoint.time < 7200000) {
+                            processedData[processedData.length] = processedPoint
+                        }
+                    })
+
+                    this.setState({
+                        processedData: processedData
+                    });
+               
+                }
+
+            }
+
         }
-    }
 
-    setData = (data) => {
-        if (this._ismounted) {
-            this.setState({
-                data: data
-            });
-        }
-    }
-
-    getGraphData = () => {
-       
     }
 
 
@@ -145,13 +154,13 @@ class GraphSensorsBox extends Component {
     render() {
 
         var renderDayGraph = null
-        if (this.state.data[0]) {
+        if (this.state.processedData && this.state.processedData[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 1)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderDayGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.state.data}>
+                    <LineChart width={xSize} height={ySize} data={this.state.processedData}>
                         <Line type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
                         <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
                         <Line type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
@@ -159,7 +168,7 @@ class GraphSensorsBox extends Component {
                         <XAxis
                             dataKey="time"
                             type="number"
-                            domain={[new Date(this.state.data[0].time).getTime(), new Date(this.state.data[this.state.data.length - 1].time).getTime()]}
+                            domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
                             tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')}
                             hide={true} />
                         <YAxis />

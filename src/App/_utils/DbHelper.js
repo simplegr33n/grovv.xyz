@@ -222,7 +222,7 @@ class DbHelper {
 
 
     // Get BoxHour data window from firebase
-    async getBoxHour(growID, setData) {
+    getBoxHour(growID, setData) {
 
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
 
@@ -259,6 +259,8 @@ class DbHelper {
 
 
         hoursList.forEach((hr) => {
+
+            console.log("GETTTTIN! " + growID + " hr " + hr)
             if (hr.toString() === hour.toString()) {
                 return;
             }
@@ -344,6 +346,7 @@ class DbHelper {
     // Set Grow Config in firebase
     setGrowConfig(config) {
 
+        //TODO: FIX THIS. it's setting both for either currently. 
 
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child('-LdtfBTlG6Fgg-ADD8-b').child('config')
         ref.set(config)
@@ -363,12 +366,9 @@ class DbHelper {
 
         ref.on('value', (snapshot) => {
 
-            console.log('snapshot.val()')
-            console.log(snapshot.val())
-
             var userGrowIDs = [];
 
-            console.log("TODO: remove filter.")
+            console.log("TODO: remove filter. what does this even do O.o")
             snapshot.forEach((child) => {
                 if (!child.val().sensors_live) {
                     userGrowIDs[userGrowIDs.length] = child.key
@@ -376,7 +376,6 @@ class DbHelper {
             });
 
             // TODO: make own function...?
-
             for (var key of userGrowIDs) {
                 var growRef = this.firebase.db.ref().child('grows').child(this.userID).child(key)
 
