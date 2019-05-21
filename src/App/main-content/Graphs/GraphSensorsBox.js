@@ -42,12 +42,11 @@ class GraphSensorsBox extends Component {
         }
 
         if (this.props.rawGrowData && this.props.growID) {
-            this.rawGrowData = this.props.rawGrowData
 
             var gwID = this.props.growID
             var rawData = this.props.rawGrowData
 
-            if (this.props.rawGrowData[gwID]) {
+            if (rawData[gwID]) {
                 var setData = rawData[gwID][rawData[gwID].length - 1]
 
                 if (this.state.data !== setData) {

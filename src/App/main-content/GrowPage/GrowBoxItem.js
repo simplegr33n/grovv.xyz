@@ -7,8 +7,6 @@ import GraphSensorsBox from '../Graphs/GraphSensorsBox'
 
 import moment from 'moment'
 
-import DbHelper from '../../_utils/DbHelper.js'
-
 
 class GrowBoxItem extends Component {
 
@@ -16,14 +14,11 @@ class GrowBoxItem extends Component {
 		super(props);
 		this.state = {
 			grow: this.props.grow,
-			liveData: [],
 			activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
 			camURL: null,
 			growDeprecate: '',
 			graphElementSize: [150, 150],
 		};
-
-		this.dbHelper = new DbHelper()
 
 		this.graphSizeUpdated = 0;
 	}
@@ -33,7 +28,6 @@ class GrowBoxItem extends Component {
 
 		//TODO: Remove condition
 		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
-			this.getLiveData = this.getLiveData()
 
 			this.getLiveCam = this.watchPiCam()
 
@@ -42,7 +36,6 @@ class GrowBoxItem extends Component {
 			}
 
 		} else {
-			this.getLiveData = this.getLiveData()
 
 			if (this._ismounted) {
 				this.setState({ growDeprecate: 'vegger' });
@@ -82,6 +75,16 @@ class GrowBoxItem extends Component {
 				this.graphSizeUpdated = dateNow.getTime();
 			}
 		}
+
+		if (this.props.liveGrowData && (this.props.liveGrowData !== this.liveGrowData)) {
+			this.liveGrowData = this.props.liveGrowData
+			console.log("COOOL!" + this.props.grow.id)
+			console.log(this.liveGrowData[this.props.grow.id])
+			console.log(this.liveGrowData)
+			//this.checkActive(this.props.liveGrowData[this.props.grow.id].time * 1000)
+
+		}
+
 	}
 
 	// TODO: remove function
@@ -95,19 +98,6 @@ class GrowBoxItem extends Component {
 				this.setState({ camURL: tempCamURL });
 			}
 		}, 5000);
-	}
-
-	getLiveData = () => {
-		this.dbHelper.getLiveData(this.props.grow.id, this.setLiveData)
-
-	}
-
-	setLiveData = (data) => {
-		if (this._ismounted) {
-			this.setState({ liveData: data });
-		}
-
-		this.checkActive(data.time)
 	}
 
 	openFullCam = (ev) => {
@@ -125,9 +115,10 @@ class GrowBoxItem extends Component {
 	checkActive = (lastUpdateTime) => {
 
 		if (lastUpdateTime) {
-			var now = new Date();
+			var now = new Date().getTime();
 
-			var difference = now - (new Date(lastUpdateTime).getTime() * 1000)
+			var difference = now - lastUpdateTime
+
 
 			// if (difference >= 3000000) {
 			// 	this.setState({
@@ -139,21 +130,30 @@ class GrowBoxItem extends Component {
 
 
 				if (difference >= 120000) {
-					this.setState({
-						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
-					});
+					if (this.state.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Warning-Background') {
+						this.setState({
+							activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
+						});
+					}
+
 				}
 
 				if (difference >= 240000) {
-					this.setState({
-						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
-					});
+					if (this.state.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Danger-Background') {
+
+						this.setState({
+							activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
+						});
+					}
 				}
 
 				if (difference < 120000) {
-					this.setState({
-						activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
-					});
+					if (this.state.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Optimal-Background') {
+
+						this.setState({
+							activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'
+						});
+					}
 				}
 
 			}
@@ -167,10 +167,21 @@ class GrowBoxItem extends Component {
 	render() {
 
 		var lastUpdate = null;
-		if (this.state.liveData) {
-			var updatedAtDate = new Date(this.state.liveData.time * 1000)
+		if (this.props.liveGrowData[this.props.grow.id]) {
+			// console.log(this.props.liveGrowData[this.props.grow.id])
+
+			var updatedAtDate = new Date(this.props.liveGrowData[this.props.grow.id].time * 1000)
+
+			if (updatedAtDate !== this.updatedAtDate) {
+				this.updatedAtDate = updatedAtDate
+				this.checkActive(updatedAtDate.getTime())
+			}
+
 			lastUpdate = moment(updatedAtDate).fromNow()
 		}
+
+
+
 
 
 		return (
@@ -203,8 +214,8 @@ class GrowBoxItem extends Component {
 						<div className="Grow-Box-Info-Text-Area">
 
 							{(() => {
-								if (this.state.liveData) {
-									return <GrowDataDisplay liveData={this.state.liveData} />
+								if (this.props.liveGrowData) {
+									return <GrowDataDisplay liveData={this.props.liveGrowData[this.props.grow.id]} />
 								}
 							})()}
 
