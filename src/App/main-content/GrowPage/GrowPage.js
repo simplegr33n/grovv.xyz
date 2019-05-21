@@ -141,7 +141,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} setJournalID={this.setJournalID} />
+									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} setJournalID={this.setJournalID}  rawGrowData={this.props.rawGrowData} />
 								)
 							}
 						})()}

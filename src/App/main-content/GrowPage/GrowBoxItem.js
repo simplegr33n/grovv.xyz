@@ -76,15 +76,6 @@ class GrowBoxItem extends Component {
 			}
 		}
 
-		if (this.props.liveGrowData && (this.props.liveGrowData !== this.liveGrowData)) {
-			this.liveGrowData = this.props.liveGrowData
-			console.log("COOOL!" + this.props.grow.id)
-			console.log(this.liveGrowData[this.props.grow.id])
-			console.log(this.liveGrowData)
-			//this.checkActive(this.props.liveGrowData[this.props.grow.id].time * 1000)
-
-		}
-
 	}
 
 	// TODO: remove function

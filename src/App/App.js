@@ -291,7 +291,8 @@ class App extends Component {
 										case 'chart':
 											return <FeedChart />
 										case 'config':
-											return <GrowConfig />
+											// tODO: FIX
+											return <GrowConfig growID='-LdtfBTlG6Fgg-ADD8-b' />
 										case 'graphs':
 											return (
 												<div className="Chart-Page">

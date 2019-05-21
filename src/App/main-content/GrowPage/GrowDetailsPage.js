@@ -325,7 +325,7 @@ class GrowDetailsPage extends Component {
                                 <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
                                 <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
                             </div>
-                            <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} />
+                            <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} growID={this.props.grow.id}  rawGrowData={this.props.rawGrowData} />
 
                         </div>
 
@@ -364,7 +364,7 @@ class GrowDetailsPage extends Component {
                                 <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
                                 <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
                             </div>
-                            <GrowDetailsConfig />
+                            <GrowDetailsConfig growID={this.props.grow.id} />
 
                         </div>
 

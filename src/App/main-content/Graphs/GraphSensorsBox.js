@@ -11,7 +11,6 @@ class GraphSensorsBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
         };
 
     }
@@ -49,16 +48,14 @@ class GraphSensorsBox extends Component {
             if (rawData[gwID]) {
                 var setData = rawData[gwID][rawData[gwID].length - 1]
 
-                if (this.state.data !== setData) {
+                if (this.data !== setData) {
 
-                    this.setState({
-                        data: setData
-                    });
+                    this.data = setData
+                    
 
                     var processedData = []
                     setData.forEach((dataPoint) => {
                         var processedPoint = dataPoint
-                        processedPoint.time = processedPoint.time * 1000
 
                         if (new Date().getTime() - processedPoint.time < 7200000) {
                             processedData[processedData.length] = processedPoint

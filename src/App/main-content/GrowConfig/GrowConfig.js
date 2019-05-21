@@ -55,6 +55,7 @@ class GrowConfig extends Component {
 
     saveConfig = () => {
         this.dbHelper.setGrowConfig(
+            this.props.growID,
             {
                 temp_min: this.state.temp_min,
                 temp_max: this.state.temp_max,
@@ -73,7 +74,7 @@ class GrowConfig extends Component {
 
     watchGrowConfig = async (setData) => {
         try {
-            await this.dbHelper.watchGrowConfig(setData)
+            await this.dbHelper.watchGrowConfig(this.props.growID, setData)
         } catch(e) {
             console.log(e); 
             return 'caught ' + e

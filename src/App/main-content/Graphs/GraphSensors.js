@@ -5,7 +5,6 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment from 'moment'
 
-import DbHelper from '../../_utils/DbHelper.js'
 
 
 
@@ -15,25 +14,12 @@ class GraphSensors extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
         };
-
-        this.dbHelper = new DbHelper()
 
     }
 
     componentDidMount() {
         this._ismounted = true;
-
-        if (this.props.growDeprecate) {
-            if (this.props.growDeprecate !== this.growDeprecate) {
-                console.log("GRAPH SENSORS GROW DEPRECATE (TODO: REMOVE)!")
-                console.log(this.props.growDeprecate)
-                this.growDeprecate = this.props.growDeprecate;
-                this.getData()
-
-            }
-        }
 
     }
 
@@ -43,31 +29,54 @@ class GraphSensors extends Component {
 
     componentDidUpdate = () => {
 
-        if (this.props.growDeprecate) {
-            if (this.props.growDeprecate !== this.growDeprecate) {
-                console.log("GRAPH SENSORS GROW DEPRECATE (TODO: REMOVE)!")
-                console.log(this.props.growDeprecate)
-                this.growDeprecate = this.props.growDeprecate;
-                this.getData()
+        if (this.props.rawGrowData && this.props.growID) {
 
+            var gwID = this.props.growID
+            var rawData = this.props.rawGrowData
+
+            if (rawData[gwID] && ((!this.rawRef) || rawData[gwID][rawData[gwID].length - 1] !== this.rawRef)) {
+                this.rawRef = rawData[gwID][rawData[gwID].length - 1]
+
+                console.log("WHWHWHAAATYAY")
+                console.log(this.rawRef)
+
+
+                var concatData = []
+
+                rawData[gwID].forEach((list) => {
+                    concatData = concatData.concat(list)
+                })
+
+
+                if (this.dataLength !== concatData.length) {
+
+                    console.log("CONCAT!")
+                    console.log(concatData)
+
+                    this.dataLength = concatData.length
+                    concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+
+
+                    var processedData = []
+                    var i = -1
+                    concatData.forEach((dataPoint) => {
+                        i++;
+                        if (i === 0 || i % 10 === 0) {
+                            var processedPoint = dataPoint
+                            processedPoint.time = processedPoint.time
+                            processedData[processedData.length] = processedPoint
+                        }
+
+
+                    })
+
+                    if (processedData.length >= concatData.length / 11) {
+                        this.setState({
+                            processedData: processedData
+                        });
+                    }
+                }
             }
-        }
-    }
-
-    getData = async () => {
-        try {
-            await this.dbHelper.getThreeDays(this.props.growDeprecate, this.setData)
-        } catch(e) {
-            console.log(e); 
-            return 'caught ' + e
-        }
-    }
-
-    setData = (data) => {
-        if (this._ismounted) {
-            this.setState({
-                data: data
-            });
         }
     }
 
@@ -147,13 +156,13 @@ class GraphSensors extends Component {
     render() {
 
         var renderDayGraph = null
-        if (this.state.data[0]) {
+        if (this.state.processedData && this.state.processedData[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 0.95)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderDayGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.state.data}>
+                    <LineChart width={xSize} height={ySize} data={this.state.processedData}>
                         <Line type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
                         <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
                         <Line type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
@@ -161,7 +170,7 @@ class GraphSensors extends Component {
                         <XAxis
                             dataKey="time"
                             type="number"
-                            domain={[new Date(this.state.data[0].time).getTime(), new Date(this.state.data[this.state.data.length - 1].time).getTime()]}
+                            domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
                             tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')} />
                         <YAxis />
                         <Tooltip content={this.renderTooltip} />

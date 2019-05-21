@@ -206,8 +206,8 @@ class DbHelper {
                 snapshot.forEach((child) => {
                     child.forEach((gChild) => {
                         var dataPoint = gChild.val()
-                        var dataTime = new Date(dataPoint.time).getTime()
-                        dataPoint.time = dataTime
+
+                        dataPoint.time = dataPoint.time * 1000
 
                         dayData[dayData.length] = dataPoint;
                     });
@@ -220,104 +220,15 @@ class DbHelper {
         });
     }
 
-
-    // Get BoxHour data window from firebase
-    getBoxHour(growID, setData) {
-
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('sensor_data')
-
-
-        var date = new Date();
-        var year = date.getFullYear().toString()
-        var month = (date.getMonth() + 1).toString()
-        if (month.length < 2) {
-            month = '0' + month
-        }
-
-
-        var day = date.getDate().toString()
-
-        var hour = date.getHours()
-
-        var hoursList = []
-        var tempHour = null
-        if ((hour - 1) >= 0) {
-            tempHour = hour - 1
-            if (tempHour.toString().length < 2) {
-                tempHour = '0' + tempHour
-            }
-            hoursList[hoursList.length] = tempHour
-        }
-        if (hour.toString().length < 2) {
-            hour = '0' + hour
-        }
-        hoursList[hoursList.length] = hour
-
-
-        var staticTwoHourData = []
-        var getTwoHoursAddedHours = []
-
-
-        hoursList.forEach((hr) => {
-
-            console.log("GETTTTIN! " + growID + " hr " + hr)
-            if (hr.toString() === hour.toString()) {
-                return;
-            }
-            ref.child(year).child(month).child(day).child(hr).on("value", (snapshot) => {
-
-
-                if (!getTwoHoursAddedHours.includes(hr)) {
-                    getTwoHoursAddedHours[getTwoHoursAddedHours.length] = hr
-                } else {
-                    return;
-                }
-
-                snapshot.forEach((child) => {
-                    var dataPoint = child.val()
-                    var dataTime = new Date(dataPoint.time).getTime()
-                    dataPoint.time = dataTime
-                    staticTwoHourData[staticTwoHourData.length] = dataPoint;
-                });
-
-                if (getTwoHoursAddedHours.length === hoursList.length - 1) {
-
-                    var tempData = []
-
-                    ref.child(year).child(month).child(day).child(hour).on("value", (snapshot) => {
-                        snapshot.forEach((child) => {
-                            var dataPoint = child.val()
-                            var dataTime = new Date(dataPoint.time).getTime()
-                            dataPoint.time = dataTime
-                            tempData[tempData.length] = dataPoint;
-
-                        });
-
-                        var fullData = staticTwoHourData.concat(tempData);
-                        fullData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                        console.log("Test Box Data Datapoints to render..." + fullData.length)
-                        console.log(fullData[fullData.length - 1]);
-
-                        setData(fullData);
-                    });
-                };
-
-            });
-
-        });
-
-    }
-
     // ............ //
     // GROW CONFIG  //
     // ............ //
 
     // Watch Grow Config in firebase
-    watchGrowConfig(setData) {
+    watchGrowConfig(growID, setData) {
 
         // Config data in firebase // TODO... proper
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child('-LdtfBTlG6Fgg-ADD8-b').child('config')
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
 
         ref.on('value', (snapshot) => {
 
@@ -344,14 +255,8 @@ class DbHelper {
     }
 
     // Set Grow Config in firebase
-    setGrowConfig(config) {
-
-        //TODO: FIX THIS. it's setting both for either currently. 
-
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child('-LdtfBTlG6Fgg-ADD8-b').child('config')
-        ref.set(config)
-
-        ref = this.firebase.db.ref().child('grows').child(this.userID).child('-LdtkOvSXRrm1zIZ6EOx').child('config')
+    setGrowConfig(growID, config) {
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
         ref.set(config)
     }
 
