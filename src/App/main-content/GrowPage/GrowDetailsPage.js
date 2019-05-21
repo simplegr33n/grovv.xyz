@@ -15,8 +15,6 @@ import moment from 'moment'
 
 
 
-
-
 class GrowDetailsPage extends Component {
 
     constructor(props) {
@@ -25,8 +23,7 @@ class GrowDetailsPage extends Component {
             displayBottom: 'data', // data, config, feed, edit-feed, journals
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
             linkedJournals: [],
-            camURL: null,
-            growDeprecate: null // TODO Remove
+            camURL: null
         };
 
         this.dbHelper = new DbHelper(); // Need for linked journals
@@ -38,18 +35,8 @@ class GrowDetailsPage extends Component {
 
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
-            // todo remove
             this.watchPiCam()
-
-            if (this._ismounted) {
-                this.setState({ growDeprecate: 'flower' });
-            }
-        } else {
-            // todo remove
-            if (this._ismounted) {
-                this.setState({ growDeprecate: 'vegger' });
-            }
-        }
+        } 
 
         if (this.props.grow.urls.cam) {
             if (this._ismounted) {
@@ -58,14 +45,38 @@ class GrowDetailsPage extends Component {
         }
 
         if (this.props.rawGrowData) {
-            this.processGrowData(this.props.rawGrowData)
+            if (!this.props.rawGrowData[this.props.grow.id]) {
+                return;
+            }
+
+            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+
+            if (this.dataLengthRef !== dataLengthRef) {
+                this.dataLengthRef = dataLengthRef
+                this.processGrowData(this.props.rawGrowData)
+            } 
         }
 
-        this.getLinkedJournals(this.props.grow.id, this.props.grow.journals, this.setLinkedJournals)
+        this.getLinkedJournals(this.props.grow.journals, this.setLinkedJournals)
     }
 
     componentWillUnmount = () => {
         this._ismounted = false;
+    }
+
+    componentDidUpdate = () => {
+        if (this.props.rawGrowData) {
+            if (!this.props.rawGrowData[this.props.grow.id]) {
+                return;
+            }
+
+            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+
+            if (this.dataLengthRef !== dataLengthRef) {
+                this.dataLengthRef = dataLengthRef
+                this.processGrowData(this.props.rawGrowData)
+            } 
+        }
     }
 
     processGrowData = (growData) => {
@@ -82,9 +93,7 @@ class GrowDetailsPage extends Component {
         this.setState({ liveData: concatData[concatData.length - 1] })
 
         console.log("concatData")
-
         console.log(concatData)
-
 
         var highTemp = []
         var lowTemp = []
@@ -375,22 +384,22 @@ class GrowDetailsPage extends Component {
                                 if (this.state.liveData) {
                                     return (<div id="Grow-Details-Main-Data-Display">
                                         <div className="Grow-Details-Main-Data-Display-Column">
-                                            <div>
+                                            <div className="Grow-Details-Main-Data-Rows-Column">
                                                 *
                                             </div>
-                                            <div style={{ fontSize: '28px' }}>
+                                            <div className="Grow-Details-Main-Data-Rows-Column" style={{ fontSize: '24px', marginTop: '-16px' }}>
                                                 cur
                                             </div>
-                                            <div>
+                                            <div className="Grow-Details-Main-Data-Rows-Column">
                                                 24h&#8593;
                                             </div>
-                                            <div>
+                                            <div className="Grow-Details-Main-Data-Rows-Column">
                                                 at...
                                             </div>
-                                            <div>
+                                            <div className="Grow-Details-Main-Data-Rows-Column">
                                                 24h&#8595;
                                             </div>
-                                            <div>
+                                            <div className="Grow-Details-Main-Data-Rows-Column">
                                                 at...
                                             </div>
                                         </div>
@@ -621,7 +630,7 @@ class GrowDetailsPage extends Component {
                                 <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
                                 <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
                             </div>
-                            <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} />
+                            <GrowDetailsGraphs growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} />
 
                         </div>
 

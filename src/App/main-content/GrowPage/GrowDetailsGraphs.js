@@ -10,7 +10,6 @@ class GrowDetailsGraphs extends Component {
         super(props);
         this.state = {
             elementSize: [],
-            growDeprecate: null
         };
 
         this.graphSizeUpdated = 0
@@ -35,12 +34,6 @@ class GrowDetailsGraphs extends Component {
             }
         }
 
-        if (this.props.growDeprecate) {
-            if (this.state.growDeprecate !== this.props.growDeprecate) {
-                this.setState({ growDeprecate: this.props.growDeprecate });
-
-            }
-        }
     }
 
     componentWillUnmount() {
@@ -51,7 +44,7 @@ class GrowDetailsGraphs extends Component {
         return (
 
             <div id="Grow-Details-Graphs-Page" ref={element => this.divRef = element}>
-                <GraphSensors parentSize={this.state.elementSize} growDeprecate={this.props.growDeprecate} growID={this.props.growID} rawGrowData={this.props.rawGrowData} />
+                <GraphSensors parentSize={this.state.elementSize} growID={this.props.growID} rawGrowData={this.props.rawGrowData} />
             </div>
 
         );

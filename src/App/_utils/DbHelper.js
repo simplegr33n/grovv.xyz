@@ -294,7 +294,7 @@ class DbHelper {
     // ............ //
 
     // Get live data from firebase
-    getLinkedJournals(key, journals, setData) {
+    getLinkedJournals(journals, setData) {
 
         var ref = this.firebase.db.ref().child('users').child(this.userID).child('journals')
 
