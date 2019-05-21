@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import '../../../styles/App.css';
 
 
-import GrowDataDisplay from './GrowDataDisplay'
-
 import GrowDetailsConfig from './GrowDetailsConfig'
 import GrowDetailsGraphs from './GrowDetailsGraphs'
 
@@ -11,6 +9,10 @@ import JournalBoxItem from '../GrowJournal/JournalBoxItem'
 
 
 import DbHelper from '../../_utils/DbHelper.js'
+
+
+import moment from 'moment'
+
 
 
 
@@ -27,7 +29,7 @@ class GrowDetailsPage extends Component {
             growDeprecate: null // TODO Remove
         };
 
-		this.dbHelper = new DbHelper();
+        this.dbHelper = new DbHelper(); // Need for linked journals
 
     }
 
@@ -74,10 +76,10 @@ class GrowDetailsPage extends Component {
         growData[this.props.grow.id].forEach((list) => {
             concatData = concatData.concat(list)
         })
-        
+
         concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
-        this.setState({ liveData: concatData[concatData.length - 1]})
+        this.setState({ liveData: concatData[concatData.length - 1] })
 
         console.log("concatData")
 
@@ -95,7 +97,7 @@ class GrowDetailsPage extends Component {
 
         var now = new Date().getTime()
 
-        
+
         var lastDayData = []
         concatData.forEach((dataPoint) => {
             if (now - dataPoint.time < 86400000) {
@@ -148,23 +150,18 @@ class GrowDetailsPage extends Component {
 
         })
 
-        console.log("TEMP OBJ")
-        console.log(highTemp)
-        console.log(lowTemp)
+        this.setState({
+            highTemp: highTemp,
+            lowTemp: lowTemp,
+            highFan: highFan,
+            lowFan: lowFan,
+            highHumidity: highHumidity,
+            lowHumidity: lowHumidity,
+            highHumidifier: highHumidifier,
+            lowHumidifier: lowHumidifier
+        })
 
-        console.log("Fan OBJ")
-        console.log(highFan)
-        console.log(lowFan)
-
-        console.log("HUMIDITY OBJ")
-        console.log(highHumidity)
-        console.log(lowHumidity)
-
-        console.log("Humidifier OBJ")
-        console.log(highHumidifier)
-        console.log(lowHumidifier)
-
-        console.log("lastDayData")        
+        console.log("lastDayData")
         console.log(lastDayData)
 
     }
@@ -183,7 +180,7 @@ class GrowDetailsPage extends Component {
             }
         }, 5000);
     }
-    
+
 
     getLinkedJournals = (key, journals, setData) => {
         this.dbHelper.getLinkedJournals(key, journals, setData)
@@ -370,13 +367,230 @@ class GrowDetailsPage extends Component {
                             <div id="Grow-Header-Text">{this.props.grow.name}</div>
                             <div className={this.state.activeIndicatorStyle} />
                         </div>
+
+
                         <div id="Grow-Details-Data-Display">
+
                             {(() => {
                                 if (this.state.liveData) {
-                                    return <GrowDataDisplay liveData={this.state.liveData} />
+                                    return (<div id="Grow-Details-Main-Data-Display">
+                                        <div className="Grow-Details-Main-Data-Display-Column">
+                                            <div>
+                                                *
+                                            </div>
+                                            <div style={{ fontSize: '28px' }}>
+                                                cur
+                                            </div>
+                                            <div>
+                                                24h&#8593;
+                                            </div>
+                                            <div>
+                                                at...
+                                            </div>
+                                            <div>
+                                                24h&#8595;
+                                            </div>
+                                            <div>
+                                                at...
+                                            </div>
+                                        </div>
+                                        {(() => {
+                                            if (this.state.liveData.cTemp) {
+                                                return (
+                                                    <div className="Grow-Details-Main-Data-Display-Column">
+                                                        <div>
+                                                            TEMP
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Current-Data">
+                                                            {Math.round(this.state.liveData.cTemp * 10) / 10}°C
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.highTemp) {
+                                                                    return Math.round(this.state.highTemp[0] * 10) / 10 + '°C'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.highTemp) {
+                                                                    var m = moment(this.state.highTemp[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.lowTemp) {
+                                                                    return Math.round(this.state.lowTemp[0] * 10) / 10 + '°C'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.lowTemp) {
+                                                                    var m = moment(this.state.lowTemp[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                    </div>
+
+                                                )
+                                            }
+                                        })()}
+
+                                        {(() => {
+                                            if (this.state.liveData.fanSpeed) {
+                                                return (
+
+
+                                                    <div className="Grow-Details-Main-Data-Display-Column">
+                                                        <div>
+                                                            Fan
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Current-Data">
+                                                            {this.state.liveData.fanSpeed}%
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.highFan) {
+                                                                    return this.state.highFan[0] + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.highFan) {
+                                                                    var m = moment(this.state.highFan[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.lowFan) {
+                                                                    return this.state.lowFan[0] + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.lowFan) {
+                                                                    var m = moment(this.state.lowFan[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                    </div>
+
+                                                )
+                                            }
+                                        })()}
+
+                                        {(() => {
+                                            if (this.state.liveData.humidity) {
+                                                return (
+
+
+                                                    <div className="Grow-Details-Main-Data-Display-Column">
+                                                        <div>
+                                                            HUMID
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Current-Data">
+                                                            {Math.round(this.state.liveData.humidity * 10) / 10}%
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.highHumidity) {
+                                                                    return Math.round(this.state.highHumidity[0] * 10) / 10 + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.highHumidity) {
+                                                                    var m = moment(this.state.highHumidity[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.lowHumidity) {
+                                                                    return Math.round(this.state.lowHumidity[0] * 10) / 10 + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.lowHumidity) {
+                                                                    var m = moment(this.state.lowHumidity[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                    </div>
+
+                                                )
+                                            }
+                                        })()}
+
+                                        {(() => {
+                                            if (this.state.liveData.humiPower) {
+                                                return (
+                                                    <div className="Grow-Details-Main-Data-Display-Column">
+                                                        <div>
+                                                            Hmdfier
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Current-Data">
+                                                            {this.state.liveData.humiPower}%
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.highHumidifier) {
+                                                                    return this.state.highHumidifier[0] + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.highHumidifier) {
+                                                                    var m = moment(this.state.highHumidifier[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data">
+                                                            {(() => {
+                                                                if (this.state.lowHumidifier) {
+                                                                    return this.state.lowHumidifier[0] + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Time">
+                                                            {(() => {
+                                                                if (this.state.lowHumidifier) {
+                                                                    var m = moment(this.state.lowHumidifier[1])
+                                                                    return m.format('HH:mm')
+                                                                }
+                                                            })()}
+                                                        </div>
+                                                    </div>
+
+                                                )
+                                            }
+                                        })()}
+
+
+                                    </div>
+                                    )
                                 }
                             })()}
                         </div>
+
+
+
                     </div>
 
 
@@ -407,7 +621,7 @@ class GrowDetailsPage extends Component {
                                 <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
                                 <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
                             </div>
-                            <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} growID={this.props.grow.id}  rawGrowData={this.props.rawGrowData} />
+                            <GrowDetailsGraphs growDeprecate={this.state.growDeprecate} growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} />
 
                         </div>
 

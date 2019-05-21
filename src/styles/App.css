@@ -1788,3 +1788,38 @@ html {
 .Grow-Details-Graph-Tooltip-Data {
     font-size: 13px;
 }
+
+/* GROW DETAILS DATA DISPLAY */
+#Grow-Details-Main-Data-Display {
+    background-color: blue;
+    display: flex;
+    flex-direction: row;
+}
+
+.Grow-Details-Main-Data-Display-Column {
+    background-color: rgb(70, 70, 14);
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.Grow-Details-Main-Data-Time {
+    font-weight: normal;
+    background-color: #444439;
+
+}
+
+.Grow-Details-Main-Data-Data {
+    font-weight: bold;
+    background-color: #31b337;
+    color: #000;
+
+}
+
+.Grow-Details-Main-Data-Current-Data {
+    font-weight: normal;
+    background-color: #b5bbb5;
+    font-size: 28px;
+    color: #000;
+}
