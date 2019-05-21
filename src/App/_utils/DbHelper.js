@@ -16,32 +16,12 @@ class DbHelper {
     // LIVE DATA  //
     // .......... //
     // Get live data from firebase
-    async getLiveData(growID, setData) {
-
-        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('live_data')
-
-        ref.on('value', (snapshot) => {
-            setData(snapshot.val())
-        }, function (errorObject) {
-            console.log("follow grow" + growID + " live failed: " + errorObject.code);
-        });
-
-    }
-
-    // .......... //
-    // LIVE DATAS  //
-    // .......... //
-    // Get live data from firebase
     // TODO: FIx when database is changed
-    async getLiveGrowDatas(userGrows, setData) {
+    async getLiveGrowData(userGrows, setData) {
 
         userGrows.forEach((grow) => {
-            // Sensor data in firebase
-            // var ref = this.firebase.db.ref().child('users').child(this.userID).child('grows').child('-LdG6gTCNZxfu1wU5Xvx').child('sensors_live').child(grow)
-
-
+            // Grow Live Data in firebase
             var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('live_data')
-
 
             ref.on('value', (snapshot) => {
                 setData(grow.id, snapshot.val())

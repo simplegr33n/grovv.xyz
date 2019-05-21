@@ -76,7 +76,7 @@ class App extends Component {
 
 		this.setState({ userGrows: userGrows });
 
-		this.dbHelper.getLiveGrowDatas(userGrows, this.setLiveGrowData)
+		this.dbHelper.getLiveGrowData(userGrows, this.setLiveGrowData)
 	}
 
 	setUserJournals = (userJournals) => {

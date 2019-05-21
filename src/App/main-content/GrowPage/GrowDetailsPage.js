@@ -14,22 +14,20 @@ import DbHelper from '../../_utils/DbHelper.js'
 
 
 
+
 class GrowDetailsPage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             displayBottom: 'data', // data, config, feed, edit-feed, journals
-            liveData: [],
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
             linkedJournals: [],
             camURL: null,
             growDeprecate: null // TODO Remove
-
         };
 
-
-        this.dbHelper = new DbHelper()
+		this.dbHelper = new DbHelper();
 
     }
 
@@ -38,17 +36,13 @@ class GrowDetailsPage extends Component {
 
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
-            this.getLiveData('flower', this.setLiveData);
-            // this.getLiveData()
+            // todo remove
             this.watchPiCam()
 
-            // todo remove
             if (this._ismounted) {
                 this.setState({ growDeprecate: 'flower' });
             }
         } else {
-            this.getLiveData('vegger', this.setLiveData);
-            // this.getVeggerData()
             // todo remove
             if (this._ismounted) {
                 this.setState({ growDeprecate: 'vegger' });
@@ -61,12 +55,118 @@ class GrowDetailsPage extends Component {
             }
         }
 
+        if (this.props.rawGrowData) {
+            this.processGrowData(this.props.rawGrowData)
+        }
+
         this.getLinkedJournals(this.props.grow.id, this.props.grow.journals, this.setLinkedJournals)
     }
 
-
     componentWillUnmount = () => {
         this._ismounted = false;
+    }
+
+    processGrowData = (growData) => {
+        console.log("PROCESS GROW DATA!")
+        console.log(growData[this.props.grow.id])
+
+        var concatData = []
+        growData[this.props.grow.id].forEach((list) => {
+            concatData = concatData.concat(list)
+        })
+        
+        concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+
+        this.setState({ liveData: concatData[concatData.length - 1]})
+
+        console.log("concatData")
+
+        console.log(concatData)
+
+
+        var highTemp = []
+        var lowTemp = []
+        var highHumidity = []
+        var lowHumidity = []
+        var highFan = []
+        var lowFan = []
+        var highHumidifier = []
+        var lowHumidifier = []
+
+        var now = new Date().getTime()
+
+        
+        var lastDayData = []
+        concatData.forEach((dataPoint) => {
+            if (now - dataPoint.time < 86400000) {
+                lastDayData[lastDayData.length] = dataPoint
+                if (dataPoint.cTemp) {
+                    if (!highTemp[0] || dataPoint.cTemp >= highTemp[0]) {
+                        highTemp[0] = dataPoint.cTemp
+                        highTemp[1] = dataPoint.time
+                    }
+
+                    if (!lowTemp[0] || dataPoint.cTemp <= lowTemp[0]) {
+                        lowTemp[0] = dataPoint.cTemp
+                        lowTemp[1] = dataPoint.time
+                    }
+                }
+                if (dataPoint.humidity) {
+                    if (!highHumidity[0] || dataPoint.humidity >= highHumidity[0]) {
+                        highHumidity[0] = dataPoint.humidity
+                        highHumidity[1] = dataPoint.time
+                    }
+
+                    if (!lowHumidity[0] || dataPoint.humidity <= lowHumidity[0]) {
+                        lowHumidity[0] = dataPoint.humidity
+                        lowHumidity[1] = dataPoint.time
+                    }
+                }
+                if (dataPoint.fanSpeed) {
+                    if (!highFan[0] || dataPoint.fanSpeed >= highFan[0]) {
+                        highFan[0] = dataPoint.fanSpeed
+                        highFan[1] = dataPoint.time
+                    }
+
+                    if (!lowFan[0] || dataPoint.fanSpeed <= lowFan[0]) {
+                        lowFan[0] = dataPoint.fanSpeed
+                        lowFan[1] = dataPoint.time
+                    }
+                }
+                if (dataPoint.humiPower) {
+                    if (!highHumidifier[0] || dataPoint.humiPower >= highHumidifier[0]) {
+                        highHumidifier[0] = dataPoint.humiPower
+                        highHumidifier[1] = dataPoint.time
+                    }
+
+                    if (!lowHumidifier[0] || dataPoint.humiPower <= lowHumidifier[0]) {
+                        lowHumidifier[0] = dataPoint.humiPower
+                        lowHumidifier[1] = dataPoint.time
+                    }
+                }
+            }
+
+        })
+
+        console.log("TEMP OBJ")
+        console.log(highTemp)
+        console.log(lowTemp)
+
+        console.log("Fan OBJ")
+        console.log(highFan)
+        console.log(lowFan)
+
+        console.log("HUMIDITY OBJ")
+        console.log(highHumidity)
+        console.log(lowHumidity)
+
+        console.log("Humidifier OBJ")
+        console.log(highHumidifier)
+        console.log(lowHumidifier)
+
+        console.log("lastDayData")        
+        console.log(lastDayData)
+
     }
 
     // TODO: remove function
@@ -84,24 +184,6 @@ class GrowDetailsPage extends Component {
         }, 5000);
     }
     
-
-    getLiveData = async (growDeprecate, setData) => {
-        try {
-            await this.dbHelper.getLiveData(growDeprecate, setData)
-        } catch (e) {
-            console.log(e);
-            return 'caught ' + e
-        }
-    }
-
-
-    setLiveData = (data) => {
-        if (this._ismounted) {
-            this.setState({
-                liveData: data
-            });
-        }
-    }
 
     getLinkedJournals = (key, journals, setData) => {
         this.dbHelper.getLinkedJournals(key, journals, setData)

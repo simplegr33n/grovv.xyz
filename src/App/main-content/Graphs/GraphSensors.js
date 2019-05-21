@@ -7,8 +7,6 @@ import moment from 'moment'
 
 
 
-
-
 class GraphSensors extends Component {
 
     constructor(props) {
@@ -37,10 +35,6 @@ class GraphSensors extends Component {
             if (rawData[gwID] && ((!this.rawRef) || rawData[gwID][rawData[gwID].length - 1] !== this.rawRef)) {
                 this.rawRef = rawData[gwID][rawData[gwID].length - 1]
 
-                console.log("WHWHWHAAATYAY")
-                console.log(this.rawRef)
-
-
                 var concatData = []
 
                 rawData[gwID].forEach((list) => {
@@ -50,12 +44,8 @@ class GraphSensors extends Component {
 
                 if (this.dataLength !== concatData.length) {
 
-                    console.log("CONCAT!")
-                    console.log(concatData)
-
                     this.dataLength = concatData.length
                     concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
 
                     var processedData = []
                     var i = -1
@@ -66,8 +56,6 @@ class GraphSensors extends Component {
                             processedPoint.time = processedPoint.time
                             processedData[processedData.length] = processedPoint
                         }
-
-
                     })
 
                     if (processedData.length >= concatData.length / 11) {

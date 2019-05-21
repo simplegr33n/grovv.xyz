@@ -83,7 +83,7 @@ class AppBar extends Component {
                             if (liveButtonData) {
                                 return (
                                     <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity" data-value={grow.id}>
-                                        {Math.round(liveButtonData.humidity * 10) / 10}°C
+                                        {Math.round(liveButtonData.humidity * 10) / 10}%
                                 </div>
                                 )
                             }
