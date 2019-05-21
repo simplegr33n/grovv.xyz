@@ -40,8 +40,8 @@ class GrowPage extends Component {
 		this.setState({ displayContent: "main" });
 	}
 
-	openMainPage = (page) => {
-		this.props.openMainPage(page)
+	openMainPage = (page, id) => {
+		this.props.openMainPage(page, id)
 	}
 
 	openCreateGrowModal = () => {

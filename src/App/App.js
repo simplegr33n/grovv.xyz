@@ -157,11 +157,11 @@ class App extends Component {
 		});
 	}
 
-	setMainContent = (setValue) => {
+	setMainContent = (setValue, id) => {
 		this.setState({
 			mainContent: setValue,
 			currentGrow: null,
-			growID: null,
+			growID: id,
 			journalID: null
 		});
 	}
@@ -237,11 +237,12 @@ class App extends Component {
 	}
 
 
-	openMainPageFromExternal = (page) => {
+	openMainPageFromExternal = (page, id) => {
 		console.log("todo: get rid of this system...")
 		console.log(page)
 		switch (page) {
 			case 'config':
+				this.configGrowID = id;
 				this.openConfig()
 				break;
 			case 'feed':
@@ -292,7 +293,7 @@ class App extends Component {
 											return <FeedChart />
 										case 'config':
 											// tODO: FIX
-											return <GrowConfig growID='-LdtfBTlG6Fgg-ADD8-b' />
+											return <GrowConfig growID={this.configGrowID} />
 										case 'graphs':
 											return (
 												<div className="Chart-Page">

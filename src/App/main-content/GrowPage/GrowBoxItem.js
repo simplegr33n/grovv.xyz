@@ -100,7 +100,7 @@ class GrowBoxItem extends Component {
 	}
 
 	openMainPage = (ev) => {
-		this.props.openMainPage(ev.target.dataset.value)
+		this.props.openMainPage(ev.target.dataset.value, this.props.grow.id)
 	}
 
 	checkActive = (lastUpdateTime) => {
