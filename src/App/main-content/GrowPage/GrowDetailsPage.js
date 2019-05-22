@@ -104,12 +104,21 @@ class GrowDetailsPage extends Component {
         var highHumidifier = []
         var lowHumidifier = []
 
+        var dataPointCount = 0
+        var tempAVG = 0
+        var humidityAVG = 0
+        var fanAVG = 0
+        var humidifierAVG = 0
+
+
         var now = new Date().getTime()
 
 
         var lastDayData = []
         concatData.forEach((dataPoint) => {
             if (now - dataPoint.time < 86400000) {
+                dataPointCount += 1
+
                 lastDayData[lastDayData.length] = dataPoint
                 if (dataPoint.cTemp) {
                     if (!highTemp[0] || dataPoint.cTemp >= highTemp[0]) {
@@ -121,6 +130,7 @@ class GrowDetailsPage extends Component {
                         lowTemp[0] = dataPoint.cTemp
                         lowTemp[1] = dataPoint.time
                     }
+                    tempAVG += parseFloat(dataPoint.cTemp)
                 }
                 if (dataPoint.humidity) {
                     if (!highHumidity[0] || dataPoint.humidity >= highHumidity[0]) {
@@ -132,6 +142,8 @@ class GrowDetailsPage extends Component {
                         lowHumidity[0] = dataPoint.humidity
                         lowHumidity[1] = dataPoint.time
                     }
+
+                    humidityAVG += parseFloat(dataPoint.humidity)
                 }
                 if (dataPoint.fanSpeed) {
                     if (!highFan[0] || dataPoint.fanSpeed >= highFan[0]) {
@@ -143,6 +155,7 @@ class GrowDetailsPage extends Component {
                         lowFan[0] = dataPoint.fanSpeed
                         lowFan[1] = dataPoint.time
                     }
+                    fanAVG += parseFloat(dataPoint.fanSpeed)
                 }
                 if (dataPoint.humiPower) {
                     if (!highHumidifier[0] || dataPoint.humiPower >= highHumidifier[0]) {
@@ -154,10 +167,20 @@ class GrowDetailsPage extends Component {
                         lowHumidifier[0] = dataPoint.humiPower
                         lowHumidifier[1] = dataPoint.time
                     }
+                    humidifierAVG += parseFloat(dataPoint.humiPower)
                 }
             }
 
         })
+
+        console.log("AVGs: " + tempAVG + ", " + humidityAVG + ", " + fanAVG + ", " + humidifierAVG) 
+
+        tempAVG = tempAVG / dataPointCount
+        humidityAVG = humidityAVG / dataPointCount
+        fanAVG = fanAVG / dataPointCount
+        humidifierAVG = humidifierAVG / dataPointCount
+
+        console.log("AVGs: " + tempAVG + ", " + humidityAVG + ", " + fanAVG + ", " + humidifierAVG) 
 
         this.setState({
             highTemp: highTemp,
@@ -167,7 +190,11 @@ class GrowDetailsPage extends Component {
             highHumidity: highHumidity,
             lowHumidity: lowHumidity,
             highHumidifier: highHumidifier,
-            lowHumidifier: lowHumidifier
+            lowHumidifier: lowHumidifier,
+            tempAVG: tempAVG,
+            humidityAVG: humidityAVG,
+            fanAVG: fanAVG,
+            humidifierAVG: humidifierAVG
         })
 
         console.log("lastDayData")
@@ -387,8 +414,11 @@ class GrowDetailsPage extends Component {
                                             <div className="Grow-Details-Main-Data-Rows-Column">
                                                 *
                                             </div>
-                                            <div className="Grow-Details-Main-Data-Rows-Column" style={{ fontSize: '24px', marginTop: '-16px' }}>
+                                            <div className="Grow-Details-Main-Data-Rows-Column" style={{ fontSize: '24px' }}>
                                                 cur
+                                            </div>
+                                            <div className="Grow-Details-Main-Data-Rows-Column">
+                                                24h~
                                             </div>
                                             <div className="Grow-Details-Main-Data-Rows-Column">
                                                 24h&#8593;
@@ -412,6 +442,13 @@ class GrowDetailsPage extends Component {
                                                         </div>
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                             {Math.round(this.state.liveData.cTemp * 10) / 10}°C
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#67676e' }}>
+                                                            {(() => {
+                                                                if (this.state.tempAVG) {
+                                                                    return Math.round(this.state.tempAVG * 10) / 10 + '°C'
+                                                                }
+                                                            })()}
                                                         </div>
                                                         <div className="Grow-Details-Main-Data-Data">
                                                             {(() => {
@@ -461,6 +498,13 @@ class GrowDetailsPage extends Component {
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                             {this.state.liveData.fanSpeed}%
                                                         </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#67676e' }}>
+                                                            {(() => {
+                                                                if (this.state.fanAVG) {
+                                                                    return Math.round(this.state.fanAVG * 10) / 10 + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
                                                         <div className="Grow-Details-Main-Data-Data">
                                                             {(() => {
                                                                 if (this.state.highFan) {
@@ -509,6 +553,13 @@ class GrowDetailsPage extends Component {
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                             {Math.round(this.state.liveData.humidity * 10) / 10}%
                                                         </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#67676e' }}>
+                                                            {(() => {
+                                                                if (this.state.humidityAVG) {
+                                                                    return Math.round(this.state.humidityAVG * 10) / 10 + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
                                                         <div className="Grow-Details-Main-Data-Data">
                                                             {(() => {
                                                                 if (this.state.highHumidity) {
@@ -554,6 +605,13 @@ class GrowDetailsPage extends Component {
                                                         </div>
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                             {this.state.liveData.humiPower}%
+                                                        </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#67676e' }}>
+                                                            {(() => {
+                                                                if (this.state.humidifierAVG) {
+                                                                    return Math.round(this.state.humidifierAVG * 10) / 10 + '%'
+                                                                }
+                                                            })()}
                                                         </div>
                                                         <div className="Grow-Details-Main-Data-Data">
                                                             {(() => {

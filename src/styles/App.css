@@ -1796,17 +1796,16 @@ html {
     display: flex;
     flex-direction: row;
     user-select: none;
+    font-weight: 400;
 }
 
 .Grow-Details-Main-Data-Display-Column {
-    padding: 2px;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
 .Grow-Details-Main-Data-Rows-Column {
-    padding: 2px;
     display: flex;
     flex-direction: column;
 }
