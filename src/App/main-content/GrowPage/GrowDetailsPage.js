@@ -173,14 +173,10 @@ class GrowDetailsPage extends Component {
 
         })
 
-        console.log("AVGs: " + tempAVG + ", " + humidityAVG + ", " + fanAVG + ", " + humidifierAVG) 
-
         tempAVG = tempAVG / dataPointCount
         humidityAVG = humidityAVG / dataPointCount
         fanAVG = fanAVG / dataPointCount
         humidifierAVG = humidifierAVG / dataPointCount
-
-        console.log("AVGs: " + tempAVG + ", " + humidityAVG + ", " + fanAVG + ", " + humidifierAVG) 
 
         this.setState({
             highTemp: highTemp,
