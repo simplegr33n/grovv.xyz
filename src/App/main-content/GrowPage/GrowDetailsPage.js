@@ -36,7 +36,7 @@ class GrowDetailsPage extends Component {
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
             this.watchPiCam()
-        } 
+        }
 
         if (this.props.grow.urls.cam) {
             if (this._ismounted) {
@@ -54,7 +54,7 @@ class GrowDetailsPage extends Component {
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
                 this.processGrowData(this.props.rawGrowData)
-            } 
+            }
         }
 
         this.getLinkedJournals(this.props.grow.journals, this.setLinkedJournals)
@@ -75,7 +75,7 @@ class GrowDetailsPage extends Component {
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
                 this.processGrowData(this.props.rawGrowData)
-            } 
+            }
         }
     }
 
@@ -121,24 +121,24 @@ class GrowDetailsPage extends Component {
 
                 lastDayData[lastDayData.length] = dataPoint
                 if (dataPoint.cTemp) {
-                    if (!highTemp[0] || dataPoint.cTemp >= highTemp[0]) {
+                    if (!highTemp[0] || parseFloat(dataPoint.cTemp) >= highTemp[0]) {
                         highTemp[0] = dataPoint.cTemp
                         highTemp[1] = dataPoint.time
                     }
 
-                    if (!lowTemp[0] || dataPoint.cTemp <= lowTemp[0]) {
+                    if (!lowTemp[0] || parseFloat(dataPoint.cTemp) <= lowTemp[0]) {
                         lowTemp[0] = dataPoint.cTemp
                         lowTemp[1] = dataPoint.time
                     }
                     tempAVG += parseFloat(dataPoint.cTemp)
                 }
                 if (dataPoint.humidity) {
-                    if (!highHumidity[0] || dataPoint.humidity >= highHumidity[0]) {
+                    if (!highHumidity[0] || parseFloat(dataPoint.humidity)  >= highHumidity[0]) {
                         highHumidity[0] = dataPoint.humidity
                         highHumidity[1] = dataPoint.time
                     }
 
-                    if (!lowHumidity[0] || dataPoint.humidity <= lowHumidity[0]) {
+                    if (!lowHumidity[0] || parseFloat(dataPoint.humidity) <= lowHumidity[0]) {
                         lowHumidity[0] = dataPoint.humidity
                         lowHumidity[1] = dataPoint.time
                     }
@@ -146,24 +146,24 @@ class GrowDetailsPage extends Component {
                     humidityAVG += parseFloat(dataPoint.humidity)
                 }
                 if (dataPoint.fanSpeed) {
-                    if (!highFan[0] || dataPoint.fanSpeed >= highFan[0]) {
+                    if (!highFan[0] || parseFloat(dataPoint.fanSpeed) >= highFan[0]) {
                         highFan[0] = dataPoint.fanSpeed
                         highFan[1] = dataPoint.time
                     }
 
-                    if (!lowFan[0] || dataPoint.fanSpeed <= lowFan[0]) {
+                    if (!lowFan[0] || parseFloat(dataPoint.fanSpeed) <= lowFan[0]) {
                         lowFan[0] = dataPoint.fanSpeed
                         lowFan[1] = dataPoint.time
                     }
                     fanAVG += parseFloat(dataPoint.fanSpeed)
                 }
                 if (dataPoint.humiPower) {
-                    if (!highHumidifier[0] || dataPoint.humiPower >= highHumidifier[0]) {
-                        highHumidifier[0] = dataPoint.humiPower
-                        highHumidifier[1] = dataPoint.time
+                    if (highHumidifier[0] === undefined || parseFloat(dataPoint.humiPower) >= highHumidifier[0]) {
+                            highHumidifier[0] = dataPoint.humiPower
+                            highHumidifier[1] = dataPoint.time                    
                     }
 
-                    if (!lowHumidifier[0] || dataPoint.humiPower <= lowHumidifier[0]) {
+                    if (!lowHumidifier[0] || parseFloat(dataPoint.humiPower) <= lowHumidifier[0]) {
                         lowHumidifier[0] = dataPoint.humiPower
                         lowHumidifier[1] = dataPoint.time
                     }
@@ -177,6 +177,13 @@ class GrowDetailsPage extends Component {
         humidityAVG = humidityAVG / dataPointCount
         fanAVG = fanAVG / dataPointCount
         humidifierAVG = humidifierAVG / dataPointCount
+
+        console.log("highHumidifier")
+        console.log(highHumidifier)
+
+
+        console.log("highTemp")
+        console.log(highTemp)
 
         this.setState({
             highTemp: highTemp,
@@ -457,7 +464,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.highTemp) {
                                                                     var m = moment(this.state.highTemp[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
@@ -472,7 +479,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.lowTemp) {
                                                                     var m = moment(this.state.lowTemp[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
@@ -512,7 +519,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.highFan) {
                                                                     var m = moment(this.state.highFan[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
@@ -527,7 +534,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.lowFan) {
                                                                     var m = moment(this.state.lowFan[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
@@ -567,7 +574,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.highHumidity) {
                                                                     var m = moment(this.state.highHumidity[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
@@ -582,7 +589,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.lowHumidity) {
                                                                     var m = moment(this.state.lowHumidity[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
@@ -620,7 +627,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.highHumidifier) {
                                                                     var m = moment(this.state.highHumidifier[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
@@ -635,7 +642,7 @@ class GrowDetailsPage extends Component {
                                                             {(() => {
                                                                 if (this.state.lowHumidifier) {
                                                                     var m = moment(this.state.lowHumidifier[1])
-                                                                    return "(" + m.format('HH:mm') +")"
+                                                                    return "(" + m.format('HH:mm') + ")"
                                                                 }
                                                             })()}
                                                         </div>
