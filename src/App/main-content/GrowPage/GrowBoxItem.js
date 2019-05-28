@@ -120,8 +120,10 @@ class GrowBoxItem extends Component {
 			if (this._ismounted) {
 
 
-				if (difference >= 120000) {
-					if (this.state.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Warning-Background') {
+				if (difference >= 120000 && difference < 24000) {
+					if (this.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Warning-Background') {
+						this.activeIndicatorStyle = 'Grow-Active-Indicator-Circle Data-Warning-Background'
+
 						this.setState({
 							activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Warning-Background'
 						});
@@ -130,7 +132,8 @@ class GrowBoxItem extends Component {
 				}
 
 				if (difference >= 240000) {
-					if (this.state.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Danger-Background') {
+					if (this.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Danger-Background') {
+						this.activeIndicatorStyle = 'Grow-Active-Indicator-Circle Data-Danger-Background'
 
 						this.setState({
 							activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Danger-Background'
@@ -139,7 +142,8 @@ class GrowBoxItem extends Component {
 				}
 
 				if (difference < 120000) {
-					if (this.state.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Optimal-Background') {
+					if (this.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Optimal-Background') {
+						this.activeIndicatorStyle = 'Grow-Active-Indicator-Circle Data-Optimal-Background'
 
 						this.setState({
 							activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Optimal-Background'

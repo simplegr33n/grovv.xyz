@@ -446,7 +446,7 @@ class GrowDetailsPage extends Component {
                                                                 } else if (this.state.liveData.cTemp < this.state.lastLiveData.cTemp) {
                                                                     return <span role="img" aria-label="lower value">&#9660;</span>
                                                                 } else {
-                                                                    return <span role="img" aria-label="even value">&#183;</span>
+                                                                    return
                                                                 }
                                                             })()}
                                                             {Math.round(this.state.liveData.cTemp * 10) / 10}°C
@@ -510,7 +510,7 @@ class GrowDetailsPage extends Component {
                                                                 } else if (this.state.liveData.fanSpeed < this.state.lastLiveData.fanSpeed) {
                                                                     return <span role="img" aria-label="lower value">&#9660;</span>
                                                                 } else {
-                                                                    return <span role="img" aria-label="even value">&#183;</span>
+                                                                    return
                                                                 }
                                                             })()}
                                                             {this.state.liveData.fanSpeed}%
@@ -574,7 +574,7 @@ class GrowDetailsPage extends Component {
                                                                 } else if (this.state.liveData.humidity < this.state.lastLiveData.humidity) {
                                                                     return <span role="img" aria-label="lower value">&#9660;</span>
                                                                 } else {
-                                                                    return <span role="img" aria-label="even value">&#183;</span>
+                                                                    return
                                                                 }
                                                             })()}
                                                             {Math.round(this.state.liveData.humidity * 10) / 10}%
@@ -636,7 +636,7 @@ class GrowDetailsPage extends Component {
                                                                 } else if (this.state.liveData.humiPower < this.state.lastLiveData.humiPower) {
                                                                     return <span role="img" aria-label="lower value">&#9660;</span>
                                                                 } else {
-                                                                    return <span role="img" aria-label="even value">&#183;</span>
+                                                                    return
                                                                 }
                                                             })()}
                                                             {this.state.liveData.humiPower}%
