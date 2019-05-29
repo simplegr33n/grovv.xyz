@@ -1513,6 +1513,24 @@ html {
     overflow: hidden;
 }
 
+#GROW-DETAILS-RESET-BTN {
+    max-height: 30px;
+    background-color: #ff4234;
+    color: #000;
+    margin-left: 60px;
+    margin-right: 40px;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    user-select: none;
+    cursor: pointer;
+    border-radius: 25px;
+}
+
+#GROW-DETAILS-RESET-BTN:hover {
+    background-color: #f55f54;
+}
+
 #GROW-DETAILS-SAVE-CONFIG-BTN {
     max-height: 60px;
     background-color: #f1ff34;
@@ -1529,6 +1547,7 @@ html {
 #GROW-DETAILS-SAVE-CONFIG-BTN:hover {
     background-color: #63ff34;
 }
+
 
 .Grow-Details-Cam-Full-Btn {
     position: absolute;

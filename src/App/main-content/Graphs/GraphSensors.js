@@ -53,7 +53,6 @@ class GraphSensors extends Component {
                         i++;
                         if (i === 0 || i % 10 === 0) {
                             var processedPoint = dataPoint
-                            processedPoint.time = processedPoint.time
                             processedData[processedData.length] = processedPoint
                         }
                     })

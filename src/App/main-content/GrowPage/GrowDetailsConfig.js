@@ -19,7 +19,9 @@ class GrowDetailsConfig extends Component {
             humidity_max: '',
             humidity_hyst: '',
             humidifier_min: '',
-            humidifier_max: ''
+            humidifier_max: '',
+
+            resetValue: false
         };
 
         this.dbHelper = new DbHelper()
@@ -29,6 +31,7 @@ class GrowDetailsConfig extends Component {
     componentDidMount() {
         this._ismounted = true;
         this.watchConfig = this.watchGrowConfig(this.setFetchedConfig);
+        this.getResetValue = this.getResetValue()
     }
 
     componentWillUnmount() {
@@ -57,14 +60,14 @@ class GrowDetailsConfig extends Component {
     watchGrowConfig = async (setData) => {
         try {
             await this.dbHelper.watchGrowConfig(this.props.growID, setData)
-        } catch(e) {
-            console.log(e); 
+        } catch (e) {
+            console.log(e);
             return 'caught ' + e
         }
     }
 
     setFetchedConfig = (configObj) => {
-        
+
         this.setState({
             temp_min: configObj.temp_min,
             temp_max: configObj.temp_max,
@@ -118,6 +121,20 @@ class GrowDetailsConfig extends Component {
 
     handleHumidifierMaxChange = (event) => {
         this.setState({ humidifier_max: event.target.value });
+    }
+
+    getResetValue = () => {
+        this.dbHelper.getResetValue(this.props.growID, this.setResetValue)
+    }
+
+    setResetValue = (value) => {
+        this.setState({ resetValue: value });
+    }
+
+    handleReset = () => {
+        if (this.state.resetValue === false) {
+            this.dbHelper.resetGrow(this.props.growID)
+        }
     }
 
 
@@ -191,7 +208,27 @@ class GrowDetailsConfig extends Component {
 
                     <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={this.saveConfig}>
                         SAVE
-                </div>
+                    </div>
+
+                    {(() => {
+                        if (!this.state.resetValue || this.state.resetValue === false) {
+                            return (
+                                <div id="GROW-DETAILS-RESET-BTN" onClick={this.handleReset}>
+                                    RESET<br></br>
+                                    GROWLAB
+                                </div>
+                            )
+                        } else {
+                            return (
+                                <div id="GROW-DETAILS-RESET-BTN" style={{userSelect: 'none', cursor: 'auto', backgroundColor: '#c77725'}}>
+                                    RESETTING<br></br>
+                                    GROWLAB...
+                                </div>
+                            )
+                        }
+                    })()}
+
+
 
                 </div>
             </div>

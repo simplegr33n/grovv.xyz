@@ -240,6 +240,42 @@ class DbHelper {
         ref.set(config)
     }
 
+
+    // .................. //
+    // GROW CONFIG RESET  //
+    // .................. //
+
+    // Get Reset Value
+    getResetValue(growID, setData) {
+
+        // Config data isResetting in firebase 
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config').child('isResetting')
+
+        ref.on('value', (snapshot) => {
+
+            if (snapshot.val() === null) {
+                setData(false);
+                return;
+            }
+
+            setData(snapshot.val())
+
+
+        }, function (errorObject) {
+            console.log("watch isResetting failed: " + errorObject.code);
+        });
+    }
+
+    // Get Reset Value
+    resetGrow(growID) {
+        // Config data isResetting in firebase 
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config').child('isResetting')
+
+        ref.set(true)
+    }
+
+
+
     // ........... //
     // GROW PAGE   //
     // ........... //
@@ -260,11 +296,10 @@ class DbHelper {
                 }
             });
 
-            // TODO: make own function...?
-            for (var key of userGrowIDs) {
-                var growRef = this.firebase.db.ref().child('grows').child(this.userID).child(key)
+            var setUserGrows = []
 
-                var setUserGrows = []
+            userGrowIDs.forEach((key) => {
+                var growRef = this.firebase.db.ref().child('grows').child(this.userID).child(key)
 
                 growRef.once('value', (snapshot) => {
 
@@ -279,7 +314,7 @@ class DbHelper {
                 }, function (errorObject) {
                     console.log("watch user grows grow failed: " + errorObject.code);
                 });
-            }
+            })
 
         }, function (errorObject) {
             console.log("watch user grows failed: " + errorObject.code);
