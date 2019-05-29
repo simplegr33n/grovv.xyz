@@ -442,11 +442,11 @@ class GrowDetailsPage extends Component {
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                             {(() => {
                                                                 if (this.state.liveData.cTemp > this.state.lastLiveData.cTemp) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.cTemp < this.state.lastLiveData.cTemp) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '10px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {Math.round(this.state.liveData.cTemp * 10) / 10}°C
@@ -506,11 +506,11 @@ class GrowDetailsPage extends Component {
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                         {(() => {
                                                                 if (this.state.liveData.fanSpeed > this.state.lastLiveData.fanSpeed) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.fanSpeed < this.state.lastLiveData.fanSpeed) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '10px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {this.state.liveData.fanSpeed}%
@@ -570,11 +570,11 @@ class GrowDetailsPage extends Component {
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                         {(() => {
                                                                 if (this.state.liveData.humidity > this.state.lastLiveData.humidity) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.humidity < this.state.lastLiveData.humidity) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '10px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {Math.round(this.state.liveData.humidity * 10) / 10}%
@@ -632,11 +632,11 @@ class GrowDetailsPage extends Component {
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                         {(() => {
                                                                 if (this.state.liveData.humiPower > this.state.lastLiveData.humiPower) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.humiPower < this.state.lastLiveData.humiPower) {
-                                                                    return <div style={{fontSize: '10px'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '10px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {this.state.liveData.humiPower}%
