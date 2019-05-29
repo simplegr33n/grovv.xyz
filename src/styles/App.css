@@ -1848,4 +1848,7 @@ html {
     font-size: 24px;
     color: #000;
     padding: 0 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
