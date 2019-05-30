@@ -210,6 +210,7 @@ class DbHelper {
         // Config data in firebase // TODO... proper
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
 
+
         ref.on('value', (snapshot) => {
 
             if (snapshot.val() === null) {
@@ -236,7 +237,7 @@ class DbHelper {
 
     // Set Grow Config in firebase
     setGrowConfig(growID, config) {
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child('-Lg5uudAktkyqOauRjY-').child('config')
         ref.set(config)
     }
 
@@ -307,7 +308,7 @@ class DbHelper {
                         setUserGrows[setUserGrows.length] = snapshot.val()
                     }
 
-                    setUserGrows.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
+                    setUserGrows.sort((a, b) => (a.createdAt > b.createdAt) ? 1 : -1)
 
                     setData(setUserGrows)
 
