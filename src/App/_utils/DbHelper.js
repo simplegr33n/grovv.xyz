@@ -237,7 +237,7 @@ class DbHelper {
 
     // Set Grow Config in firebase
     setGrowConfig(growID, config) {
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child('-Lg5uudAktkyqOauRjY-').child('config')
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
         ref.set(config)
     }
 
