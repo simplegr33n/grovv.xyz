@@ -113,11 +113,19 @@ class GrowDetailsPage extends Component {
         var fanAVG = 0
         var humidifierAVG = 0
 
+        var yestPointCount = 0
+        var yestTempAVG = 0
+        var yestHumidityAVG = 0
+        var yestFanAVG = 0
+        var yestHumidifierAVG = 0
 
         var now = new Date().getTime()
 
 
         var lastDayData = []
+
+        var yesterdayData = []
+
         concatData.forEach((dataPoint) => {
             if (now - dataPoint.time < 86400000) {
                 dataPointCount += 1
@@ -174,12 +182,36 @@ class GrowDetailsPage extends Component {
                 }
             }
 
+            if ((now - dataPoint.time < (86400000 * 2)) && (now - dataPoint.time > 86400000)) {
+                yestPointCount += 1
+
+                yesterdayData[yesterdayData.length] = dataPoint
+                if (dataPoint.cTemp) {
+                    yestTempAVG += parseFloat(dataPoint.cTemp)
+                }
+                if (dataPoint.humidity) {
+                    yestHumidityAVG += parseFloat(dataPoint.humidity)
+                }
+                if (dataPoint.fanSpeed) {
+                    yestFanAVG += parseFloat(dataPoint.fanSpeed)
+                }
+                if (dataPoint.humiPower) {
+                    yestHumidifierAVG += parseFloat(dataPoint.humiPower)
+                }
+
+            }
+
         })
 
         tempAVG = tempAVG / dataPointCount
         humidityAVG = humidityAVG / dataPointCount
         fanAVG = fanAVG / dataPointCount
         humidifierAVG = humidifierAVG / dataPointCount
+
+        yestTempAVG = yestTempAVG / yestPointCount
+        yestHumidityAVG = yestHumidityAVG / yestPointCount
+        yestFanAVG = yestFanAVG / yestPointCount
+        yestHumidifierAVG = yestHumidifierAVG / yestPointCount
 
         this.setState({
             highTemp: highTemp,
@@ -193,7 +225,12 @@ class GrowDetailsPage extends Component {
             tempAVG: tempAVG,
             humidityAVG: humidityAVG,
             fanAVG: fanAVG,
-            humidifierAVG: humidifierAVG
+            humidifierAVG: humidifierAVG,
+            yestTempAVG: yestTempAVG,
+            yestHumidityAVG: yestHumidityAVG,
+            yestFanAVG: yestFanAVG,
+            yestHumidifierAVG: yestHumidifierAVG
+
         })
 
         console.log("lastDayData")
@@ -413,8 +450,11 @@ class GrowDetailsPage extends Component {
                                             <div className="Grow-Details-Main-Data-Rows-Column">
                                                 *
                                             </div>
-                                            <div className="Grow-Details-Main-Data-Rows-Column" style={{ fontSize: '24px', marginBottom: '2px' }}>
+                                            <div className="Grow-Details-Main-Data-Rows-Column" style={{ fontSize: '22px' }}>
                                                 cur
+                                            </div>
+                                            <div className="Grow-Details-Main-Data-Rows-Column" style={{ fontSize: '8px', opacity: 0, marginBottom: '2px' }}>
+                                                y
                                             </div>
                                             <div className="Grow-Details-Main-Data-Rows-Column">
                                                 24h~
@@ -442,16 +482,35 @@ class GrowDetailsPage extends Component {
                                                         <div className="Grow-Details-Main-Data-Current-Data">
                                                             {(() => {
                                                                 if (this.state.liveData.cTemp > this.state.lastLiveData.cTemp) {
-                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.cTemp < this.state.lastLiveData.cTemp) {
-                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {Math.round(this.state.liveData.cTemp * 10) / 10}°C
                                                         </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '8px', color: '#A9A9A9' }}>
+                                                            {(() => {
+                                                                if (this.state.yestTempAVG) {
+                                                                    return Math.round(this.state.yestTempAVG * 10) / 10 + '°C'
+                                                                }
+                                                            })()}
+                                                        </div>
                                                         <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca', marginBottom: '2px' }}>
+                                                            {(() => {
+                                                                if (this.state.tempAVG && this.state.yestTempAVG) {
+                                                                    if (this.state.tempAVG > this.state.yestTempAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.tempAVG < this.state.yestTempAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '10px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                }
+                                                            })()}
+
                                                             {(() => {
                                                                 if (this.state.tempAVG) {
                                                                     return Math.round(this.state.tempAVG * 10) / 10 + '°C'
@@ -504,18 +563,36 @@ class GrowDetailsPage extends Component {
                                                             Fan
                                                         </div>
                                                         <div className="Grow-Details-Main-Data-Current-Data">
-                                                        {(() => {
+                                                            {(() => {
                                                                 if (this.state.liveData.fanSpeed > this.state.lastLiveData.fanSpeed) {
-                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.fanSpeed < this.state.lastLiveData.fanSpeed) {
-                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {this.state.liveData.fanSpeed}%
                                                         </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '8px', color: '#A9A9A9' }}>
+                                                            {(() => {
+                                                                if (this.state.yestFanAVG) {
+                                                                    return Math.round(this.state.yestFanAVG * 10) / 10 + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
                                                         <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca', marginBottom: '2px' }}>
+                                                            {(() => {
+                                                                if (this.state.fanAVG && this.state.yestFanAVG) {
+                                                                    if (this.state.fanAVG > this.state.yestFanAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.fanAVG < this.state.yestFanAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '10px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                }
+                                                            })()}
                                                             {(() => {
                                                                 if (this.state.fanAVG) {
                                                                     return Math.round(this.state.fanAVG * 10) / 10 + '%'
@@ -568,18 +645,37 @@ class GrowDetailsPage extends Component {
                                                             HUMID
                                                         </div>
                                                         <div className="Grow-Details-Main-Data-Current-Data">
-                                                        {(() => {
+                                                            {(() => {
                                                                 if (this.state.liveData.humidity > this.state.lastLiveData.humidity) {
-                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.humidity < this.state.lastLiveData.humidity) {
-                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {Math.round(this.state.liveData.humidity * 10) / 10}%
                                                         </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '8px', color: '#A9A9A9' }}>
+                                                            {(() => {
+                                                                if (this.state.yestHumidityAVG) {
+                                                                    return Math.round(this.state.yestHumidityAVG * 10) / 10 + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
                                                         <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca', marginBottom: '2px' }}>
+                                                            {(() => {
+                                                                if (this.state.humidityAVG && this.state.yestHumidityAVG) {
+                                                                    if (this.state.humidityAVG > this.state.yestHumidityAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.humidityAVG < this.state.yestHumidityAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '10px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                }
+                                                            })()}
+                                                            
                                                             {(() => {
                                                                 if (this.state.humidityAVG) {
                                                                     return Math.round(this.state.humidityAVG * 10) / 10 + '%'
@@ -630,18 +726,37 @@ class GrowDetailsPage extends Component {
                                                             Hmdfier
                                                         </div>
                                                         <div className="Grow-Details-Main-Data-Current-Data">
-                                                        {(() => {
+                                                            {(() => {
                                                                 if (this.state.liveData.humiPower > this.state.lastLiveData.humiPower) {
-                                                                    return <div style={{fontSize: '14px', color: '#a02525'}}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                                                 } else if (this.state.liveData.humiPower < this.state.lastLiveData.humiPower) {
-                                                                    return <div style={{fontSize: '14px', color: '#242490'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 } else {
-                                                                    return <div style={{fontSize: '14px', visibility: 'hidden'}}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                                                 }
                                                             })()}
                                                             {this.state.liveData.humiPower}%
                                                         </div>
+                                                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '8px', color: '#A9A9A9' }}>
+                                                            {(() => {
+                                                                if (this.state.yestHumidifierAVG) {
+                                                                    return Math.round(this.state.yestHumidifierAVG * 10) / 10 + '%'
+                                                                }
+                                                            })()}
+                                                        </div>
                                                         <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca', marginBottom: '2px' }}>
+                                                            {(() => {
+                                                                if (this.state.humidifierAVG && this.state.yestHumidifierAVG) {
+                                                                    if (this.state.humidifierAVG > this.state.yestHumidifierAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.humidifierAVG < this.state.yestHumidifierAVG) {
+                                                                        return <div style={{ fontSize: '10px', color: '#000' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '10px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                }
+                                                            })()}
+                                                            
                                                             {(() => {
                                                                 if (this.state.humidifierAVG) {
                                                                     return Math.round(this.state.humidifierAVG * 10) / 10 + '%'
@@ -709,7 +824,9 @@ class GrowDetailsPage extends Component {
                                     <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
                                 </div>
                                 <div className="Grow-Details-Journals-Header">Connected Journals</div>
-                                {renderedLinkedJournals}
+                                <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', maxHeight: '100%' }}>
+                                    {renderedLinkedJournals}
+                                </div>
 
                             </div>
                         </div>
