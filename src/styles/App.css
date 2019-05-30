@@ -1412,7 +1412,7 @@ html {
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
-    padding: 3%;
+    padding: 1%;
     background-color: rgb(27, 65, 23);
 }
 
@@ -1454,8 +1454,10 @@ html {
 
 }
 
-.Grow-Details-Data-Display {
+#Grow-Details-Data-Display {
     width: 100%;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .Grow-Data-Display {
@@ -1709,6 +1711,8 @@ html {
     background-color: rgb(69, 143, 40);
     user-select: none;
     margin-left: 2px;
+    width: 37px;
+    max-width: 37px;
 }
 
 .App-Bar-Button-Grow:hover {
@@ -1810,40 +1814,45 @@ html {
 
 /* GROW DETAILS DATA DISPLAY */
 #Grow-Details-Main-Data-Display {
-    background-color: #000;
-    font-size: 16px;
+    font-size: 18px;
     color: #ededf1;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     user-select: none;
     font-weight: 600;
 }
 
-.Grow-Details-Main-Data-Display-Column {
+.Grow-Details-Main-Data-Display-Row {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex: 1;
 }
 
-.Grow-Details-Main-Data-Rows-Column {
+.Grow-Details-Main-Data-Row-Header {
     display: flex;
     flex-direction: column;
-    font-size: 16px;
+    font-size: 18px;
+    width: 60px;
+    max-width: 60px;
 }
 
 .Grow-Details-Main-Data-Time {
-    font-weight: normal;
+    font-weight: bold;
     background-color: #444439;
     color: #d3d3d4;
+    font-size: 10px;
 }
 
 .Grow-Details-Main-Data-Data {
     font-weight: bold;
     background-color: #c4c725;
     color: #000;
-    font-size: 16px;
+    font-size: 18px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
+    width: 60px;
+    max-width: 60px;
 }
 
 .Grow-Details-Main-Data-Current-Data {
@@ -1855,4 +1864,6 @@ html {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    width: 80px;
+    max-width: 80px;
 }
