@@ -35,6 +35,7 @@ Create optimized build and push to 'gh-pages' branch for deployment.
 * https://github.com/Hacker0x01/react-datepicker - **react-datepicker** simple datepicker
 * http://recharts.org/ - **recharts** for graphs
 * https://github.com/moment/moment - **moment** for easy date formating
+* https://github.com/react-icons/react-icons icons 
 
 ## Considering...
 * https://github.com/bokuweb/react-rnd - for a customizable dashboard interface?

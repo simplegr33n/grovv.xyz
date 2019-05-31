@@ -1816,6 +1816,7 @@ html {
 #Grow-Details-Main-Data-Display {
     font-size: 18px;
     color: #ededf1;
+    background-color: #000;
     display: flex;
     flex-direction: column;
     user-select: none;
@@ -1826,11 +1827,18 @@ html {
     display: flex;
     flex-direction: row;
     flex: 1;
+    height: 40px;
+}
+
+.Grow-Details-Headers-Display-Row {
+    display: flex;
+    flex-direction: row;
 }
 
 .Grow-Details-Main-Data-Row-Header {
     display: flex;
     flex-direction: column;
+    text-align: bottom;
     font-size: 18px;
     width: 60px;
     max-width: 60px;
@@ -1858,12 +1866,12 @@ html {
 .Grow-Details-Main-Data-Current-Data {
     font-weight: 700;
     background-color: #38c538;
-    font-size: 22px;
+    font-size: 23px;
     color: #000;
-    padding: 0 3px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     width: 80px;
     max-width: 80px;
+    margin-bottom: 1px;
 }

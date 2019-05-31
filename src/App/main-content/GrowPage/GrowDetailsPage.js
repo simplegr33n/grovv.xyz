@@ -13,6 +13,8 @@ import DbHelper from '../../_utils/DbHelper.js'
 
 import moment from 'moment'
 
+import { WiThermometer, WiHumidity, WiHurricane, WiSprinkle } from 'react-icons/wi';
+
 
 
 class GrowDetailsPage extends Component {
@@ -447,8 +449,8 @@ class GrowDetailsPage extends Component {
                                 if (this.state.liveData) {
                                     return (
                                         <div id="Grow-Details-Main-Data-Display">
-                                            <div className="Grow-Details-Main-Data-Display-Row">
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', color: '#000' }}>*</div>
+                                            <div className="Grow-Details-Headers-Display-Row">
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', color: '#000', width: '44px', maxWidth: '44px'  }}>*</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '86px', maxWidth: '86px' }}>cur</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>24h~</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>24h&#8593;</div>
@@ -458,9 +460,9 @@ class GrowDetailsPage extends Component {
                                                 if (this.state.liveData.cTemp) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>
-                                                                TEMP
-                                                        </div>
+                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
+                                                                <WiThermometer style={{color: '#FFF', fontSize: '44px' }}/>
+                                                            </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
                                                                     if (this.state.liveData.cTemp > this.state.lastLiveData.cTemp) {
@@ -473,7 +475,7 @@ class GrowDetailsPage extends Component {
                                                                 })()}
                                                                 {Math.round(this.state.liveData.cTemp * 10) / 10}°C
                                                         </div>
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '10px', color: '#A9A9A9' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '10px', color: '#A9A9A9'}}>
                                                                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                                                     {(() => {
                                                                         if (this.state.yestTempAVG) {
@@ -501,7 +503,7 @@ class GrowDetailsPage extends Component {
                                                                 </div>
                                                             </div>
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time">
                                                                     {(() => {
                                                                         if (this.state.highTemp) {
@@ -520,7 +522,7 @@ class GrowDetailsPage extends Component {
 
                                                             </div>
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time">
                                                                     {(() => {
                                                                         if (this.state.lowTemp) {
@@ -549,8 +551,9 @@ class GrowDetailsPage extends Component {
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>
-                                                                Fan
+                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
+                                                                <WiHurricane style={{color: '#FFF', fontSize: '44px' }}/>
+
                                                         </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -593,7 +596,7 @@ class GrowDetailsPage extends Component {
                                                             </div>
 
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time" >
                                                                     {(() => {
                                                                         if (this.state.highFan) {
@@ -610,7 +613,7 @@ class GrowDetailsPage extends Component {
                                                                 })()}
                                                             </div>
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
 
                                                                 <div className="Grow-Details-Main-Data-Time">
                                                                     {(() => {
@@ -640,8 +643,9 @@ class GrowDetailsPage extends Component {
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>
-                                                                HUMID
+                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
+                                                                <WiHumidity style={{color: '#FFF', fontSize: '44px'}}/>
+                                                                
                                                         </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -685,7 +689,7 @@ class GrowDetailsPage extends Component {
                                                                 </div>
                                                             </div>
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time" >
                                                                     {(() => {
                                                                         if (this.state.highHumidity) {
@@ -702,7 +706,7 @@ class GrowDetailsPage extends Component {
                                                                 })()}
                                                             </div>
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time">
                                                                     {(() => {
                                                                         if (this.state.lowHumidity) {
@@ -729,8 +733,8 @@ class GrowDetailsPage extends Component {
                                                 if (this.state.liveData.humiPower) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>
-                                                                Hmdfier
+                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
+                                                            <WiSprinkle style={{color: '#FFF', fontSize: '44px' }}/>
                                                         </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -776,7 +780,7 @@ class GrowDetailsPage extends Component {
                                                             </div>
 
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time">
                                                                     {(() => {
                                                                         if (this.state.highHumidifier) {
@@ -793,7 +797,7 @@ class GrowDetailsPage extends Component {
                                                                 })()}
                                                             </div>
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time" >
                                                                     {(() => {
                                                                         if (this.state.lowHumidifier) {
