@@ -36,11 +36,15 @@ class GrowDetailsPage extends Component {
         this._ismounted = true;
 
         //TODO: Remove condition
-        if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
+        if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-') {
+
             this.watchPiCam()
+
+            this.setState({ camURL: this.props.grow.urls.cam + 'cam_pic.php?time=' });
+
         }
 
-        if (this.props.grow.urls.cam) {
+        if (this.props.grow.urls.cam && !(this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-')) {
             if (this._ismounted) {
                 this.setState({ camURL: this.props.grow.urls.cam });
             }
@@ -51,7 +55,18 @@ class GrowDetailsPage extends Component {
                 return;
             }
 
-            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            console.log('itzakadoozie')
+            console.log(this.props.rawGrowData)
+
+            console.log(this.props.rawGrowData[this.props.grow.id])
+            console.log(this.props.rawGrowData[this.props.grow.id]['01'])
+
+
+            // if (!(this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1])) {
+            //     return;
+            // }
+
+                var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
@@ -72,7 +87,11 @@ class GrowDetailsPage extends Component {
                 return;
             }
 
-            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            // if (!(this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1])) {
+            //     return;
+            // }
+
+                var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
@@ -242,7 +261,8 @@ class GrowDetailsPage extends Component {
 
     // TODO: remove function
     watchPiCam = () => {
-        var tempURL = 'http://96.52.249.69:300/html/cam_pic.php?time='
+        var tempURL = this.props.grow.urls.cam + 'cam_pic.php?time='
+
         var i = 0
         setInterval(() => {
             i++
@@ -450,7 +470,7 @@ class GrowDetailsPage extends Component {
                                     return (
                                         <div id="Grow-Details-Main-Data-Display">
                                             <div className="Grow-Details-Headers-Display-Row">
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', color: '#000', width: '44px', maxWidth: '44px'  }}>*</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', color: '#000', width: '44px', maxWidth: '44px' }}>*</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '86px', maxWidth: '86px' }}>cur</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>24h~</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>24h&#8593;</div>
@@ -461,7 +481,7 @@ class GrowDetailsPage extends Component {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
                                                             <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                                <WiThermometer style={{color: '#FFF', fontSize: '44px' }}/>
+                                                                <WiThermometer style={{ color: '#FFF', fontSize: '44px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -475,13 +495,17 @@ class GrowDetailsPage extends Component {
                                                                 })()}
                                                                 {Math.round(this.state.liveData.cTemp * 10) / 10}°C
                                                         </div>
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '10px', color: '#A9A9A9'}}>
-                                                                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                                                     {(() => {
                                                                         if (this.state.yestTempAVG) {
                                                                             return Math.round(this.state.yestTempAVG * 10) / 10 + '°C'
                                                                         }
                                                                     })()}
+
+
                                                                     {(() => {
                                                                         if (this.state.tempAVG && this.state.yestTempAVG) {
                                                                             if (this.state.tempAVG > this.state.yestTempAVG) {
@@ -494,14 +518,17 @@ class GrowDetailsPage extends Component {
                                                                         }
                                                                     })()}
                                                                 </div>
-                                                                <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca' }}>
-                                                                    {(() => {
-                                                                        if (this.state.tempAVG) {
-                                                                            return Math.round(this.state.tempAVG * 10) / 10 + '°C'
-                                                                        }
-                                                                    })()}
-                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.tempAVG) {
+                                                                        return Math.round(this.state.tempAVG * 10) / 10 + '°C'
+                                                                    }
+                                                                })()}
                                                             </div>
+
+
+
+
 
                                                             <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time">
@@ -552,9 +579,9 @@ class GrowDetailsPage extends Component {
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
                                                             <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                                <WiHurricane style={{color: '#FFF', fontSize: '44px' }}/>
+                                                                <WiHurricane style={{ color: '#FFF', fontSize: '44px' }} />
 
-                                                        </div>
+                                                            </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
                                                                     if (this.state.liveData.fanSpeed > this.state.lastLiveData.fanSpeed) {
@@ -567,13 +594,15 @@ class GrowDetailsPage extends Component {
                                                                 })()}
                                                                 {this.state.liveData.fanSpeed}%
                                                         </div>
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '10px', color: '#A9A9A9' }}>
-                                                                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                                                     {(() => {
                                                                         if (this.state.yestFanAVG) {
                                                                             return Math.round(this.state.yestFanAVG * 10) / 10 + '%'
                                                                         }
                                                                     })()}
+
                                                                     {(() => {
                                                                         if (this.state.fanAVG && this.state.yestFanAVG) {
                                                                             if (this.state.fanAVG > this.state.yestFanAVG) {
@@ -586,14 +615,15 @@ class GrowDetailsPage extends Component {
                                                                         }
                                                                     })()}
                                                                 </div>
-                                                                <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca' }}>
-                                                                    {(() => {
-                                                                        if (this.state.fanAVG) {
-                                                                            return Math.round(this.state.fanAVG * 10) / 10 + '%'
-                                                                        }
-                                                                    })()}
-                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.fanAVG) {
+                                                                        return Math.round(this.state.fanAVG * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
                                                             </div>
+
+
 
 
                                                             <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
@@ -644,9 +674,9 @@ class GrowDetailsPage extends Component {
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
                                                             <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                                <WiHumidity style={{color: '#FFF', fontSize: '44px'}}/>
-                                                                
-                                                        </div>
+                                                                <WiHumidity style={{ color: '#FFF', fontSize: '44px' }} />
+
+                                                            </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
                                                                     if (this.state.liveData.humidity > this.state.lastLiveData.humidity) {
@@ -660,14 +690,14 @@ class GrowDetailsPage extends Component {
                                                                 {Math.round(this.state.liveData.humidity * 10) / 10}%
                                                         </div>
 
-
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '10px', color: '#A9A9A9' }}>
-                                                                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                                                     {(() => {
                                                                         if (this.state.yestHumidityAVG) {
                                                                             return Math.round(this.state.yestHumidityAVG * 10) / 10 + '%'
                                                                         }
                                                                     })()}
+
                                                                     {(() => {
                                                                         if (this.state.humidityAVG && this.state.yestHumidityAVG) {
                                                                             if (this.state.humidityAVG > this.state.yestHumidityAVG) {
@@ -680,14 +710,16 @@ class GrowDetailsPage extends Component {
                                                                         }
                                                                     })()}
                                                                 </div>
-                                                                <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca' }}>
-                                                                    {(() => {
-                                                                        if (this.state.humidityAVG) {
-                                                                            return Math.round(this.state.humidityAVG * 10) / 10 + '%'
-                                                                        }
-                                                                    })()}
-                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.humidityAVG) {
+                                                                        return Math.round(this.state.humidityAVG * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
                                                             </div>
+
+
+
 
                                                             <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time" >
@@ -734,8 +766,8 @@ class GrowDetailsPage extends Component {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
                                                             <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                            <WiSprinkle style={{color: '#FFF', fontSize: '44px' }}/>
-                                                        </div>
+                                                                <WiSprinkle style={{ color: '#FFF', fontSize: '44px' }} />
+                                                            </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
                                                                     if (this.state.liveData.humiPower > this.state.lastLiveData.humiPower) {
@@ -751,8 +783,8 @@ class GrowDetailsPage extends Component {
 
 
 
-                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#000', fontSize: '10px', color: '#A9A9A9' }}>
-                                                                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                                                     {(() => {
                                                                         if (this.state.yestHumidifierAVG) {
                                                                             return Math.round(this.state.yestHumidifierAVG * 10) / 10 + '%'
@@ -770,14 +802,14 @@ class GrowDetailsPage extends Component {
                                                                         }
                                                                     })()}
                                                                 </div>
-                                                                <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#b7b7ca' }}>
-                                                                    {(() => {
-                                                                        if (this.state.humidifierAVG) {
-                                                                            return Math.round(this.state.humidifierAVG * 10) / 10 + '%'
-                                                                        }
-                                                                    })()}
-                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.humidifierAVG) {
+                                                                        return Math.round(this.state.humidifierAVG * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
                                                             </div>
+
 
 
                                                             <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>

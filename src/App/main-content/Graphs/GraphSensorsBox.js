@@ -157,17 +157,18 @@ class GraphSensorsBox extends Component {
 
                 renderDayGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
-                        <Line type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
-                        <Line type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
-                        <Line type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
-                        <Line type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                        <Line yAxisId="left"  type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
+                        <Line yAxisId="right" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
+                        <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
+                        <Line yAxisId="right" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
                         <XAxis
                             dataKey="time"
                             type="number"
                             domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
                             tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')}
                             hide={true} />
-                        <YAxis />
+                        <YAxis yAxisId="left" orientation="left"  domain={[21,30]} />
+                        <YAxis yAxisId="right" orientation="right" />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
                 );

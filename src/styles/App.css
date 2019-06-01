@@ -1412,7 +1412,6 @@ html {
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
-    padding: 1%;
     background-color: rgb(27, 65, 23);
 }
 
@@ -1839,7 +1838,7 @@ html {
     display: flex;
     flex-direction: column;
     text-align: bottom;
-    font-size: 18px;
+    font-size: 1em;
     width: 60px;
     max-width: 60px;
 }
@@ -1848,14 +1847,27 @@ html {
     font-weight: bold;
     background-color: #444439;
     color: #d3d3d4;
-    font-size: 10px;
+    font-size: 0.7em;
 }
 
 .Grow-Details-Main-Data-Data {
     font-weight: bold;
-    background-color: #c4c725;
+    background-color: #b6b6ad;
     color: #000;
-    font-size: 18px;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 60px;
+    max-width: 60px;
+}
+
+
+.Grow-Details-Main-Yest-Data {
+    font-weight: bold;
+    background-color: #000;
+    color: #A9A9A9;
+    font-size: 0.7em;
     display: flex;
     flex-direction: column;
     justify-content: center;

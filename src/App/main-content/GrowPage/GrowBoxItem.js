@@ -27,12 +27,14 @@ class GrowBoxItem extends Component {
 		this._ismounted = true;
 
 		//TODO: Remove condition
-		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b') {
+		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-') {
 
 			this.getLiveCam = this.watchPiCam()
 
 			if (this._ismounted) {
 				this.setState({ growDeprecate: 'flower' });
+				this.setState({ camURL: this.props.grow.urls.cam + 'cam_pic.php?time=' });
+
 			}
 
 		} else {
@@ -42,7 +44,7 @@ class GrowBoxItem extends Component {
 			}
 		}
 
-		if (this.props.grow.urls.cam) {
+		if (this.props.grow.urls.cam && !(this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-')) {
 
 			if (this._ismounted) {
 				this.setState({ camURL: this.props.grow.urls.cam });
@@ -80,7 +82,7 @@ class GrowBoxItem extends Component {
 
 	// TODO: remove function
 	watchPiCam = () => {
-		var tempURL = 'http://96.52.249.69:300/html/cam_pic.php?time='
+		var tempURL = this.props.grow.urls.cam + 'cam_pic.php?time='
 		var i = 0
 		setInterval(() => {
 			i++

@@ -52,14 +52,10 @@ class App extends Component {
 		this.firebase.auth.onAuthStateChanged((user) => {
 			if (user) {
 				this.setState({ UID: user.uid });
-				this.getUrls();
 				this.getUsername();
 
 				this.dbHelper.getUserGrows(this.setUserGrows)
 				this.dbHelper.getUserJournals(this.setUserJournals)
-
-				// this.dbHelper.getThreeDayData('flower', this.setThreeDayData)
-				// this.dbHelper.getThreeDayData('vegger', this.setThreeDayData)
 
 			}
 		});
@@ -95,6 +91,8 @@ class App extends Component {
 
 		var tempThreeDayData = []
 
+		day = parseInt(day)
+
 		if (previousData[growDeprecate]) {
 			tempThreeDayData = previousData[growDeprecate]
 		}
@@ -124,23 +122,6 @@ class App extends Component {
 			console.log("The username read failed: " + errorObject.code);
 		});
 
-	}
-
-
-	getUrls = () => {
-		// Urls location in tree
-		var ref = this.firebase.db.ref().child('users').child(this.state.UID).child('urls')
-
-		ref.on("value", (snapshot) => {
-			this.setState({
-				URL_livecam: snapshot.val().livecam,
-				URL_vegger_livecam: snapshot.val().vegger_livecam,
-				urls: snapshot.val(),
-				//mainContent: 'journals'
-			});
-		}, function (errorObject) {
-			console.log("The url read failed: " + errorObject.code);
-		});
 	}
 
 	handleSignOut = () => {
@@ -297,11 +278,12 @@ class App extends Component {
 										case 'graphs':
 											return (
 												<div className="Chart-Page">
+													{/* TODO REMOVE */}
 													flower 3 day
-													<GrowGraphsTest growDeprecate={'flower'} />
+													<GrowGraphsTest growDeprecate={'-LdtfBTlG6Fgg-ADD8-b'} />
 
 													vegger 3 day
-													<GrowGraphsTest growDeprecate={'vegger'} />
+													<GrowGraphsTest growDeprecate={'-LdtkOvSXRrm1zIZ6EOx'} />
 												</div>
 											)
 										default:
