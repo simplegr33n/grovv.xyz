@@ -16,7 +16,6 @@ class GrowBoxItem extends Component {
 			grow: this.props.grow,
 			activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
 			camURL: null,
-			growDeprecate: '',
 			graphElementSize: [150, 150],
 		};
 
@@ -32,16 +31,12 @@ class GrowBoxItem extends Component {
 			this.getLiveCam = this.watchPiCam()
 
 			if (this._ismounted) {
-				this.setState({ growDeprecate: 'flower' });
 				this.setState({ camURL: this.props.grow.urls.cam + 'cam_pic.php?time=' });
-
 			}
 
 		} else {
 
-			if (this._ismounted) {
-				this.setState({ growDeprecate: 'vegger' });
-			}
+
 		}
 
 		if (this.props.grow.urls.cam && !(this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-')) {
@@ -163,6 +158,9 @@ class GrowBoxItem extends Component {
 
 	render() {
 
+		// console.log("LIVE DATA!" + this.props.grow.id)
+		// console.log(this.props.liveGrowData)
+
 		var lastUpdate = null;
 		if (this.props.liveGrowData[this.props.grow.id]) {
 			// console.log(this.props.liveGrowData[this.props.grow.id])
@@ -186,7 +184,7 @@ class GrowBoxItem extends Component {
 
 				<div className="Grow-Box-Cam-Div">
 					<div className="Grow-Box-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullCam}>&#9974;</div>
-					<img className="Grow-Box-Cam" alt="cam" src={this.state.camURL} width="100%" height="100%" style={{ objectFit: 'contain', cursor: 'pointer' }} onClick={this.openGrow} />
+					<img className="Grow-Box-Cam" alt="cam" src={this.state.camURL} style={{ objectFit: 'contain', cursor: 'pointer', width: '100%' }} onClick={this.openGrow} />
 				</div>
 
 				<div className="Grow-Box-Item-Main">

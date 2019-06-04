@@ -453,7 +453,7 @@ class GrowDetailsPage extends Component {
 
                     <div className="Grow-Details-Content-Cam">
                         <div className="Grow-Details-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullCam}>&#9974;</div>
-                        <img alt="cam" style={{ objectFit: 'contain' }} src={this.state.camURL} width="100%" height="100%" />
+                        <img alt="cam" style={{ objectFit: 'contain', width: '100%' }} src={this.state.camURL} />
                     </div>
 
                     <div className="Grow-Details-Page-Panel">

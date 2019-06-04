@@ -5,6 +5,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment from 'moment'
 
+import { WiThermometer, WiHumidity, WiHurricane, WiSprinkle } from 'react-icons/wi';
+
 
 
 class GraphSensors extends Component {
@@ -12,7 +14,18 @@ class GraphSensors extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            displayHours: 72, // 24, 72
+
+            displayTemp: true,
+            displayFan: true,
+            displayHumidity: true,
+            displayHumidifier: true
         };
+
+        this.displayTemp = true
+        this.displayFan = true
+        this.displayHumidity = true
+        this.displayHumidifier = true
 
     }
 
@@ -69,7 +82,7 @@ class GraphSensors extends Component {
 
     renderTooltip = (props) => {
         var rawContent = props.payload
-        if (rawContent.length === 0) {
+        if (rawContent === null || rawContent.length === 0) {
             return;
         }
 
@@ -139,6 +152,51 @@ class GraphSensors extends Component {
         )
     }
 
+    toggleLine = (ev) => {
+        //this.props.openFullCam(ev.target.dataset.value)
+        switch (ev.target.dataset.value) {
+            case 'temp':
+                if (this.displayTemp === true) {
+                    this.displayTemp = false
+                    this.setState({ displayTemp: false })
+                } else {
+                    this.displayTemp = true
+                    this.setState({ displayTemp: true })
+                }
+                break;
+            case 'fan':
+                if (this.displayFan === true) {
+                    this.displayFan = false
+                    this.setState({ displayFan: false })
+                } else {
+                    this.displayFan = true
+                    this.setState({ displayFan: true })
+                }
+                break;
+            case 'humidity':
+                if (this.displayHumidity === true) {
+                    this.displayHumidity = false
+                    this.setState({ displayHumidity: false })
+                } else {
+                    this.displayHumidity = true
+                    this.setState({ displayHumidity: true })
+                }
+                break;
+
+            case 'humidifier':
+                if (this.displayHumidifier === true) {
+                    this.displayHumidifier = false
+                    this.setState({ displayHumidifier: false })
+                } else {
+                    this.displayHumidifier = true
+                    this.setState({ displayHumidifier: true })
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 
     render() {
 
@@ -150,16 +208,46 @@ class GraphSensors extends Component {
 
                 renderDayGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
-                        <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                        {(() => {
+                            if (this.state.displayTemp) {
+                                return <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
+                            } else {
+                                return <Line yAxisId="left" hide="true" type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
+
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayFan) {
+                                return <Line yAxisId="right" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
+                            } else {
+                                return <Line yAxisId="right" hide="true" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
+
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayHumidity) {
+                                return <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
+                            } else {
+                                return <Line yAxisId="right" hide="true" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
+
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayHumidifier) {
+                                return <Line yAxisId="right" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                            } else {
+
+                                return <Line yAxisId="right" hide="true" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                            }
+                        })()}
+
+
                         <XAxis
                             dataKey="time"
                             type="number"
                             domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
                             tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')} />
-                        <YAxis yAxisId="left" orientation="left"  domain={[21,30]} />
+                        <YAxis yAxisId="left" orientation="left" domain={[21, 30]} />
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
@@ -168,13 +256,59 @@ class GraphSensors extends Component {
         }
 
 
+
+
+
         return (
 
-
             <div className="Chart-Container">
+                <div style={{ width: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                        {(() => {
+                            if (this.state.displayTemp) {
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#ca2014' }} data-value={'temp'} onClick={this.toggleLine}><WiThermometer /></button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'temp'} onClick={this.toggleLine}><WiThermometer /></button>
+
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayFan) {
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#db5e24' }} data-value={'fan'} onClick={this.toggleLine}><WiHurricane /></button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'fan'} onClick={this.toggleLine}><WiHurricane /></button>
+
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayHumidity) {
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#387d14' }} data-value={'humidity'} onClick={this.toggleLine}><WiHumidity /></button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidity'} onClick={this.toggleLine}><WiHumidity /></button>
+
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayHumidifier) {
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#8884d8' }} data-value={'humidifier'} onClick={this.toggleLine}><WiSprinkle /></button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidifier'} onClick={this.toggleLine}><WiSprinkle /></button>
+
+                            }
+                        })()}
+
+
+                    </div>
+
+                    <div>
+                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }}>24hr</button>
+                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }}>72hr</button>
+                    </div>
+
+
+                </div>
                 {renderDayGraph}
             </div>
-
 
         );
     }

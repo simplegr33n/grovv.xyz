@@ -23,7 +23,13 @@ class DbHelper {
             // Grow Live Data in firebase
             var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('live_data')
 
+            console.log("GROW GET DATA " + grow.id)
+
             ref.on('value', (snapshot) => {
+
+                console.log(grow.id + " IS ")
+                console.log(snapshot.val())
+
                 setData(grow.id, snapshot.val())
             }, function (errorObject) {
                 console.log("follow " + grow + " live failed: " + errorObject.code);
@@ -195,6 +201,9 @@ class DbHelper {
 
                 dayData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
+                console.log("Day dat" + growID)
+                console.log(dayData)
+
                 setData(growID, day, dayData);
             });
         });
@@ -290,7 +299,7 @@ class DbHelper {
 
             var userGrowIDs = [];
 
-            console.log("TODO: remove filter. what does this even do O.o")
+            console.log("TODO: remove filter. what does this even do O.o ")
             snapshot.forEach((child) => {
                 if (!child.val().sensors_live) {
                     userGrowIDs[userGrowIDs.length] = child.key

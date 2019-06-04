@@ -80,6 +80,9 @@ class App extends Component {
 	}
 
 	setLiveGrowData = (dataID, newGrowData) => {
+		if (newGrowData === null) {
+			return;
+		}
 		var currentData = this.state.liveGrowData
 		currentData[dataID.toString()] = newGrowData
 
