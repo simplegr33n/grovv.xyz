@@ -152,51 +152,56 @@ class GraphSensors extends Component {
         )
     }
 
-    toggleLine = (ev) => {
-        //this.props.openFullCam(ev.target.dataset.value)
-        switch (ev.target.dataset.value) {
-            case 'temp':
-                if (this.displayTemp === true) {
-                    this.displayTemp = false
-                    this.setState({ displayTemp: false })
-                } else {
-                    this.displayTemp = true
-                    this.setState({ displayTemp: true })
-                }
-                break;
-            case 'fan':
-                if (this.displayFan === true) {
-                    this.displayFan = false
-                    this.setState({ displayFan: false })
-                } else {
-                    this.displayFan = true
-                    this.setState({ displayFan: true })
-                }
-                break;
-            case 'humidity':
-                if (this.displayHumidity === true) {
-                    this.displayHumidity = false
-                    this.setState({ displayHumidity: false })
-                } else {
-                    this.displayHumidity = true
-                    this.setState({ displayHumidity: true })
-                }
-                break;
 
-            case 'humidifier':
-                if (this.displayHumidifier === true) {
-                    this.displayHumidifier = false
-                    this.setState({ displayHumidifier: false })
-                } else {
-                    this.displayHumidifier = true
-                    this.setState({ displayHumidifier: true })
-                }
-                break;
-            default:
-                break;
+
+    toggleTempLine = () => {
+
+        if (this.displayTemp === true) {
+            this.displayTemp = false
+            this.setState({ displayTemp: false })
+        } else {
+            this.displayTemp = true
+            this.setState({ displayTemp: true })
         }
+
     }
 
+    toggleFanLine = () => {
+
+        if (this.displayFan === true) {
+            this.displayFan = false
+            this.setState({ displayFan: false })
+        } else {
+            this.displayFan = true
+            this.setState({ displayFan: true })
+        }
+
+    }
+
+    toggleHumidityLine = () => {
+
+        if (this.displayHumidity === true) {
+            this.displayHumidity = false
+            this.setState({ displayHumidity: false })
+        } else {
+            this.displayHumidity = true
+            this.setState({ displayHumidity: true })
+        }
+
+    }
+
+
+    toggleHumidifierLine = () => {
+
+        if (this.displayHumidifier === true) {
+            this.displayHumidifier = false
+            this.setState({ displayHumidifier: false })
+        } else {
+            this.displayHumidifier = true
+            this.setState({ displayHumidifier: true })
+        }
+
+    }
 
     render() {
 
@@ -212,7 +217,7 @@ class GraphSensors extends Component {
                             if (this.state.displayTemp) {
                                 return <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
                             } else {
-                                return <Line yAxisId="left" hide="true" type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
+                                return <Line yAxisId="left" type="monotone" dataKey=" " stroke="#ca2014" dot={false} />
 
                             }
                         })()}
@@ -220,7 +225,7 @@ class GraphSensors extends Component {
                             if (this.state.displayFan) {
                                 return <Line yAxisId="right" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
                             } else {
-                                return <Line yAxisId="right" hide="true" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
+                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#db5e24" dot={false} />
 
                             }
                         })()}
@@ -228,7 +233,7 @@ class GraphSensors extends Component {
                             if (this.state.displayHumidity) {
                                 return <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
                             } else {
-                                return <Line yAxisId="right" hide="true" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
+                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#387d14" dot={false} />
 
                             }
                         })()}
@@ -237,7 +242,7 @@ class GraphSensors extends Component {
                                 return <Line yAxisId="right" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
                             } else {
 
-                                return <Line yAxisId="right" hide="true" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#8884d8" dot={false} />
                             }
                         })()}
 
@@ -266,33 +271,33 @@ class GraphSensors extends Component {
                     <div>
                         {(() => {
                             if (this.state.displayTemp) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#ca2014' }} data-value={'temp'} onClick={this.toggleLine}><WiThermometer /></button>
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#ca2014' }} data-value={'temp'} onClick={this.toggleTempLine}><WiThermometer /></button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'temp'} onClick={this.toggleLine}><WiThermometer /></button>
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'temp'} value={'temp'} onClick={this.toggleTempLine}><WiThermometer /></button>
 
                             }
                         })()}
                         {(() => {
                             if (this.state.displayFan) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#db5e24' }} data-value={'fan'} onClick={this.toggleLine}><WiHurricane /></button>
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#db5e24' }} data-value={'fan'} onClick={this.toggleFanLine}><WiHurricane /></button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'fan'} onClick={this.toggleLine}><WiHurricane /></button>
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'fan'} onClick={this.toggleFanLine}><WiHurricane /></button>
 
                             }
                         })()}
                         {(() => {
                             if (this.state.displayHumidity) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#387d14' }} data-value={'humidity'} onClick={this.toggleLine}><WiHumidity /></button>
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#387d14' }} data-value={'humidity'} onClick={this.toggleHumidityLine}><WiHumidity /></button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidity'} onClick={this.toggleLine}><WiHumidity /></button>
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidity'} onClick={this.toggleHumidityLine}><WiHumidity /></button>
 
                             }
                         })()}
                         {(() => {
                             if (this.state.displayHumidifier) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#8884d8' }} data-value={'humidifier'} onClick={this.toggleLine}><WiSprinkle /></button>
+                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#8884d8' }} data-value={'humidifier'} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidifier'} onClick={this.toggleLine}><WiSprinkle /></button>
+                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidifier'} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
 
                             }
                         })()}
