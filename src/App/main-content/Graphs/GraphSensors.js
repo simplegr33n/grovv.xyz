@@ -14,7 +14,7 @@ class GraphSensors extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayHours: 72, // 24, 72
+            displayWindow: 72, // 12, 24, 72
 
             displayTemp: true,
             displayFan: true,
@@ -54,30 +54,95 @@ class GraphSensors extends Component {
                     concatData = concatData.concat(list)
                 })
 
-
                 if (this.dataLength !== concatData.length) {
-
                     this.dataLength = concatData.length
                     concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
-                    var processedData = []
-                    var i = -1
-                    concatData.forEach((dataPoint) => {
-                        i++;
-                        if (i === 0 || i % 10 === 0) {
-                            var processedPoint = dataPoint
-                            processedData[processedData.length] = processedPoint
-                        }
-                    })
-
-                    if (processedData.length >= concatData.length / 11) {
-                        this.setState({
-                            processedData: processedData
-                        });
-                    }
+                    // process data
+                    this.concatData = concatData
+                    this.processData()
                 }
             }
         }
+    }
+
+    processData = (window = this.state.displayWindow) => {
+        var data = null
+        if (!this.concatData) {
+            return;
+        } else {
+            data = this.concatData
+        }
+
+        var processedData = []
+        var i = -1
+        var now = new Date().getTime()
+
+        console.log("TIMENOW " + now)
+        console.log("WINDOW " + window)
+
+
+        switch (window) {
+            case 72:
+                data.forEach((dataPoint) => {
+                    i++;
+                    if (i === 0 || i % 10 === 0) {
+                        var processedPoint = dataPoint
+                        processedData[processedData.length] = processedPoint
+                    }
+                })
+
+                if (processedData.length >= data.length / 11) { //TODO: not sure why i've included this check, removed for other hours...
+                    this.setState({
+                        processedData: processedData
+                    });
+                }
+                break;
+            case 24:
+                data.forEach((dataPoint) => {
+                    if (now - dataPoint.time < 86400000) {
+                        i++;
+                        if (i === 0 || i % 4 === 0) {
+                            var processedPoint = dataPoint
+                            processedData[processedData.length] = processedPoint
+                        }
+                    }
+                })
+
+                this.setState({
+                    processedData: processedData
+                });
+                break;
+            case 12:
+                data.forEach((dataPoint) => {
+                    if (now - dataPoint.time < 43200000) {
+                            var processedPoint = dataPoint
+                            processedData[processedData.length] = processedPoint
+                    }
+                })
+
+                this.setState({
+                    processedData: processedData
+                });
+                break;
+            default: //72
+                data.forEach((dataPoint) => {
+                    i++;
+                    if (i === 0 || i % 10 === 0) {
+                        var processedPoint = dataPoint
+                        processedData[processedData.length] = processedPoint
+                    }
+                })
+
+                if (processedData.length >= data.length / 11) {
+                    this.setState({
+                        processedData: processedData
+                    });
+                }
+                break;
+        }
+        this.render()
+
     }
 
     renderTooltip = (props) => {
@@ -203,6 +268,22 @@ class GraphSensors extends Component {
 
     }
 
+    toggle12 = () => {
+        this.setState({ displayWindow: 12 })
+        this.processData(12)
+    }
+
+    toggle24 = () => {
+        this.setState({ displayWindow: 24 })
+        this.processData(24)
+
+    }
+
+    toggle72 = () => {
+        this.setState({ displayWindow: 72 })
+        this.processData(72)
+    }
+
     render() {
 
         var renderDayGraph = null
@@ -267,37 +348,45 @@ class GraphSensors extends Component {
         return (
 
             <div className="Chart-Container">
-                <div style={{ width: '30px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div style={{ width: '30px', display: 'flex', flexDirection: 'column' }}>
+
+                    <div>
+                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle12}>12hr</button>
+                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle24}>24hr</button>
+                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle72}>72hr</button>
+                    </div>
+
+                    <div style={{ height: '20px' }}></div>
                     <div>
                         {(() => {
-                            if (this.state.displayTemp) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#ca2014' }} data-value={'temp'} onClick={this.toggleTempLine}><WiThermometer /></button>
-                            } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'temp'} value={'temp'} onClick={this.toggleTempLine}><WiThermometer /></button>
+                            if (this.state.displayTemp && this.state.processedData && this.state.processedData[0].cTemp) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#ca2014' }} onClick={this.toggleTempLine}><WiThermometer /></button>
+                            } else if (this.state.processedData && this.state.processedData[0].cTemp) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleTempLine}><WiThermometer /></button>
 
                             }
                         })()}
                         {(() => {
-                            if (this.state.displayFan) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#db5e24' }} data-value={'fan'} onClick={this.toggleFanLine}><WiHurricane /></button>
-                            } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'fan'} onClick={this.toggleFanLine}><WiHurricane /></button>
+                            if (this.state.displayFan && this.state.processedData && this.state.processedData[0].fanSpeed) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#db5e24' }} onClick={this.toggleFanLine}><WiHurricane /></button>
+                            } else if (this.state.processedData && this.state.processedData[0].fanSpeed) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleFanLine}><WiHurricane /></button>
 
                             }
                         })()}
                         {(() => {
-                            if (this.state.displayHumidity) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#387d14' }} data-value={'humidity'} onClick={this.toggleHumidityLine}><WiHumidity /></button>
-                            } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidity'} onClick={this.toggleHumidityLine}><WiHumidity /></button>
+                            if (this.state.displayHumidity && this.state.processedData && this.state.processedData[0].humidity) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#387d14' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
+                            } else if (this.state.processedData && this.state.processedData[0].humidity) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
 
                             }
                         })()}
                         {(() => {
-                            if (this.state.displayHumidifier) {
-                                return <button style={{ width: '30px', height: '30px', backgroundColor: '#8884d8' }} data-value={'humidifier'} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
-                            } else {
-                                return <button style={{ width: '30px', height: '30px' }} data-value={'humidifier'} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
+                            if (this.state.displayHumidifier && this.state.processedData && this.state.processedData[0].humiPower) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
+                            } else if (this.state.processedData && this.state.processedData[0].humiPower) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
 
                             }
                         })()}
@@ -305,10 +394,6 @@ class GraphSensors extends Component {
 
                     </div>
 
-                    <div>
-                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }}>24hr</button>
-                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }}>72hr</button>
-                    </div>
 
 
                 </div>
