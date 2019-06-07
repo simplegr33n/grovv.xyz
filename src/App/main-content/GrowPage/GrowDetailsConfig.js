@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
+import TimePicker from 'react-time-picker'
+
 import DbHelper from '../../_utils/DbHelper.js'
 
 
@@ -51,7 +53,9 @@ class GrowDetailsConfig extends Component {
                 humidity_max: this.state.humidity_max,
                 humidity_hyst: this.state.humidity_hyst,
                 humidifier_min: this.state.humidifier_min,
-                humidifier_max: this.state.humidifier_max
+                humidifier_max: this.state.humidifier_max,
+                lights_on: this.state.lights_on,
+                lights_off: this.state.lights_off
             }
         )
 
@@ -78,7 +82,9 @@ class GrowDetailsConfig extends Component {
             humidity_max: configObj.humidity_max,
             humidity_hyst: configObj.humidity_hyst,
             humidifier_min: configObj.humidifier_min,
-            humidifier_max: configObj.humidifier_max
+            humidifier_max: configObj.humidifier_max,
+            lights_on: configObj.lights_on,
+            lights_off: configObj.lights_off
         });
 
     }
@@ -123,6 +129,26 @@ class GrowDetailsConfig extends Component {
         this.setState({ humidifier_max: event.target.value });
     }
 
+    handleLightsOnChange = (event) => {
+        if (!event.target) {
+            console.log("no event target...")
+            return
+        }
+        console.log("Lights on change!")
+        console.log(event.target.value)
+        // this.setState({ humidifier_min: event.target.value });
+    }
+
+    handleLightsOffChange = (event) => {
+        if (!event.target) {
+            console.log("no event target...")
+            return
+        }
+        console.log("Lights off change!")
+        console.log(event.target.value)
+        // this.setState({ humidifier_max: event.target.value });
+    }
+
     getResetValue = () => {
         this.dbHelper.getResetValue(this.props.growID, this.setResetValue)
     }
@@ -143,92 +169,84 @@ class GrowDetailsConfig extends Component {
         return (
 
             <div id="Grow-Details-Config-Page">
-                <div id="Grow-Details-Config-Header-Text">Grow Config</div>
-                <div id="Grow-Details-Config-Scroll">
+                <div id="Grow-Details-Config-Settings-Div">
+                    <div id="Grow-Details-Config-Header-Text">Grow Config</div>
+                    <div id="Grow-Details-Config-Scroll">
 
-                    <div id="Config-Temp-Field">
-                        <h2>TEMPERATURE</h2>
-                        <div id="Config-Temp-Min-Max">
-                            <div>
-                                Min:
-                            <input type="number" className="Config-Input" id="temp-min" value={this.state.temp_min} onChange={this.handleTempMinChange} />°C
-                        </div>
-                            <div>
-                                Max:
-                            <input type="number" className="Config-Input" id="temp-max" value={this.state.temp_max} onChange={this.handleTempMaxChange} />°C
-                        </div>
-                            <div>
-                                Hyst:
-                            <input type="number" className="Config-Input" id="temp-hyst" value={this.state.temp_hyst} onChange={this.handleTempHystChange} />Δ°C
-                        </div>
-                        </div>
-                        <h3>FAN POWER</h3>
-                        <div id="Config-Fan-Min-Max">
-                            <div>
-                                Min:
-                            <input type="number" className="Config-Input" id="fan-min" value={this.state.fan_min} onChange={this.handleFanMinChange} />%
-                        </div>
-                            <div>
-                                Max:
-                            <input type="number" className="Config-Input" id="fan-max" value={this.state.fan_max} onChange={this.handleFanMaxChange} />%
-                        </div>
+                        <div id="Config-Temp-Field" style={{ backgroundColor: '#e8e81e' }}>
+                            <div className="Config-Item-Header-Text">LIGHTS</div>
+                            <div id="Config-Temp-Min-Max">
+                                <div>On: <TimePicker
+                                    id="lights_on"
+                                    value={this.state.lights_on}
+                                    onChange={this.handleLightsOnChange} /></div>
+                                <div>Off: <TimePicker
+                                    id="lights_off"
+                                    value={this.state.lights_off}
+                                    onChange={this.handleLightsOnChange} /></div>
+                            </div>
                         </div>
 
-                    </div>
-
-                    <div id="Config-Humidity-Field">
-                        <h2>HUMIDITY</h2>
-                        <div id="Config-Humidity-Min-Max">
-                            <div>
-                                Min:
-                            <input type="number" className="Config-Input" id="humidity-min" value={this.state.humidity_min} onChange={this.handleHumidityMinChange} />% R.H.
-                        </div>
-                            <div>
-                                Max:
-                            <input type="number" className="Config-Input" id="humidity-max" value={this.state.humidity_max} onChange={this.handleHumidityMaxChange} />% R.H.
-                        </div>
-                            <div>
-                                Hyst:
-                            <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hyst} onChange={this.handleHumidityHystChange} />Δ % R.H.
-                        </div>
-                        </div>
-                        <h3>HUMIDIFIER POWER</h3>
-                        <div id="Config-Humidifier-Min-Max">
-                            <div>
-                                Min:
-                            <input type="number" className="Config-Input" id="humidifier-min" value={this.state.humidifier_min} onChange={this.handleHumidifierMinChange} />%
-                        </div>
-                            <div>
-                                Max:
-                            <input type="number" className="Config-Input" id="humidifier-max" value={this.state.humidifier_max} onChange={this.handleHumidifierMaxChange} />%
-                        </div>
+                        <div id="Config-Temp-Field">
+                            <div className="Config-Item-Header-Text">TEMPERATURE <b>(°C)</b></div>
+                            <div id="Config-Temp-Min-Max">
+                                <div> Min: <input type="number" className="Config-Input" id="temp-min" value={this.state.temp_min} onChange={this.handleTempMinChange} /></div>
+                                <div>Max: <input type="number" className="Config-Input" id="temp-max" value={this.state.temp_max} onChange={this.handleTempMaxChange} /></div>
+                                <div>Hyst Δ: <input type="number" className="Config-Input" id="temp-hyst" value={this.state.temp_hyst} onChange={this.handleTempHystChange} />Δ</div>
+                            </div>
+                            <div className="Config-Item-Header-Text">FAN POWER (%)</div>
+                            <div id="Config-Fan-Min-Max">
+                                <div>Min: <input type="number" className="Config-Input" id="fan-min" value={this.state.fan_min} onChange={this.handleFanMinChange} /></div>
+                                <div>Max: <input type="number" className="Config-Input" id="fan-max" value={this.state.fan_max} onChange={this.handleFanMaxChange} /></div>
+                            </div>
                         </div>
 
-                    </div>
+                        <div id="Config-Humidity-Field">
+                            <div className="Config-Item-Header-Text">HUMIDITY (% r.h.)</div>
+                            <div id="Config-Humidity-Min-Max">
+                                <div>Min: <input type="number" className="Config-Input" id="humidity-min" value={this.state.humidity_min} onChange={this.handleHumidityMinChange} /></div>
+                                <div>Max: <input type="number" className="Config-Input" id="humidity-max" value={this.state.humidity_max} onChange={this.handleHumidityMaxChange} /></div>
+                                <div>Hyst Δ: <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hyst} onChange={this.handleHumidityHystChange} /></div>
+                            </div>
+                            <div className="Config-Item-Header-Text">HUMIDIFIER POWER (%)</div>
+                            <div id="Config-Humidifier-Min-Max">
+                                <div>Min: <input type="number" className="Config-Input" id="humidifier-min" value={this.state.humidifier_min} onChange={this.handleHumidifierMinChange} /></div>
+                                <div>Max: <input type="number" className="Config-Input" id="humidifier-max" value={this.state.humidifier_max} onChange={this.handleHumidifierMaxChange} /></div>
+                            </div>
 
-                    <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={this.saveConfig}>
-                        SAVE
-                    </div>
+                        </div>
 
-                    {(() => {
-                        if (!this.state.resetValue || this.state.resetValue === false) {
-                            return (
-                                <div id="GROW-DETAILS-RESET-BTN" onClick={this.handleReset}>
-                                    RESET<br></br>
-                                    GROWLAB
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
+
+                            {(() => {
+                                if (!this.state.resetValue || this.state.resetValue === false) {
+                                    return (
+                                        <div id="GROW-DETAILS-RESET-BTN" onClick={this.handleReset}>
+                                            RESET<br></br>
+                                            GROWLAB
                                 </div>
-                            )
-                        } else {
-                            return (
-                                <div id="GROW-DETAILS-RESET-BTN" style={{userSelect: 'none', cursor: 'auto', backgroundColor: '#c77725'}}>
-                                    RESETTING<br></br>
-                                    GROWLAB...
+                                    )
+                                } else {
+                                    return (
+                                        <div id="GROW-DETAILS-RESET-BTN" style={{ userSelect: 'none', cursor: 'auto', backgroundColor: '#c77725' }}>
+                                            RESETTING<br></br>
+                                            GROWLAB...
                                 </div>
-                            )
-                        }
-                    })()}
+                                    )
+                                }
+                            })()}
+
+                            <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={this.saveConfig}>SAVE <br></br> CONFIG</div>
 
 
+
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div id="Grow-Details-Config-Layout-Div">
 
                 </div>
             </div>

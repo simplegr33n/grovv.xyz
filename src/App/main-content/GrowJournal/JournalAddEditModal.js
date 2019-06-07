@@ -101,19 +101,31 @@ class JournalAddEditModal extends Component {
         }
         this.setState({ published: true });
 
+        var title = null;
+        if (this.state.title === '' || !this.state.title) {
+            title = ''
+        } else {
+            title = this.state.title
+        }
+
+        var content = null;
+        if (this.state.content === '' || !this.state.content) {
+            content = ''
+        } else {
+            content = this.state.content
+        }
+
         this.dbHelper.saveJournalEntry(
             this.state.journalID,
             this.state.entryID,
             this.state.trueDate,
-            this.state.title,
-            this.state.content,
+            title,
+            content,
             this.state.growStage,
             this.state.postDate,
             this.state.images,
             this.closeModal
         )
-
-
     }
 
     closeModal = (entryID) => {

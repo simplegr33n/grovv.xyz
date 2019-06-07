@@ -33,6 +33,7 @@ Create optimized build and push to 'gh-pages' branch for deployment.
 * * image Optimization: https://gist.github.com/mbove77/a082a9ff74dd625f45975848116418d7
 * https://github.com/react-dropzone/react-dropzone - **react-datepicker** simple dropzone for images/files
 * https://github.com/Hacker0x01/react-datepicker - **react-datepicker** simple datepicker
+* https://github.com/wojtekmaj/react-time-picker - **react-time-picker** simple time picker
 * http://recharts.org/ - **recharts** for graphs
 * https://github.com/moment/moment - **moment** for easy date formating
 * https://github.com/react-icons/react-icons icons 
