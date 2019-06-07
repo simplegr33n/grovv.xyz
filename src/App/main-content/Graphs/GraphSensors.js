@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 import moment from 'moment'
 
@@ -19,7 +19,14 @@ class GraphSensors extends Component {
             displayTemp: true,
             displayFan: true,
             displayHumidity: true,
-            displayHumidifier: true
+            displayHumidifier: true,
+
+            //tickArray: [1559707200000, 1559750400000, 1559793600000, 1559836800000]
+            // tickSourceArray: [1559664000000, 1559707200000, 1559750400000, 1559793600000, 1559836800000, 1559880000000, 1559923200000],
+            lightsOnArray: [],
+            lightsOffArray: [],
+            tickArray: [],
+            lightBackgrounds: ['#7344e7', '#fff936']
         };
 
         this.displayTemp = true
@@ -32,6 +39,8 @@ class GraphSensors extends Component {
     componentDidMount() {
         this._ismounted = true;
 
+
+
     }
 
     componentWillUnmount() {
@@ -39,6 +48,11 @@ class GraphSensors extends Component {
     }
 
     componentDidUpdate = () => {
+
+        if (this.props.growConfig && this.growConfig !== this.props.growConfig) {
+            this.growConfig = this.props.growConfig
+            this.generateTickSourceArrays()
+        }
 
         if (this.props.rawGrowData && this.props.growID) {
 
@@ -64,6 +78,96 @@ class GraphSensors extends Component {
                 }
             }
         }
+    }
+
+    generateTickSourceArrays = () => {
+        var m = moment(new Date())
+        m.subtract(3, 'days')
+
+
+        var lightsOnArray = []
+        var lightsOffArray = []
+
+        console.log('generateTickSourceArray')
+        console.log(m.format('L') + ' 10:00')
+
+
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
+
+        m.add(1, 'days')
+
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
+
+        m.add(1, 'days')
+
+
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
+
+
+        m.add(1, 'days')
+
+
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
+
+
+        this.setState({
+            lightsOnArray: lightsOnArray,
+            lightsOffArray: lightsOffArray
+        })
+
+        this.lightsOnArray = lightsOnArray
+        this.lightsOffArray = lightsOffArray
+
+        this.createTickArray()
+
+
+    }
+
+    createTickArray = (processedData = this.state.processedData) => {
+        if (!processedData) {
+            return
+        }
+
+        var tickRange = [new Date(processedData[0].time).getTime(), new Date(processedData[processedData.length - 1].time).getTime()]
+
+        var ticks = []
+
+        var tempOnArray = this.lightsOnArray
+        var tempOffArray = this.lightsOffArray
+
+        if (!tempOffArray && !tempOnArray) {
+            return
+        }
+
+        var sourceArray = tempOnArray.concat(tempOffArray)
+
+        sourceArray.sort((a, b) => (a > b) ? 1 : -1)
+
+        console.log("SOURCE ARRAY")
+        console.log(sourceArray)
+
+
+
+        sourceArray.forEach((tick) => {
+            if (tick > tickRange[0] && tick < tickRange[1]) {
+                ticks[ticks.length] = tick
+            }
+        })
+
+        //set backgrounds
+        if (tempOnArray.includes(ticks[0])) {
+            this.setState({ lightBackgrounds: ['#7344e7', '#fff936'] })
+        } else {
+            this.setState({ lightBackgrounds: ['#fff936', '#7344e7'] })
+
+        }
+
+        this.setState({ tickArray: ticks })
+
     }
 
     processData = (window = this.state.displayWindow) => {
@@ -116,8 +220,8 @@ class GraphSensors extends Component {
             case 12:
                 data.forEach((dataPoint) => {
                     if (now - dataPoint.time < 43200000) {
-                            var processedPoint = dataPoint
-                            processedData[processedData.length] = processedPoint
+                        var processedPoint = dataPoint
+                        processedData[processedData.length] = processedPoint
                     }
                 })
 
@@ -141,7 +245,8 @@ class GraphSensors extends Component {
                 }
                 break;
         }
-        this.render()
+
+        this.createTickArray(processedData)
 
     }
 
@@ -327,12 +432,15 @@ class GraphSensors extends Component {
                             }
                         })()}
 
+                        <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} fillOpacity={0.2} />
 
                         <XAxis
                             dataKey="time"
                             type="number"
                             domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
-                            tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')} />
+                            ticks={this.state.tickArray}
+                            tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
+                        />
                         <YAxis yAxisId="left" orientation="left" domain={[21, 30]} />
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip content={this.renderTooltip} />
@@ -351,9 +459,27 @@ class GraphSensors extends Component {
                 <div style={{ width: '30px', display: 'flex', flexDirection: 'column' }}>
 
                     <div>
-                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle12}>12hr</button>
-                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle24}>24hr</button>
-                        <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle72}>72hr</button>
+                        {(() => {
+                            if (this.state.displayWindow === 12) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle12}>12hr</button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle12}>12hr</button>
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayWindow === 24) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle24}>24hr</button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle24}>24hr</button>
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayWindow === 72) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle72}>72hr</button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle72}>72hr</button>
+                            }
+                        })()}
                     </div>
 
                     <div style={{ height: '20px' }}></div>

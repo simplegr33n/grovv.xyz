@@ -25,7 +25,8 @@ class GrowDetailsPage extends Component {
             displayBottom: 'data', // data, config, feed, edit-feed, journals
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
             linkedJournals: [],
-            camURL: null
+            camURL: null,
+            growConfig: null
         };
 
         this.dbHelper = new DbHelper(); // Need for linked journals
@@ -34,6 +35,10 @@ class GrowDetailsPage extends Component {
 
     componentDidMount() {
         this._ismounted = true;
+
+        if (this.props.grow.id) {
+            this.getConfig()
+        }
 
         //TODO: Remove condition
         if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-') {
@@ -55,18 +60,7 @@ class GrowDetailsPage extends Component {
                 return;
             }
 
-            console.log('itzakadoozie')
-            console.log(this.props.rawGrowData)
-
-            console.log(this.props.rawGrowData[this.props.grow.id])
-            console.log(this.props.rawGrowData[this.props.grow.id]['01'])
-
-
-            // if (!(this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1])) {
-            //     return;
-            // }
-
-                var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
@@ -91,7 +85,7 @@ class GrowDetailsPage extends Component {
             //     return;
             // }
 
-                var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
@@ -297,12 +291,6 @@ class GrowDetailsPage extends Component {
             var now = new Date();
             var difference = now - (new Date(lastUpdateTime).getTime())
 
-            // if (difference >= 3000000) {
-            //     this.setState({
-            //         activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Neutral-Background'
-            //     });
-            // }
-
             if (this._ismounted) {
 
                 if (difference >= 120000) {
@@ -383,6 +371,13 @@ class GrowDetailsPage extends Component {
         this.props.setJournalID(journal.id);
     }
 
+    getConfig = () => {
+        this.dbHelper.watchGrowConfig(this.props.grow.id, this.setConfig)
+    }
+
+    setConfig = (config) => {
+        this.setState({ growConfig: config })
+    }
 
     render() {
         //TODO: below in less code... or not using zIndex.
@@ -859,7 +854,13 @@ class GrowDetailsPage extends Component {
                             })()}
                         </div>
 
-
+                        <div className="Grow-Details-Bottom-Btns">
+                            <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                            <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
+                            <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                            <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                            <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                        </div>
 
                     </div>
 
@@ -868,14 +869,7 @@ class GrowDetailsPage extends Component {
 
                         <div className="Grow-Details-Bottom-Item" style={journalsStyle} >
                             <div className="Grow-Details-Journals">
-                                {/* TODO: Make Component */}
-                                <div className="Grow-Details-Bottom-Btns">
-                                    <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                                    <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
-                                    <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                                    <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                                    <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                                </div>
+
                                 <div className="Grow-Details-Journals-Header">Connected Journals</div>
                                 <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', maxHeight: '100%' }}>
                                     {renderedLinkedJournals}
@@ -885,55 +879,19 @@ class GrowDetailsPage extends Component {
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
-                            {/* TODO: Make Component */}
-                            <div className="Grow-Details-Bottom-Btns">
-                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                            </div>
-                            <GrowDetailsGraphs growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} />
-
+                            <GrowDetailsGraphs growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} growConfig={this.state.growConfig} />
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={feedStyle} >
-                            {/* TODO: Make Component */}
-                            <div className="Grow-Details-Bottom-Btns">
-                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                            </div>
                             <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
-
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={editFeedStyle} >
-                            {/* TODO: Make Component */}
-                            <div className="Grow-Details-Bottom-Btns">
-                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                            </div>
                             <object id="Edit-Food-Chart" type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
-
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={configStyle} >
-                            {/* TODO: Make Component */}
-                            <div className="Grow-Details-Bottom-Btns">
-                                <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
-                                <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                                <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                                <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                            </div>
                             <GrowDetailsConfig growID={this.props.grow.id} />
-
                         </div>
 
                     </div>

@@ -1622,7 +1622,7 @@ html {
 
 #Grow-Details-Graphs-Page {
     width: 100%;
-    height: calc(100% - 30px);
+    height: 100%;
     background-color: #000;
     position: relative;
 
@@ -1792,7 +1792,6 @@ html {
     flex-wrap: wrap;
     justify-content: flex-end;
     background-color: #1b4117;
-    margin-right: 20px;
     z-index: 1;
 }
 

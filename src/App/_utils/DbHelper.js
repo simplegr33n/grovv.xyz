@@ -219,13 +219,13 @@ class DbHelper {
         // Config data in firebase // TODO... proper
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
 
-
         ref.on('value', (snapshot) => {
 
             if (snapshot.val() === null) {
                 return;
             }
 
+            // TODO: just set it to snapshot.val()... doing below is redundant..
             setData({
                 temp_min: snapshot.val().temp_min,
                 temp_max: snapshot.val().temp_max,
@@ -236,7 +236,9 @@ class DbHelper {
                 humidity_max: snapshot.val().humidity_max,
                 humidity_hyst: snapshot.val().humidity_hyst,
                 humidifier_min: snapshot.val().humidifier_min,
-                humidifier_max: snapshot.val().humidifier_max
+                humidifier_max: snapshot.val().humidifier_max,
+                lights_on: snapshot.val().lights_on,
+                lights_off: snapshot.val().lights_off
             });
 
         }, function (errorObject) {
@@ -247,7 +249,7 @@ class DbHelper {
     // Set Grow Config in firebase
     setGrowConfig(growID, config) {
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
-        ref.set(config)
+        ref.update(config)
     }
 
 
