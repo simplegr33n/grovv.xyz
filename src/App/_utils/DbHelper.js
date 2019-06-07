@@ -452,8 +452,8 @@ class DbHelper {
         var journalID = ref.key
         var nowDate = new Date()
 
-        ref.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
-        userRef.set({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
+        ref.update({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
+        userRef.update({ 'id': journalID, 'name': journalName, 'updatedAt': nowDate.getTime(), 'createdAt': nowDate.getTime(), 'previewImage': 'https://via.placeholder.com/160x120?text=NO+PREVIEW' })
 
         openJournal(journalID)
     }
@@ -492,7 +492,7 @@ class DbHelper {
         }
 
 
-        ref.child(entryID).set({
+        ref.child(entryID).update({
             'id': entryID,
             'title': title,
             'published': true,

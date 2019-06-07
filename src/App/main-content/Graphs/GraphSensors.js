@@ -21,8 +21,6 @@ class GraphSensors extends Component {
             displayHumidity: true,
             displayHumidifier: true,
 
-            //tickArray: [1559707200000, 1559750400000, 1559793600000, 1559836800000]
-            // tickSourceArray: [1559664000000, 1559707200000, 1559750400000, 1559793600000, 1559836800000, 1559880000000, 1559923200000],
             lightsOnArray: [],
             lightsOffArray: [],
             tickArray: [],
@@ -84,14 +82,9 @@ class GraphSensors extends Component {
         var m = moment(new Date())
         m.subtract(3, 'days')
 
-
         var lightsOnArray = []
         var lightsOffArray = []
 
-        console.log('generateTickSourceArray')
-        console.log(m.format('L') + ' 10:00')
-
-
         lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
         lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
 
@@ -102,13 +95,10 @@ class GraphSensors extends Component {
 
         m.add(1, 'days')
 
-
         lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
         lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
 
-
         m.add(1, 'days')
-
 
         lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
         lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
@@ -124,11 +114,10 @@ class GraphSensors extends Component {
 
         this.createTickArray()
 
-
     }
 
     createTickArray = (processedData = this.state.processedData) => {
-        if (!processedData) {
+        if (!processedData || !processedData[0]) {
             return
         }
 
@@ -146,11 +135,6 @@ class GraphSensors extends Component {
         var sourceArray = tempOnArray.concat(tempOffArray)
 
         sourceArray.sort((a, b) => (a > b) ? 1 : -1)
-
-        console.log("SOURCE ARRAY")
-        console.log(sourceArray)
-
-
 
         sourceArray.forEach((tick) => {
             if (tick > tickRange[0] && tick < tickRange[1]) {
@@ -181,10 +165,6 @@ class GraphSensors extends Component {
         var processedData = []
         var i = -1
         var now = new Date().getTime()
-
-        console.log("TIMENOW " + now)
-        console.log("WINDOW " + window)
-
 
         switch (window) {
             case 72:
@@ -485,33 +465,33 @@ class GraphSensors extends Component {
                     <div style={{ height: '20px' }}></div>
                     <div>
                         {(() => {
-                            if (this.state.displayTemp && this.state.processedData && this.state.processedData[0].cTemp) {
+                            if (this.state.displayTemp && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].cTemp) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#ca2014' }} onClick={this.toggleTempLine}><WiThermometer /></button>
-                            } else if (this.state.processedData && this.state.processedData[0].cTemp) {
+                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].cTemp) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleTempLine}><WiThermometer /></button>
 
                             }
                         })()}
                         {(() => {
-                            if (this.state.displayFan && this.state.processedData && this.state.processedData[0].fanSpeed) {
+                            if (this.state.displayFan && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#db5e24' }} onClick={this.toggleFanLine}><WiHurricane /></button>
-                            } else if (this.state.processedData && this.state.processedData[0].fanSpeed) {
+                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleFanLine}><WiHurricane /></button>
 
                             }
                         })()}
                         {(() => {
-                            if (this.state.displayHumidity && this.state.processedData && this.state.processedData[0].humidity) {
+                            if (this.state.displayHumidity && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#387d14' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
-                            } else if (this.state.processedData && this.state.processedData[0].humidity) {
+                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
 
                             }
                         })()}
                         {(() => {
-                            if (this.state.displayHumidifier && this.state.processedData && this.state.processedData[0].humiPower) {
+                            if (this.state.displayHumidifier && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
-                            } else if (this.state.processedData && this.state.processedData[0].humiPower) {
+                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
 
                             }
