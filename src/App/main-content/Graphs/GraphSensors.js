@@ -466,33 +466,33 @@ class GraphSensors extends Component {
                     <div>
                         {(() => {
                             if (this.state.displayTemp && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].cTemp) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#ca2014' }} onClick={this.toggleTempLine}><WiThermometer /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#ca2014' }} onClick={this.toggleTempLine}><WiThermometer /></button>
                             } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].cTemp) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleTempLine}><WiThermometer /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleTempLine}><WiThermometer /></button>
 
                             }
                         })()}
                         {(() => {
                             if (this.state.displayFan && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#db5e24' }} onClick={this.toggleFanLine}><WiHurricane /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF',  padding: '0px', backgroundColor: '#db5e24' }} onClick={this.toggleFanLine}><WiHurricane /></button>
                             } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleFanLine}><WiHurricane /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleFanLine}><WiHurricane /></button>
 
                             }
                         })()}
                         {(() => {
                             if (this.state.displayHumidity && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#387d14' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF',  padding: '0px', backgroundColor: '#387d14' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
                             } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
 
                             }
                         })()}
                         {(() => {
                             if (this.state.displayHumidifier && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF',  padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
                             } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '22px', padding: '0px' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
 
                             }
                         })()}

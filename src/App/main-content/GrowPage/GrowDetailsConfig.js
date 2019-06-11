@@ -6,6 +6,9 @@ import TimePicker from 'react-time-picker'
 import DbHelper from '../../_utils/DbHelper.js'
 
 
+import GrowSetUp from '../GrowConfig/GrowSetUp'
+
+
 
 class GrowDetailsConfig extends Component {
 
@@ -129,24 +132,16 @@ class GrowDetailsConfig extends Component {
         this.setState({ humidifier_max: event.target.value });
     }
 
-    handleLightsOnChange = (event) => {
-        if (!event.target) {
-            console.log("no event target...")
-            return
-        }
-        console.log("Lights on change!")
-        console.log(event.target.value)
-        // this.setState({ humidifier_min: event.target.value });
+    handleLightsOnChange = (value) => {
+        console.log('value...?')
+        console.log(value)
+        this.setState({ lights_on: value });
     }
 
-    handleLightsOffChange = (event) => {
-        if (!event.target) {
-            console.log("no event target...")
-            return
-        }
-        console.log("Lights off change!")
-        console.log(event.target.value)
-        // this.setState({ humidifier_max: event.target.value });
+    handleLightsOffChange = (value) => {
+        console.log('value...?')
+        console.log(value)
+        this.setState({ lights_off: value });
     }
 
     getResetValue = () => {
@@ -171,47 +166,53 @@ class GrowDetailsConfig extends Component {
             <div id="Grow-Details-Config-Page">
                 <div id="Grow-Details-Config-Settings-Div">
                     <div id="Grow-Details-Config-Header-Text">Grow Config</div>
-                    <div id="Grow-Details-Config-Scroll">
+                    <div id="Grow-Details-Config-Scroll" style={{ margin: '4px' }}>
 
                         <div id="Config-Temp-Field" style={{ backgroundColor: '#e8e81e' }}>
                             <div className="Config-Item-Header-Text">LIGHTS</div>
                             <div id="Config-Temp-Min-Max">
-                                <div>On: <TimePicker
+                                <div>on <TimePicker
                                     id="lights_on"
                                     value={this.state.lights_on}
-                                    onChange={this.handleLightsOnChange} /></div>
-                                <div>Off: <TimePicker
+                                    onChange={this.handleLightsOnChange.bind(this)} /></div>
+                                <div>off <TimePicker
                                     id="lights_off"
                                     value={this.state.lights_off}
-                                    onChange={this.handleLightsOnChange} /></div>
+                                    onChange={this.handleLightsOffChange.bind(this)} /></div>
                             </div>
                         </div>
 
                         <div id="Config-Temp-Field">
                             <div className="Config-Item-Header-Text">TEMPERATURE <b>(°C)</b></div>
                             <div id="Config-Temp-Min-Max">
-                                <div> Min: <input type="number" className="Config-Input" id="temp-min" value={this.state.temp_min} onChange={this.handleTempMinChange} /></div>
-                                <div>Max: <input type="number" className="Config-Input" id="temp-max" value={this.state.temp_max} onChange={this.handleTempMaxChange} /></div>
-                                <div>Hyst Δ: <input type="number" className="Config-Input" id="temp-hyst" value={this.state.temp_hyst} onChange={this.handleTempHystChange} />Δ</div>
+                                <div> min <input type="number" className="Config-Input" id="temp-min" value={this.state.temp_min} onChange={this.handleTempMinChange} /></div>
+                                <div>max <input type="number" className="Config-Input" id="temp-max" value={this.state.temp_max} onChange={this.handleTempMaxChange} /></div>
+                                <div>hyst Δ <input type="number" className="Config-Input" id="temp-hyst" value={this.state.temp_hyst} onChange={this.handleTempHystChange} /></div>
                             </div>
+                        </div>
+
+                        <div id="Config-Temp-Field" style={{ backgroundColor: '#cacac9' }}>
                             <div className="Config-Item-Header-Text">FAN POWER (%)</div>
                             <div id="Config-Fan-Min-Max">
-                                <div>Min: <input type="number" className="Config-Input" id="fan-min" value={this.state.fan_min} onChange={this.handleFanMinChange} /></div>
-                                <div>Max: <input type="number" className="Config-Input" id="fan-max" value={this.state.fan_max} onChange={this.handleFanMaxChange} /></div>
+                                <div>min <input type="number" className="Config-Input" id="fan-min" value={this.state.fan_min} onChange={this.handleFanMinChange} /></div>
+                                <div>max <input type="number" className="Config-Input" id="fan-max" value={this.state.fan_max} onChange={this.handleFanMaxChange} /></div>
                             </div>
                         </div>
 
                         <div id="Config-Humidity-Field">
                             <div className="Config-Item-Header-Text">HUMIDITY (% r.h.)</div>
                             <div id="Config-Humidity-Min-Max">
-                                <div>Min: <input type="number" className="Config-Input" id="humidity-min" value={this.state.humidity_min} onChange={this.handleHumidityMinChange} /></div>
-                                <div>Max: <input type="number" className="Config-Input" id="humidity-max" value={this.state.humidity_max} onChange={this.handleHumidityMaxChange} /></div>
-                                <div>Hyst Δ: <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hyst} onChange={this.handleHumidityHystChange} /></div>
+                                <div>min <input type="number" className="Config-Input" id="humidity-min" value={this.state.humidity_min} onChange={this.handleHumidityMinChange} /></div>
+                                <div>max <input type="number" className="Config-Input" id="humidity-max" value={this.state.humidity_max} onChange={this.handleHumidityMaxChange} /></div>
+                                <div>hyst Δ <input type="number" className="Config-Input" id="humidity-hyst" value={this.state.humidity_hyst} onChange={this.handleHumidityHystChange} /></div>
                             </div>
+                        </div>
+
+                        <div id="Config-Humidity-Field" style={{ backgroundColor: '#6090c7' }}>
                             <div className="Config-Item-Header-Text">HUMIDIFIER POWER (%)</div>
                             <div id="Config-Humidifier-Min-Max">
-                                <div>Min: <input type="number" className="Config-Input" id="humidifier-min" value={this.state.humidifier_min} onChange={this.handleHumidifierMinChange} /></div>
-                                <div>Max: <input type="number" className="Config-Input" id="humidifier-max" value={this.state.humidifier_max} onChange={this.handleHumidifierMaxChange} /></div>
+                                <div>min <input type="number" className="Config-Input" id="humidifier-min" value={this.state.humidifier_min} onChange={this.handleHumidifierMinChange} /></div>
+                                <div>max <input type="number" className="Config-Input" id="humidifier-max" value={this.state.humidifier_max} onChange={this.handleHumidifierMaxChange} /></div>
                             </div>
 
                         </div>
@@ -247,7 +248,7 @@ class GrowDetailsConfig extends Component {
                     </div>
                 </div>
                 <div id="Grow-Details-Config-Layout-Div">
-
+                    <GrowSetUp />
                 </div>
             </div>
 

@@ -330,6 +330,7 @@ html {
     padding: 4px;
     font-size: 14px;
     font-weight: bold;
+    width: 260px;
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -342,6 +343,8 @@ html {
 #Config-Temp-Min-Max {
     font-size: 12px;
     display: flex;
+    justify-content: space-around;
+
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
@@ -351,12 +354,15 @@ html {
     font-size: 12px;
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     flex-wrap: wrap;
 }
 
 #Config-Humidity-Field {
     padding: 4px;
     font-size: 14px;
+    width: 260px;
+
     font-weight: bold;
     display: flex;
     flex-direction: column;
@@ -364,7 +370,7 @@ html {
     text-align: left;
     justify-content: center;
     color: #000;
-    background-color: #6090c7;
+    background-color: #4bc94f;
 }
 
 #Config-Humidity-Min-Max {
@@ -1504,15 +1510,14 @@ html {
 }
 
 #Grow-Details-Config-Settings-Div {
-    flex: 1;
     height: 100%;
 }
 
 #Grow-Details-Config-Layout-Div {
     flex: 2;
     height: 100%;
-
-    background-color: pink;
+    min-width: 66vw;
+    background-color: rgb(158, 139, 98);
 }
 
 #Grow-Details-Config-Scroll {
@@ -1525,16 +1530,17 @@ html {
 }
 
 #GROW-DETAILS-RESET-BTN {
-    height: 40px;
+    height: 25px;
     color: #000;
     width: 90px;
     padding: 10px;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 14px;
     font-weight: bold;
     user-select: none;
     cursor: pointer;
     background-color: #ff4234;
-    border-radius: 25px;
+    border-radius: 5px;
 }
 
 #GROW-DETAILS-RESET-BTN:hover {
@@ -1542,13 +1548,14 @@ html {
 }
 
 #GROW-DETAILS-SAVE-CONFIG-BTN {
-    border-radius: 25px;
-    height: 45px;
+    border-radius: 5px;
+    height: 25px;
     background-color: #f1ff34;
     color: #000;
     width: 65px;
     padding: 10px;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 14px;
     font-weight: bold;
     user-select: none;
     cursor: pointer;
@@ -1896,3 +1903,25 @@ html {
     margin-bottom: 1px;
 }
 
+
+/* Grow SetUp */
+#Grow-Set-Up-Page {
+    background-color: #c9d4ab;
+    color: #000;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#Grow-Visual-Editor {
+    background-color: rgb(105, 66, 43);
+    min-width: 333px;
+    min-height: 333px;
+    flex: 1;
+}
+
+#Grow-Items-List {
+    min-width: 180px;
+}
