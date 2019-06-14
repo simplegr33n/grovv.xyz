@@ -28,7 +28,7 @@ class GrowSetUp extends Component {
         return (
 
             <div id="Grow-Set-Up-Page">
-                <GrowVisualEditor baseDimensions={[900,600]}/>
+                <GrowVisualEditor baseDimensions={[300,300]}/>
                 <div id="Grow-Items-List">
                     list
                 </div>

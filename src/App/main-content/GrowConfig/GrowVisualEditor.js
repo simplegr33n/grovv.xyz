@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
+import { ReactComponent as Area } from './SVGs/area.svg'
+import { ReactComponent as Container } from './SVGs/container.svg'
 
 
 
@@ -52,7 +54,7 @@ class GrowVisualEditor extends Component {
                 var baseHeight;
                 if (widthOverHeight <= 1) {
                     baseWidth = (this.state.editorDimensions[1] * 0.9) * widthOverHeight
-                    baseHeight =  this.state.editorDimensions[1] * 0.9
+                    baseHeight = this.state.editorDimensions[1] * 0.9
                 } else {
                     baseWidth = this.state.editorDimensions[1] * 0.9
                     baseHeight = (this.state.editorDimensions[1] * 0.9) / widthOverHeight
@@ -75,13 +77,16 @@ class GrowVisualEditor extends Component {
         return (
 
             <div id="Grow-Visual-Editor" style={{ display: 'flex', flexDirection: 'column' }}>
-                grow visual editor
                 <div style={{ backgroundColor: '#36454F', margin: '1%', padding: '1%', flex: '1' }} ref={element => this.divRef = element}>
                     {(() => {
                         if (this.state.baseDimensionsPixels) {
                             return (
-                                <div style={{ backgroundColor: '#C0C0C0', margin: '0 auto', width: this.state.baseDimensionsPixels[0], height: this.state.baseDimensionsPixels[1] }}>
-
+                                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', margin: '0 auto', width: this.state.baseDimensionsPixels[0], height: this.state.baseDimensionsPixels[1] }}>
+                                    <Area style={{ position: 'absolute', width: '100%', height: '100%' }} />
+                                    <div style={{ position: 'absolute', width: '100%', height: '100%', display: 'flex', flexDirection: 'row' }}>
+                                        <Container style={{ flex: '1', padding: '1%' }} />
+                                        <Container style={{ flex: '1', padding: '1%' }} />
+                                    </div>
                                 </div>
                             )
                         }
@@ -89,6 +94,8 @@ class GrowVisualEditor extends Component {
 
 
                 </div>
+
+                {/* <Area /> */}
             </div>
 
         );
