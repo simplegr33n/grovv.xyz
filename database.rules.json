@@ -1,0 +1,18 @@
+{
+  "rules": {
+    "config": {
+      ".read": false,
+      ".write": false
+    },
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "sensor_data": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}

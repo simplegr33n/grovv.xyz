@@ -1,0 +1,37 @@
+{
+  "name": "grovv-xyz",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://simplegr33n.github.io/grovv.xyz/",
+  "dependencies": {
+    "@firebase/database": "^0.3.13",
+    "firebase": "^5.8.5",
+    "gh-pages": "^2.0.1",
+    "moment": "^2.24.0",
+    "react": "^16.8.3",
+    "react-datepicker": "^2.5.0",
+    "react-dom": "^16.8.3",
+    "react-dropzone": "^10.1.4",
+    "react-icons": "^3.7.0",
+    "react-scripts": "^2.1.8",
+    "react-time-picker": "^3.5.2",
+    "recharts": "^1.5.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
