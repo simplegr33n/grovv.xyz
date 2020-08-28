@@ -25,21 +25,7 @@ class GrowBoxItem extends Component {
 	componentDidMount = () => {
 		this._ismounted = true;
 
-		//TODO: Remove condition
-		if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-') {
-
-			this.getLiveCam = this.watchPiCam()
-
-			if (this._ismounted) {
-				this.setState({ camURL: this.props.grow.urls.cam + 'cam_pic.php?time=' });
-			}
-
-		} else {
-
-
-		}
-
-		if (this.props.grow.urls.cam && !(this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-')) {
+		if (this.props.grow.urls.cam) {
 
 			if (this._ismounted) {
 				this.setState({ camURL: this.props.grow.urls.cam });

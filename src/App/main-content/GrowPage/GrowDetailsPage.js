@@ -40,16 +40,7 @@ class GrowDetailsPage extends Component {
             this.getConfig()
         }
 
-        //TODO: Remove condition
-        if (this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-') {
-
-            this.watchPiCam()
-
-            this.setState({ camURL: this.props.grow.urls.cam + 'cam_pic.php?time=' });
-
-        }
-
-        if (this.props.grow.urls.cam && !(this.props.grow.id === '-LdtfBTlG6Fgg-ADD8-b' || this.props.grow.id === '-Lg5uudAktkyqOauRjY-')) {
+        if (this.props.grow.urls.cam) {
             if (this._ismounted) {
                 this.setState({ camURL: this.props.grow.urls.cam });
             }

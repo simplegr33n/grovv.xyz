@@ -40,6 +40,43 @@ class SignIn extends Component {
         return paswdRegex.test(String(testPswd));
     }
 
+    enterSubmit() {
+        console.log("SignIn submit enter pressed");
+        let username = this.state.username;
+        let password = this.state.password;
+        console.log(`SignUp submit enter pressed - username ${username}`);
+        if (!this.validateEmail(username)) {
+            alert('Bad email me thinks :(')
+            return;
+        }
+        // if (!this.validatePassword(password)) {
+        //     alert('Bad password. Must be 7-15 characters with at least 1 numeric digit and a special character.')
+        //     return;
+        // }
+        this.setState({
+            username: '',
+            password: ''
+        });
+        this.hideSigninFields();
+
+        this.firebase.auth.signInWithEmailAndPassword(username, password).catch(function (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+
+            console.log(`${errorCode}: ${errorMessage}`)
+            alert(`${errorCode}: ${errorMessage}`)
+            this.setState({ SHOWFIELDS: true });
+            return;
+            // ...
+        });
+
+        console.log(`username ${username} - logged in`)
+        // this.props.signIn();
+        return;
+
+    }
+
     handleSubmit = () => {
         console.log("SignIn submit pressed");
         let username = this.state.username;
@@ -106,9 +143,9 @@ class SignIn extends Component {
                         onChange={this.handlePasswordChange}
                         onKeyPress={(ev) => {
                             console.log(`Pressed keyCode ${ev.key}`);
-                            if (ev.key === 'Enter') {
+                            if (ev.key === 'Enter' || ev.key === '13') {
                               // Do code here
-                              this.handleSubmit
+                              this.enterSubmit()
                             }
                           }} />
                     </div>
