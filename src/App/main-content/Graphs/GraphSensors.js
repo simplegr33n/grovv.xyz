@@ -14,7 +14,7 @@ class GraphSensors extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayWindow: 72, // 12, 24, 72
+            displayWindow: 72, // 3, 12, 24, 72
 
             displayTemp: true,
             displayFan: true,
@@ -209,6 +209,18 @@ class GraphSensors extends Component {
                     processedData: processedData
                 });
                 break;
+            case 3:
+                data.forEach((dataPoint) => {
+                    if (now - dataPoint.time < 10800000) {
+                        var processedPoint = dataPoint
+                        processedData[processedData.length] = processedPoint
+                    }
+                })
+
+                this.setState({
+                    processedData: processedData
+                });
+                break;
             default: //72
                 data.forEach((dataPoint) => {
                     i++;
@@ -353,6 +365,11 @@ class GraphSensors extends Component {
 
     }
 
+    toggle3 = () => {
+        this.setState({ displayWindow: 3 })
+        this.processData(3)
+    }
+
     toggle12 = () => {
         this.setState({ displayWindow: 12 })
         this.processData(12)
@@ -439,6 +456,13 @@ class GraphSensors extends Component {
                 <div style={{ width: '30px', display: 'flex', flexDirection: 'column' }}>
 
                     <div>
+                        {(() => {
+                            if (this.state.displayWindow === 3) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle3}>3hr</button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle3}>3hr</button>
+                            }
+                        })()}
                         {(() => {
                             if (this.state.displayWindow === 12) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle12}>12hr</button>
