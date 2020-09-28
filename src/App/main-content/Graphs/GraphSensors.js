@@ -221,6 +221,18 @@ class GraphSensors extends Component {
                     processedData: processedData
                 });
                 break;
+            case 1: // stupid naming for half hour... but if i'm using integers..
+                    data.forEach((dataPoint) => {
+                        if (now - dataPoint.time < 1800000) {
+                            var processedPoint = dataPoint
+                            processedData[processedData.length] = processedPoint
+                        }
+                    })
+    
+                    this.setState({
+                        processedData: processedData
+                    });
+                    break;
             default: //72
                 data.forEach((dataPoint) => {
                     i++;
@@ -365,6 +377,11 @@ class GraphSensors extends Component {
 
     }
 
+    toggle1 = () => {
+        this.setState({ displayWindow: 1 })
+        this.processData(1)
+    }
+
     toggle3 = () => {
         this.setState({ displayWindow: 3 })
         this.processData(3)
@@ -456,6 +473,13 @@ class GraphSensors extends Component {
                 <div style={{ width: '30px', display: 'flex', flexDirection: 'column' }}>
 
                     <div>
+                        {(() => {
+                            if (this.state.displayWindow === 1) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle1}>1/2hr</button>
+                            } else {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle1}>1/2hr</button>
+                            }
+                        })()}
                         {(() => {
                             if (this.state.displayWindow === 3) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle3}>3hr</button>
