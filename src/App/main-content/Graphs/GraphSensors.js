@@ -219,17 +219,17 @@ class GraphSensors extends Component {
                 });
                 break;
             case 1: // stupid naming for half hour... but if i'm using integers..
-                    data.forEach((dataPoint) => {
-                        if (now - dataPoint.time < 1800000) {
-                            var processedPoint = dataPoint
-                            processedData[processedData.length] = processedPoint
-                        }
-                    })
-    
-                    this.setState({
-                        processedData: processedData
-                    });
-                    break;
+                data.forEach((dataPoint) => {
+                    if (now - dataPoint.time < 1800000) {
+                        var processedPoint = dataPoint
+                        processedData[processedData.length] = processedPoint
+                    }
+                })
+
+                this.setState({
+                    processedData: processedData
+                });
+                break;
             default: //72
                 data.forEach((dataPoint) => {
                     i++;
@@ -366,8 +366,6 @@ class GraphSensors extends Component {
                     }
                 })()}
 
-
-
                 {(() => {
                     if (tempFanPower) {
                         return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempFanSpdColor }}>FAN-PWR: {tempFanPower}% </div>
@@ -467,25 +465,55 @@ class GraphSensors extends Component {
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
                         {(() => {
                             if (this.state.displayTemp) {
-                                return <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#FF0000" strokeWidth="3" dot={false}/>
+                                return <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#FF0000" strokeWidth="2" dot={false} />
                             } else {
                                 return <Line yAxisId="left" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
 
                             }
                         })()}
                         {(() => {
+                            if (this.state.displayTemp) {
+                                return <Line yAxisId="left" type="monotone" dataKey="s2Temp" stroke="#E42CEC" strokeWidth="2" dot={false} />
+                            } else {
+                                return <Line yAxisId="left" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
+
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayTemp) {
+                                return <Line yAxisId="left" type="monotone" dataKey="s3Temp" stroke="#ECA92C" strokeWidth="2" dot={false} />
+                            } else {
+                                return <Line yAxisId="left" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
+
+                            }
+                        })()}
+
+
+                        {(() => {
                             if (this.state.displayHumidity) {
-                                return <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#FF0000" dot={false} />
+                                return <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#FF0000" strokeWidth="0.5" dot={false} />
                             } else {
                                 return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
 
                             }
                         })()}
-                        <Line yAxisId="left" type="monotone" dataKey="s2Temp" stroke="#E42CEC" strokeWidth="3" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="s2Humi" stroke="#E42CEC" dot={false} />
+                        {(() => {
+                            if (this.state.displayHumidity) {
+                                return <Line yAxisId="right" type="monotone" dataKey="s2Humi" stroke="#E42CEC" strokeWidth="0.5" dot={false} />
+                            } else {
+                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
 
-                        <Line yAxisId="left" type="monotone" dataKey="s3Temp" stroke="#ECA92C" strokeWidth="3" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="s3Humi" stroke="#ECA92C" dot={false} />
+                            }
+                        })()}
+                        {(() => {
+                            if (this.state.displayHumidity) {
+                                return <Line yAxisId="right" type="monotone" dataKey="s3Humi" stroke="#ECA92C" strokeWidth="0.5" dot={false} />
+                            } else {
+                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
+
+                            }
+                        })()}
+
 
 
                         {(() => {
@@ -505,8 +533,7 @@ class GraphSensors extends Component {
                                 return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#8884d8" dot={false} />
                             }
                         })()}
-                        <Line yAxisId="left" type="monotone" dataKey="outTemp" stroke="#FFF" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="outHumidity" stroke="#FFF" dot={false} />
+
 
 
                         <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} fillOpacity={0.2} />
@@ -533,7 +560,7 @@ class GraphSensors extends Component {
         return (
 
             <div className="Chart-Container">
-                
+
                 {renderDayGraph}
                 <div style={{ width: '30px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '10x' }}>
 
@@ -586,24 +613,24 @@ class GraphSensors extends Component {
                             }
                         })()}
                         {(() => {
-                            if (this.state.displayFan && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF',  padding: '0px', backgroundColor: '#db5e24' }} onClick={this.toggleFanLine}><WiHurricane /></button>
-                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleFanLine}><WiHurricane /></button>
-
-                            }
-                        })()}
-                        {(() => {
                             if (this.state.displayHumidity && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF',  padding: '0px', backgroundColor: '#387d14' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#387d14' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
                             } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
 
                             }
                         })()}
                         {(() => {
+                            if (this.state.displayFan && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#db5e24' }} onClick={this.toggleFanLine}><WiHurricane /></button>
+                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleFanLine}><WiHurricane /></button>
+
+                            }
+                        })()}
+                        {(() => {
                             if (this.state.displayHumidifier && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF',  padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
+                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
                             } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
 

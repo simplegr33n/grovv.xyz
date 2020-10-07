@@ -288,8 +288,8 @@ class GrowDetailsPage extends Component {
         tempAVG = tempAVG / dataPointCount
         humidityAVG = humidityAVG / dataPointCount
 
-        temp2AVG = temp3AVG / dataPointCount
-        humidity2AVG = humidity3AVG / dataPointCount
+        temp2AVG = temp2AVG / dataPointCount
+        humidity2AVG = humidity2AVG / dataPointCount
 
         temp3AVG = temp3AVG / dataPointCount
         humidity3AVG = humidity3AVG / dataPointCount
@@ -532,24 +532,61 @@ class GrowDetailsPage extends Component {
 
                 <div className="Grow-Details-Page-Content">
 
+                    <div className="Grow-Details-Bottom-Btns">
+                        <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
+                        <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
+                        <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
+                        <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
+                        <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
+                    </div>
+
+                    <div className="Grow-Details-Content-Bottom">
+
+                        <div className="Grow-Details-Bottom-Item" style={journalsStyle} >
+                            <div className="Grow-Details-Journals">
+
+                                <div className="Grow-Details-Journals-Header">Connected Journals</div>
+                                <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', maxHeight: '100%' }}>
+                                    {renderedLinkedJournals}
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
+                            <GrowDetailsGraphs growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} growConfig={this.state.growConfig} />
+                        </div>
+
+                        <div className="Grow-Details-Bottom-Item" style={feedStyle} >
+                            <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
+                        </div>
+
+                        <div className="Grow-Details-Bottom-Item" style={editFeedStyle} >
+                            <object id="Edit-Food-Chart" type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
+                        </div>
+
+                        <div className="Grow-Details-Bottom-Item" style={configStyle} >
+                            <GrowDetailsConfig growID={this.props.grow.id} />
+                        </div>
+
+                    </div>
 
 
                     <div className="Grow-Details-Page-Panel">
-                    <div className="Grow-Details-Header">
+                        <div className="Grow-Details-Header">
                             <div className={this.state.activeIndicatorStyle} />
                             <div id="Grow-Header-Text">{this.props.grow.name}</div>
                         </div>
 
 
                         <div id="Grow-Details-Data-Display">
-
                             {(() => {
                                 if (this.state.liveData) {
                                     return (
                                         <div id="Grow-Details-Main-Data-Display">
                                             <div className="Grow-Details-Headers-Display-Row">
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', width: '44px', maxWidth: '44px' }}></div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '86px', maxWidth: '86px' }}>cur</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', width: '100px', maxWidth: '100px' }}></div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '86px', maxWidth: '86px' }}></div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h~</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h&#8593;</div>
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h&#8595;</div>
@@ -559,8 +596,8 @@ class GrowDetailsPage extends Component {
                                                 if (this.state.liveData.cTemp) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiThermometer style={{ color: '#FFF', fontSize: '34px' }} />
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Temp 1 <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -606,9 +643,6 @@ class GrowDetailsPage extends Component {
                                                             </div>
 
 
-
-
-
                                                             <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                                                                 <div className="Grow-Details-Main-Data-Time">
                                                                     {(() => {
@@ -625,7 +659,7 @@ class GrowDetailsPage extends Component {
                                                                     }
                                                                 })()}
 
-                                                                
+
 
 
                                                             </div>
@@ -655,15 +689,15 @@ class GrowDetailsPage extends Component {
                                             })()}
 
 
-{(() => {
+                                            {(() => {
                                                 if (this.state.liveData.humidity) {
                                                     return (
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiHumidity style={{ color: '#FFF', fontSize: '34px' }} />
 
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Humi 1 <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -756,8 +790,8 @@ class GrowDetailsPage extends Component {
                                                 if (this.state.liveData.s2Temp) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiThermometer style={{ color: '#FFF', fontSize: '34px' }} />
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Temp 2 <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -822,7 +856,7 @@ class GrowDetailsPage extends Component {
                                                                     }
                                                                 })()}
 
-                                                                
+
 
 
                                                             </div>
@@ -852,15 +886,14 @@ class GrowDetailsPage extends Component {
                                             })()}
 
 
-{(() => {
+                                            {(() => {
                                                 if (this.state.liveData.s2Humi) {
                                                     return (
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiHumidity style={{ color: '#FFF', fontSize: '34px' }} />
-
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Humi 2 <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -951,8 +984,8 @@ class GrowDetailsPage extends Component {
                                                 if (this.state.liveData.s3Temp) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiThermometer style={{ color: '#FFF', fontSize: '34px' }} />
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Temp 3 <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -1017,7 +1050,7 @@ class GrowDetailsPage extends Component {
                                                                     }
                                                                 })()}
 
-                                                                
+
 
 
                                                             </div>
@@ -1046,15 +1079,14 @@ class GrowDetailsPage extends Component {
                                                 }
                                             })()}
 
-{(() => {
+                                            {(() => {
                                                 if (this.state.liveData.s3Humi) {
                                                     return (
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiHumidity style={{ color: '#FFF', fontSize: '34px' }} />
-
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Humi 3 <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -1146,9 +1178,9 @@ class GrowDetailsPage extends Component {
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiHurricane style={{ color: '#FFF', fontSize: '34px' }} />
 
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Fan <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -1241,8 +1273,9 @@ class GrowDetailsPage extends Component {
                                                 if (this.state.liveData.humiPower) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
-                                                                <WiSprinkle style={{ color: '#FFF', fontSize: '34px' }} />
+
+                                                            <div style={{ width: '100px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+                                                                Hmdfr <WiSprinkle style={{ color: '#FFF', fontSize: '30px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -1335,47 +1368,11 @@ class GrowDetailsPage extends Component {
                             })()}
                         </div>
 
-                        <div className="Grow-Details-Bottom-Btns">
-                            <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-                            <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
-                            <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-                            <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
-                            <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                        </div>
+
 
                     </div>
 
 
-                    <div className="Grow-Details-Content-Bottom">
-
-                        <div className="Grow-Details-Bottom-Item" style={journalsStyle} >
-                            <div className="Grow-Details-Journals">
-
-                                <div className="Grow-Details-Journals-Header">Connected Journals</div>
-                                <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', maxHeight: '100%' }}>
-                                    {renderedLinkedJournals}
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div className="Grow-Details-Bottom-Item" style={graphsStyle} >
-                            <GrowDetailsGraphs growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} growConfig={this.state.growConfig} />
-                        </div>
-
-                        <div className="Grow-Details-Bottom-Item" style={feedStyle} >
-                            <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
-                        </div>
-
-                        <div className="Grow-Details-Bottom-Item" style={editFeedStyle} >
-                            <object id="Edit-Food-Chart" type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
-                        </div>
-
-                        <div className="Grow-Details-Bottom-Item" style={configStyle} >
-                            <GrowDetailsConfig growID={this.props.grow.id} />
-                        </div>
-
-                    </div>
 
                 </div>
 
