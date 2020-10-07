@@ -86,8 +86,6 @@ class GrowDetailsPage extends Component {
     }
 
     processGrowData = (growData) => {
-        console.log("PROCESS GROW DATA!")
-        console.log(growData[this.props.grow.id])
 
         var concatData = []
         growData[this.props.grow.id].forEach((list) => {
@@ -96,18 +94,25 @@ class GrowDetailsPage extends Component {
 
         concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
+
         this.setState({
             liveData: concatData[concatData.length - 1],
-            lastLiveData: concatData[concatData.length - 2]
+            lastLiveData: concatData[concatData.length - 2],
         })
-
-        console.log("concatData")
-        console.log(concatData)
 
         var highTemp = []
         var lowTemp = []
         var highHumidity = []
         var lowHumidity = []
+        var highTemp2 = []
+        var lowTemp2 = []
+        var highHumi2 = []
+        var lowHumi2 = []
+        var highTemp3 = []
+        var lowTemp3 = []
+        var highHumi3 = []
+        var lowHumi3 = []
+
         var highFan = []
         var lowFan = []
         var highHumidifier = []
@@ -116,12 +121,20 @@ class GrowDetailsPage extends Component {
         var dataPointCount = 0
         var tempAVG = 0
         var humidityAVG = 0
+        var temp2AVG = 0
+        var humidity2AVG = 0
+        var temp3AVG = 0
+        var humidity3AVG = 0
         var fanAVG = 0
         var humidifierAVG = 0
 
         var yestPointCount = 0
         var yestTempAVG = 0
         var yestHumidityAVG = 0
+        var yestTemp2AVG = 0
+        var yestHumidity2AVG = 0
+        var yestTemp3AVG = 0
+        var yestHumidity3AVG = 0
         var yestFanAVG = 0
         var yestHumidifierAVG = 0
 
@@ -149,6 +162,30 @@ class GrowDetailsPage extends Component {
                     }
                     tempAVG += parseFloat(dataPoint.cTemp)
                 }
+                if (dataPoint.s2Temp) {
+                    if (!highTemp2[0] || parseFloat(dataPoint.s2Temp) >= highTemp2[0]) {
+                        highTemp2[0] = dataPoint.s2Temp
+                        highTemp2[1] = dataPoint.time
+                    }
+
+                    if (!lowTemp2[0] || parseFloat(dataPoint.s2Temp) <= lowTemp2[0]) {
+                        lowTemp2[0] = dataPoint.s2Temp
+                        lowTemp2[1] = dataPoint.time
+                    }
+                    temp2AVG += parseFloat(dataPoint.s2Temp)
+                }
+                if (dataPoint.s3Temp) {
+                    if (!highTemp3[0] || parseFloat(dataPoint.s3Temp) >= highTemp3[0]) {
+                        highTemp3[0] = dataPoint.s3Temp
+                        highTemp3[1] = dataPoint.time
+                    }
+
+                    if (!lowTemp3[0] || parseFloat(dataPoint.s3Temp) <= lowTemp3[0]) {
+                        lowTemp3[0] = dataPoint.s3Temp
+                        lowTemp3[1] = dataPoint.time
+                    }
+                    temp3AVG += parseFloat(dataPoint.s3Temp)
+                }
                 if (dataPoint.humidity) {
                     if (!highHumidity[0] || parseFloat(dataPoint.humidity) >= highHumidity[0]) {
                         highHumidity[0] = dataPoint.humidity
@@ -162,6 +199,32 @@ class GrowDetailsPage extends Component {
 
                     humidityAVG += parseFloat(dataPoint.humidity)
                 }
+                if (dataPoint.s2Humi) {
+                    if (!highHumi2[0] || parseFloat(dataPoint.s2Humi) >= highHumi2[0]) {
+                        highHumi2[0] = dataPoint.s2Humi
+                        highHumi2[1] = dataPoint.time
+                    }
+
+                    if (!lowHumi2[0] || parseFloat(dataPoint.s2Humi) <= lowHumi2[0]) {
+                        lowHumi2[0] = dataPoint.s2Humi
+                        lowHumi2[1] = dataPoint.time
+                    }
+                    humidity2AVG += parseFloat(dataPoint.s2Humi)
+                }
+                if (dataPoint.s3Humi) {
+                    if (!highHumi3[0] || parseFloat(dataPoint.s3Humi) >= highHumi3[0]) {
+                        highHumi3[0] = dataPoint.s3Humi
+                        highHumi3[1] = dataPoint.time
+                    }
+
+                    if (!lowHumi3[0] || parseFloat(dataPoint.s3Humi) <= lowHumi3[0]) {
+                        lowHumi3[0] = dataPoint.s3Humi
+                        lowHumi3[1] = dataPoint.time
+                    }
+                    humidity3AVG += parseFloat(dataPoint.s3Humi)
+                }
+
+
                 if (dataPoint.fanSpeed) {
                     if (!highFan[0] || parseFloat(dataPoint.fanSpeed) >= highFan[0]) {
                         highFan[0] = dataPoint.fanSpeed
@@ -192,11 +255,24 @@ class GrowDetailsPage extends Component {
                 yestPointCount += 1
 
                 yesterdayData[yesterdayData.length] = dataPoint
+
                 if (dataPoint.cTemp) {
                     yestTempAVG += parseFloat(dataPoint.cTemp)
                 }
                 if (dataPoint.humidity) {
                     yestHumidityAVG += parseFloat(dataPoint.humidity)
+                }
+                if (dataPoint.s2Temp) {
+                    yestTemp2AVG += parseFloat(dataPoint.s2Temp)
+                }
+                if (dataPoint.s2Humi) {
+                    yestHumidity2AVG += parseFloat(dataPoint.s2Humi)
+                }
+                if (dataPoint.s3Temp) {
+                    yestTemp3AVG += parseFloat(dataPoint.s3Temp)
+                }
+                if (dataPoint.s3Humi) {
+                    yestHumidity3AVG += parseFloat(dataPoint.s3Humi)
                 }
                 if (dataPoint.fanSpeed) {
                     yestFanAVG += parseFloat(dataPoint.fanSpeed)
@@ -211,6 +287,13 @@ class GrowDetailsPage extends Component {
 
         tempAVG = tempAVG / dataPointCount
         humidityAVG = humidityAVG / dataPointCount
+
+        temp2AVG = temp3AVG / dataPointCount
+        humidity2AVG = humidity3AVG / dataPointCount
+
+        temp3AVG = temp3AVG / dataPointCount
+        humidity3AVG = humidity3AVG / dataPointCount
+
         fanAVG = fanAVG / dataPointCount
         humidifierAVG = humidifierAVG / dataPointCount
 
@@ -222,10 +305,18 @@ class GrowDetailsPage extends Component {
         this.setState({
             highTemp: highTemp,
             lowTemp: lowTemp,
+            highTemp2: highTemp2,
+            lowTemp2: lowTemp2,
+            highTemp3: highTemp3,
+            lowTemp3: lowTemp3,
             highFan: highFan,
             lowFan: lowFan,
             highHumidity: highHumidity,
             lowHumidity: lowHumidity,
+            highHumi2: highHumi2,
+            lowHumi2: lowHumi2,
+            highHumi3: highHumi3,
+            lowHumi3: lowHumi3,
             highHumidifier: highHumidifier,
             lowHumidifier: lowHumidifier,
             tempAVG: tempAVG,
@@ -234,6 +325,10 @@ class GrowDetailsPage extends Component {
             humidifierAVG: humidifierAVG,
             yestTempAVG: yestTempAVG,
             yestHumidityAVG: yestHumidityAVG,
+            yestTemp2AVG: yestTemp2AVG,
+            yestHumidity2AVG: yestHumidity2AVG,
+            yestTemp3AVG: yestTemp3AVG,
+            yestHumidity3AVG: yestHumidity3AVG,
             yestFanAVG: yestFanAVG,
             yestHumidifierAVG: yestHumidifierAVG
 
@@ -437,15 +532,12 @@ class GrowDetailsPage extends Component {
 
                 <div className="Grow-Details-Page-Content">
 
-                    <div className="Grow-Details-Content-Cam">
-                        <div className="Grow-Details-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullCam}>&#9974;</div>
-                        <img alt="cam" style={{ objectFit: 'contain', width: '100%' }} src={this.state.camURL} />
-                    </div>
+
 
                     <div className="Grow-Details-Page-Panel">
-                        <div className="Grow-Details-Header">
-                            <div id="Grow-Header-Text">{this.props.grow.name}</div>
+                    <div className="Grow-Details-Header">
                             <div className={this.state.activeIndicatorStyle} />
+                            <div id="Grow-Header-Text">{this.props.grow.name}</div>
                         </div>
 
 
@@ -456,18 +548,19 @@ class GrowDetailsPage extends Component {
                                     return (
                                         <div id="Grow-Details-Main-Data-Display">
                                             <div className="Grow-Details-Headers-Display-Row">
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', color: '#000', width: '44px', maxWidth: '44px' }}>*</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '86px', maxWidth: '86px' }}>cur</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>24h~</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>24h&#8593;</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ backgroundColor: '#000', width: '60px', maxWidth: '60px' }}>24h&#8595;</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', width: '44px', maxWidth: '44px' }}></div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '86px', maxWidth: '86px' }}>cur</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h~</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h&#8593;</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h&#8595;</div>
                                             </div>
+
                                             {(() => {
                                                 if (this.state.liveData.cTemp) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                                <WiThermometer style={{ color: '#FFF', fontSize: '44px' }} />
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiThermometer style={{ color: '#FFF', fontSize: '34px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {
@@ -532,6 +625,8 @@ class GrowDetailsPage extends Component {
                                                                     }
                                                                 })()}
 
+                                                                
+
 
                                                             </div>
 
@@ -550,6 +645,205 @@ class GrowDetailsPage extends Component {
                                                                         return Math.round(this.state.lowTemp[0] * 10) / 10 + '°C'
                                                                     }
                                                                 })()}
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    )
+                                                }
+                                            })()}
+
+                                            {(() => {
+                                                if (this.state.liveData.s2Temp) {
+                                                    return (
+                                                        <div className="Grow-Details-Main-Data-Display-Row">
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiThermometer style={{ color: '#FFF', fontSize: '34px' }} />
+                                                            </div>
+                                                            <div className="Grow-Details-Main-Data-Current-Data">
+                                                                {(() => {
+                                                                    if (this.state.liveData.s2Temp > this.state.lastLiveData.s2Temp) {
+                                                                        return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.liveData.s2Temp < this.state.lastLiveData.s2Temp) {
+                                                                        return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                })()}
+                                                                {Math.round(this.state.liveData.s2Temp * 10) / 10}°C
+                                                        </div>
+
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                                    {(() => {
+                                                                        if (this.state.yestTemp2AVG) {
+                                                                            return Math.round(this.state.yestTemp2AVG * 10) / 10 + '°C'
+                                                                        }
+                                                                    })()}
+
+
+                                                                    {(() => {
+                                                                        if (this.state.temp2AVG && this.state.yestTemp2AVG) {
+                                                                            if (this.state.temp2AVG > this.state.yestTemp2AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                            } else if (this.state.tempAVG < this.state.yestTemp2AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            } else {
+                                                                                return <div style={{ visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            }
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.temp2AVG) {
+                                                                        return Math.round(this.state.temp2AVG * 10) / 10 + '°C'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+
+
+
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time">
+                                                                    {(() => {
+                                                                        if (this.state.highTemp2) {
+                                                                            var m = moment(this.state.highTemp2[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.highTemp2) {
+                                                                        return Math.round(this.state.highTemp2[0] * 10) / 10 + '°C'
+                                                                    }
+                                                                })()}
+
+                                                                
+
+
+                                                            </div>
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time">
+                                                                    {(() => {
+                                                                        if (this.state.lowTemp2) {
+                                                                            var m = moment(this.state.lowTemp2[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.lowTemp2) {
+                                                                        return Math.round(this.state.lowTemp2[0] * 10) / 10 + '°C'
+                                                                    }
+                                                                })()}
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    )
+                                                }
+                                            })()}
+
+                                            {(() => {
+                                                if (this.state.liveData.s3Temp) {
+                                                    return (
+                                                        <div className="Grow-Details-Main-Data-Display-Row">
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiThermometer style={{ color: '#FFF', fontSize: '34px' }} />
+                                                            </div>
+                                                            <div className="Grow-Details-Main-Data-Current-Data">
+                                                                {(() => {
+                                                                    if (this.state.liveData.s3Temp > this.state.lastLiveData.s3Temp) {
+                                                                        return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.liveData.s3Temp < this.state.lastLiveData.s3Temp) {
+                                                                        return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                })()}
+                                                                {Math.round(this.state.liveData.s3Temp * 10) / 10}°C
+                                                        </div>
+
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                                    {(() => {
+                                                                        if (this.state.yestTemp3AVG) {
+                                                                            return Math.round(this.state.yestTemp3AVG * 10) / 10 + '°C'
+                                                                        }
+                                                                    })()}
+
+
+                                                                    {(() => {
+                                                                        if (this.state.temp3AVG && this.state.yestTemp3AVG) {
+                                                                            if (this.state.temp3AVG > this.state.yestTemp3AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                            } else if (this.state.temp3AVG < this.state.yestTemp3AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            } else {
+                                                                                return <div style={{ visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            }
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.temp3AVG) {
+                                                                        return Math.round(this.state.temp3AVG * 10) / 10 + '°C'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+
+
+
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time">
+                                                                    {(() => {
+                                                                        if (this.state.highTemp3) {
+                                                                            var m = moment(this.state.highTemp3[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.highTemp3) {
+                                                                        return Math.round(this.state.highTemp3[0] * 10) / 10 + '°C'
+                                                                    }
+                                                                })()}
+
+                                                                
+
+
+                                                            </div>
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time">
+                                                                    {(() => {
+                                                                        if (this.state.lowTemp3) {
+                                                                            var m = moment(this.state.lowTemp3[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.lowTemp3) {
+                                                                        return Math.round(this.state.lowTemp3[0] * 10) / 10 + '°C'
+                                                                    }
+                                                                })()}
+
                                                             </div>
 
                                                         </div>
@@ -564,8 +858,8 @@ class GrowDetailsPage extends Component {
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                                <WiHurricane style={{ color: '#FFF', fontSize: '44px' }} />
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiHurricane style={{ color: '#FFF', fontSize: '34px' }} />
 
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
@@ -659,8 +953,8 @@ class GrowDetailsPage extends Component {
 
 
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                                <WiHumidity style={{ color: '#FFF', fontSize: '44px' }} />
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiHumidity style={{ color: '#FFF', fontSize: '34px' }} />
 
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
@@ -747,12 +1041,201 @@ class GrowDetailsPage extends Component {
                                                 }
                                             })()}
 
+
+{(() => {
+                                                if (this.state.liveData.s2Humi) {
+                                                    return (
+
+
+                                                        <div className="Grow-Details-Main-Data-Display-Row">
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiHumidity style={{ color: '#FFF', fontSize: '34px' }} />
+
+                                                            </div>
+                                                            <div className="Grow-Details-Main-Data-Current-Data">
+                                                                {(() => {
+                                                                    if (this.state.liveData.s2Humi > this.state.lastLiveData.s2Humi) {
+                                                                        return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.liveData.s2Humi < this.state.lastLiveData.s2Humi) {
+                                                                        return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                })()}
+                                                                {Math.round(this.state.liveData.s2Humi * 10) / 10}%
+                                                        </div>
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                                    {(() => {
+                                                                        if (this.state.yestHumidity2AVG) {
+                                                                            return Math.round(this.state.yestHumidity2AVG * 10) / 10 + '%'
+                                                                        }
+                                                                    })()}
+
+                                                                    {(() => {
+                                                                        if (this.state.humidity2AVG && this.state.yestHumidity2AVG) {
+                                                                            if (this.state.humidity2AVG > this.state.yestHumidity2AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                            } else if (this.state.humidity2AVG < this.state.yestHumidity2AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            } else {
+                                                                                return <div style={{ visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            }
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.humidity2AVG) {
+                                                                        return Math.round(this.state.humidity2AVG * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+
+
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time" >
+                                                                    {(() => {
+                                                                        if (this.state.highHumi2) {
+                                                                            var m = moment(this.state.highHumi2[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.highHumi2) {
+                                                                        return Math.round(this.state.highHumi2[0] * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time">
+                                                                    {(() => {
+                                                                        if (this.state.lowHumi2) {
+                                                                            var m = moment(this.state.lowHumi2[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.lowHumi2) {
+                                                                        return Math.round(this.state.lowHumi2[0] * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+                                                        </div>
+
+                                                    )
+                                                }
+                                            })()}
+
+{(() => {
+                                                if (this.state.liveData.s3Humi) {
+                                                    return (
+
+
+                                                        <div className="Grow-Details-Main-Data-Display-Row">
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiHumidity style={{ color: '#FFF', fontSize: '34px' }} />
+
+                                                            </div>
+                                                            <div className="Grow-Details-Main-Data-Current-Data">
+                                                                {(() => {
+                                                                    if (this.state.liveData.s3Humi > this.state.lastLiveData.s3Humi) {
+                                                                        return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                    } else if (this.state.liveData.s3Humi < this.state.lastLiveData.s3Humi) {
+                                                                        return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    } else {
+                                                                        return <div style={{ fontSize: '14px', visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                    }
+                                                                })()}
+                                                                {Math.round(this.state.liveData.s3Humi * 10) / 10}%
+                                                        </div>
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                                    {(() => {
+                                                                        if (this.state.yestHumidity3AVG) {
+                                                                            return Math.round(this.state.yestHumidity3AVG * 10) / 10 + '%'
+                                                                        }
+                                                                    })()}
+
+                                                                    {(() => {
+                                                                        if (this.state.humidity3AVG && this.state.yestHumidity3AVG) {
+                                                                            if (this.state.humidity3AVG > this.state.yestHumidity3AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                                                            } else if (this.state.humidity3AVG < this.state.yestHumidity3AVG) {
+                                                                                return <div style={{ color: '#FFF' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            } else {
+                                                                                return <div style={{ visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                                                            }
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.humidity3AVG) {
+                                                                        return Math.round(this.state.humidity3AVG * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+
+
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time" >
+                                                                    {(() => {
+                                                                        if (this.state.highHumi3) {
+                                                                            var m = moment(this.state.highHumi3[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.highHumi3) {
+                                                                        return Math.round(this.state.highHumi3[0] * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+                                                            <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
+                                                                <div className="Grow-Details-Main-Data-Time">
+                                                                    {(() => {
+                                                                        if (this.state.lowHumi3) {
+                                                                            var m = moment(this.state.lowHumi3[1])
+                                                                            return m.format('HH:mm')
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {(() => {
+                                                                    if (this.state.lowHumi3) {
+                                                                        return Math.round(this.state.lowHumi3[0] * 10) / 10 + '%'
+                                                                    }
+                                                                })()}
+                                                            </div>
+
+                                                        </div>
+
+                                                    )
+                                                }
+                                            })()}
+
                                             {(() => {
                                                 if (this.state.liveData.humiPower) {
                                                     return (
                                                         <div className="Grow-Details-Main-Data-Display-Row">
-                                                            <div style={{ backgroundColor: '#000', width: '44px', maxHeight: '100%' }}>
-                                                                <WiSprinkle style={{ color: '#FFF', fontSize: '44px' }} />
+                                                            <div style={{ width: '44px', maxHeight: '100%' }}>
+                                                                <WiSprinkle style={{ color: '#FFF', fontSize: '34px' }} />
                                                             </div>
                                                             <div className="Grow-Details-Main-Data-Current-Data">
                                                                 {(() => {

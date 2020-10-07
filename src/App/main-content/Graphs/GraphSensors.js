@@ -36,9 +36,6 @@ class GraphSensors extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-
-
-
     }
 
     componentWillUnmount() {
@@ -270,6 +267,10 @@ class GraphSensors extends Component {
         var tempHumidityColor = "#000"
         var tempHumidifierPower = null;
         var tempHumiPwrColor = "#000"
+        var tempOutTemp = null;
+        var tempOutTempColor = "#000"
+        var tempOutHumidity = null;
+        var tempOutHumidityColor = "#000"
 
         rawContent.forEach((line) => {
             if (line.dataKey === "cTemp") {
@@ -290,6 +291,16 @@ class GraphSensors extends Component {
             if (line.dataKey === "humiPower") {
                 tempHumiPwrColor = line.stroke
                 tempHumidifierPower = rawContent[0].payload.humiPower
+            }
+
+            if (line.dataKey === "outTemp") {
+                tempOutHumidityColor = line.stroke
+                tempOutHumidity = rawContent[0].payload.outHumidity
+            }
+
+            if (line.dataKey === "outHumidity") {
+                tempOutTempColor = line.stroke
+                tempOutTemp = rawContent[0].payload.outTemp
             }
         })
 
@@ -321,6 +332,18 @@ class GraphSensors extends Component {
                     }
                 })()}
 
+                {(() => {
+                    if (tempOutTemp) {
+                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempTempColor }}>OUT TEMP: {tempOutTemp}°C </div>
+                    }
+                })()}
+
+                {(() => {
+                    if (tempOutHumidity) {
+                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumidityColor }}>OUT HUMID: {tempOutHumidity}% RH </div>
+                    }
+                })()}
+
             </div>
 
         )
@@ -329,7 +352,6 @@ class GraphSensors extends Component {
 
 
     toggleTempLine = () => {
-
         if (this.displayTemp === true) {
             this.displayTemp = false
             this.setState({ displayTemp: false })
@@ -337,11 +359,9 @@ class GraphSensors extends Component {
             this.displayTemp = true
             this.setState({ displayTemp: true })
         }
-
     }
 
     toggleFanLine = () => {
-
         if (this.displayFan === true) {
             this.displayFan = false
             this.setState({ displayFan: false })
@@ -349,11 +369,9 @@ class GraphSensors extends Component {
             this.displayFan = true
             this.setState({ displayFan: true })
         }
-
     }
 
     toggleHumidityLine = () => {
-
         if (this.displayHumidity === true) {
             this.displayHumidity = false
             this.setState({ displayHumidity: false })
@@ -361,12 +379,10 @@ class GraphSensors extends Component {
             this.displayHumidity = true
             this.setState({ displayHumidity: true })
         }
-
     }
 
 
     toggleHumidifierLine = () => {
-
         if (this.displayHumidifier === true) {
             this.displayHumidifier = false
             this.setState({ displayHumidifier: false })
@@ -374,7 +390,6 @@ class GraphSensors extends Component {
             this.displayHumidifier = true
             this.setState({ displayHumidifier: true })
         }
-
     }
 
     toggle1 = () => {
@@ -395,7 +410,6 @@ class GraphSensors extends Component {
     toggle24 = () => {
         this.setState({ displayWindow: 24 })
         this.processData(24)
-
     }
 
     toggle72 = () => {
@@ -445,6 +459,9 @@ class GraphSensors extends Component {
                                 return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#8884d8" dot={false} />
                             }
                         })()}
+                        <Line yAxisId="left" type="monotone" dataKey="outTemp" stroke="#FFF" dot={false} />
+                        <Line yAxisId="right" type="monotone" dataKey="outHumidity" stroke="#FFF" dot={false} />
+
 
                         <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} fillOpacity={0.2} />
 
@@ -470,7 +487,9 @@ class GraphSensors extends Component {
         return (
 
             <div className="Chart-Container">
-                <div style={{ width: '30px', display: 'flex', flexDirection: 'column' }}>
+                
+                {renderDayGraph}
+                <div style={{ width: '30px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '10x' }}>
 
                     <div>
                         {(() => {
@@ -551,7 +570,6 @@ class GraphSensors extends Component {
 
 
                 </div>
-                {renderDayGraph}
             </div>
 
         );
