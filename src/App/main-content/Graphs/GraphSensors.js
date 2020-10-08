@@ -16,11 +16,6 @@ class GraphSensors extends Component {
         this.state = {
             displayWindow: 72, // 1/2, 3, 12, 24, 72
 
-            displayTemp: true,
-            displayFan: true,
-            displayHumidity: true,
-            displayHumidifier: true,
-
             lightsOnArray: [],
             lightsOffArray: [],
             tickArray: [],
@@ -285,48 +280,6 @@ class GraphSensors extends Component {
     }
 
 
-
-    toggleTempLine = () => {
-        if (this.displayTemp === true) {
-            this.displayTemp = false
-            this.setState({ displayTemp: false })
-        } else {
-            this.displayTemp = true
-            this.setState({ displayTemp: true })
-        }
-    }
-
-    toggleFanLine = () => {
-        if (this.displayFan === true) {
-            this.displayFan = false
-            this.setState({ displayFan: false })
-        } else {
-            this.displayFan = true
-            this.setState({ displayFan: true })
-        }
-    }
-
-    toggleHumidityLine = () => {
-        if (this.displayHumidity === true) {
-            this.displayHumidity = false
-            this.setState({ displayHumidity: false })
-        } else {
-            this.displayHumidity = true
-            this.setState({ displayHumidity: true })
-        }
-    }
-
-
-    toggleHumidifierLine = () => {
-        if (this.displayHumidifier === true) {
-            this.displayHumidifier = false
-            this.setState({ displayHumidifier: false })
-        } else {
-            this.displayHumidifier = true
-            this.setState({ displayHumidifier: true })
-        }
-    }
-
     toggle1 = () => {
         this.setState({ displayWindow: 1 })
         this.processData(1)
@@ -401,47 +354,48 @@ class GraphSensors extends Component {
             <div className="Chart-Container">
 
                 {renderDayGraph}
-                <div style={{ width: '30px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '10x' }}>
+                <div style={{ width: '18px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '10x' }}>
 
                     <div>
                         {(() => {
                             if (this.state.displayWindow === 1) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle1}>1/2hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle1}>1/2h</button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle1}>1/2hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle1}>1/2h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 3) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle3}>3hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle3}>3h</button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle3}>3hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle3}>3h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 12) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle12}>12hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle12}>12h</button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle12}>12hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle12}>12h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 24) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle24}>24hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle24}>24h</button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle24}>24hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle24}>24h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 72) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle72}>72hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle72}>72h</button>
                             } else {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '10px', padding: '0' }} onClick={this.toggle72}>72hr</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle72}>72h</button>
                             }
                         })()}
                     </div>
 
-                    <div style={{ height: '20px' }}></div>
+
+                    {/* <div style={{ height: '20px' }}></div>
                     <div>
                         {(() => {
                             if (this.state.displayTemp && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].cTemp) {
@@ -472,14 +426,9 @@ class GraphSensors extends Component {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
                             } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
                                 return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
-
                             }
                         })()}
-
-
-                    </div>
-
-
+                    </div> */}
 
                 </div>
             </div>

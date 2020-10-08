@@ -526,13 +526,13 @@ class GrowDetailsPage extends Component {
 
                 <div className="Grow-Details-Page-Content">
 
-                    <div className="Grow-Details-Bottom-Btns">
+                    {/* <div className="Grow-Details-Bottom-Btns">
                         <button className="Grow-Box-Function-Btn" data-value={'data'} onClick={this.openData} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
                         <button className="Grow-Box-Function-Btn" data-value={'journals'} onClick={this.openJournals} >JRNLS <span role="img" aria-label="journal">&#128214;</span></button>
                         <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openConfig} >CNFG <span role="img" aria-label="grow config icon">&#128187;</span></button>
                         <button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openFeed} >FEED &#9619;&#9619;</button>
                         <button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openEditFeed} >&#9998;</button>
-                    </div>
+                    </div> */}
 
                     <div className="Grow-Details-Content-Bottom">
 
