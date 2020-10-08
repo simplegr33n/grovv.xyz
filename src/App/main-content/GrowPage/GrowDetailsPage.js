@@ -13,7 +13,7 @@ import DbHelper from '../../_utils/DbHelper.js'
 
 import moment from 'moment'
 
-import { WiThermometer, WiHumidity, WiHurricane, WiSprinkle } from 'react-icons/wi';
+import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
 
 
 
@@ -175,10 +175,10 @@ class GrowDetailsPage extends Component {
                 for (const pid in dataPoint) {
 
                     if (SENSOR_PIDS.includes(pid)) {
-                        var tIndex = SENSOR_PIDS.indexOf(pid)
+                        var yIndex = SENSOR_PIDS.indexOf(pid)
 
                         //AVERAGES
-                        YEST_AVGS[tIndex] += parseFloat(dataPoint[pid])
+                        YEST_AVGS[yIndex] += parseFloat(dataPoint[pid])
 
                     }
 
@@ -419,7 +419,11 @@ class GrowDetailsPage extends Component {
                         </div>)
                     } else if (this.props.grow.config.SENSORS[tIndex].type === "humidifier") {
                         return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
-                            {this.props.grow.config.SENSORS[tIndex].name}  <WiSprinkle style={{ color: '#FFF', fontSize: '30px' }} />
+                            {this.props.grow.config.SENSORS[tIndex].name}  <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
+                        </div>)
+                    } else if (this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                        return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
+                            {this.props.grow.config.SENSORS[tIndex].name}  <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
                         </div>)
                     } else {
                         return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
@@ -484,16 +488,24 @@ class GrowDetailsPage extends Component {
                 <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
                     <div className="Grow-Details-Main-Data-Time">
                         {(() => {
-                            if (this.state.highTemp) {
-                                var m = moment(this.state.highTemp[1])
+                            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                            if (this.state.DAILY_HIGHS_TIMES) {
+                                var m = moment(this.state.DAILY_HIGHS_TIMES[tIndex])
                                 return m.format('HH:mm')
                             }
                         })()}
                     </div>
 
                     {(() => {
-                        if (this.state.highTemp) {
-                            return Math.round(this.state.highTemp[0] * 10) / 10 + '°C'
+                        var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                        if (this.state.DAILY_HIGHS) {
+                            if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                                return Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10 + '°C'
+                            } else {
+                                return Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10 + '%'
+                            }
                         }
                     })()}
                 </div>
@@ -501,19 +513,26 @@ class GrowDetailsPage extends Component {
                 <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
                     <div className="Grow-Details-Main-Data-Time">
                         {(() => {
-                            if (this.state.lowTemp) {
-                                var m = moment(this.state.lowTemp[1])
+                            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                            if (this.state.DAILY_LOWS_TIMES) {
+                                var m = moment(this.state.DAILY_LOWS_TIMES[tIndex])
                                 return m.format('HH:mm')
                             }
                         })()}
                     </div>
 
                     {(() => {
-                        if (this.state.lowTemp) {
-                            return Math.round(this.state.lowTemp[0] * 10) / 10 + '°C'
+                        var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                        if (this.state.DAILY_LOWS) {
+                            if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                                return Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10 + '°C'
+                            } else {
+                                return Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10 + '%'
+                            }
                         }
                     })()}
-
                 </div>
             </div>
         );
