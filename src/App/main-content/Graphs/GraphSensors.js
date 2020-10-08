@@ -14,7 +14,7 @@ class GraphSensors extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayWindow: 72, // 3, 12, 24, 72
+            displayWindow: 72, // 1/2, 3, 12, 24, 72
 
             displayTemp: true,
             displayFan: true,
@@ -24,7 +24,7 @@ class GraphSensors extends Component {
             lightsOnArray: [],
             lightsOffArray: [],
             tickArray: [],
-            lightBackgrounds: ['#7344e7', '#fff936']
+            lightBackgrounds: ['#7344e740', '#fff93640']
         };
 
         this.displayTemp = true
@@ -141,9 +141,9 @@ class GraphSensors extends Component {
 
         //set backgrounds
         if (tempOnArray.includes(ticks[0])) {
-            this.setState({ lightBackgrounds: ['#7344e7', '#fff936'] })
+            this.setState({ lightBackgrounds: ['#7344e740', '#fff93640'] })
         } else {
-            this.setState({ lightBackgrounds: ['#fff936', '#7344e7'] })
+            this.setState({ lightBackgrounds: ['#fff93640', '#7344e740'] })
 
         }
 
@@ -259,126 +259,25 @@ class GraphSensors extends Component {
 
         var readableTime = moment(props.payload[0].payload.time).format('ddd - HH:mm')
 
-        var tempTemp = null;
-        var tempTempColor = "#000"
-        var tempHumidity = null;
-        var tempHumidityColor = "#000"
-        var tempTemp2 = null;
-        var tempTempColor2 = "#000"
-        var tempHumidity2 = null;
-        var tempHumidityColor2 = "#000"
-        var tempTemp3 = null;
-        var tempTempColor3 = "#000"
-        var tempHumidity3 = null;
-        var tempHumidityColor3 = "#000"
+        const listItems = rawContent.map((l) =>
+            (() => {
+                var tIndex = rawContent.indexOf(l)
 
-        var tempFanPower = null;
-        var tempFanSpdColor = "#000"
-
-        var tempHumidifierPower = null;
-        var tempHumiPwrColor = "#000"
+                if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                    return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}°C </div>
+                } else {
+                    return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}% </div>
+                }
+            })()
+        );
 
 
-        rawContent.forEach((line) => {
-            if (line.dataKey === "cTemp") {
-                tempTempColor = line.stroke
-                tempTemp = rawContent[0].payload.cTemp
-            }
-
-            if (line.dataKey === "humidity") {
-                tempHumidityColor = line.stroke
-                tempHumidity = rawContent[0].payload.humidity
-            }
-
-            if (line.dataKey === "s2Temp") {
-                tempTempColor2 = line.stroke
-                tempTemp2 = rawContent[0].payload.s2Temp
-            }
-
-            if (line.dataKey === "s2Humi") {
-                tempHumidityColor2 = line.stroke
-                tempHumidity2 = rawContent[0].payload.s2Humi
-            }
-
-            if (line.dataKey === "s3Temp") {
-                tempTempColor3 = line.stroke
-                tempTemp3 = rawContent[0].payload.s3Temp
-            }
-
-            if (line.dataKey === "s3Humi") {
-                tempHumidityColor3 = line.stroke
-                tempHumidity3 = rawContent[0].payload.s3Humi
-            }
-
-
-            if (line.dataKey === "fanSpeed") {
-                tempFanSpdColor = line.stroke
-                tempFanPower = rawContent[0].payload.fanSpeed
-            }
-
-
-
-            if (line.dataKey === "humiPower") {
-                tempHumiPwrColor = line.stroke
-                tempHumidifierPower = rawContent[0].payload.humiPower
-            }
-
-
-        })
 
         return (
             <div className="Grow-Details-Graph-Tooltip">
                 <div>{readableTime}</div>
 
-                {(() => {
-                    if (tempTemp) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempTempColor }}>T1: {tempTemp}°C </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempHumidity) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumidityColor }}>H1: {tempHumidity}% RH </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempTemp2) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempTempColor2 }}>T2: {tempTemp2}°C </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempHumidity2) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumidityColor2 }}>H2: {tempHumidity2}% RH </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempTemp3) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempTempColor3 }}>T3: {tempTemp3}°C </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempHumidity3) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumidityColor3 }}>H3: {tempHumidity3}% RH </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempFanPower) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempFanSpdColor }}>FAN-PWR: {tempFanPower}% </div>
-                    }
-                })()}
-
-
-                {(() => {
-                    if (tempHumidifierPower) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumiPwrColor }}>HUM-PWR: {tempHumidifierPower}% </div>
-                    }
-                })()}
-
+                {listItems}
 
             </div>
 
@@ -455,6 +354,16 @@ class GraphSensors extends Component {
 
     render() {
 
+        const lineItems = this.props.grow.config.SENSORS.map((l) =>
+            (() => {
+                if (l.type === "airTemp" || l.type === "waterTemp") {
+                    return <Line yAxisId="left" type="monotone" dataKey={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                } else {
+                    return <Line yAxisId="right" type="monotone" dataKey={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                }
+            })()
+        );
+
         var renderDayGraph = null
         if (this.state.processedData && this.state.processedData[0]) {
             if (this.props.parentSize) {
@@ -463,77 +372,8 @@ class GraphSensors extends Component {
 
                 renderDayGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
-                        {(() => {
-                            if (this.state.displayTemp) {
-                                return <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#FF0000" strokeWidth="2" dot={false} />
-                            } else {
-                                return <Line yAxisId="left" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
 
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayTemp) {
-                                return <Line yAxisId="left" type="monotone" dataKey="s2Temp" stroke="#E42CEC" strokeWidth="2" dot={false} />
-                            } else {
-                                return <Line yAxisId="left" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
-
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayTemp) {
-                                return <Line yAxisId="left" type="monotone" dataKey="s3Temp" stroke="#ECA92C" strokeWidth="2" dot={false} />
-                            } else {
-                                return <Line yAxisId="left" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
-
-                            }
-                        })()}
-
-
-                        {(() => {
-                            if (this.state.displayHumidity) {
-                                return <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#FF0000" strokeWidth="0.5" dot={false} />
-                            } else {
-                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
-
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayHumidity) {
-                                return <Line yAxisId="right" type="monotone" dataKey="s2Humi" stroke="#E42CEC" strokeWidth="0.5" dot={false} />
-                            } else {
-                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
-
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayHumidity) {
-                                return <Line yAxisId="right" type="monotone" dataKey="s3Humi" stroke="#ECA92C" strokeWidth="0.5" dot={false} />
-                            } else {
-                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#FF0000" dot={false} />
-
-                            }
-                        })()}
-
-
-
-                        {(() => {
-                            if (this.state.displayFan) {
-                                return <Line yAxisId="right" type="monotone" dataKey="fanSpeed" stroke="#4c4c4c" dot={false} />
-                            } else {
-                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#4c4c4c" dot={false} />
-
-                            }
-                        })()}
-
-                        {(() => {
-                            if (this.state.displayHumidifier) {
-                                return <Line yAxisId="right" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
-                            } else {
-
-                                return <Line yAxisId="right" type="monotone" dataKey=" " stroke="#8884d8" dot={false} />
-                            }
-                        })()}
-
+                        {lineItems}
 
 
                         <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} fillOpacity={0.2} />
@@ -552,7 +392,6 @@ class GraphSensors extends Component {
                 );
             }
         }
-
 
 
 

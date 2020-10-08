@@ -253,6 +253,34 @@ class DbHelper {
     }
 
 
+    // Watch Grow Config in firebase
+    watchGrowSensors(growID, setData) {
+
+        // Config data in firebase // TODO... proper
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config').child('SENSORS')
+
+        ref.on('value', (snapshot) => {
+
+            if (snapshot.val() === null) {
+                return;
+            }
+
+            // setData({
+            //     type: snapshot.val().type,
+            //     name: snapshot.val().name,
+            //     PID: snapshot.val().PID,
+            //     thickness: snapshot.val().thickness,
+            //     color: snapshot.val().color,
+            // });
+
+            setData(snapshot.val())
+
+        }, function (errorObject) {
+            console.log("watch sensors failed: " + errorObject.code);
+        });
+    }
+
+
     // .................. //
     // GROW CONFIG RESET  //
     // .................. //
