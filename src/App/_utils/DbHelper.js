@@ -111,7 +111,6 @@ class DbHelper {
 
                     ref.child(year).child(month).child(dy).on("value", (snapshot) => {
 
-                        console.log("DAYALOOUYA! deeep" + dy)
                         var tempCurrentData = [];
 
 
@@ -200,9 +199,6 @@ class DbHelper {
                 });
 
                 dayData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                console.log("Day dat" + growID)
-                console.log(dayData)
 
                 setData(growID, day, dayData);
             });

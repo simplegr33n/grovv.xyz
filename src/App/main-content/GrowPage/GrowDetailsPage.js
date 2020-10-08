@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-
-import GrowDetailsConfig from './GrowDetailsConfig'
 import GrowDetailsGraphs from './GrowDetailsGraphs'
-
-import JournalBoxItem from '../GrowJournal/JournalBoxItem'
 
 
 import DbHelper from '../../_utils/DbHelper.js'
@@ -22,11 +18,7 @@ class GrowDetailsPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayBottom: 'data', // data, config, feed, edit-feed, journals
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
-            linkedJournals: [],
-            camURL: null,
-            growConfig: null,
 
             SENSOR_PIDS: [],
 
@@ -36,8 +28,9 @@ class GrowDetailsPage extends Component {
             DAILY_LOWS_TIMES: [],
             DAILY_AVGS: [],
             YEST_AVGS: [],
-            DAILY_POINT_COUNT: 0,
-            YEST_POINT_COUNT: 0
+
+            ACTIVE_LINES: [],
+            ACTIVE_LINES_INITIALIZED: false
         };
 
         this.dbHelper = new DbHelper(); // Need for linked journals
@@ -46,12 +39,6 @@ class GrowDetailsPage extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-
-        if (this.props.grow.urls.cam) {
-            if (this._ismounted) {
-                this.setState({ camURL: this.props.grow.urls.cam });
-            }
-        }
 
         if (this.props.rawGrowData) {
             if (!this.props.rawGrowData[this.props.grow.id]) {
@@ -65,8 +52,6 @@ class GrowDetailsPage extends Component {
                 this.processGrowData(this.props.rawGrowData)
             }
         }
-
-        this.getLinkedJournals(this.props.grow.journals, this.setLinkedJournals)
     }
 
     componentWillUnmount = () => {
@@ -86,6 +71,14 @@ class GrowDetailsPage extends Component {
                 this.processGrowData(this.props.rawGrowData)
             }
         }
+
+        // SHOW ALL LINES IF NONE ACTIVE (this is how they initialize)
+        if (this.state.ACTIVE_LINES.length === 0 && this.state.ACTIVE_LINES_INITIALIZED === false && this.state.SENSOR_PIDS) {
+            this.setState({
+                ACTIVE_LINES: this.state.SENSOR_PIDS,
+                ACTIVE_LINES_INITIALIZED: true
+            })
+        }
     }
 
     processGrowData = (growData) => {
@@ -94,9 +87,7 @@ class GrowDetailsPage extends Component {
         growData[this.props.grow.id].forEach((list) => {
             concatData = concatData.concat(list)
         })
-
         concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
 
         this.setState({
             liveData: concatData[concatData.length - 1],
@@ -123,12 +114,10 @@ class GrowDetailsPage extends Component {
         // DEFINING SENSOR INFO
         if (this.props.grow.config.SENSORS) {
             this.props.grow.config.SENSORS.forEach((sensor, key) => {
-                console.log("key: " + key + ", sensor: " + sensor.name);
 
                 if (SENSOR_PIDS[key] !== sensor.PID) {
                     SENSOR_PIDS[key] = sensor.PID
                 }
-
             });
         }
 
@@ -159,11 +148,8 @@ class GrowDetailsPage extends Component {
                             DAILY_AVGS[tIndex] = 0
                         }
                         DAILY_AVGS[tIndex] = parseFloat(dataPoint[pid]) + parseFloat(DAILY_AVGS[tIndex])
-
                     }
-
                 }
-
             }
 
             // YESTERDAY AVERAGES
@@ -184,16 +170,18 @@ class GrowDetailsPage extends Component {
                         }
                         YEST_AVGS[yIndex] = parseFloat(dataPoint[pid]) + parseFloat(YEST_AVGS[yIndex])
                     }
-
                 }
-
             }
         })
-        // ACTUALLY AVERAGE THEM...
-        console.log("DAILY!")
-        console.log(DAILY_AVGS)
-        console.log("YEST!")
-        console.log(YEST_AVGS)
+
+        // CALCULATE AVERAGES
+        DAILY_AVGS.forEach((avg, key) => {
+            DAILY_AVGS[key] = DAILY_AVGS[key] / DAILY_POINT_COUNT
+        });
+
+        YEST_AVGS.forEach((avg, key) => {
+            YEST_AVGS[key] = YEST_AVGS[key] / YEST_POINT_COUNT
+        });
 
         this.setState({
             SENSOR_PIDS: SENSOR_PIDS,
@@ -203,83 +191,98 @@ class GrowDetailsPage extends Component {
             DAILY_LOWS: DAILY_LOWS,
             DAILY_LOWS_TIMES: DAILY_LOWS_TIMES,
             DAILY_AVGS: DAILY_AVGS,
-            YEST_AVGS: YEST_AVGS,
-
-            DAILY_POINT_COUNT: DAILY_POINT_COUNT,
-            YEST_POINT_COUNT: YEST_POINT_COUNT
-
+            YEST_AVGS: YEST_AVGS
         });
-
     }
 
+    toggleLine = (ev) => {
+        var pid = ev.target.dataset.value
+        console.log("PID!!: " + pid)
+        console.log(this.state.ACTIVE_LINES)
 
+        var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
+        var tActiveLines = this.state.ACTIVE_LINES
 
+        if (tActiveLines.includes(pid)) {
+            tActiveLines[tIndex] = null
 
+            console.log("REMOVED: " + pid)
+            console.log(this.state.ACTIVE_LINES)
+        } else {
+            tActiveLines[tIndex] = pid
 
-    // TODO: remove function
-    watchPiCam = () => {
-        var tempURL = this.props.grow.urls.cam + 'cam_pic.php?time='
-
-        var i = 0
-        setInterval(() => {
-            i++
-            var tempCamURL = tempURL + i.toString()
-            if (this._ismounted) {
-                this.setState({
-                    camURL: tempCamURL
-                });
-            }
-        }, 5000);
-    }
-
-
-    getLinkedJournals = (key, journals, setData) => {
-        this.dbHelper.getLinkedJournals(key, journals, setData)
-    }
-
-
-    setLinkedJournals = (data) => {
-        if (this._ismounted) {
-            this.setState({
-                linkedJournals: data
-            });
+            console.log("ADDED: " + pid)
+            console.log(this.state.ACTIVE_LINES)
         }
+
+        this.setState({ ACTIVE_LINES: tActiveLines })
     }
+
 
     render() {
 
         const listItems = this.state.SENSOR_PIDS.map((pid) =>
-            <div className="Grow-Details-Main-Data-Display-Row">
+            <div className="Grow-Details-Main-Data-Display-Row" key={pid}>
 
                 {(() => {
                     var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
-                    if (this.props.grow.config.SENSORS[tIndex].type === "airTemp") {
-                        return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
-                            {this.props.grow.config.SENSORS[tIndex].name} <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
-                        </div>)
-                    } else if (this.props.grow.config.SENSORS[tIndex].type === "humidity") {
-                        return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
-                            {this.props.grow.config.SENSORS[tIndex].name}  <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
-                        </div>)
-                    } else if (this.props.grow.config.SENSORS[tIndex].type === "fan") {
-                        return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
-                            {this.props.grow.config.SENSORS[tIndex].name}  <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
-                        </div>)
-                    } else if (this.props.grow.config.SENSORS[tIndex].type === "humidifier") {
-                        return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
-                            {this.props.grow.config.SENSORS[tIndex].name}  <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
-                        </div>)
-                    } else if (this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                        return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
-                            {this.props.grow.config.SENSORS[tIndex].name}  <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
-                        </div>)
+                    if (this.state.ACTIVE_LINES.includes(pid)) {
+                        if (this.props.grow.config.SENSORS[tIndex].type === "airTemp") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                                {this.props.grow.config.SENSORS[tIndex].name} <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidity") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', color: this.props.grow.config.SENSORS[tIndex].color }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "fan") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', color: this.props.grow.config.SENSORS[tIndex].color }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidifier") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', color: this.props.grow.config.SENSORS[tIndex].color }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', color: this.props.grow.config.SENSORS[tIndex].color }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', color: this.props.grow.config.SENSORS[tIndex].color }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}
+                            </div>)
+                        }
                     } else {
-                        return (<div style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em' }}>
-                            {this.props.grow.config.SENSORS[tIndex].name}
-                        </div>)
+                        if (this.props.grow.config.SENSORS[tIndex].type === "airTemp") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', opacity: '0.5' }}>
+                                {this.props.grow.config.SENSORS[tIndex].name} <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidity") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', opacity: '0.5' }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "fan") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', opacity: '0.5' }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidifier") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', opacity: '0.5' }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else if (this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', opacity: '0.5' }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}  <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
+                            </div>)
+                        } else {
+                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.7em', opacity: '0.5' }}>
+                                {this.props.grow.config.SENSORS[tIndex].name}
+                            </div>)
+                        }
                     }
+
+
                 })()}
 
                 <div className="Grow-Details-Main-Data-Current-Data">
@@ -312,19 +315,21 @@ class GrowDetailsPage extends Component {
 
                             if (this.state.YEST_AVGS[tIndex]) {
                                 if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                                    return Math.round(this.state.YEST_AVGS[tIndex] / this.state.YEST_POINT_COUNT * 10) / 10 + '°C'
+                                    return Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10 + '°C'
                                 } else {
-                                    return Math.round(this.state.YEST_AVGS[tIndex] / this.state.YEST_POINT_COUNT * 10) / 10 + '%'
+                                    return Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10 + '%'
                                 }
                             }
                         })()}
 
 
                         {(() => {
-                            if (this.state.tempAVG && this.state.yestTempAVG) {
-                                if (this.state.tempAVG > this.state.yestTempAVG) {
+                            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                            if (this.state.DAILY_AVGS[tIndex] && this.state.YEST_AVGS[tIndex]) {
+                                if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
                                     return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
-                                } else if (this.state.tempAVG < this.state.yestTempAVG) {
+                                } else if (this.state.DAILY_AVGS[tIndex] < this.state.YEST_AVGS[tIndex]) {
                                     return <div style={{ color: '#FFF' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                 } else {
                                     return <div style={{ visibility: 'hidden' }}><span role="img" aria-label="lower value">&#9660;</span></div>
@@ -339,9 +344,9 @@ class GrowDetailsPage extends Component {
 
                         if (this.state.DAILY_AVGS[tIndex]) {
                             if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                                return Math.round(this.state.DAILY_AVGS[tIndex] / this.state.DAILY_POINT_COUNT * 10) / 10 + '°C'
+                                return Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10 + '°C'
                             } else {
-                                return Math.round(this.state.DAILY_AVGS[tIndex] / this.state.DAILY_POINT_COUNT * 10) / 10 + '%'
+                                return Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10 + '%'
                             }
                         }
                     })()}
@@ -414,7 +419,7 @@ class GrowDetailsPage extends Component {
                             <div id="Grow-Header-Text">{this.props.grow.name}</div>
                         </div>
                         <div className="Grow-Details-Bottom-Item" >
-                            <GrowDetailsGraphs growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} growConfig={this.state.growConfig} grow={this.props.grow} />
+                            <GrowDetailsGraphs activeLines={this.state.ACTIVE_LINES} growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} grow={this.props.grow} />
                         </div>
                     </div>
 

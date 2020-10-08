@@ -33,7 +33,6 @@ class GrowDetailsGraphs extends Component {
                 this.graphSizeUpdated = dateNow.getTime();
             }
         }
-
     }
 
     componentWillUnmount() {
@@ -44,7 +43,7 @@ class GrowDetailsGraphs extends Component {
         return (
 
             <div id="Grow-Details-Graphs-Page" ref={element => this.divRef = element}>
-                <GraphSensors parentSize={this.state.elementSize} growID={this.props.growID} rawGrowData={this.props.rawGrowData} growConfig={this.props.growConfig} grow={this.props.grow} />
+                <GraphSensors activeLines={this.props.activeLines} parentSize={this.state.elementSize} growID={this.props.growID} rawGrowData={this.props.rawGrowData} growConfig={this.props.growConfig} grow={this.props.grow} />
             </div>
 
         );

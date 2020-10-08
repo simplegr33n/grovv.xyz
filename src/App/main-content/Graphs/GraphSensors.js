@@ -67,6 +67,7 @@ class GraphSensors extends Component {
                 }
             }
         }
+
     }
 
     generateTickSourceArrays = () => {
@@ -257,11 +258,13 @@ class GraphSensors extends Component {
             (() => {
                 var tIndex = rawContent.indexOf(l)
 
+
                 if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}°C </div>
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}°C </div>
                 } else {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}% </div>
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}% </div>
                 }
+
             })()
         );
 
@@ -308,10 +311,19 @@ class GraphSensors extends Component {
 
         const lineItems = this.props.grow.config.SENSORS.map((l) =>
             (() => {
-                if (l.type === "airTemp" || l.type === "waterTemp") {
-                    return <Line yAxisId="left" type="monotone" dataKey={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
-                } else {
-                    return <Line yAxisId="right" type="monotone" dataKey={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                var tIndex = this.props.grow.config.SENSORS.indexOf(l)
+
+                if (this.props.activeLines) {
+                    console.log("ACTIVE LIENS!")
+                    console.log(this.props.activeLines)
+                }
+
+                if (this.props.activeLines && this.props.activeLines.includes(this.props.grow.config.SENSORS[tIndex].PID)) {
+                    if (l.type === "airTemp" || l.type === "waterTemp") {
+                        return <Line yAxisId="left" type="monotone" dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                    } else {
+                        return <Line yAxisId="right" type="monotone" dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                    }
                 }
             })()
         );
@@ -326,7 +338,6 @@ class GraphSensors extends Component {
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
 
                         {lineItems}
-
 
                         <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} fillOpacity={0.2} />
 
@@ -353,6 +364,7 @@ class GraphSensors extends Component {
             <div className="Chart-Container">
 
                 {renderDayGraph}
+
                 <div style={{ width: '18px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '10x' }}>
 
                     <div>
@@ -392,43 +404,6 @@ class GraphSensors extends Component {
                             }
                         })()}
                     </div>
-
-
-                    {/* <div style={{ height: '20px' }}></div>
-                    <div>
-                        {(() => {
-                            if (this.state.displayTemp && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].cTemp) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#ca2014' }} onClick={this.toggleTempLine}><WiThermometer /></button>
-                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].cTemp) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleTempLine}><WiThermometer /></button>
-
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayHumidity && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#387d14' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
-                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humidity) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleHumidityLine}><WiHumidity /></button>
-
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayFan && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#db5e24' }} onClick={this.toggleFanLine}><WiHurricane /></button>
-                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].fanSpeed) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleFanLine}><WiHurricane /></button>
-
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayHumidifier && this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', color: '#FFF', padding: '0px', backgroundColor: '#8884d8' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
-                            } else if (this.state.processedData && this.state.processedData[0] && this.state.processedData[0].humiPower) {
-                                return <button style={{ width: '30px', height: '30px', fontSize: '28px', padding: '0px' }} onClick={this.toggleHumidifierLine}><WiSprinkle /></button>
-                            }
-                        })()}
-                    </div> */}
-
                 </div>
             </div>
 
