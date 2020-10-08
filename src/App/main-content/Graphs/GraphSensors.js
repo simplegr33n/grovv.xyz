@@ -5,7 +5,6 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
 
 import moment from 'moment'
 
-import { WiThermometer, WiHumidity, WiHurricane, WiSprinkle } from 'react-icons/wi';
 
 
 

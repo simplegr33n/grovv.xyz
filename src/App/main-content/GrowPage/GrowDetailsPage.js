@@ -35,7 +35,9 @@ class GrowDetailsPage extends Component {
             DAILY_LOWS: [],
             DAILY_LOWS_TIMES: [],
             DAILY_AVGS: [],
-            YEST_AVGS: []
+            YEST_AVGS: [],
+            DAILY_POINT_COUNT: 0,
+            YEST_POINT_COUNT: 0
         };
 
         this.dbHelper = new DbHelper(); // Need for linked journals
@@ -44,10 +46,6 @@ class GrowDetailsPage extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-
-        if (this.props.grow.id) {
-            this.getConfig()
-        }
 
         if (this.props.grow.urls.cam) {
             if (this._ismounted) {
@@ -157,7 +155,10 @@ class GrowDetailsPage extends Component {
                             DAILY_LOWS_TIMES[tIndex] = dataPoint.time
                         }
                         //AVERAGES
-                        DAILY_AVGS[tIndex] += parseFloat(dataPoint[pid])
+                        if (!DAILY_AVGS[tIndex]) {
+                            DAILY_AVGS[tIndex] = 0
+                        }
+                        DAILY_AVGS[tIndex] = parseFloat(dataPoint[pid]) + parseFloat(DAILY_AVGS[tIndex])
 
                     }
 
@@ -178,8 +179,10 @@ class GrowDetailsPage extends Component {
                         var yIndex = SENSOR_PIDS.indexOf(pid)
 
                         //AVERAGES
-                        YEST_AVGS[yIndex] += parseFloat(dataPoint[pid])
-
+                        if (!YEST_AVGS[yIndex]) {
+                            YEST_AVGS[yIndex] = 0
+                        }
+                        YEST_AVGS[yIndex] = parseFloat(dataPoint[pid]) + parseFloat(YEST_AVGS[yIndex])
                     }
 
                 }
@@ -200,7 +203,11 @@ class GrowDetailsPage extends Component {
             DAILY_LOWS: DAILY_LOWS,
             DAILY_LOWS_TIMES: DAILY_LOWS_TIMES,
             DAILY_AVGS: DAILY_AVGS,
-            YEST_AVGS: YEST_AVGS
+            YEST_AVGS: YEST_AVGS,
+
+            DAILY_POINT_COUNT: DAILY_POINT_COUNT,
+            YEST_POINT_COUNT: YEST_POINT_COUNT
+
         });
 
     }
@@ -328,15 +335,6 @@ class GrowDetailsPage extends Component {
         this.props.setJournalID(journal.id);
     }
 
-    getConfig = () => {
-        this.dbHelper.watchGrowConfig(this.props.grow.id, this.setConfig)
-    }
-
-    setConfig = (config) => {
-        this.setState({ growConfig: config })
-    }
-
-
     render() {
         //TODO: below in less code... or not using zIndex.
         var zIndexOne = { zIndex: '1', position: 'absolute' }
@@ -434,7 +432,7 @@ class GrowDetailsPage extends Component {
 
                 <div className="Grow-Details-Main-Data-Current-Data">
                     {(() => {
-                        if (this.state.liveData[pid] > this.state.lastLiveData.sA1_Temp[pid]) {
+                        if (this.state.liveData[pid] > this.state.lastLiveData[pid]) {
                             return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                         } else if (this.state.liveData[pid] < this.state.lastLiveData[pid]) {
                             return <div style={{ fontSize: '14px', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
@@ -458,8 +456,14 @@ class GrowDetailsPage extends Component {
                 <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
                     <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         {(() => {
-                            if (this.state.yestTempAVG) {
-                                return Math.round(this.state.yestTempAVG * 10) / 10 + '°C'
+                            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                            if (this.state.YEST_AVGS[tIndex]) {
+                                if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                                    return Math.round(this.state.YEST_AVGS[tIndex] / this.state.YEST_POINT_COUNT * 10) / 10 + '°C'
+                                } else {
+                                    return Math.round(this.state.YEST_AVGS[tIndex] / this.state.YEST_POINT_COUNT * 10) / 10 + '%'
+                                }
                             }
                         })()}
 
@@ -477,9 +481,16 @@ class GrowDetailsPage extends Component {
                         })()}
                     </div>
 
+
                     {(() => {
-                        if (this.state.tempAVG) {
-                            return Math.round(this.state.tempAVG * 10) / 10 + '°C'
+                        var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                        if (this.state.DAILY_AVGS[tIndex]) {
+                            if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                                return Math.round(this.state.DAILY_AVGS[tIndex] / this.state.DAILY_POINT_COUNT * 10) / 10 + '°C'
+                            } else {
+                                return Math.round(this.state.DAILY_AVGS[tIndex] / this.state.DAILY_POINT_COUNT * 10) / 10 + '%'
+                            }
                         }
                     })()}
                 </div>
@@ -571,11 +582,11 @@ class GrowDetailsPage extends Component {
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={feedStyle} >
-                            <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} />
+                            {/* <iframe id="Food-Chart" title="FoodChart" src={this.props.grow.urls.feed_chart} /> */}
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={editFeedStyle} >
-                            <object id="Edit-Food-Chart" type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" />
+                            {/* <object id="Edit-Food-Chart" type="text/html" data={this.props.grow.urls.feed_edit} width="100%" height="100%" aria-label="edit food chart" /> */}
                         </div>
 
                         <div className="Grow-Details-Bottom-Item" style={configStyle} >
@@ -605,24 +616,15 @@ class GrowDetailsPage extends Component {
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h&#8595;</div>
                                             </div>
 
-
                                             {listItems}
-
 
                                         </div>
                                     )
                                 }
                             })()}
                         </div>
-
-
-
                     </div>
-
-
-
                 </div>
-
             </div>
         );
     }

@@ -213,71 +213,11 @@ class DbHelper {
     // GROW CONFIG  //
     // ............ //
 
-    // Watch Grow Config in firebase
-    watchGrowConfig(growID, setData) {
-
-        // Config data in firebase // TODO... proper
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
-
-        ref.on('value', (snapshot) => {
-
-            if (snapshot.val() === null) {
-                return;
-            }
-
-            // TODO: just set it to snapshot.val()... doing below is redundant..
-            setData({
-                temp_min: snapshot.val().temp_min,
-                temp_max: snapshot.val().temp_max,
-                temp_hyst: snapshot.val().temp_hyst,
-                fan_min: snapshot.val().fan_min,
-                fan_max: snapshot.val().fan_max,
-                humidity_min: snapshot.val().humidity_min,
-                humidity_max: snapshot.val().humidity_max,
-                humidity_hyst: snapshot.val().humidity_hyst,
-                humidifier_min: snapshot.val().humidifier_min,
-                humidifier_max: snapshot.val().humidifier_max,
-                lights_on: snapshot.val().lights_on,
-                lights_off: snapshot.val().lights_off
-            });
-
-        }, function (errorObject) {
-            console.log("watch config failed: " + errorObject.code);
-        });
-    }
 
     // Set Grow Config in firebase
     setGrowConfig(growID, config) {
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
         ref.update(config)
-    }
-
-
-    // Watch Grow Config in firebase
-    watchGrowSensors(growID, setData) {
-
-        // Config data in firebase // TODO... proper
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config').child('SENSORS')
-
-        ref.on('value', (snapshot) => {
-
-            if (snapshot.val() === null) {
-                return;
-            }
-
-            // setData({
-            //     type: snapshot.val().type,
-            //     name: snapshot.val().name,
-            //     PID: snapshot.val().PID,
-            //     thickness: snapshot.val().thickness,
-            //     color: snapshot.val().color,
-            // });
-
-            setData(snapshot.val())
-
-        }, function (errorObject) {
-            console.log("watch sensors failed: " + errorObject.code);
-        });
     }
 
 
