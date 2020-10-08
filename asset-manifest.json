@@ -1,5 +1,5 @@
 {
-  "main.css": "/grovv.xyz/static/css/main.096c6f86.chunk.css",
+  "main.css": "/grovv.xyz/static/css/main.06e33a72.chunk.css",
   "main.js": "/grovv.xyz/static/js/main.3ea934cf.chunk.js",
   "main.js.map": "/grovv.xyz/static/js/main.3ea934cf.chunk.js.map",
   "runtime~main.js": "/grovv.xyz/static/js/runtime~main.5f921949.js",
@@ -8,10 +8,10 @@
   "static/js/2.5ec4e687.chunk.js": "/grovv.xyz/static/js/2.5ec4e687.chunk.js",
   "static/js/2.5ec4e687.chunk.js.map": "/grovv.xyz/static/js/2.5ec4e687.chunk.js.map",
   "index.html": "/grovv.xyz/index.html",
-  "precache-manifest.487abbbfd241015d07cb4d4f6b8f0899.js": "/grovv.xyz/precache-manifest.487abbbfd241015d07cb4d4f6b8f0899.js",
+  "precache-manifest.a2b944dd822e5b20d86658de1f96d5f1.js": "/grovv.xyz/precache-manifest.a2b944dd822e5b20d86658de1f96d5f1.js",
   "service-worker.js": "/grovv.xyz/service-worker.js",
   "static/css/2.0ff7e0ec.chunk.css.map": "/grovv.xyz/static/css/2.0ff7e0ec.chunk.css.map",
-  "static/css/main.096c6f86.chunk.css.map": "/grovv.xyz/static/css/main.096c6f86.chunk.css.map",
+  "static/css/main.06e33a72.chunk.css.map": "/grovv.xyz/static/css/main.06e33a72.chunk.css.map",
   "static/media/area.5f290f46.svg": "/grovv.xyz/static/media/area.5f290f46.svg",
   "static/media/container.41fa1b4f.svg": "/grovv.xyz/static/media/container.41fa1b4f.svg"
 }
