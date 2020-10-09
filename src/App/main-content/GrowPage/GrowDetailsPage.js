@@ -3,6 +3,8 @@ import '../../../styles/App.css';
 
 import GrowDetailsGraphs from './GrowDetailsGraphs'
 
+import GrowDetailsConfig from './GrowDetailsConfig'
+
 
 import DbHelper from '../../_utils/DbHelper.js'
 
@@ -210,8 +212,6 @@ class GrowDetailsPage extends Component {
     toggleLine = (e) => {
         var pid = e.currentTarget.getAttribute('data-value')
 
-        console.log("datavalue... 1" + pid)
-
         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
         var tActiveLines = this.state.ACTIVE_LINES
@@ -224,6 +224,10 @@ class GrowDetailsPage extends Component {
 
         this.setState({ ACTIVE_LINES: tActiveLines })
         this.forceUpdate()
+    }
+
+    openSettings() {
+        // todo:
     }
 
 
@@ -308,10 +312,6 @@ class GrowDetailsPage extends Component {
 
                         if ((this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp")) {
 
-                            console.log("datavalue CURRENTING! " + pid)
-                            console.log(this.state.liveData[pid])
-                            console.log(this.state.liveData)
-
                             return <div>{Math.round(this.state.liveData[pid] * 10) / 10}°C</div>
                         } else {
                             return <div>{Math.round(this.state.liveData[pid] * 10) / 10}%</div>
@@ -324,11 +324,6 @@ class GrowDetailsPage extends Component {
                     <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         {(() => {
                             var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-
-                            // console.log("YESTING!")
-                            // console.log(pid)
-                            // console.log(this.state.liveData[pid])
-                            // console.log(this.state.liveData)
 
                             if (this.state.YEST_AVGS[tIndex]) {
                                 if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
@@ -344,11 +339,6 @@ class GrowDetailsPage extends Component {
                             var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
                             if (this.state.DAILY_AVGS[tIndex] && this.state.YEST_AVGS[tIndex]) {
-
-                                // console.log("AVERAGING!")
-                                // console.log(pid)
-                                // console.log(this.state.liveData[pid])
-                                // console.log(this.state.liveData)
 
                                 if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
                                     return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
@@ -445,7 +435,6 @@ class GrowDetailsPage extends Component {
                             <GrowDetailsGraphs activeLines={this.state.ACTIVE_LINES} growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} grow={this.props.grow} />
                         </div>
                     </div>
-
 
                     <div className="Grow-Details-Page-Panel">
 

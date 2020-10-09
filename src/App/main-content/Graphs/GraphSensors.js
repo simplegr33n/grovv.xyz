@@ -38,14 +38,14 @@ class GraphSensors extends Component {
 
     componentDidUpdate = () => {
 
-        if (this.props.growConfig && this.growConfig !== this.props.growConfig) {
-            this.growConfig = this.props.growConfig
+        if (this.props.grow && this.growConfig !== this.props.grow.config) {
+            this.growConfig = this.props.grow.config
             this.generateTickSourceArrays()
         }
 
-        if (this.props.rawGrowData && this.props.growID) {
+        if (this.props.rawGrowData && this.props.grow) {
 
-            var gwID = this.props.growID
+            var gwID = this.props.grow.id
             var rawData = this.props.rawGrowData
 
             if (rawData[gwID] && ((!this.rawRef) || rawData[gwID][rawData[gwID].length - 1] !== this.rawRef)) {
@@ -77,24 +77,23 @@ class GraphSensors extends Component {
         var lightsOnArray = []
         var lightsOffArray = []
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
 
         m.add(1, 'days')
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
 
         m.add(1, 'days')
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
 
         m.add(1, 'days')
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.growConfig.lights_off)).format('x')
-
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
 
         this.setState({
             lightsOnArray: lightsOnArray,
@@ -269,7 +268,6 @@ class GraphSensors extends Component {
         );
 
 
-
         return (
             <div className="Grow-Details-Graph-Tooltip">
                 <div>{readableTime}</div>
@@ -365,37 +363,37 @@ class GraphSensors extends Component {
                     <div>
                         {(() => {
                             if (this.state.displayWindow === 1) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle1}>1/2h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle1}>&#189;h</button>
                             } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle1}>1/2h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle1}>&#189;h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 3) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle3}>3h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle3}>3h</button>
                             } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle3}>3h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle3}>3h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 12) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle12}>12h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle12}>12h</button>
                             } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle12}>12h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle12}>12h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 24) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle24}>24h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle24}>24h</button>
                             } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle24}>24h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle24}>24h</button>
                             }
                         })()}
                         {(() => {
                             if (this.state.displayWindow === 72) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle72}>72h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle72}>72h</button>
                             } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.35em', padding: '0' }} onClick={this.toggle72}>72h</button>
+                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle72}>72h</button>
                             }
                         })()}
                     </div>

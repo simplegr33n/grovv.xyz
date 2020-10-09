@@ -6,9 +6,6 @@ import TimePicker from 'react-time-picker'
 import DbHelper from '../../_utils/DbHelper.js'
 
 
-import GrowSetUp from '../GrowConfig/GrowSetUp'
-
-
 
 class GrowDetailsConfig extends Component {
 
@@ -225,14 +222,14 @@ class GrowDetailsConfig extends Component {
                                         <div id="GROW-DETAILS-RESET-BTN" onClick={this.handleReset}>
                                             RESET<br></br>
                                             GROWLAB
-                                </div>
+                                        </div>
                                     )
                                 } else {
                                     return (
                                         <div id="GROW-DETAILS-RESET-BTN" style={{ userSelect: 'none', cursor: 'auto', backgroundColor: '#c77725' }}>
                                             RESETTING<br></br>
                                             GROWLAB...
-                                </div>
+                                        </div>
                                     )
                                 }
                             })()}
@@ -246,9 +243,6 @@ class GrowDetailsConfig extends Component {
 
 
                     </div>
-                </div>
-                <div id="Grow-Details-Config-Layout-Div">
-                    <GrowSetUp />
                 </div>
             </div>
 

@@ -13,7 +13,6 @@ import SignUp from './auth/SignUp.js'
 
 // Main Content
 import FeedChart from './main-content/FeedChart/FeedChart.js'
-import GrowConfig from './main-content/GrowConfig/GrowConfig.js'
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './main-content/GrowPage/GrowPage.js'
 //import GraphSensors from './main-content/Graphs/GraphSensors.js'
@@ -272,9 +271,7 @@ class App extends Component {
 											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 										case 'chart':
 											return <FeedChart />
-										case 'config':
-											// tODO: FIX
-											return <GrowConfig growID={this.configGrowID} />
+
 										case 'graphs':
 											return (
 												<div className="Chart-Page">
