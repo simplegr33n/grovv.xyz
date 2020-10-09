@@ -5,7 +5,7 @@ import TimePicker from 'react-time-picker'
 
 import DbHelper from '../../_utils/DbHelper.js'
 
-import { HiOutlinePencilAlt } from 'react-icons/hi';
+import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
 
 class GrowSettings extends Component {
 
@@ -106,12 +106,12 @@ class GrowSettings extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="Config-Settings-Field" style={{ backgroundColor: '#e0001e' }}>
+                                        <div className="Config-Settings-Field" style={{ backgroundColor: '#3d7a80' }}>
                                             <div className="Config-Item-Header-Text" style={{ userSelect: 'none' }}>SENSORS</div>
 
                                             <div className="Settings-Data-Line">
                                                 <div>
-                                                    <HiOutlinePencilAlt style={{ userSelect: 'none', cursor: 'pointer' }} />
+                                                    <WiThermometer style={{ userSelect: 'none', cursor: 'pointer', fontsize: '2em' }} />
                                                 </div>
                                                 <div>
                                                     <div style={{ fontSize: '0.7em', userSelect: 'none' }}>

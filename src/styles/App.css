@@ -334,6 +334,7 @@ html {
 
 .Config-Settings-Field {
   padding: 4px;
+  margin-bottom: 2px;
   font-size: 14px;
   font-weight: bold;
   max-width: 400px;

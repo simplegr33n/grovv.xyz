@@ -51,7 +51,7 @@ class GraphSensorsBox extends Component {
                 if (this.data !== setData) {
 
                     this.data = setData
-                    
+
 
                     var processedData = []
                     setData.forEach((dataPoint) => {
@@ -65,7 +65,7 @@ class GraphSensorsBox extends Component {
                     this.setState({
                         processedData: processedData
                     });
-               
+
                 }
 
             }
@@ -85,32 +85,19 @@ class GraphSensorsBox extends Component {
 
         var tempTemp = null;
         var tempTempColor = "#000"
-        var tempFanPower = null;
-        var tempFanSpdColor = "#000"
         var tempHumidity = null;
         var tempHumidityColor = "#000"
-        var tempHumidifierPower = null;
-        var tempHumiPwrColor = "#000"
+
 
         rawContent.forEach((line) => {
-            if (line.dataKey === "cTemp") {
+            if (line.dataKey === "sA1_Temp") {
                 tempTempColor = line.stroke
-                tempTemp = rawContent[0].payload.cTemp
+                tempTemp = rawContent[0].payload.sA1_Temp
             }
 
-            if (line.dataKey === "fanSpeed") {
-                tempFanSpdColor = line.stroke
-                tempFanPower = rawContent[0].payload.fanSpeed
-            }
-
-            if (line.dataKey === "humidity") {
+            if (line.dataKey === "sA1_Humi") {
                 tempHumidityColor = line.stroke
-                tempHumidity = rawContent[0].payload.humidity
-            }
-
-            if (line.dataKey === "humiPower") {
-                tempHumiPwrColor = line.stroke
-                tempHumidifierPower = rawContent[0].payload.humiPower
+                tempHumidity = rawContent[0].payload.sA1_Humi
             }
         })
 
@@ -125,20 +112,8 @@ class GraphSensorsBox extends Component {
                 })()}
 
                 {(() => {
-                    if (tempFanPower) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempFanSpdColor }}>FAN-PWR: {tempFanPower}% </div>
-                    }
-                })()}
-
-                {(() => {
                     if (tempHumidity) {
                         return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumidityColor }}>HUMID: {tempHumidity}% RH </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempHumidifierPower) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumiPwrColor }}>HUM-PWR: {tempHumidifierPower}% </div>
                     }
                 })()}
 
@@ -157,7 +132,7 @@ class GraphSensorsBox extends Component {
 
                 renderDayGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
-                        <Line yAxisId="left"  type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
+                        <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
                         <Line yAxisId="right" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
                         <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
                         <Line yAxisId="right" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
@@ -167,7 +142,7 @@ class GraphSensorsBox extends Component {
                             domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
                             tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')}
                             hide={true} />
-                        <YAxis yAxisId="left" orientation="left"  domain={[21,30]} />
+                        <YAxis yAxisId="left" orientation="left" domain={[21, 30]} />
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
