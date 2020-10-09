@@ -332,11 +332,12 @@ html {
   text-align: center;
 }
 
-#Config-Temp-Field {
+.Config-Settings-Field {
   padding: 4px;
   font-size: 14px;
   font-weight: bold;
-  width: 260px;
+  max-width: 400px;
+  width: 340px;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -346,7 +347,7 @@ html {
   background-color: #e47c40;
 }
 
-#Config-Temp-Min-Max {
+.Settings-Data-Line {
   font-size: 12px;
   display: flex;
   justify-content: space-around;
@@ -1446,7 +1447,7 @@ html {
 .Grow-Details-Header {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   background-color: rgb(26, 26, 26);
 }
 
@@ -1929,3 +1930,6 @@ html {
 #Grow-Items-List {
   min-width: 180px;
 }
+
+/* GROW SETTINGS */
+/* 2020 */

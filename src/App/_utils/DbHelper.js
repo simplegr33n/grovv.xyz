@@ -208,6 +208,26 @@ class DbHelper {
     // ............ //
     // GROW CONFIG  //
     // ............ //
+    // Get Reset Value
+    getGrowConfig(growID, setData) {
+
+        // Config data isResetting in firebase 
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
+
+        ref.on('value', (snapshot) => {
+
+            if (snapshot.val() === null) {
+                setData(false);
+                return;
+            }
+
+            setData(snapshot.val())
+
+
+        }, function (errorObject) {
+            console.log("watch isResetting failed: " + errorObject.code);
+        });
+    }
 
 
     // Set Grow Config in firebase
