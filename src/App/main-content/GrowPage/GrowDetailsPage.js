@@ -21,6 +21,7 @@ class GrowDetailsPage extends Component {
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
 
             SENSOR_PIDS: [],
+            SENSORS_INIT: false,
 
             DAILY_HIGHS: [],
             DAILY_HIGHS_TIMES: [],
@@ -29,7 +30,8 @@ class GrowDetailsPage extends Component {
             DAILY_AVGS: [],
             YEST_AVGS: [],
 
-            ACTIVE_LINES: []
+            ACTIVE_LINES: [],
+            ACTIVE_INIT: false
         };
 
         this.dbHelper = new DbHelper(); // Need for linked journals
@@ -51,24 +53,6 @@ class GrowDetailsPage extends Component {
                 this.processGrowData(this.props.rawGrowData)
             }
         }
-
-        // DEFINING SENSOR INFO
-        var SENSOR_PIDS = []
-        if (this.props.grow.config.SENSORS.length !== this.state.SENSOR_PIDS.length) {
-            console.log("SENSOR INIT!!")
-
-            this.props.grow.config.SENSORS.forEach((sensor, key) => {
-                if (SENSOR_PIDS[key] !== sensor.PID) {
-                    SENSOR_PIDS[key] = sensor.PID
-                }
-            });
-
-            // Initialize all lines as active
-            this.setState({
-                SENSOR_PIDS: SENSOR_PIDS,
-                ACTIVE_LINES: SENSOR_PIDS
-            });
-        }
     }
 
     componentWillUnmount = () => {
@@ -76,7 +60,7 @@ class GrowDetailsPage extends Component {
     }
 
     componentDidUpdate = () => {
-        if (this.props.rawGrowData) {
+        if (this.props.rawGrowData && this.state.SENSOR_PIDS) {
             if (!this.props.rawGrowData[this.props.grow.id]) {
                 return;
             }
@@ -119,9 +103,9 @@ class GrowDetailsPage extends Component {
         var lastDayData = []
         var yesterdayData = []
 
-        // DEFINING SENSOR INFO
+        // INITIALIZING SENSOR INFO
         var SENSOR_PIDS = []
-        if (this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
+        if (this.state.SENSORS_INIT === false && this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
             this.props.grow.config.SENSORS.forEach((sensor, key) => {
 
                 if (SENSOR_PIDS[key] !== sensor.PID) {
@@ -132,6 +116,13 @@ class GrowDetailsPage extends Component {
             this.setState({
                 SENSOR_PIDS: SENSOR_PIDS
             });
+
+            if (this.state.ACTIVE_INIT === false) {
+                this.setState({
+                    ACTIVE_LINES: SENSOR_PIDS,
+                    ACTIVE_INIT: true
+                });
+            }
         }
 
         concatData.forEach((dataPoint) => {
@@ -309,6 +300,7 @@ class GrowDetailsPage extends Component {
                             console.log("CURRENTING!")
                             console.log(pid)
                             console.log(this.state.liveData[pid])
+                            console.log(this.state.liveData)
 
                             return <div>{Math.round(this.state.liveData[pid] * 10) / 10}°C</div>
                         } else {
@@ -326,6 +318,7 @@ class GrowDetailsPage extends Component {
                             console.log("YESTING!")
                             console.log(pid)
                             console.log(this.state.liveData[pid])
+                            console.log(this.state.liveData)
 
                             if (this.state.YEST_AVGS[tIndex]) {
                                 if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
@@ -345,6 +338,7 @@ class GrowDetailsPage extends Component {
                                 console.log("AVERAGING!")
                                 console.log(pid)
                                 console.log(this.state.liveData[pid])
+                                console.log(this.state.liveData)
 
                                 if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
                                     return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
