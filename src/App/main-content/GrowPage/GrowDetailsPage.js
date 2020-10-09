@@ -3,8 +3,6 @@ import '../../../styles/App.css';
 
 import GrowDetailsGraphs from './GrowDetailsGraphs'
 
-import GrowDetailsConfig from './GrowDetailsConfig'
-
 
 import DbHelper from '../../_utils/DbHelper.js'
 

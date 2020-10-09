@@ -332,7 +332,7 @@ class GraphSensors extends Component {
 
                         {lineItems}
 
-                        <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} fillOpacity={0.2} />
+                        <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} stroke="none" fillOpacity={0.2} />
 
                         <XAxis
                             dataKey="time"
