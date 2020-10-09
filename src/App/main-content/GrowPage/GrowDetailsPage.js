@@ -17,6 +17,7 @@ class GrowDetailsPage extends Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
 
@@ -31,7 +32,9 @@ class GrowDetailsPage extends Component {
             YEST_AVGS: [],
 
             ACTIVE_LINES: [],
-            ACTIVE_INIT: false
+            ACTIVE_INIT: false,
+
+            TABLE_INIT: false
         };
 
         this.dbHelper = new DbHelper(); // Need for linked journals
@@ -41,25 +44,6 @@ class GrowDetailsPage extends Component {
     componentDidMount() {
         this._ismounted = true;
 
-        if (this.props.rawGrowData) {
-            if (!this.props.rawGrowData[this.props.grow.id]) {
-                return;
-            }
-
-            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
-
-            if (this.dataLengthRef !== dataLengthRef) {
-                this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.rawGrowData)
-            }
-        }
-    }
-
-    componentWillUnmount = () => {
-        this._ismounted = false;
-    }
-
-    componentDidUpdate = () => {
         if (this.props.rawGrowData && this.state.SENSOR_PIDS) {
             if (!this.props.rawGrowData[this.props.grow.id]) {
                 return;
@@ -70,6 +54,32 @@ class GrowDetailsPage extends Component {
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
                 this.processGrowData(this.props.rawGrowData)
+            }
+            this.forceUpdate()
+        }
+
+    }
+
+    componentWillUnmount = () => {
+        this._ismounted = false;
+    }
+
+    componentDidUpdate = () => {
+        if (this.props.rawGrowData) {
+            if (!this.props.rawGrowData[this.props.grow.id]) {
+                return;
+            }
+
+            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+
+            if (this.dataLengthRef !== dataLengthRef) {
+                this.dataLengthRef = dataLengthRef
+                this.processGrowData(this.props.rawGrowData)
+            } else if (!this.state.TABLE_INIT) {
+                // Gotta get this process in the first time for things to go smooth... not quite sure why.
+                this.dataLengthRef = dataLengthRef
+                this.processGrowData(this.props.rawGrowData)
+                this.setState({ TABLE_INIT: true })
             }
         }
 
@@ -200,7 +210,7 @@ class GrowDetailsPage extends Component {
     toggleLine = (e) => {
         var pid = e.currentTarget.getAttribute('data-value')
 
-        console.log("datavalue... " + pid)
+        console.log("datavalue... 1" + pid)
 
         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
@@ -213,6 +223,7 @@ class GrowDetailsPage extends Component {
         }
 
         this.setState({ ACTIVE_LINES: tActiveLines })
+        this.forceUpdate()
     }
 
 
@@ -295,10 +306,9 @@ class GrowDetailsPage extends Component {
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
-                        if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                        if ((this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp")) {
 
-                            console.log("CURRENTING!")
-                            console.log(pid)
+                            console.log("datavalue CURRENTING! " + pid)
                             console.log(this.state.liveData[pid])
                             console.log(this.state.liveData)
 
@@ -315,10 +325,10 @@ class GrowDetailsPage extends Component {
                         {(() => {
                             var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
-                            console.log("YESTING!")
-                            console.log(pid)
-                            console.log(this.state.liveData[pid])
-                            console.log(this.state.liveData)
+                            // console.log("YESTING!")
+                            // console.log(pid)
+                            // console.log(this.state.liveData[pid])
+                            // console.log(this.state.liveData)
 
                             if (this.state.YEST_AVGS[tIndex]) {
                                 if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
@@ -335,10 +345,10 @@ class GrowDetailsPage extends Component {
 
                             if (this.state.DAILY_AVGS[tIndex] && this.state.YEST_AVGS[tIndex]) {
 
-                                console.log("AVERAGING!")
-                                console.log(pid)
-                                console.log(this.state.liveData[pid])
-                                console.log(this.state.liveData)
+                                // console.log("AVERAGING!")
+                                // console.log(pid)
+                                // console.log(this.state.liveData[pid])
+                                // console.log(this.state.liveData)
 
                                 if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
                                     return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>

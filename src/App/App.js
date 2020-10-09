@@ -32,8 +32,6 @@ class App extends Component {
 			mainContent: 'signin', // signin, signup, main, chart, config, journal, grows, graphs, etc.
 			UID: null,
 			username: '',
-			URL_livecam: null,
-			URL_vegger_livecam: null,
 			journalID: null,
 			currentGrow: null,
 			growID: null, //todo: remove, use currentGrow
@@ -129,8 +127,7 @@ class App extends Component {
 
 	handleSignOut = () => {
 		this.setState({
-			UID: null,
-			URL_livecam: null,
+			UID: null
 		});
 		this.firebase.auth.signOut().then(function () {
 			// Sign-out successful.
@@ -290,7 +287,7 @@ class App extends Component {
 												</div>
 											)
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData}/>
+											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 									}
 								} else {
 									switch (this.state.mainContent) {

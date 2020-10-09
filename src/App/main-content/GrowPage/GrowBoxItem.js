@@ -15,7 +15,6 @@ class GrowBoxItem extends Component {
 		this.state = {
 			grow: this.props.grow,
 			activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
-			camURL: null,
 			graphElementSize: [150, 150],
 		};
 
@@ -25,13 +24,6 @@ class GrowBoxItem extends Component {
 	componentDidMount = () => {
 		this._ismounted = true;
 
-		if (this.props.grow.urls.cam) {
-
-			if (this._ismounted) {
-				this.setState({ camURL: this.props.grow.urls.cam });
-			}
-
-		}
 	}
 
 	componentWillUnmount = () => {
@@ -48,7 +40,6 @@ class GrowBoxItem extends Component {
 				return;
 			}
 
-
 			var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight]
 
 			if (tempSize !== this.state.graphElementSize) {
@@ -59,23 +50,6 @@ class GrowBoxItem extends Component {
 			}
 		}
 
-	}
-
-	// TODO: remove function
-	watchPiCam = () => {
-		var tempURL = this.props.grow.urls.cam + 'cam_pic.php?time='
-		var i = 0
-		setInterval(() => {
-			i++
-			var tempCamURL = tempURL + i.toString()
-			if (this._ismounted) {
-				this.setState({ camURL: tempCamURL });
-			}
-		}, 5000);
-	}
-
-	openFullCam = (ev) => {
-		this.props.openFullCam(ev.target.dataset.value)
 	}
 
 	openGrow = () => {
@@ -93,15 +67,7 @@ class GrowBoxItem extends Component {
 
 			var difference = now - lastUpdateTime
 
-
-			// if (difference >= 3000000) {
-			// 	this.setState({
-			// 		activeIndicatorStyle: 'Grow-Active-Indicator-Circle Data-Neutral-Background'
-			// 	});
-			// }
-
 			if (this._ismounted) {
-
 
 				if (difference >= 120000 && difference < 24000) {
 					if (this.activeIndicatorStyle !== 'Grow-Active-Indicator-Circle Data-Warning-Background') {
@@ -133,7 +99,6 @@ class GrowBoxItem extends Component {
 						});
 					}
 				}
-
 			}
 
 		} else {
@@ -144,12 +109,8 @@ class GrowBoxItem extends Component {
 
 	render() {
 
-		// console.log("LIVE DATA!" + this.props.grow.id)
-		// console.log(this.props.liveGrowData)
-
 		var lastUpdate = null;
 		if (this.props.liveGrowData[this.props.grow.id]) {
-			// console.log(this.props.liveGrowData[this.props.grow.id])
 
 			var updatedAtDate = new Date(this.props.liveGrowData[this.props.grow.id].time * 1000)
 
@@ -162,16 +123,8 @@ class GrowBoxItem extends Component {
 		}
 
 
-
-
-
 		return (
 			<div className="Grow-Box-Item">
-
-				<div className="Grow-Box-Cam-Div">
-					<div className="Grow-Box-Cam-Full-Btn" data-value={this.props.grow.urls.cam} onClick={this.openFullCam}>&#9974;</div>
-					<img className="Grow-Box-Cam" alt="cam" src={this.state.camURL} style={{ objectFit: 'contain', cursor: 'pointer', width: '100%' }} onClick={this.openGrow} />
-				</div>
 
 				<div className="Grow-Box-Item-Main">
 					<div className="Grow-Box-Item-Header">
@@ -186,7 +139,7 @@ class GrowBoxItem extends Component {
 					</div>
 					<div className="Grow-Box-Function-Btns">
 						<button className="Grow-Box-Function-Btn" data-value={'graphs'} onClick={this.openMainPage} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-						{/* <button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openMainPage} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button> */}
+						<button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openMainPage} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
 						<button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openMainPage} >FEED &#9619;&#9619;</button>
 						<button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openMainPage} >&#9998;</button>
 					</div>
@@ -205,12 +158,7 @@ class GrowBoxItem extends Component {
 						<div className="Grow-Box-Info-Graph-Area" ref={element => this.divRef = element}>
 							<GraphSensorsBox parentSize={this.state.graphElementSize} growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} />
 						</div>
-
-
-						{/* <img alt="preview" src={this.props.grow.previewImage} className="Grow-Box-Preview-Image" /> */}
 					</div>
-
-
 
 				</div>
 

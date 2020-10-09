@@ -3,7 +3,6 @@ import '../../../styles/App.css';
 
 import GrowBoxItem from './GrowBoxItem'
 import GrowDetailsPage from './GrowDetailsPage'
-import GrowCamFull from './GrowCamFull'
 
 
 class GrowPage extends Component {
@@ -11,9 +10,8 @@ class GrowPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			displayContent: "main", // main, full-cam
-			grow: this.props.grow,
-			camURL: null
+			displayContent: "main", // main
+			grow: this.props.grow
 		};
 	}
 
@@ -56,20 +54,6 @@ class GrowPage extends Component {
 		this.props.setGrow(grow)
 	}
 
-	openFullCam = (url) => {
-		this.setState({
-			displayContent: "full-cam",
-			camURL: url
-		});
-	}
-
-	closeFullCam = () => {
-		this.setState({
-			displayContent: "main",
-			camURL: null
-		});
-	}
-
 	setJournalID = (journalID) => {
 		console.log("GROW PAGE!")
 		console.log(journalID)
@@ -90,7 +74,7 @@ class GrowPage extends Component {
 		if (this.props.grow === null && this.props.userGrows) {
 			renderedGrowBoxes = this.props.userGrows.map((grow) =>
 				<div key={grow.id} className="Grow-Box-Item-Container">
-					<GrowBoxItem grow={grow} openGrow={this.openGrow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} liveGrowData={this.props.liveGrowData} rawGrowData={this.props.rawGrowData} />
+					<GrowBoxItem grow={grow} openGrow={this.openGrow} openMainPage={this.openMainPage} liveGrowData={this.props.liveGrowData} rawGrowData={this.props.rawGrowData} />
 				</div>
 			)
 		}
@@ -141,7 +125,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} openFullCam={this.openFullCam} openMainPage={this.openMainPage} setJournalID={this.setJournalID}  rawGrowData={this.props.rawGrowData} />
+									<GrowDetailsPage grow={this.props.grow} openMainPage={this.openMainPage} setJournalID={this.setJournalID} rawGrowData={this.props.rawGrowData} />
 								)
 							}
 						})()}
@@ -154,13 +138,6 @@ class GrowPage extends Component {
 
 
 				</div>
-				{(() => {
-					if (this.state.displayContent === 'full-cam') {
-						return (
-							<GrowCamFull closeFullCam={this.closeFullCam} camURL={this.state.camURL} />
-						)
-					}
-				})()}
 			</div>
 		);
 	}
