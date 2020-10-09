@@ -29,8 +29,7 @@ class GrowDetailsPage extends Component {
             DAILY_AVGS: [],
             YEST_AVGS: [],
 
-            ACTIVE_LINES: [],
-            ACTIVE_LINES_INITIALIZED: false
+            ACTIVE_LINES: []
         };
 
         this.dbHelper = new DbHelper(); // Need for linked journals
@@ -52,6 +51,24 @@ class GrowDetailsPage extends Component {
                 this.processGrowData(this.props.rawGrowData)
             }
         }
+
+        // DEFINING SENSOR INFO
+        var SENSOR_PIDS = []
+        if (this.props.grow.config.SENSORS.length !== this.state.SENSOR_PIDS.length) {
+            console.log("SENSOR INIT!!")
+
+            this.props.grow.config.SENSORS.forEach((sensor, key) => {
+                if (SENSOR_PIDS[key] !== sensor.PID) {
+                    SENSOR_PIDS[key] = sensor.PID
+                }
+            });
+
+            // Initialize all lines as active
+            this.setState({
+                SENSOR_PIDS: SENSOR_PIDS,
+                ACTIVE_LINES: SENSOR_PIDS
+            });
+        }
     }
 
     componentWillUnmount = () => {
@@ -72,13 +89,6 @@ class GrowDetailsPage extends Component {
             }
         }
 
-        // SHOW ALL LINES IF NONE ACTIVE (this is how they initialize)
-        if (this.state.ACTIVE_LINES.length === 0 && this.state.ACTIVE_LINES_INITIALIZED === false && this.state.SENSOR_PIDS) {
-            this.setState({
-                ACTIVE_LINES: this.state.SENSOR_PIDS,
-                ACTIVE_LINES_INITIALIZED: true
-            })
-        }
     }
 
     processGrowData = (growData) => {
@@ -96,8 +106,6 @@ class GrowDetailsPage extends Component {
 
         var now = new Date().getTime()
 
-        var SENSOR_PIDS = []
-
         var DAILY_HIGHS = []
         var DAILY_HIGHS_TIMES = []
         var DAILY_LOWS = []
@@ -112,12 +120,17 @@ class GrowDetailsPage extends Component {
         var yesterdayData = []
 
         // DEFINING SENSOR INFO
-        if (this.props.grow.config.SENSORS) {
+        var SENSOR_PIDS = []
+        if (this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
             this.props.grow.config.SENSORS.forEach((sensor, key) => {
 
                 if (SENSOR_PIDS[key] !== sensor.PID) {
                     SENSOR_PIDS[key] = sensor.PID
                 }
+            });
+
+            this.setState({
+                SENSOR_PIDS: SENSOR_PIDS
             });
         }
 
@@ -184,8 +197,6 @@ class GrowDetailsPage extends Component {
         });
 
         this.setState({
-            SENSOR_PIDS: SENSOR_PIDS,
-
             DAILY_HIGHS: DAILY_HIGHS,
             DAILY_HIGHS_TIMES: DAILY_HIGHS_TIMES,
             DAILY_LOWS: DAILY_LOWS,
@@ -195,10 +206,10 @@ class GrowDetailsPage extends Component {
         });
     }
 
-    toggleLine = (ev) => {
-        var pid = ev.target.dataset.value
-        console.log("PID!!: " + pid)
-        console.log(this.state.ACTIVE_LINES)
+    toggleLine = (e) => {
+        var pid = e.currentTarget.getAttribute('data-value')
+
+        console.log("datavalue... " + pid)
 
         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
@@ -206,14 +217,8 @@ class GrowDetailsPage extends Component {
 
         if (tActiveLines.includes(pid)) {
             tActiveLines[tIndex] = null
-
-            console.log("REMOVED: " + pid)
-            console.log(this.state.ACTIVE_LINES)
         } else {
             tActiveLines[tIndex] = pid
-
-            console.log("ADDED: " + pid)
-            console.log(this.state.ACTIVE_LINES)
         }
 
         this.setState({ ACTIVE_LINES: tActiveLines })
@@ -300,6 +305,11 @@ class GrowDetailsPage extends Component {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
                         if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+
+                            console.log("CURRENTING!")
+                            console.log(pid)
+                            console.log(this.state.liveData[pid])
+
                             return <div>{Math.round(this.state.liveData[pid] * 10) / 10}°C</div>
                         } else {
                             return <div>{Math.round(this.state.liveData[pid] * 10) / 10}%</div>
@@ -312,6 +322,10 @@ class GrowDetailsPage extends Component {
                     <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         {(() => {
                             var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+
+                            console.log("YESTING!")
+                            console.log(pid)
+                            console.log(this.state.liveData[pid])
 
                             if (this.state.YEST_AVGS[tIndex]) {
                                 if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
@@ -327,6 +341,11 @@ class GrowDetailsPage extends Component {
                             var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
 
                             if (this.state.DAILY_AVGS[tIndex] && this.state.YEST_AVGS[tIndex]) {
+
+                                console.log("AVERAGING!")
+                                console.log(pid)
+                                console.log(this.state.liveData[pid])
+
                                 if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
                                     return <div style={{ color: '#FFF' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                 } else if (this.state.DAILY_AVGS[tIndex] < this.state.YEST_AVGS[tIndex]) {

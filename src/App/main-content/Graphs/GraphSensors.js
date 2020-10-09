@@ -260,9 +260,9 @@ class GraphSensors extends Component {
 
 
                 if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}°C </div>
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}°C </div>
                 } else {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{this.props.grow.config.SENSORS[tIndex].name}: {rawContent[0].payload[l.dataKey]}% </div>
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
                 }
 
             })()
@@ -313,16 +313,11 @@ class GraphSensors extends Component {
             (() => {
                 var tIndex = this.props.grow.config.SENSORS.indexOf(l)
 
-                if (this.props.activeLines) {
-                    console.log("ACTIVE LIENS!")
-                    console.log(this.props.activeLines)
-                }
-
                 if (this.props.activeLines && this.props.activeLines.includes(this.props.grow.config.SENSORS[tIndex].PID)) {
                     if (l.type === "airTemp" || l.type === "waterTemp") {
-                        return <Line yAxisId="left" type="monotone" dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                        return <Line yAxisId="left" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
                     } else {
-                        return <Line yAxisId="right" type="monotone" dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                        return <Line yAxisId="right" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
                     }
                 }
             })()
