@@ -77,23 +77,23 @@ class GraphSensors extends Component {
         var lightsOnArray = []
         var lightsOffArray = []
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.off)).format('x')
 
         m.add(1, 'days')
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.off)).format('x')
 
         m.add(1, 'days')
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.off)).format('x')
 
         m.add(1, 'days')
 
-        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_on)).format('x')
-        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.lights_off)).format('x')
+        lightsOnArray[lightsOnArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.on)).format('x')
+        lightsOffArray[lightsOffArray.length] = moment(new Date(m.format('L') + ' ' + this.props.grow.config.LIGHTS.off)).format('x')
 
         this.setState({
             lightsOnArray: lightsOnArray,

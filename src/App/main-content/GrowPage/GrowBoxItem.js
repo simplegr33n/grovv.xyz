@@ -156,7 +156,7 @@ class GrowBoxItem extends Component {
 						</div>
 
 						<div className="Grow-Box-Info-Graph-Area" ref={element => this.divRef = element}>
-							<GraphSensorsBox parentSize={this.state.graphElementSize} growID={this.props.grow.id} rawGrowData={this.props.rawGrowData} />
+							<GraphSensorsBox parentSize={this.state.graphElementSize} grow={this.props.grow} rawGrowData={this.props.rawGrowData} />
 						</div>
 					</div>
 

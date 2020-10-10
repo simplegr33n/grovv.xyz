@@ -17,9 +17,9 @@ class GraphSensorsBox extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-        if (this.props.growID && this._ismounted) {
-            if (this.props.growID !== this.growID) {
-                this.growID = this.props.growID;
+        if (this.props.grow && this._ismounted) {
+            if (this.props.grow.id !== this.growID) {
+                this.growID = this.props.grow.id;
             }
 
         }
@@ -34,15 +34,15 @@ class GraphSensorsBox extends Component {
 
     componentDidUpdate = () => {
 
-        if (this.props.growID && this._ismounted) {
-            if (this.props.growID !== this.growID) {
-                this.growID = this.props.growID;
+        if (this.props.grow.id && this._ismounted) {
+            if (this.props.grow.id !== this.growID) {
+                this.growID = this.props.grow.id;
             }
         }
 
-        if (this.props.rawGrowData && this.props.growID) {
+        if (this.props.rawGrowData && this.props.grow.id) {
 
-            var gwID = this.props.growID
+            var gwID = this.props.grow.id
             var rawData = this.props.rawGrowData
 
             if (rawData[gwID]) {
@@ -67,15 +67,13 @@ class GraphSensorsBox extends Component {
                     });
 
                 }
-
             }
-
         }
 
     }
 
 
-    renderTooltip(props) {
+    renderTooltip = (props) => {
         var rawContent = props.payload
         if (rawContent.length === 0) {
             return;
@@ -83,39 +81,25 @@ class GraphSensorsBox extends Component {
 
         var readableTime = moment(props.payload[0].payload.time).fromNow()
 
-        var tempTemp = null;
-        var tempTempColor = "#000"
-        var tempHumidity = null;
-        var tempHumidityColor = "#000"
+        const tooltipItems = rawContent.map((l) =>
+            (() => {
+                var tIndex = rawContent.indexOf(l)
 
+                if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}°C </div>
+                } else {
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
+                }
 
-        rawContent.forEach((line) => {
-            if (line.dataKey === "sA1_Temp") {
-                tempTempColor = line.stroke
-                tempTemp = rawContent[0].payload.sA1_Temp
-            }
+            })()
+        );
 
-            if (line.dataKey === "sA1_Humi") {
-                tempHumidityColor = line.stroke
-                tempHumidity = rawContent[0].payload.sA1_Humi
-            }
-        })
 
         return (
             <div className="Grow-Details-Graph-Tooltip">
                 <div>{readableTime}</div>
 
-                {(() => {
-                    if (tempTemp) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempTempColor }}>TEMP: {tempTemp}°C </div>
-                    }
-                })()}
-
-                {(() => {
-                    if (tempHumidity) {
-                        return <div className="Grow-Details-Graph-Tooltip-Data" style={{ color: tempHumidityColor }}>HUMID: {tempHumidity}% RH </div>
-                    }
-                })()}
+                {tooltipItems}
 
             </div>
 
@@ -132,10 +116,8 @@ class GraphSensorsBox extends Component {
 
                 renderDayGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
-                        <Line yAxisId="left" type="monotone" dataKey="cTemp" stroke="#ca2014" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="fanSpeed" stroke="#db5e24" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#387d14" dot={false} />
-                        <Line yAxisId="right" type="monotone" dataKey="humiPower" stroke="#8884d8" dot={false} />
+                        <Line yAxisId="left" type="monotone" name="temp" dataKey="sA1_Temp" stroke="#ca2014" dot={false} />
+                        <Line yAxisId="right" type="monotone" name="humi" dataKey="sA1_Humi" stroke="#db5e24" dot={false} />
                         <XAxis
                             dataKey="time"
                             type="number"

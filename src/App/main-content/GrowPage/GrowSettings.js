@@ -45,26 +45,138 @@ class GrowSettings extends Component {
 
     // UI METHODS
     postConfig = () => {
-        // this.dbHelper.setGrowConfig(
-        //     this.props.grow.id,
-        //     {
-        //         // NEEDS TO BE ALL OBJECT AT ONCE TO AVOID FUCKING UP...
-        //         // lights_on: this.state.lights_on,
-        //         // lights_off: this.state.lights_off
-        //     }
-        // )
+        console.log(this.state.config)
+
+
+        this.dbHelper.setGrowConfig(
+            this.props.grow.id, this.state.config
+        )
+
+        this.close()
+
+        // EXIT?
+
+        // ENSURE REFRESH?
+    }
+
+    sensorMeanChange = (e) => {
+        console.log("mean change?")
+        console.log(e.target.id) // PID
+        console.log(e.target.value) // Value..
+
+        var tempConfig = this.state.config
+        tempConfig.SENSORS.forEach((sensor) => {
+            if (sensor.PID === e.target.id) {
+                sensor._mean = parseFloat(e.target.value)
+            }
+        })
+
+        this.setState({
+            config: tempConfig
+        });
+    }
+
+    sensorDeviationChange = (e) => {
+        console.log("deviation change?")
+        console.log(e.target.id) // PID
+        console.log(e.target.value) // Value..
+
+        var tempConfig = this.state.config
+        tempConfig.SENSORS.forEach((sensor) => {
+            if (sensor.PID === e.target.id) {
+                sensor._deviation = parseFloat(e.target.value)
+            }
+        })
+
+        this.setState({
+            config: tempConfig
+        });
+    }
+
+    sensorWeightChange = (e) => {
+        console.log("weight change?")
+        console.log(e.target.id) // PID
+        console.log(e.target.value) // Value..
+
+        var tempConfig = this.state.config
+        tempConfig.SENSORS.forEach((sensor) => {
+            if (sensor.PID === e.target.id) {
+                sensor.thickness = e.target.value
+            }
+        })
+
+        this.setState({
+            config: tempConfig
+        });
+    }
+
+    sensorColorChange = (e) => {
+        console.log("color change?")
+        console.log(e.target.id) // PID
+        console.log(e.target.value) // Value..
+
+        var tempConfig = this.state.config
+        tempConfig.SENSORS.forEach((sensor) => {
+            if (sensor.PID === e.target.id) {
+                sensor.color = e.target.value
+            }
+        })
+
+        this.setState({
+            config: tempConfig
+        });
+    }
+
+    sensorTypeChange = (e) => {
+        console.log("type change?")
+        console.log(e.target.id) // PID
+        console.log(e.target.value) // Value..
+
+        var tempConfig = this.state.config
+        tempConfig.SENSORS.forEach((sensor) => {
+            if (sensor.PID === e.target.id) {
+                sensor.type = e.target.value
+            }
+        })
+
+        this.setState({
+            config: tempConfig
+        });
+    }
+
+    sensorNameChange = (e) => {
+        console.log("name change?")
+        console.log(e.target.id) // PID
+        console.log(e.target.value) // Value..
+
+        var tempConfig = this.state.config
+        tempConfig.SENSORS.forEach((sensor) => {
+            if (sensor.PID === e.target.id) {
+                sensor.name = e.target.value
+            }
+        })
+
+        this.setState({
+            config: tempConfig
+        });
     }
 
     handleLightsOnChange = (value) => {
-        console.log('value...?')
-        console.log(value)
-        this.setState({ lights_on: value });
+        var tempConfig = this.state.config
+        tempConfig.LIGHTS.on = value
+
+        this.setState({
+            config: tempConfig
+        });
     }
 
     handleLightsOffChange = (value) => {
-        console.log('value...?')
-        console.log(value)
-        this.setState({ lights_off: value });
+        var tempConfig = this.state.config
+        tempConfig.LIGHTS.off = value
+
+        this.setState({
+            config: tempConfig
+        });
     }
 
     close = () => {
@@ -79,8 +191,24 @@ class GrowSettings extends Component {
             <div key={sensor.PID} className="Config-Settings-Field" style={{ backgroundColor: '#3d7a80' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
 
-                    <div style={{ userSelect: 'none', fontsize: '0.6em' }} >
-                        <WiThermometer /> {sensor.PID}
+                    <div style={{ userSelect: 'none', fontsize: '0.6em', color: "#FFF", background: '#131B14' }} >
+
+                        {(() => {
+                            if (sensor.type === "airTemp") {
+                                return (<WiThermometer style={{ fontSize: '1.3em', color: sensor.color }} />)
+                            } else if (sensor.type === "waterTemp") {
+                                return (<WiThermometerExterior style={{ fontSize: '1.3em', color: sensor.color }} />)
+                            } else if (sensor.type === "humidity") {
+                                return (<WiHumidity style={{ fontSize: '1.3em', color: sensor.color }} />)
+                            } else if (sensor.type === "fan") {
+                                return (<WiHurricane style={{ fontSize: '1.3em', color: sensor.color }} />)
+                            } else if (sensor.type === "humidifier") {
+                                return (<WiCloudUp style={{ fontSize: '1.3em', color: sensor.color }} />)
+                            } else {
+                                return (<div />)
+                            }
+                        })()}
+                        {sensor.PID}
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
@@ -90,7 +218,7 @@ class GrowSettings extends Component {
                                 Name
                             </div>
                             <div style={{ fontWeight: '400' }}>
-                                <input id="name" name="name" type="name" defaultValue={sensor.name} maxlength="16" style={{ fontSize: '0.8em', maxWidth: "70px" }} />
+                                <input onChange={this.sensorNameChange} id={sensor.PID} name="name" type="name" defaultValue={sensor.name} maxLength="16" style={{ fontSize: '0.8em', maxWidth: "70px" }} />
                             </div>
                         </div>
 
@@ -99,7 +227,7 @@ class GrowSettings extends Component {
                                 Type
                             </div>
                             <div>
-                                <select id="myList" defaultValue={sensor.type} style={{ fontSize: '0.8em', maxWidth: "70px", height: '20px' }} >
+                                <select onChange={this.sensorTypeChange} id={sensor.PID} defaultValue={sensor.type} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                                     <option value="airTemp">airTemp</option>
                                     <option value="waterTemp">waterTemp</option>
                                     <option value="humidity">humidity</option>
@@ -114,8 +242,16 @@ class GrowSettings extends Component {
                             <div style={{ fontSize: '0.7em', userSelect: 'none' }}>
                                 Weight
                             </div>
-                            <div style={{ fontSize: '1em', fontWeight: '400' }}>
-                                <input id="thickness" name="thickness" type="thickness" defaultValue={sensor.thickness} maxlength="10" style={{ fontSize: '0.8em', maxWidth: "24px" }} />
+                            <div>
+                                <select onChange={this.sensorWeightChange} id={sensor.PID} defaultValue={sensor.thickness} style={{ fontSize: '0.7em', maxWidth: "44px", height: '20px' }} >
+                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                    <option value="1.5">1.5</option>
+                                    <option value="1">1</option>
+                                    <option value="0.75">0.75</option>
+                                    <option value="0.5">0.5</option>
+                                    <option value="0.25">0.25</option>
+                                </select>
                             </div>
                         </div>
 
@@ -126,7 +262,7 @@ class GrowSettings extends Component {
                                 Mean
                             </div>
                             <div style={{ fontSize: '1em', fontWeight: '400' }}>
-                                <input id="_mean" name="_mean" type="_mean" defaultValue={sensor._mean} style={{ fontSize: '0.8em', maxWidth: "24px" }} />
+                                <input type='number' onChange={this.sensorMeanChange} id={sensor.PID} name="_mean" defaultValue={sensor._mean} style={{ fontSize: '0.8em', maxWidth: "36px" }} />
                             </div>
                         </div>
 
@@ -135,7 +271,7 @@ class GrowSettings extends Component {
                                 SDev
                             </div>
                             <div style={{ fontSize: '1em', fontWeight: '400' }}>
-                                <input id="_deviation" name="_deviation" type="_deviation" defaultValue={sensor._deviation} style={{ fontSize: '0.8em', maxWidth: "24px" }} />
+                                <input type='number' onChange={this.sensorDeviationChange} id={sensor.PID} name="_deviation" defaultValue={sensor._deviation} style={{ fontSize: '0.8em', maxWidth: "36px" }} />
                             </div>
                         </div>
 
@@ -144,7 +280,7 @@ class GrowSettings extends Component {
                                 Color
                             </div>
                             <div style={{ fontSize: '1em', fontWeight: '400' }}>
-                                <input id="color" name="color" type="color" defaultValue={sensor.color} maxlength="10" style={{ fontSize: '0.8em', padding: 0, marginTop: '1px', maxWidth: "18px", maxHeight: '18px' }} />
+                                <input onChange={this.sensorColorChange} id={sensor.PID} name="color" type="color" defaultValue={sensor.color} maxLength="10" style={{ fontSize: '0.8em', padding: 0, marginTop: '1px', maxWidth: "18px", maxHeight: '18px' }} />
                             </div>
                         </div>
 
@@ -178,13 +314,17 @@ class GrowSettings extends Component {
                                         <div className="Config-Settings-Field" style={{ backgroundColor: '#e8e81e' }}>
                                             <div className="Settings-Data-Line">
                                                 <div>on <TimePicker
+                                                    clearIcon={null}
                                                     id="lights_on"
-                                                    value={this.state.config.lights_on}
-                                                    onChange={this.handleLightsOnChange.bind(this)} /></div>
+                                                    value={this.state.config.LIGHTS.on}
+                                                    onChange={this.handleLightsOnChange.bind(this)} />
+                                                </div>
                                                 <div>off <TimePicker
+                                                    clearIcon={null}
                                                     id="lights_off"
-                                                    value={this.state.config.lights_off}
-                                                    onChange={this.handleLightsOffChange.bind(this)} /></div>
+                                                    value={this.state.config.LIGHTS.off}
+                                                    onChange={this.handleLightsOffChange.bind(this)} />
+                                                </div>
                                             </div>
                                         </div>
 
@@ -195,9 +335,9 @@ class GrowSettings extends Component {
 
 
                                         {/* Doubly hid for now */}
-                                        {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
-                                            <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={this.postConfig}>SAVE <br></br> CONFIG</div>
-                                        </div> */}
+                                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
+                                            <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={this.postConfig}>SAVE <br></br> SETTINGS</div>
+                                        </div>
                                     </div>
                                 </div>
                             )
