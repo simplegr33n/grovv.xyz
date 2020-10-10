@@ -60,6 +60,7 @@ class GrowPage extends Component {
 		this.props.setJournalID(journalID)
 	}
 
+
 	render() {
 
 		if (this.props.growID) {

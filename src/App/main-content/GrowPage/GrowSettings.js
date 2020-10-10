@@ -45,27 +45,16 @@ class GrowSettings extends Component {
 
     // UI METHODS
     postConfig = () => {
-        console.log(this.state.config)
-
-
+        // Post config
         this.dbHelper.setGrowConfig(this.props.grow.id, this.state.config)
-
-        console.log("PROPS")
-        console.log(this.props) // losing the refreshGrows function...
-
-        // if (this.props.refreshGrows) {
+        // Refresh page data
         this.props.refreshGrows(this.state.config)
-        // }
-
-
+        // Close settings menu
         this.props.close()
-
     }
 
     sensorMeanChange = (e) => {
-        console.log("mean change?")
-        console.log(e.target.id) // PID
-        console.log(e.target.value) // Value..
+        console.log("Change " + e.target.id + ": " + e.target.value)
 
         var tempConfig = this.state.config
         tempConfig.SENSORS.forEach((sensor) => {
@@ -80,9 +69,7 @@ class GrowSettings extends Component {
     }
 
     sensorDeviationChange = (e) => {
-        console.log("deviation change?")
-        console.log(e.target.id) // PID
-        console.log(e.target.value) // Value..
+        console.log("Change " + e.target.id + ": " + e.target.value)
 
         var tempConfig = this.state.config
         tempConfig.SENSORS.forEach((sensor) => {
@@ -97,9 +84,7 @@ class GrowSettings extends Component {
     }
 
     sensorWeightChange = (e) => {
-        console.log("weight change?")
-        console.log(e.target.id) // PID
-        console.log(e.target.value) // Value..
+        console.log("Change " + e.target.id + ": " + e.target.value)
 
         var tempConfig = this.state.config
         tempConfig.SENSORS.forEach((sensor) => {
@@ -114,10 +99,6 @@ class GrowSettings extends Component {
     }
 
     sensorColorChange = (e) => {
-        console.log("color change?")
-        console.log(e.target.id) // PID
-        console.log(e.target.value) // Value..
-
         var tempConfig = this.state.config
         tempConfig.SENSORS.forEach((sensor) => {
             if (sensor.PID === e.target.id) {
@@ -131,9 +112,7 @@ class GrowSettings extends Component {
     }
 
     sensorTypeChange = (e) => {
-        console.log("type change?")
-        console.log(e.target.id) // PID
-        console.log(e.target.value) // Value..
+        console.log("Change " + e.target.id + ": " + e.target.value)
 
         var tempConfig = this.state.config
         tempConfig.SENSORS.forEach((sensor) => {
@@ -148,9 +127,7 @@ class GrowSettings extends Component {
     }
 
     sensorNameChange = (e) => {
-        console.log("name change?")
-        console.log(e.target.id) // PID
-        console.log(e.target.value) // Value..
+        console.log("Change " + e.target.id + ": " + e.target.value)
 
         var tempConfig = this.state.config
         tempConfig.SENSORS.forEach((sensor) => {
