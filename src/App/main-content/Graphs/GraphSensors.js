@@ -263,7 +263,6 @@ class GraphSensors extends Component {
                 } else {
                     return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
                 }
-
             })()
         );
 
@@ -339,7 +338,7 @@ class GraphSensors extends Component {
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="left" orientation="left" domain={[21, 30]} />
+                        <YAxis yAxisId="left" orientation="left" domain={[21, 24]} />
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
