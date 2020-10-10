@@ -42,8 +42,6 @@ class App extends Component {
 			threeDayData: []
 		};
 
-		this.refreshGrows = this.refreshGrows.bind(this)
-
 		this.dbHelper = new DbHelper();
 
 		this.firebase = new Firebase();
@@ -64,8 +62,6 @@ class App extends Component {
 	refreshGrows = (newGrowConfig) => {
 		var tempGrow = this.state.currentGrow
 		tempGrow.config = newGrowConfig
-
-		console.log("REFRESHOO")
 
 		this.setState({ currentGrow: tempGrow });
 	}

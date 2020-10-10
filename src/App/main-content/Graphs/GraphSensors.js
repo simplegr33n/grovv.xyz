@@ -258,11 +258,7 @@ class GraphSensors extends Component {
                 var tIndex = this.props.activeLines.indexOf(l.dataKey)
                 var curSensor = this.props.grow.config.SENSORS[tIndex]
 
-                if (curSensor.type === "airTemp" || curSensor.type === "waterTemp") {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}°C </div>
-                } else {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
-                }
+                return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]} {curSensor.unit} </div>
             })()
         );
 
@@ -332,14 +328,15 @@ class GraphSensors extends Component {
                         <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} stroke="none" fillOpacity={0.2} />
 
                         <XAxis
+                            tick={{ fill: "#B3C2B5" }}
                             dataKey="time"
                             type="number"
                             domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="left" orientation="left" domain={[21, 24]} />
-                        <YAxis yAxisId="right" orientation="right" />
+                        <YAxis yAxisId="left" orientation="left" domain={[21, 24]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="right" orientation="right" tick={{ fill: "#B3C2B5" }} />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
                 );
@@ -355,7 +352,8 @@ class GraphSensors extends Component {
 
                 {renderDayGraph}
 
-                <div style={{ width: '18px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '10x' }}>
+                {/* Time Scale Select... */}
+                <div style={{ width: '18px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '1%' }}>
 
                     <div>
                         {(() => {

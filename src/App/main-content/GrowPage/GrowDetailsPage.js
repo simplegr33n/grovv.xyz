@@ -242,62 +242,56 @@ class GrowDetailsPage extends Component {
 
                 {(() => {
                     var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                    var curSensor = this.props.grow.config.SENSORS[tIndex]
 
                     if (this.state.ACTIVE_LINES.includes(pid)) {
-                        if (this.props.grow.config.SENSORS[tIndex].type === "airTemp") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', color: this.props.grow.config.SENSORS[tIndex].color }}  >
-                                {this.props.grow.config.SENSORS[tIndex].name} <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidity") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "fan") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidifier") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}
-                            </div>)
-                        }
+                        return (
+                            <div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                                <div style={{ paddingTop: '4px' }} > {curSensor.name}</div>
+
+
+                                {(() => {
+                                    if (curSensor.type === "airTemp") {
+                                        return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "humidity") {
+                                        return <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "fan") {
+                                        return <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "humidifier") {
+                                        return <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "waterTemp") {
+                                        return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else {
+                                        return <div />
+                                    }
+                                })()}
+
+                            </div>
+                        )
                     } else {
-                        if (this.props.grow.config.SENSORS[tIndex].type === "airTemp") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', opacity: '0.3', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name} <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidity") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', opacity: '0.3', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "fan") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', opacity: '0.3', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "humidifier") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', opacity: '0.3', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else if (this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', opacity: '0.3', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}  <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
-                            </div>)
-                        } else {
-                            return (<div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', opacity: '0.3', color: this.props.grow.config.SENSORS[tIndex].color }}>
-                                {this.props.grow.config.SENSORS[tIndex].name}
-                            </div>)
-                        }
+                        return (
+                            <div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', opacity: '0.3', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                                <div style={{ paddingTop: '2px' }} > {curSensor.name}</div>
+
+                                {(() => {
+                                    if (curSensor.type === "airTemp") {
+                                        return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "humidity") {
+                                        return <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "fan") {
+                                        return <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "humidifier") {
+                                        return <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else if (curSensor.type === "waterTemp") {
+                                        return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
+                                    } else {
+                                        return <div />
+                                    }
+                                })()}
+
+                            </div>
+                        )
                     }
-
-
                 })()}
 
                 <div className="Grow-Details-Main-Data-Current-Data">
@@ -313,13 +307,9 @@ class GrowDetailsPage extends Component {
 
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                        var curSensor = this.props.grow.config.SENSORS[tIndex]
 
-                        if ((this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp")) {
-
-                            return <div>{Math.round(this.state.liveData[pid] * 10) / 10}°C</div>
-                        } else {
-                            return <div>{Math.round(this.state.liveData[pid] * 10) / 10}%</div>
-                        }
+                        return <div>{Math.round(this.state.liveData[pid] * 10) / 10}{curSensor.unit}</div>
                     })()}
                 </div>
 
@@ -328,13 +318,10 @@ class GrowDetailsPage extends Component {
                     <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         {(() => {
                             var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                            var curSensor = this.props.grow.config.SENSORS[tIndex]
 
                             if (this.state.YEST_AVGS[tIndex]) {
-                                if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                                    return Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10 + '°C'
-                                } else {
-                                    return Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10 + '%'
-                                }
+                                return Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10 + curSensor.unit
                             }
                         })()}
 
@@ -358,13 +345,10 @@ class GrowDetailsPage extends Component {
 
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                        var curSensor = this.props.grow.config.SENSORS[tIndex]
 
                         if (this.state.DAILY_AVGS[tIndex]) {
-                            if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                                return Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10 + '°C'
-                            } else {
-                                return Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10 + '%'
-                            }
+                            return Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10 + curSensor.unit
                         }
                     })()}
                 </div>
@@ -384,13 +368,10 @@ class GrowDetailsPage extends Component {
 
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                        var curSensor = this.props.grow.config.SENSORS[tIndex]
 
                         if (this.state.DAILY_HIGHS) {
-                            if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                                return Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10 + '°C'
-                            } else {
-                                return Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10 + '%'
-                            }
+                            return Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10 + curSensor.unit
                         }
                     })()}
                 </div>
@@ -409,13 +390,10 @@ class GrowDetailsPage extends Component {
 
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                        var curSensor = this.props.grow.config.SENSORS[tIndex]
 
                         if (this.state.DAILY_LOWS) {
-                            if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                                return Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10 + '°C'
-                            } else {
-                                return Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10 + '%'
-                            }
+                            return Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10 + curSensor.unit
                         }
                     })()}
                 </div>
@@ -427,9 +405,7 @@ class GrowDetailsPage extends Component {
         // MAIN RENDER RETURN
         return (
             <div className="Grow-Details-Page">
-
                 <div className="Grow-Details-Page-Content">
-
                     <div className="Grow-Details-Content-Bottom">
                         <div className="Grow-Details-Header">
                             <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>

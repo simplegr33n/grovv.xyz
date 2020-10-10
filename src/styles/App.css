@@ -1655,7 +1655,7 @@ html {
 /* GRAPHS PAGE */
 
 #Grow-Details-Graphs-Page {
-  width: 107%;
+  width: 110%;
   height: 100%;
   background-color: rgb(18, 19, 18);
   position: relative;
@@ -1676,13 +1676,18 @@ html {
   flex-direction: row;
   justify-content: flex-start;
   position: relative;
-  margin-left: -5%;
+  margin-left: -10%;
   /* max-width: 400px; */
   /* background-color: #000; */
 }
 
 .recharts-tooltip-label {
   color: #000;
+}
+
+.recharts-cartesian-axis-tick {
+  font-size: 0.5em;
+  font-family: Roboto, sans-serif;
 }
 
 /* APP BAR */
@@ -1857,6 +1862,7 @@ html {
 .Grow-Details-Headers-Display-Row {
   display: flex;
   flex-direction: row;
+  background: #0c140d;
 }
 
 .Grow-Details-Main-Data-Row-Header {
