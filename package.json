@@ -15,7 +15,7 @@
     "react-icons": "^3.7.0",
     "react-scripts": "^2.1.8",
     "react-time-picker": "^3.5.2",
-    "recharts": "^1.5.0"
+    "recharts": "^1.8.5"
   },
   "scripts": {
     "start": "react-scripts start",

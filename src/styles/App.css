@@ -1815,10 +1815,12 @@ html {
   color: rgb(225, 231, 223);
   display: flex;
   flex-direction: column;
+  font-size: 0.75em;
 }
 
 .Grow-Details-Graph-Tooltip-Data {
-  font-size: 13px;
+  font-size: 0.9em;
+  font-weight: 400;
 }
 
 /* GROW DETAILS DATA DISPLAY */

@@ -258,7 +258,15 @@ class GraphSensors extends Component {
                 var tIndex = this.props.activeLines.indexOf(l.dataKey)
                 var curSensor = this.props.grow.config.SENSORS[tIndex]
 
-                return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]} {curSensor.unit} </div>
+                return (
+                    <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
+                        <div style={{ color: l.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
+                            <div>{l.name}: </div>
+                            <div style={{ fontWeight: 600 }} >{rawContent[0].payload[l.dataKey]} {curSensor.unit}</div>
+                        </div>
+                        <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
+                    </div>
+                )
             })()
         );
 

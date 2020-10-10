@@ -285,7 +285,6 @@ class DbHelper {
 
             var userGrowIDs = [];
 
-            console.log("TODO: remove filter. what does this even do O.o ")
             snapshot.forEach((child) => {
                 if (!child.val().sensors_live) {
                     userGrowIDs[userGrowIDs.length] = child.key

@@ -279,11 +279,6 @@ class GrowDetailsPage extends Component {
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
                     var setIndicatorColor = '#FFF'
 
-
-                    console.log("CURRENT SENSOR!")
-                    console.log(curSensor)
-
-
                     if ((curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
                         if (((curSensor._mean + (curSensor._deviation * 2)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.state.liveData[pid])) {
                             setIndicatorColor = '#FF0000' // BAD
