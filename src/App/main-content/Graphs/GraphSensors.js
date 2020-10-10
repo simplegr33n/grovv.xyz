@@ -255,13 +255,11 @@ class GraphSensors extends Component {
 
         const listItems = rawContent.map((l) =>
             (() => {
-                var tIndex = rawContent.indexOf(l)
+                var tIndex = this.props.activeLines.indexOf(l.dataKey)
                 var curSensor = this.props.grow.config.SENSORS[tIndex]
 
                 if (curSensor.type === "airTemp" || curSensor.type === "waterTemp") {
                     return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}°C </div>
-                } else if (curSensor.type === "humidifier") {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
                 } else {
                     return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
                 }
