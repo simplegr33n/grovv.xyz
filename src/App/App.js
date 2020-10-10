@@ -59,6 +59,16 @@ class App extends Component {
 
 	}
 
+	refreshGrows = (newGrowConfig) => {
+		var tempGrow = this.state.currentGrow
+		tempGrow.config = newGrowConfig
+
+		console.log("YOYOYOYO")
+		console.log(tempGrow)
+
+		this.setState({ currentGrow: tempGrow });
+	}
+
 	setUserGrows = (userGrows) => {
 		console.log("USER GROWS!")
 		console.log(userGrows)
@@ -284,7 +294,7 @@ class App extends Component {
 												</div>
 											)
 										default:
-											return <GrowPage openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
+											return <GrowPage refreshGrows={this.refreshGrows} openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 									}
 								} else {
 									switch (this.state.mainContent) {

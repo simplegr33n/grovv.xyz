@@ -449,7 +449,7 @@ class GrowDetailsPage extends Component {
                     {(() => {
                         if (this.state.SHOW_SETTINGS) {
                             return (
-                                <GrowSettings grow={this.props.grow} close={this.openCloseSettings} />
+                                <GrowSettings grow={this.props.grow} refreshGrows={this.props.refreshGrows} close={this.openCloseSettings} />
                             )
                         }
                     })()}

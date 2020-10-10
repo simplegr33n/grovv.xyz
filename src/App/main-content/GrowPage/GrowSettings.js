@@ -48,15 +48,12 @@ class GrowSettings extends Component {
         console.log(this.state.config)
 
 
-        this.dbHelper.setGrowConfig(
-            this.props.grow.id, this.state.config
-        )
+        this.dbHelper.setGrowConfig(this.props.grow.id, this.state.config)
 
-        this.close()
+        this.props.refreshGrows(this.state.config)
 
-        // EXIT?
+        this.props.close()
 
-        // ENSURE REFRESH?
     }
 
     sensorMeanChange = (e) => {
