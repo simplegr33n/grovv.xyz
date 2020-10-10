@@ -256,12 +256,14 @@ class GraphSensors extends Component {
         const listItems = rawContent.map((l) =>
             (() => {
                 var tIndex = rawContent.indexOf(l)
+                var curSensor = this.props.grow.config.SENSORS[tIndex]
 
-
-                if (this.props.grow.config.SENSORS[tIndex].type === "airTemp" || this.props.grow.config.SENSORS[tIndex].type === "waterTemp") {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}°C </div>
+                if (curSensor.type === "airTemp" || curSensor.type === "waterTemp") {
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}°C </div>
+                } else if (curSensor.type === "humidifier") {
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
                 } else {
-                    return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
+                    return <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}% </div>
                 }
 
             })()
@@ -309,9 +311,7 @@ class GraphSensors extends Component {
 
         const lineItems = this.props.grow.config.SENSORS.map((l) =>
             (() => {
-                var tIndex = this.props.grow.config.SENSORS.indexOf(l)
-
-                if (this.props.activeLines && this.props.activeLines.includes(this.props.grow.config.SENSORS[tIndex].PID)) {
+                if (this.props.activeLines && this.props.activeLines.includes(l.PID)) {
                     if (l.type === "airTemp" || l.type === "waterTemp") {
                         return <Line yAxisId="left" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
                     } else {
