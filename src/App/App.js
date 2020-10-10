@@ -12,11 +12,8 @@ import SignIn from './auth/SignIn.js'
 import SignUp from './auth/SignUp.js'
 
 // Main Content
-import FeedChart from './main-content/FeedChart/FeedChart.js'
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './main-content/GrowPage/GrowPage.js'
-//import GraphSensors from './main-content/Graphs/GraphSensors.js'
-import GrowGraphsTest from './graphs/GrowGraphsTest.js'
 
 
 // Top Bar
@@ -28,7 +25,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mainContent: 'signin', // signin, signup, main, chart, config, journal, grows, graphs, etc.
+			mainContent: 'signin', // signin, signup, main, journal, grows, etc.
 			UID: null,
 			username: '',
 			journalID: null,
@@ -135,6 +132,7 @@ class App extends Component {
 		this.firebase.auth.signOut().then(function () {
 			// Sign-out successful.
 			console.log(`signed out`)
+			window.location.reload()
 		}).catch(function (error) {
 			// An error happened.
 			console.log(`Error signing out: ${error}`)
@@ -158,22 +156,6 @@ class App extends Component {
 			growID: growID
 		});
 
-	}
-
-	openChart = () => {
-		if (this.state.mainContent !== 'chart') {
-			this.setState({ mainContent: 'chart' });
-		}
-	}
-
-	editChart = () => {
-		window.open('https://docs.google.com/spreadsheets/d/1i7EDfBIwj4eYU2LxyS02YwDDeNROcdgXjROKfzCtp60/edit?usp=sharing', 'sharer', 'toolbar=0,status=0,width=548,height=325');
-	}
-
-	openConfig = () => {
-		if (this.state.mainContent !== 'config') {
-			this.setState({ mainContent: 'config' });
-		}
 	}
 
 	openJournals = () => {
@@ -235,19 +217,9 @@ class App extends Component {
 			case 'edit-feed':
 				this.editChart()
 				break;
-			case 'graphs':
-				this.openGraphs()
-				break;
 			default:
-				this.openGraphs()
 				break;
 		}
-	}
-
-	openGraphs = () => {
-		this.setState({
-			mainContent: 'graphs',
-		});
 	}
 
 	render() {
@@ -258,7 +230,7 @@ class App extends Component {
 
 					{(() => {
 						if (this.state.UID) {
-							return <AppBar mainContent={this.state.mainContent} setGrowByID={this.setGrowByID} setMainContent={this.setMainContent} liveGrowData={this.state.liveGrowData} userGrows={this.state.userGrows} />
+							return <AppBar mainContent={this.state.mainContent} setGrowByID={this.setGrowByID} setMainContent={this.setMainContent} handleSignOut={this.handleSignOut} liveGrowData={this.state.liveGrowData} userGrows={this.state.userGrows} />
 						}
 					})()}
 
@@ -271,22 +243,6 @@ class App extends Component {
 									switch (this.state.mainContent) {
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
-										case 'grows':
-											return <GrowPage refreshGrows={this.refreshGrows} openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
-										case 'chart':
-											return <FeedChart />
-
-										case 'graphs':
-											return (
-												<div className="Chart-Page">
-													{/* TODO REMOVE */}
-													flower 3 day
-													<GrowGraphsTest growDeprecate={'-LdtfBTlG6Fgg-ADD8-b'} />
-
-													vegger 3 day
-													<GrowGraphsTest growDeprecate={'-LdtkOvSXRrm1zIZ6EOx'} />
-												</div>
-											)
 										default:
 											return <GrowPage refreshGrows={this.refreshGrows} openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 									}

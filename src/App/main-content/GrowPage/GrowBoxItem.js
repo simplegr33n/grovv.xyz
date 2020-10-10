@@ -16,14 +16,15 @@ class GrowBoxItem extends Component {
 			grow: this.props.grow,
 			activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
 			graphElementSize: [150, 150],
+			graphSizeUpdated: 0 // init at 0
 		};
 
-		this.graphSizeUpdated = 0;
 	}
 
 	componentDidMount = () => {
 		this._ismounted = true;
 
+		this.initGraphDimensions()
 	}
 
 	componentWillUnmount = () => {
@@ -31,25 +32,43 @@ class GrowBoxItem extends Component {
 	}
 
 	componentDidUpdate() {
+		this.calcGraphDimensions()
+	}
+
+	initGraphDimensions() {
 		var dateNow = new Date()
 
-		if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.graphSizeUpdated) > 500))) {
+		if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]))) {
 
-			// tODO: remove, hacky
-			if ((this.divRef.clientWidth - this.state.graphElementSize[0]) < 30) {
-				return;
-			}
-
-			var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight]
+			var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + 55]
 
 			if (tempSize !== this.state.graphElementSize) {
 				if (this._ismounted) {
-					this.setState({ graphElementSize: tempSize });
+					this.setState({
+						graphElementSize: tempSize,
+						graphSizeUpdated: dateNow.getTime()
+					});
 				}
-				this.graphSizeUpdated = dateNow.getTime();
 			}
 		}
+	}
 
+	calcGraphDimensions() {
+		var dateNow = new Date()
+
+		if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
+
+			var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + 55]
+
+			if (tempSize !== this.state.graphElementSize) {
+				if (this._ismounted) {
+					this.setState({
+						graphElementSize: tempSize,
+						graphSizeUpdated: dateNow.getTime()
+					});
+				}
+			}
+		}
 	}
 
 	openGrow = () => {
@@ -136,12 +155,6 @@ class GrowBoxItem extends Component {
 							update<i><b>: {lastUpdate}</b></i>
 							<div className={this.state.activeIndicatorStyle} />
 						</div>
-					</div>
-					<div className="Grow-Box-Function-Btns">
-						<button className="Grow-Box-Function-Btn" data-value={'graphs'} onClick={this.openMainPage} >DATA <span role="img" aria-label="grow data icon">&#128200;</span></button>
-						<button className="Grow-Box-Function-Btn" data-value={'config'} onClick={this.openMainPage} >CONFIG <span role="img" aria-label="grow config icon">&#128187;</span></button>
-						<button className="Grow-Box-Function-Btn-Feed" data-value={'feed'} onClick={this.openMainPage} >FEED &#9619;&#9619;</button>
-						<button className="Grow-Box-Function-Btn-Edit-Feed" data-value={'edit-feed'} onClick={this.openMainPage} >&#9998;</button>
 					</div>
 
 					<div className="Grow-Box-Info">

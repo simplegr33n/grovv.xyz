@@ -20,28 +20,12 @@ class AppBar extends Component {
         this.props.setMainContent('grows')
     }
 
-    // Replace with a setGrow 
-    openGanjaGrove = () => {
-        this.props.openGanjaGrove()
-    }
-    openVegger = () => {
-        this.props.openVegger()
-    }
-
     setGrow = (ev) => {
         this.props.setGrowByID(ev.target.dataset.value)
     }
 
-    //TODO: why is this here (also in App.js)?
     handleSignOut = () => {
-        this.firebase.auth.signOut().then(function () {
-            // Sign-out successful.
-            console.log(`signed out`)
-            window.location.reload();
-        }).catch(function (error) {
-            // An error happened.
-            console.log(`Error signing out: ${error}`)
-        });
+        this.props.handleSignOut()
     }
 
 

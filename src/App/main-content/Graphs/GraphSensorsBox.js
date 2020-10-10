@@ -124,7 +124,7 @@ class GraphSensorsBox extends Component {
                             domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
                             tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')}
                             hide={true} />
-                        <YAxis yAxisId="left" orientation="left" domain={[21, 30]} />
+                        <YAxis yAxisId="left" orientation="left" domain={[21, 27]} />
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
@@ -136,7 +136,7 @@ class GraphSensorsBox extends Component {
         return (
 
 
-            <div className="Chart-Container">
+            <div className="Chart-Container-Box">
                 {renderDayGraph}
             </div>
 
