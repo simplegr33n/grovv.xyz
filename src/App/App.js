@@ -42,6 +42,8 @@ class App extends Component {
 			threeDayData: []
 		};
 
+		this.refreshGrows = this.refreshGrows.bind(this)
+
 		this.dbHelper = new DbHelper();
 
 		this.firebase = new Firebase();
@@ -63,8 +65,7 @@ class App extends Component {
 		var tempGrow = this.state.currentGrow
 		tempGrow.config = newGrowConfig
 
-		console.log("YOYOYOYO")
-		console.log(tempGrow)
+		console.log("REFRESHOO")
 
 		this.setState({ currentGrow: tempGrow });
 	}
@@ -114,9 +115,6 @@ class App extends Component {
 		tempThreeDayData[day] = data
 
 		previousData[growDeprecate] = tempThreeDayData
-
-		// console.log("Set3Day ########################### length: " + data.length)
-		// console.log(previousData)
 
 		this.setState({ threeDayData: previousData });
 	}

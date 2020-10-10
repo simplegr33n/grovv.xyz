@@ -50,7 +50,13 @@ class GrowSettings extends Component {
 
         this.dbHelper.setGrowConfig(this.props.grow.id, this.state.config)
 
+        console.log("PROPS")
+        console.log(this.props) // losing the refreshGrows function...
+
+        // if (this.props.refreshGrows) {
         this.props.refreshGrows(this.state.config)
+        // }
+
 
         this.props.close()
 
@@ -333,7 +339,7 @@ class GrowSettings extends Component {
 
                                         {/* Doubly hid for now */}
                                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
-                                            <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={this.postConfig}>SAVE <br></br> SETTINGS</div>
+                                            <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={() => this.postConfig()}>SAVE <br></br> SETTINGS</div>
                                         </div>
                                     </div>
                                 </div>
