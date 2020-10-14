@@ -259,18 +259,20 @@ class GraphSensors extends Component {
 
         const listItems = rawContent.map((l) =>
             (() => {
-                var tIndex = this.props.activeLines.indexOf(l.dataKey)
-                var curSensor = this.props.grow.config.SENSORS[tIndex]
+                if (this.props.activeLines) {
+                    var tIndex = this.props.activeLines.indexOf(l.dataKey)
+                    var curSensor = this.props.grow.config.SENSORS[tIndex]
 
-                return (
-                    <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
-                        <div style={{ color: l.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
-                            <div>{l.name}: </div>
-                            <div style={{ fontWeight: 600 }} >{rawContent[0].payload[l.dataKey]} {curSensor.unit}</div>
+                    return (
+                        <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
+                            <div style={{ color: l.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
+                                <div>{l.name}: </div>
+                                <div style={{ fontWeight: 600 }} >{rawContent[0].payload[l.dataKey]} {curSensor.unit}</div>
+                            </div>
+                            <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
                         </div>
-                        <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
-                    </div>
-                )
+                    )
+                }
             })()
         );
 
@@ -317,6 +319,13 @@ class GraphSensors extends Component {
         const lineItems = this.props.grow.config.SENSORS.map((l) =>
             (() => {
                 if (this.props.activeLines && this.props.activeLines.includes(l.PID)) {
+                    if (l.type === "airTemp" || l.type === "waterTemp" || l.type === "co2") {
+                        return <Line yAxisId="left" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                    } else {
+                        return <Line yAxisId="right" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
+                    }
+                    // temp solition for the multi graph page
+                } else if (!this.props.activeLines) {
                     if (l.type === "airTemp" || l.type === "waterTemp" || l.type === "co2") {
                         return <Line yAxisId="left" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
                     } else {

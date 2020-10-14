@@ -1781,17 +1781,17 @@ html {
 .App-Bar-Logout-Button {
   color: #fff;
   display: flex;
-  font-size: 40px;
-  margin-top: -11px;
+  font-size: 30px;
   font-weight: bolder;
   padding-right: 2px;
   user-select: none;
   cursor: pointer;
+  margin-top: -2px;
 }
 
 .App-Bar-Logout-Button:hover {
   background-color: rgb(107, 112, 107);
-  margin-top: -9px;
+  margin-top: 0px;
 }
 
 .App-Bar-Logout-Button:active {
@@ -1924,3 +1924,28 @@ html {
 
 /* GROW SETTINGS */
 /* 2020 */
+
+/* AllGraphs */
+.AllGraphs-Graph-Item {
+  width: 100%;
+  background-color: rgb(7, 14, 6);
+  color: #fff;
+  margin: 0.5%;
+  margin-top: 0;
+  position: relative;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-shadow: 2px 2px 4px rgb(3, 14, 3);
+}
+
+.AllGraphs-Graph-Main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.AllGraphs-Graph-Name {
+  user-select: none;
+}

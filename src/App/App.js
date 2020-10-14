@@ -13,7 +13,8 @@ import SignUp from './auth/SignUp.js'
 
 // Main Content
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
-import GrowPage from './main-content/GrowPage/GrowPage.js'
+import GrowPage from './main-content/GrowPage.js'
+import AllGraphs from './main-content/AllGraphs.js'
 
 
 // Top Bar
@@ -184,6 +185,7 @@ class App extends Component {
 		}
 	}
 
+
 	setGrow = (grow) => {
 		console.log("APP Setgrow")
 		console.log(grow)
@@ -243,6 +245,8 @@ class App extends Component {
 									switch (this.state.mainContent) {
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
+										case 'graphs':
+											return <AllGraphs userGrows={this.state.userGrows} threeDayData={this.state.threeDayData} />
 										default:
 											return <GrowPage refreshGrows={this.refreshGrows} openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 									}

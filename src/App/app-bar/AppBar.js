@@ -4,6 +4,8 @@ import '../../styles/App.css';
 
 import cornerLogo from '../../assets/corner-logo.png'
 
+import { AiOutlineLineChart } from 'react-icons/ai';
+
 
 class AppBar extends Component {
 
@@ -16,6 +18,10 @@ class AppBar extends Component {
 
     openJournals = () => {
         this.props.setMainContent('journals')
+    }
+
+    openGraphs = () => {
+        this.props.setMainContent('graphs')
     }
 
     openGrows = () => {
@@ -94,6 +100,10 @@ class AppBar extends Component {
                 </div>
 
                 {renderedLiveGrowButtons}
+
+                <div className="App-Bar-Button-Grow" style={{ background: '#000' }} onClick={this.openGraphs}>
+                    <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                </div>
 
                 <div className="App-Bar-Button" onClick={this.openJournals}>
                     JRNLS

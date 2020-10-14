@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../styles/App.css';
 
-import GrowBoxItem from './GrowBoxItem'
-import GrowDetailsPage from './GrowDetailsPage'
+import GrowBoxItem from './GrowPage/GrowBoxItem'
+import GrowDetailsPage from './GrowPage/GrowDetailsPage'
 
 
 class GrowPage extends Component {
