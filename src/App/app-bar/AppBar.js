@@ -43,9 +43,15 @@ class AppBar extends Component {
 
                 var brokenName = grow.name.split(" ")
                 var acroName = ""
-                brokenName.forEach((piece) => {
-                    acroName += piece.charAt(0)
-                })
+
+                if (grow.name.length >= 4) {
+                    brokenName.forEach((piece) => {
+                        acroName += piece.charAt(0)
+                    })
+                } else {
+                    acroName = grow.name
+                }
+
 
                 return (
                     <div className="App-Bar-Button-Grow" key={grow.id} onClick={this.setGrow} data-value={grow.id}>
@@ -53,7 +59,7 @@ class AppBar extends Component {
                             {acroName}
                         </div>
                         {(() => {
-                            if (liveButtonData) {
+                            if (liveButtonData && liveButtonData.sA1_Temp) {
                                 return (
                                     <div ref={this.flowerTempRef} className="App-Bar-Button-Grow-Temp" data-value={grow.id}>
                                         {Math.round(liveButtonData.sA1_Temp * 10) / 10}°C
@@ -64,7 +70,7 @@ class AppBar extends Component {
 
 
                         {(() => {
-                            if (liveButtonData) {
+                            if (liveButtonData && liveButtonData.sA1_Humi) {
                                 return (
                                     <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity" data-value={grow.id}>
                                         {Math.round(liveButtonData.sA1_Humi * 10) / 10}%

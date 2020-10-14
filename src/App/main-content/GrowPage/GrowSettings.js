@@ -7,6 +7,7 @@ import DbHelper from '../../_utils/DbHelper.js'
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
 import co2svg from '../../../assets/co2svg.svg'
+import tvocSvg from '../../../assets/tvoc-svg.svg'
 
 
 
@@ -189,6 +190,8 @@ class GrowSettings extends Component {
                                 return (<WiCloudUp style={{ fontSize: '1.3em', color: sensor.color }} />)
                             } else if (sensor.type === "co2") {
                                 return (<img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '80%', color: sensor.color }} />)
+                            } else if (sensor.type === "tvoc") {
+                                return (<img src={tvocSvg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '80%', color: sensor.color }} />)
                             } else {
                                 return (<div />)
                             }
@@ -217,6 +220,7 @@ class GrowSettings extends Component {
                                     <option value="airTemp">airTemp</option>
                                     <option value="waterTemp">waterTemp</option>
                                     <option value="humidity">humidity</option>
+                                    <option value="co2">CO&#8322;</option>
                                     <option value="fan">fan</option>
                                     <option value="humidifier">humidifier</option>
                                 </select>
@@ -295,25 +299,32 @@ class GrowSettings extends Component {
                                     <div id="Grow-Details-Config-Scroll" style={{ overflowY: 'scroll' }}>
 
                                         {/* LIGHTS */}
-                                        <div className="Config-Item-Header-Text">LIGHTS</div>
+                                        {(() => {
+                                            if (this.state.config.LIGHTS) {
+                                                return (
+                                                    <div>
+                                                        <div className="Config-Item-Header-Text">LIGHTS</div>
 
-                                        <div className="Config-Settings-Field" style={{ backgroundColor: '#e8e81e' }}>
-                                            <div className="Settings-Data-Line">
-                                                <div>on <TimePicker
-                                                    clearIcon={null}
-                                                    id="lights_on"
-                                                    value={this.state.config.LIGHTS.on}
-                                                    onChange={this.handleLightsOnChange.bind(this)} />
-                                                </div>
-                                                <div>off <TimePicker
-                                                    clearIcon={null}
-                                                    id="lights_off"
-                                                    value={this.state.config.LIGHTS.off}
-                                                    onChange={this.handleLightsOffChange.bind(this)} />
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                                        <div className="Config-Settings-Field" style={{ backgroundColor: '#e8e81e' }}>
+                                                            <div className="Settings-Data-Line">
+                                                                <div>on <TimePicker
+                                                                    clearIcon={null}
+                                                                    id="lights_on"
+                                                                    value={this.state.config.LIGHTS.on}
+                                                                    onChange={this.handleLightsOnChange.bind(this)} />
+                                                                </div>
+                                                                <div>off <TimePicker
+                                                                    clearIcon={null}
+                                                                    id="lights_off"
+                                                                    value={this.state.config.LIGHTS.off}
+                                                                    onChange={this.handleLightsOffChange.bind(this)} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        })()}
                                         {/* SENSORS */}
                                         <div className="Config-Item-Header-Text">SENSORS</div>
 

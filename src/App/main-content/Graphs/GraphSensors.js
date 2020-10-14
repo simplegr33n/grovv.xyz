@@ -71,6 +71,10 @@ class GraphSensors extends Component {
     }
 
     generateTickSourceArrays = () => {
+        if (!this.props.grow.config.LIGHTS) {
+            return;
+        }
+
         var m = moment(new Date())
         m.subtract(3, 'days')
 
@@ -313,7 +317,7 @@ class GraphSensors extends Component {
         const lineItems = this.props.grow.config.SENSORS.map((l) =>
             (() => {
                 if (this.props.activeLines && this.props.activeLines.includes(l.PID)) {
-                    if (l.type === "airTemp" || l.type === "waterTemp") {
+                    if (l.type === "airTemp" || l.type === "waterTemp" || l.type === "co2") {
                         return <Line yAxisId="left" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
                     } else {
                         return <Line yAxisId="right" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
