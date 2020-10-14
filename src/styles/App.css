@@ -1852,8 +1852,8 @@ html {
   flex-direction: column;
   text-align: bottom;
   font-size: 0.6em;
-  width: 60px;
-  max-width: 60px;
+  width: 88px;
+  max-width: 88px;
 }
 
 .Grow-Details-Main-Data-Time {
@@ -1879,12 +1879,12 @@ html {
   font-weight: bold;
   background-color: #000;
   color: #a9a9a9;
-  font-size: 0.5em;
+  font-size: 0.6em;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60px;
-  max-width: 60px;
+  width: 64px;
+  max-width: 64px;
 }
 
 .Grow-Details-Main-Data-Current-Data {

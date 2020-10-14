@@ -439,10 +439,10 @@ class GrowDetailsPage extends Component {
                                         <div id="Grow-Details-Main-Data-Display">
                                             <div className="Grow-Details-Headers-Display-Row">
                                                 <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', width: '120px', maxWidth: '120px' }}></div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '86px', maxWidth: '86px' }}></div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h~</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h&#8593;</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '60px', maxWidth: '60px' }}>24h&#8595;</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '88px', maxWidth: '88px' }}></div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h~</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h&#8593;</div>
+                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h&#8595;</div>
                                             </div>
 
                                             {sensorInfoRows}

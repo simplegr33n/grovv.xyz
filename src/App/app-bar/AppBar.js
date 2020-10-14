@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import '../../styles/App.css';
 
+import cornerLogo from '../../assets/corner-logo.png'
+
 
 class AppBar extends Component {
 
@@ -88,7 +90,7 @@ class AppBar extends Component {
 
             <div id="App-Bar" >
                 <div id="App-Bar-Logo" onClick={this.openGrows}>
-                    grovv
+                    <img src={cornerLogo} alt="App Logo" style={{ maxWidth: "100px" }} />
                 </div>
 
                 {renderedLiveGrowButtons}
