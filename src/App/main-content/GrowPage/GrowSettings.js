@@ -6,6 +6,9 @@ import TimePicker from 'react-time-picker'
 import DbHelper from '../../_utils/DbHelper.js'
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
+import co2svg from '../../../assets/co2svg.svg'
+
+
 
 class GrowSettings extends Component {
 
@@ -171,7 +174,7 @@ class GrowSettings extends Component {
             <div key={sensor.PID} className="Config-Settings-Field" style={{ backgroundColor: '#3d7a80' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
 
-                    <div style={{ userSelect: 'none', fontsize: '0.6em', color: "#FFF", background: '#131B14' }} >
+                    <div style={{ userSelect: 'none', fontsize: '0.6em', color: "#FFF", background: '#131B14', maxHeight: '30px', height: '30px' }} >
 
                         {(() => {
                             if (sensor.type === "airTemp") {
@@ -184,11 +187,14 @@ class GrowSettings extends Component {
                                 return (<WiHurricane style={{ fontSize: '1.3em', color: sensor.color }} />)
                             } else if (sensor.type === "humidifier") {
                                 return (<WiCloudUp style={{ fontSize: '1.3em', color: sensor.color }} />)
+                            } else if (sensor.type === "co2") {
+                                return (<img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '80%', color: sensor.color }} />)
                             } else {
                                 return (<div />)
                             }
                         })()}
                         {sensor.PID}
+
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>

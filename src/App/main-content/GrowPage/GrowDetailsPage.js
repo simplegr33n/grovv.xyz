@@ -11,6 +11,7 @@ import moment from 'moment'
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
 import { BsGearFill } from 'react-icons/bs';
+import co2svg from '../../../assets/co2svg.svg'
 
 
 
@@ -266,6 +267,8 @@ class GrowDetailsPage extends Component {
                                     return <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
                                 } else if (curSensor.type === "waterTemp") {
                                     return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
+                                } else if (curSensor.type === "co2") {
+                                    return <img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
                                 } else {
                                     return <div />
                                 }
