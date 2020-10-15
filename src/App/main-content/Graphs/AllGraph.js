@@ -30,6 +30,20 @@ class AllGraph extends Component {
 
     componentDidMount() {
         this._ismounted = true;
+
+        if (this.props.user) {
+            if (this.props.user.PREFS) {
+                if (this.props.user.PREFS.GRAPHS) {
+                    if (this.props.user.PREFS.GRAPHS.AllGraph) {
+                        if (this.props.user.PREFS.GRAPHS.AllGraph.timeWindow && (this.props.user.PREFS.GRAPHS.AllGraph.timeWindow !== this.state.displayWindow)) {
+                            this.setState({
+                                displayWindow: this.props.user.PREFS.GRAPHS.AllGraph.timeWindow
+                            });
+                        }
+                    }
+                }
+            }
+        }
     }
 
     componentWillUnmount() {
@@ -142,6 +156,14 @@ class AllGraph extends Component {
     }
 
 
+    toggleWindow = (e) => {
+        this.setState({ displayWindow: e.target.value })
+        this.processData(e.target.value)
+        this.props.toggleWindow(e.target.value)
+    }
+
+
+
     renderTooltip = (props) => {
         var rawContent = props.payload
         if (rawContent === null || rawContent.length === 0) {
@@ -154,37 +176,44 @@ class AllGraph extends Component {
             var tID = curSensor.name.split("^")[1]
             var tPID = curSensor.name.split("^")[3]
 
-            if (this.props.activeLines[tID].includes(curSensor.dataKey)) {
-
-                var grow = null
-                this.props.userGrows.forEach((g) => {
-                    if (g.id === tID) {
-                        grow = g
-                        return
-                    } else {
-                        return
+            if (this.props.user) {
+                if (this.props.user.PREFS) {
+                    if (this.props.user.PREFS.GRAPHS) {
+                        if (this.props.user.PREFS.GRAPHS.AllGraph) {
+                            if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[curSensor.dataKey] === false)) {
+                                return
+                            }
+                        }
                     }
-                })
-
-                var sensor = null
-                grow.config.SENSORS.forEach((s) => {
-                    if (s.PID === tPID) {
-                        sensor = s
-                    }
-                })
-
-                return (
-                    <div className="AllGraph-Tooltip-Data" key={curSensor.dataKey} style={{ color: sensor.color, paddingLeft: '2px', paddingRight: '2px' }}>
-                        <div style={{ color: sensor.color, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
-                            <div>{sensor.name}: </div>
-                            <div style={{ fontWeight: 800 }} >{curSensor.payload[curSensor.dataKey]} {sensor.unit}</div>
-                        </div>
-                        <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
-                    </div>
-                )
+                }
             }
 
+            var grow = null
+            this.props.userGrows.forEach((g) => {
+                if (g.id === tID) {
+                    grow = g
+                    return
+                } else {
+                    return
+                }
+            })
 
+            var sensor = null
+            grow.config.SENSORS.forEach((s) => {
+                if (s.PID === tPID) {
+                    sensor = s
+                }
+            })
+
+            return (
+                <div className="AllGraph-Tooltip-Data" key={curSensor.dataKey} style={{ color: sensor.color, paddingLeft: '2px', paddingRight: '2px' }}>
+                    <div style={{ color: sensor.color, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
+                        <div>{sensor.name}: </div>
+                        <div style={{ fontWeight: 800 }} >{curSensor.payload[curSensor.dataKey]} {sensor.unit}</div>
+                    </div>
+                    <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
+                </div>
+            )
         });
 
         return (
@@ -199,37 +228,36 @@ class AllGraph extends Component {
     }
 
 
-    toggleWindow = (e) => {
-        console.log("Change " + e.target.id + ": " + e.target.value)
-
-        this.setState({ displayWindow: e.target.value })
-        this.processData(e.target.value)
-    }
-
-
-
     render() {
 
         if (this.state.combinedProcessedData) {
             var lineItems = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor) => {
                 var dataBlob = sensor.name + "^" + grow.id + "^" + sensor.unit + "^" + sensor.PID
-                var dataKey = sensor.PID + "^" + grow.id
                 var lineKey = sensor.PID + "^" + grow.id
 
-                if (!this.props.activeLines[grow.id].includes(lineKey)) {
-                    return
+                if (this.props.user) {
+                    if (this.props.user.PREFS) {
+                        if (this.props.user.PREFS.GRAPHS) {
+                            if (this.props.user.PREFS.GRAPHS.AllGraph) {
+                                if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[lineKey] === false)) {
+                                    return
+                                }
+                            }
+                        }
+                    }
                 }
 
+
                 if (sensor.type === "airTemp" || sensor.type === "waterTemp") {
-                    return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.type === "humidifier" || sensor.type === "fan" || sensor.type === "humidity") {
-                    return <Line yAxisId="percent" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="percent" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.unit === "ᵖᵖᵐ") {
-                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.unit === "ᵖᵖᵇ") {
-                    return <Line yAxisId="ppb" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="ppb" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else {
-                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 }
             }));
 
@@ -254,7 +282,7 @@ class AllGraph extends Component {
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="temperature" orientation="left" domain={[, 24]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="temperature" orientation="left" domain={[24]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#false" }} />
                         <YAxis yAxisId="ppb" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "false" }} />
@@ -274,7 +302,7 @@ class AllGraph extends Component {
                 {/* Time Scale Select... */}
                 <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '2%' }}>
 
-                    <select onChange={this.toggleWindow} id="AllGraph-Time-Scale" defaultValue={this.state.displayWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+                    <select onChange={this.toggleWindow} id="AllGraph-Time-Scale" defaultValue={this.props.user.PREFS.GRAPHS.AllGraph.timeWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;h</option>
                         <option value={10800000}>3h</option>
                         <option value={43200000}>12h</option>

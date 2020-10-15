@@ -66,7 +66,6 @@ class App extends Component {
 	setFirebaseUserPrefs = (u) => {
 		this.setState({ user: u });
 
-
 		console.log("temp user GONNASET", u)
 
 		this.dbHelper.setUser(u)

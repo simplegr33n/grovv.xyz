@@ -3,7 +3,7 @@ import '../../styles/App.css';
 
 import AllGraph from './Graphs/AllGraph'
 
-import moment from 'moment'
+// import moment from 'moment' // for datetime...
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
 import co2svg from '../../assets/co2svg.svg'
@@ -33,7 +33,7 @@ class AllGraphs extends Component {
             var activeLines = []
             var growIDs = []
 
-            for (const [key, value] of Object.entries(this.props.userGrows)) {
+            for (const [key] of Object.entries(this.props.userGrows)) {
 
                 var grow = this.props.userGrows[key]
 
@@ -53,7 +53,6 @@ class AllGraphs extends Component {
                                 if (this.props.user.PREFS.GRAPHS.AllGraph) {
                                     if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors) {
                                         if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[tempIdentifier] === false) {
-                                            console.log('HIDING:', tempIdentifier)
                                             return
                                         }
                                     }
@@ -127,28 +126,8 @@ class AllGraphs extends Component {
     toggleLine = (e) => {
         var data = e.currentTarget.getAttribute('data-value')
 
-        var tempActiveLines = this.state.activeLines[data.split("^")[1]]
-
-        if (tempActiveLines.includes(data)) {
-            const index = tempActiveLines.indexOf(data);
-            if (index > -1) {
-                tempActiveLines.splice(index, 1);
-            }
-        } else {
-            tempActiveLines[tempActiveLines.length] = data
-        }
-
-        var tempAllActive = this.state.activeLines
-        tempAllActive[data.split("^")[1]] = tempActiveLines
-
-        this.setState({
-            activeLines: tempAllActive
-        });
-
         // update firebase data
         var tempUser = this.props.user
-        console.log("TEMP USER", tempUser)
-
 
         if (tempUser.PREFS) {
             if (tempUser.PREFS.GRAPHS) {
@@ -156,21 +135,26 @@ class AllGraphs extends Component {
                     if (tempUser.PREFS.GRAPHS.AllGraph.showSensors) {
                         if (tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] === false) {
                             tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = true
-                            console.log("TEMP USER T'd", tempUser)
-                            this.setUserLinePref(tempUser)
+                            this.setUserPrefs(tempUser)
                             return
                         }
                     }
                 }
             }
         }
-        console.log("TEMP USER F'd", tempUser)
         tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = false
-        this.setUserLinePref(tempUser)
+        this.setUserPrefs(tempUser)
 
     }
 
-    setUserLinePref = (data) => {
+    toggleWindow = (tWindow) => {
+        // update firebase data
+        var tempUser = this.props.user
+        tempUser.PREFS.GRAPHS.AllGraph.timeWindow = tWindow
+        this.setUserPrefs(tempUser)
+    }
+
+    setUserPrefs = (data) => {
         this.props.setFirebaseUser(data)
     }
 
@@ -184,18 +168,26 @@ class AllGraphs extends Component {
                     <div className="AllGraph-Main-Data-Display-Row" key={sensor.PID}>
 
                         {(() => {
+
                             var pid = sensor.PID
                             var tIndex = key
                             var curSensor = grow.config.SENSORS[tIndex]
-                            var setOpacity = 0.3
-                            var setPaddingTop = '3px'
                             var dataVal = pid + "^" + grow.id
 
+                            var setOpacity = 1
+                            var setPaddingTop = '4px'
 
-
-                            if (!this.state.activeLines || (this.state.activeLines[grow.id] && this.state.activeLines[grow.id].includes(dataVal))) {
-                                setOpacity = 1
-                                setPaddingTop = '4px'
+                            if (this.props.user) {
+                                if (this.props.user.PREFS) {
+                                    if (this.props.user.PREFS.GRAPHS) {
+                                        if (this.props.user.PREFS.GRAPHS.AllGraph) {
+                                            if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[dataVal] === false)) {
+                                                setOpacity = 0.3
+                                                setPaddingTop = '3px'
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             return (
@@ -270,7 +262,7 @@ class AllGraphs extends Component {
                         <div className="AllGraphs-Graph-Main">
                             <div className="AllGraphs-Info">
                                 <div className="Grow-Box-Info-Graph-Area" >
-                                    <AllGraph parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} activeLines={this.state.activeLines} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} />
+                                    <AllGraph parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.props.user} />
                                 </div>
                             </div>
                         </div>
