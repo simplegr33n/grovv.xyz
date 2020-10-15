@@ -28,7 +28,7 @@ class AllGraphs extends Component {
     componentDidMount = () => {
         this._ismounted = true;
 
-        if (this.props.userGrows) {
+        if (this.props.userGrows && this.props.user) {
 
             var activeLines = []
             var growIDs = []
@@ -41,10 +41,28 @@ class AllGraphs extends Component {
                 var growActiveLines = []
                 this.props.userGrows[key].config.SENSORS.forEach((sensor, key) => {
                     if (growActiveLines[key] !== sensor.PID) {
-                        growActiveLines[key] = sensor.PID + "^" + grow.id
                         if (!growIDs.includes(grow.id)) {
                             growIDs[growIDs.length] = grow.id
                         }
+
+                        var tempIdentifier = sensor.PID + "^" + grow.id
+
+
+                        if (this.props.user.PREFS) {
+                            if (this.props.user.PREFS.GRAPHS) {
+                                if (this.props.user.PREFS.GRAPHS.AllGraph) {
+                                    if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors) {
+                                        if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[tempIdentifier] === false) {
+                                            console.log('HIDING:', tempIdentifier)
+                                            return
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        growActiveLines[growActiveLines.length] = tempIdentifier
+
                     }
                 });
 
@@ -127,6 +145,33 @@ class AllGraphs extends Component {
             activeLines: tempAllActive
         });
 
+        // update firebase data
+        var tempUser = this.props.user
+        console.log("TEMP USER", tempUser)
+
+
+        if (tempUser.PREFS) {
+            if (tempUser.PREFS.GRAPHS) {
+                if (tempUser.PREFS.GRAPHS.AllGraph) {
+                    if (tempUser.PREFS.GRAPHS.AllGraph.showSensors) {
+                        if (tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] === false) {
+                            tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = true
+                            console.log("TEMP USER T'd", tempUser)
+                            this.setUserLinePref(tempUser)
+                            return
+                        }
+                    }
+                }
+            }
+        }
+        console.log("TEMP USER F'd", tempUser)
+        tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = false
+        this.setUserLinePref(tempUser)
+
+    }
+
+    setUserLinePref = (data) => {
+        this.props.setFirebaseUser(data)
     }
 
 
@@ -148,13 +193,13 @@ class AllGraphs extends Component {
 
 
 
-                            if (!this.state.activeLines || this.state.activeLines[grow.id].includes(dataVal)) {
+                            if (!this.state.activeLines || (this.state.activeLines[grow.id] && this.state.activeLines[grow.id].includes(dataVal))) {
                                 setOpacity = 1
                                 setPaddingTop = '4px'
                             }
 
                             return (
-                                <div data-value={dataVal} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: grow.config.SENSORS[tIndex].color }}  >
+                                <div data-value={dataVal} key={pid} onClick={this.toggleLine} style={{ width: '110px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: grow.config.SENSORS[tIndex].color }}  >
                                     <div style={{ paddingTop: setPaddingTop }} > {curSensor.name}</div>
 
                                     {(() => {

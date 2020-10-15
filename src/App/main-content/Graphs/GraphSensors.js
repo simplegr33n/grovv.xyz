@@ -358,7 +358,7 @@ class GraphSensors extends Component {
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="left" orientation="left" domain={[5, 24]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="left" orientation="left" domain={[, 24]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="right" hide={true} orientation="right" tick={{ fill: "#B3C2B5" }} />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>

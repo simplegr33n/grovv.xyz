@@ -7,9 +7,42 @@ class DbHelper {
 
         this.firebase = new Firebase();
 
-        this.userID = 'wR4QKyZ77mho1fL0FQWSMBQ170S2'
+        this.userID = 'wR4QKyZ77mho1fL0FQWSMBQ170S2' // Hardcoded to bradyn's for now
 
     }
+
+    // ............ //
+    //    USER      //
+    // ............ //
+    // Get Reset Value
+    getUser(UID, setData) {
+
+        // Config data isResetting in firebase 
+        var ref = this.firebase.db.ref().child('users').child(UID)
+
+        ref.on('value', (snapshot) => {
+
+            if (snapshot.val() === null) {
+                setData(false);
+                return;
+            }
+
+            setData(snapshot.val())
+
+
+        }, function (errorObject) {
+            console.log("get user failed: " + errorObject.code);
+        });
+    }
+
+
+    // Set Grow Config in firebase
+    setUser(u) {
+        var ref = this.firebase.db.ref().child('users').child(u.uid)
+        console.log("DBU", u)
+        ref.set(u)
+    }
+
 
 
     // .......... //

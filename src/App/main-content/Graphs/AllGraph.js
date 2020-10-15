@@ -254,7 +254,7 @@ class AllGraph extends Component {
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="temperature" orientation="left" domain={[5, 24]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="temperature" orientation="left" domain={[, 24]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#false" }} />
                         <YAxis yAxisId="ppb" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "false" }} />
