@@ -27,8 +27,7 @@ class DbHelper {
 
             ref.on('value', (snapshot) => {
 
-                console.log(grow.id + " IS ")
-                console.log(snapshot.val())
+                console.log(grow.id + " LIVE: ", snapshot.val())
 
                 setData(grow.id, snapshot.val())
             }, function (errorObject) {
@@ -367,8 +366,7 @@ class DbHelper {
                 journalsList.push(child.val())
             });
 
-            console.log("Journals List:")
-            console.log(journalsList)
+            console.log("Journals List: ", journalsList)
 
             journalsList.sort((a, b) => (a.updatedAt < b.updatedAt) ? 1 : -1)
 

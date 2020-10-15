@@ -1949,3 +1949,38 @@ html {
 .AllGraphs-Graph-Name {
   user-select: none;
 }
+
+.AllGraph-Tooltip {
+  width: 300px;
+  background-color: rgb(10, 10, 10);
+  color: rgb(225, 231, 223);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  font-size: 0.75em;
+  max-height: 300px;
+}
+
+.AllGraph-Tooltip-Data {
+  font-size: 0.8em;
+  font-weight: 400;
+  max-width: 150px;
+}
+
+#All-Graphs-Buttons {
+  font-size: 0.7em;
+  max-height: 60vh;
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.AllGraph-Main-Data-Display-Row {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 30px;
+  max-height: 30px;
+}

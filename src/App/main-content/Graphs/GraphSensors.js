@@ -335,10 +335,12 @@ class GraphSensors extends Component {
             })()
         );
 
+        console.log("lineItems", lineItems)
+
         var renderDayGraph = null
         if (this.state.processedData && this.state.processedData[0]) {
             if (this.props.parentSize) {
-                var xSize = Math.floor(this.props.parentSize[0] * 0.95)
+                var xSize = Math.floor(this.props.parentSize[0] * 0.91)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderDayGraph = (
@@ -356,8 +358,8 @@ class GraphSensors extends Component {
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="left" orientation="left" domain={[21, 24]} tick={{ fill: "#B3C2B5" }} />
-                        <YAxis yAxisId="right" orientation="right" tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="left" orientation="left" domain={[5, 24]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="right" hide={true} orientation="right" tick={{ fill: "#B3C2B5" }} />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
                 );

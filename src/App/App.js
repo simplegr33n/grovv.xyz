@@ -65,8 +65,7 @@ class App extends Component {
 	}
 
 	setUserGrows = (userGrows) => {
-		console.log("USER GROWS!")
-		console.log(userGrows)
+		console.log("USER GROWS!", userGrows)
 
 		userGrows.forEach((grow) => {
 			this.dbHelper.getThreeDayData(grow.id, this.setThreeDayData)
@@ -246,7 +245,7 @@ class App extends Component {
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
 										case 'graphs':
-											return <AllGraphs userGrows={this.state.userGrows} threeDayData={this.state.threeDayData} />
+											return <AllGraphs userGrows={this.state.userGrows} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 										default:
 											return <GrowPage refreshGrows={this.refreshGrows} openMainPage={this.openMainPageFromExternal} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 									}
