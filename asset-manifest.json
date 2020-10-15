@@ -1,5 +1,5 @@
 {
-  "main.css": "/grovv.xyz/static/css/main.cf01f9ad.chunk.css",
+  "main.css": "/grovv.xyz/static/css/main.bf1309a9.chunk.css",
   "main.js": "/grovv.xyz/static/js/main.ee1b9b67.chunk.js",
   "main.js.map": "/grovv.xyz/static/js/main.ee1b9b67.chunk.js.map",
   "runtime~main.js": "/grovv.xyz/static/js/runtime~main.5f921949.js",
@@ -8,10 +8,10 @@
   "static/js/2.a42f0f47.chunk.js": "/grovv.xyz/static/js/2.a42f0f47.chunk.js",
   "static/js/2.a42f0f47.chunk.js.map": "/grovv.xyz/static/js/2.a42f0f47.chunk.js.map",
   "index.html": "/grovv.xyz/index.html",
-  "precache-manifest.dc8351977bb7cdaa1f6166873f75c67b.js": "/grovv.xyz/precache-manifest.dc8351977bb7cdaa1f6166873f75c67b.js",
+  "precache-manifest.7dd0f544b434783402c435005bf1cafb.js": "/grovv.xyz/precache-manifest.7dd0f544b434783402c435005bf1cafb.js",
   "service-worker.js": "/grovv.xyz/service-worker.js",
   "static/css/2.0ff7e0ec.chunk.css.map": "/grovv.xyz/static/css/2.0ff7e0ec.chunk.css.map",
-  "static/css/main.cf01f9ad.chunk.css.map": "/grovv.xyz/static/css/main.cf01f9ad.chunk.css.map",
+  "static/css/main.bf1309a9.chunk.css.map": "/grovv.xyz/static/css/main.bf1309a9.chunk.css.map",
   "static/media/co2svg.svg": "/grovv.xyz/static/media/co2svg.fc43d345.svg",
   "static/media/corner-logo.png": "/grovv.xyz/static/media/corner-logo.5ece3763.png",
   "static/media/tvoc-svg.svg": "/grovv.xyz/static/media/tvoc-svg.86ee762c.svg"
