@@ -263,6 +263,7 @@ class GraphSensors extends Component {
                     var tIndex = this.props.activeLines.indexOf(l.dataKey)
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
 
+
                     return (
                         <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
                             <div style={{ color: l.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
@@ -335,7 +336,6 @@ class GraphSensors extends Component {
             })()
         );
 
-        console.log("lineItems", lineItems)
 
         var renderDayGraph = null
         if (this.state.processedData && this.state.processedData[0]) {

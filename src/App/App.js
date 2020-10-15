@@ -186,8 +186,7 @@ class App extends Component {
 
 
 	setGrow = (grow) => {
-		console.log("APP Setgrow")
-		console.log(grow)
+		console.log("APP Setgrow", grow)
 		this.setState({
 			growID: null,
 			currentGrow: grow
@@ -195,8 +194,7 @@ class App extends Component {
 	}
 
 	setJournalID = (journalID) => {
-		console.log("APP SetJournalID")
-		console.log(journalID)
+		console.log("APP SetJournalID", journalID)
 		this.setState({
 			mainContent: 'journals',
 			journalID: journalID

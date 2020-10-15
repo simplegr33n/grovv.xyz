@@ -55,7 +55,6 @@ class AllGraph extends Component {
                 }
                 valChanged = true
 
-                console.log("diff updating!", this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length)
                 newArrayLengths[gwID] = this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length
 
                 var subConcatData = []
@@ -90,6 +89,7 @@ class AllGraph extends Component {
 
         var now = new Date().getTime()
         var processedData = []
+        var combinedProcessedData = []
 
         //forEach
         this.props.growIDs.forEach((id) => {
@@ -98,8 +98,11 @@ class AllGraph extends Component {
             }
 
             var subProcessedData = []
+
             var i = -1
             superData[id].forEach((dataPoint) => {
+
+                var subCombined = {}
 
                 var reducerValue = Math.round(this.state.displayWindow / 10800000)
                 if (reducerValue < 1) {
@@ -111,6 +114,17 @@ class AllGraph extends Component {
 
                     if (i === 0 || i % reducerValue === 0) {
                         var processedPoint = dataPoint
+
+                        for (const [key, value] of Object.entries(processedPoint)) {
+                            if (key !== "time") {
+                                subCombined[key + "^" + id] = value
+                            } else {
+                                subCombined.time = value
+                            }
+                        }
+
+                        combinedProcessedData[combinedProcessedData.length] = subCombined
+
                         subProcessedData[subProcessedData.length] = processedPoint
                     }
                 }
@@ -119,10 +133,12 @@ class AllGraph extends Component {
             processedData[id] = subProcessedData
         })
 
+        combinedProcessedData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+
         this.setState({
+            combinedProcessedData: combinedProcessedData,
             processedData: processedData
         });
-
     }
 
 
@@ -134,32 +150,48 @@ class AllGraph extends Component {
 
         var readableTime = moment(props.payload[0].payload.time).format('ddd - HH:mm')
 
-        const listItems = rawContent.map((curSensor) =>
-            (() => {
+        const listItems = rawContent.map((curSensor) => {
+            var tID = curSensor.name.split("^")[1]
+            var tPID = curSensor.name.split("^")[3]
 
-                if (this.props.activeLines[curSensor.name.split("^")[1]].includes(curSensor.name.split("^")[3])) {
+            if (this.props.activeLines[tID].includes(curSensor.dataKey)) {
 
-                    console.log("OHHHYEAH!", this.props.activeLines[curSensor.name.split("^")[1]])
+                var grow = null
+                this.props.userGrows.forEach((g) => {
+                    if (g.id === tID) {
+                        grow = g
+                        return
+                    } else {
+                        return
+                    }
+                })
 
-                    return (
-                        <div className="AllGraph-Tooltip-Data" key={curSensor.name} style={{ color: curSensor.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
-                            <div style={{ color: curSensor.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
-                                <div>{curSensor.name.split("^")[0]}: </div>
-                                <div style={{ fontWeight: 600 }} >{rawContent[0].payload[curSensor.dataKey]} {curSensor.unit}</div>
-                            </div>
-                            <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
+                var sensor = null
+                grow.config.SENSORS.forEach((s) => {
+                    if (s.PID === tPID) {
+                        sensor = s
+                    }
+                })
+
+                return (
+                    <div className="AllGraph-Tooltip-Data" key={curSensor.dataKey} style={{ color: sensor.color, paddingLeft: '2px', paddingRight: '2px' }}>
+                        <div style={{ color: sensor.color, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
+                            <div>{sensor.name}: </div>
+                            <div style={{ fontWeight: 800 }} >{curSensor.payload[curSensor.dataKey]} {sensor.unit}</div>
                         </div>
-                    )
-                }
-            })()
-        );
+                        <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
+                    </div>
+                )
+            }
 
+
+        });
 
         return (
-            <div className="AllGraph-Tooltip">
+            <div className="AllGraph-Tooltip" >
                 <div>{readableTime}</div>
 
-                {listItems}
+                { listItems}
 
             </div>
 
@@ -178,37 +210,37 @@ class AllGraph extends Component {
 
     render() {
 
-        if (this.state.processedData) {
+        if (this.state.combinedProcessedData) {
             var lineItems = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor) => {
                 var dataBlob = sensor.name + "^" + grow.id + "^" + sensor.unit + "^" + sensor.PID
-                var dataKey = sensor.PID
-                var key = sensor.PID + "^" + grow.id
+                var dataKey = sensor.PID + "^" + grow.id
+                var lineKey = sensor.PID + "^" + grow.id
 
-                if (!this.props.activeLines[grow.id].includes(sensor.PID)) {
+                if (!this.props.activeLines[grow.id].includes(lineKey)) {
                     return
                 }
 
                 if (sensor.type === "airTemp" || sensor.type === "waterTemp") {
-                    return <Line yAxisId="temperature" type="monotone" data={this.state.processedData[grow.id]} name={dataBlob} dataKey={dataKey} key={key} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.type === "humidifier" || sensor.type === "fan" || sensor.type === "humidity") {
-                    return <Line yAxisId="percent" type="monotone" data={this.state.processedData[grow.id]} name={dataBlob} dataKey={dataKey} key={key} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                } else if (sensor.type === "ppm") {
-                    return <Line yAxisId="ppm" type="monotone" data={this.state.processedData[grow.id]} name={dataBlob} dataKey={dataKey} key={key} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                } else if (sensor.unit === "ppb") {
-                    return <Line yAxisId="ppb" type="monotone" data={this.state.processedData[grow.id]} name={dataBlob} dataKey={dataKey} key={key} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="percent" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else if (sensor.unit === "ᵖᵖᵐ") {
+                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else if (sensor.unit === "ᵖᵖᵇ") {
+                    return <Line yAxisId="ppb" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else {
-                    return <Line yAxisId="ppm" type="monotone" data={this.state.processedData[grow.id]} name={dataBlob} dataKey={dataKey} key={key} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={dataKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 }
             }));
 
 
             var renderDayGraph = null
             if (this.props.parentSize) {
-                var xSize = Math.floor(this.props.parentSize[0] * 0.92)
+                var xSize = Math.floor(this.props.parentSize[0] * 0.9)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderDayGraph = (
-                    <LineChart width={xSize} height={ySize}>
+                    <LineChart width={xSize} height={ySize} data={this.state.combinedProcessedData}>
 
                         {lineItems}
 

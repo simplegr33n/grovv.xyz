@@ -29,14 +29,11 @@ class AllGraphs extends Component {
         this._ismounted = true;
 
         if (this.props.userGrows) {
-            console.log("USER GROOOWW", this.props.userGrows)
 
             var activeLines = []
             var growIDs = []
 
             for (const [key, value] of Object.entries(this.props.userGrows)) {
-                console.log(key, value);
-                console.log("ingrow", this.props.userGrows[key])
 
                 var grow = this.props.userGrows[key]
 
@@ -44,7 +41,7 @@ class AllGraphs extends Component {
                 var growActiveLines = []
                 this.props.userGrows[key].config.SENSORS.forEach((sensor, key) => {
                     if (growActiveLines[key] !== sensor.PID) {
-                        growActiveLines[key] = sensor.PID
+                        growActiveLines[key] = sensor.PID + "^" + grow.id
                         if (!growIDs.includes(grow.id)) {
                             growIDs[growIDs.length] = grow.id
                         }
@@ -53,8 +50,6 @@ class AllGraphs extends Component {
 
                 activeLines[grow.id] = growActiveLines
             }
-
-            console.log("activeLines", activeLines)
 
 
             this.setState({
@@ -114,20 +109,15 @@ class AllGraphs extends Component {
     toggleLine = (e) => {
         var data = e.currentTarget.getAttribute('data-value')
 
-        console.log("DATAVAL", e)
-        console.log("togglepid", data)
-        console.log("yommer", this.state.activeLines)
-
         var tempActiveLines = this.state.activeLines[data.split("^")[1]]
-        console.log("tempActiveLines", tempActiveLines)
-        if (tempActiveLines.includes(data.split("^")[0])) {
-            console.log("IN THERE")
-            const index = tempActiveLines.indexOf(data.split("^")[0]);
+
+        if (tempActiveLines.includes(data)) {
+            const index = tempActiveLines.indexOf(data);
             if (index > -1) {
                 tempActiveLines.splice(index, 1);
             }
         } else {
-            tempActiveLines[tempActiveLines.length] = data.split("^")[0]
+            tempActiveLines[tempActiveLines.length] = data
         }
 
         var tempAllActive = this.state.activeLines
@@ -142,87 +132,91 @@ class AllGraphs extends Component {
 
     render() {
 
-        // var lineItems = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor) => {
-        const sensorInfoRows = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor, key) => {
-            return (
-                <div className="AllGraph-Main-Data-Display-Row" key={sensor.PID}>
+        var sensorInfoRows = []
+        if (this.state.activeLines) {
+            sensorInfoRows = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor, key) => {
+                return (
+                    <div className="AllGraph-Main-Data-Display-Row" key={sensor.PID}>
 
-                    {(() => {
-                        var pid = sensor.PID
-                        var tIndex = key
-                        var curSensor = grow.config.SENSORS[tIndex]
-                        var setOpacity = 0.3
-                        var setPaddingTop = '3px'
-                        var dataVal = pid + "^" + grow.id
+                        {(() => {
+                            var pid = sensor.PID
+                            var tIndex = key
+                            var curSensor = grow.config.SENSORS[tIndex]
+                            var setOpacity = 0.3
+                            var setPaddingTop = '3px'
+                            var dataVal = pid + "^" + grow.id
 
-                        if (!this.state.activeLines || this.state.activeLines[grow.id].includes(sensor.PID)) {
-                            setOpacity = 1
-                            setPaddingTop = '4px'
-                        }
 
-                        return (
-                            <div data-value={dataVal} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: grow.config.SENSORS[tIndex].color }}  >
-                                <div style={{ paddingTop: setPaddingTop }} > {curSensor.name}</div>
 
-                                {(() => {
-                                    if (curSensor.type === "airTemp") {
-                                        return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "humidity") {
-                                        return <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "fan") {
-                                        return <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "humidifier") {
-                                        return <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "waterTemp") {
-                                        return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "co2") {
-                                        return <img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
-                                    } else if (curSensor.type === "tvoc") {
-                                        return <img src={tvocSvg} alt="TVOC Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
-                                    } else {
-                                        return <div />
-                                    }
-                                })()}
-
-                            </div>
-                        )
-                    })()}
-                    {(() => {
-                        var pid = sensor.PID
-                        var tIndex = key
-                        var curSensor = grow.config.SENSORS[tIndex]
-                        var setIndicatorColor = '#FFF'
-
-                        if (this.props.liveGrowData && this.props.liveGrowData[grow.id] && (curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
-                            if (((curSensor._mean + (curSensor._deviation * 2)) < this.props.liveGrowData[grow.id][pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.props.liveGrowData[grow.id][pid])) {
-                                setIndicatorColor = '#FF0000' // BAD
-                            } else if (((curSensor._mean + (curSensor._deviation)) < this.props.liveGrowData[grow.id][pid]) || ((curSensor._mean - (curSensor._deviation)) > this.props.liveGrowData[grow.id][pid])) {
-                                setIndicatorColor = '#ded954' // WARN
-                            } else {
-                                setIndicatorColor = '#38c538' // GOOD
+                            if (!this.state.activeLines || this.state.activeLines[grow.id].includes(dataVal)) {
+                                setOpacity = 1
+                                setPaddingTop = '4px'
                             }
-                        }
 
-                        return (
-                            <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
+                            return (
+                                <div data-value={dataVal} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: grow.config.SENSORS[tIndex].color }}  >
+                                    <div style={{ paddingTop: setPaddingTop }} > {curSensor.name}</div>
 
-                                {(() => {
-                                    if (!this.props.liveGrowData[grow.id]) {
-                                        return
-                                    }
-                                    var tIndex = key
-                                    var curSensor = grow.config.SENSORS[tIndex]
+                                    {(() => {
+                                        if (curSensor.type === "airTemp") {
+                                            return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
+                                        } else if (curSensor.type === "humidity") {
+                                            return <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
+                                        } else if (curSensor.type === "fan") {
+                                            return <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
+                                        } else if (curSensor.type === "humidifier") {
+                                            return <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
+                                        } else if (curSensor.type === "waterTemp") {
+                                            return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
+                                        } else if (curSensor.type === "co2") {
+                                            return <img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
+                                        } else if (curSensor.type === "tvoc") {
+                                            return <img src={tvocSvg} alt="TVOC Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
+                                        } else {
+                                            return <div />
+                                        }
+                                    })()}
 
-                                    return <div>{Math.round(this.props.liveGrowData[grow.id][pid] * 10) / 10}{curSensor.unit}</div>
-                                })()}
-                            </div>
-                        )
-                    })()}
-                </div>
+                                </div>
+                            )
+                        })()}
+                        {(() => {
+                            var pid = sensor.PID
+                            var tIndex = key
+                            var curSensor = grow.config.SENSORS[tIndex]
+                            var setIndicatorColor = '#FFF'
+
+                            if (this.props.liveGrowData && this.props.liveGrowData[grow.id] && (curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
+                                if (((curSensor._mean + (curSensor._deviation * 2)) < this.props.liveGrowData[grow.id][pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.props.liveGrowData[grow.id][pid])) {
+                                    setIndicatorColor = '#FF0000' // BAD
+                                } else if (((curSensor._mean + (curSensor._deviation)) < this.props.liveGrowData[grow.id][pid]) || ((curSensor._mean - (curSensor._deviation)) > this.props.liveGrowData[grow.id][pid])) {
+                                    setIndicatorColor = '#ded954' // WARN
+                                } else {
+                                    setIndicatorColor = '#38c538' // GOOD
+                                }
+                            }
+
+                            return (
+                                <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
+
+                                    {(() => {
+                                        if (!this.props.liveGrowData[grow.id]) {
+                                            return
+                                        }
+                                        var tIndex = key
+                                        var curSensor = grow.config.SENSORS[tIndex]
+
+                                        return <div>{Math.round(this.props.liveGrowData[grow.id][pid] * 10) / 10}{curSensor.unit}</div>
+                                    })()}
+                                </div>
+                            )
+                        })()}
+                    </div>
+                )
+            }
             )
+            );
         }
-        )
-        );
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
