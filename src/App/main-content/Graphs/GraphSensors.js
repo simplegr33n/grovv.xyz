@@ -187,7 +187,6 @@ class GraphSensors extends Component {
 
     toggleWindow = (e) => {
         var setVAl = parseInt(e.target.value)
-        console.log(setVAl)
 
         this.setState({ displayWindow: setVAl })
         this.processData(setVAl)

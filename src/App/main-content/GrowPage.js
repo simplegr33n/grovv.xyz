@@ -62,15 +62,6 @@ class GrowPage extends Component {
 
 	render() {
 
-		var renderedGrowBoxes = null;
-		if (this.props.grow === null && this.props.userGrows) {
-			renderedGrowBoxes = this.props.userGrows.map((grow) =>
-				<div key={grow.id} className="Grow-Box-Item-Container">
-					<GrowBoxItem grow={grow} openGrow={this.openGrow} liveGrowData={this.props.liveGrowData} rawGrowData={this.props.rawGrowData} />
-				</div>
-			)
-		}
-
 		return (
 
 			<div id="Grow-Page">
@@ -80,35 +71,9 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow === null) {
 								return (
-									<div id="Grow-List-Main-Area">
-
-										{(() => {
-											if (renderedGrowBoxes) {
-												return (
-													<div id="Grow-Box-Area-Scroll">
-														<div id="Grow-Header-Area">
-															<div id="Grow-Header-Text">Grows</div>
-															<button className="New-Grow-Btn" onClick={this.openCreateGrowModal}>
-																+
-															</button>
-														</div>
-
-														<div id="Grow-Box-Area">
-															{renderedGrowBoxes}
-														</div>
-													</div>
-												)
-											} else {
-												return (
-													<div id="Grow-Header-Area">
-														<div id="Grow-Header-Text">Grows</div>
-														<button className="New-Grow-Btn" onClick={this.openCreateGrowModal}>
-															+
-														</button>
-													</div>
-												)
-											}
-										})()}
+									<div style={{ height: "100%" }}>
+										<iframe id="Food-Chart" title="FoodChart" src="https://docs.google.com/spreadsheets/d/1i7EDfBIwj4eYU2LxyS02YwDDeNROcdgXjROKfzCtp60/edit?usp=sharing">
+										</iframe>
 									</div>
 								)
 							}
