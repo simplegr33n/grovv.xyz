@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "86740f4ee7d26dc9d1a1",
+    "revision": "7c2a9c6118958c046435",
     "url": "/grovv.xyz/static/css/main.26543ff3.chunk.css"
   },
   {
-    "revision": "86740f4ee7d26dc9d1a1",
-    "url": "/grovv.xyz/static/js/main.45a04de1.chunk.js"
+    "revision": "7c2a9c6118958c046435",
+    "url": "/grovv.xyz/static/js/main.ca623e15.chunk.js"
   },
   {
     "revision": "11f44ca7cbfb1074bb97",
@@ -32,7 +32,7 @@ self.__precacheManifest = [
     "url": "/grovv.xyz/static/media/corner-logo.5ece3763.png"
   },
   {
-    "revision": "17e90d8a060113122c2b33c446c6f9f6",
+    "revision": "05aa1a8b6a8a8db302c4ebe4d2b1775a",
     "url": "/grovv.xyz/index.html"
   }
 ];
