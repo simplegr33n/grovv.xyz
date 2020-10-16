@@ -1739,7 +1739,7 @@ body {
   padding-left: 8px;
   height: 100%;
   max-height: 100%;
-  background-color: rgb(69, 143, 40);
+  background-color: rgb(63, 105, 47);
   user-select: none;
   margin-left: 2px;
   width: 37px;
@@ -1756,33 +1756,53 @@ body {
   color: #fff;
 }
 
+.App-Bar-Button-Updated {
+  background: #171a17;
+  display: flex;
+  font-size: 0.4em;
+  font-weight: 200;
+  justify-content: flex-end;
+  max-width: 100%;
+  padding-right: 1px;
+  padding-bottom: 1px;
+  margin-top: -1px;
+  user-select: none;
+  max-height: 7px;
+  margin-bottom: -4px;
+  overflow: hidden;
+}
+
 .App-Bar-Button-Grow-Name {
   display: flex;
-  font-size: 0.8em;
-  font-weight: bolder;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: none;
+  margin-bottom: -1px;
   padding-right: 8px;
   user-select: none;
   max-height: 20px;
 }
 
 .App-Bar-Button-Grow-Temp {
-  font-size: 0.7em;
+  font-size: 0.6em;
   font-weight: bold;
-  padding-left: 2px;
-  padding-right: 2px;
+  padding-left: 1px;
+  padding-right: 1px;
   max-height: 100%;
-  background-color: rgb(201, 86, 20);
+  font-weight: 500;
+  background-color: rgb(219, 151, 105);
   user-select: none;
   color: #000;
 }
 
 .App-Bar-Button-Grow-Humidity {
-  font-size: 0.7em;
+  font-size: 0.6em;
   font-weight: bold;
-  padding-left: 2px;
-  padding-right: 2px;
+  padding-left: 1px;
+  padding-right: 1px;
   max-height: 100%;
-  background-color: rgb(40, 102, 143);
+  font-weight: 500;
+  background-color: rgb(119, 136, 185);
   user-select: none;
   color: #000;
 }

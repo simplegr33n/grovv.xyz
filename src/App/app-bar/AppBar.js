@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import moment from 'moment'
+
 import '../../styles/App.css';
 
 import cornerLogo from '../../assets/corner-logo.png'
@@ -14,6 +16,7 @@ class AppBar extends Component {
         this.state = {
 
         };
+
     }
 
     openJournals = () => {
@@ -29,9 +32,6 @@ class AppBar extends Component {
     }
 
     setGrow = (ev) => {
-        console.log("EV", ev)
-        console.log("EV", ev.target.dataset.value)
-
         this.props.userGrows.forEach((grow) => {
             if (grow.id === ev.target.dataset.value) {
                 this.props.setGrow(grow)
@@ -67,9 +67,46 @@ class AppBar extends Component {
                     acroName = grow.name
                 }
 
+                var indicatorColor = "#FF0000"
+                var lastUpdate = null;
+                if (this.props.liveGrowData[grow.id]) {
+                    var now = new Date().getTime();
+                    var updatedAtDate = new Date(this.props.liveGrowData[grow.id].time * 1000)
+
+                    if (this.updatedAtDate && (updatedAtDate !== this.updatedAtDate[grow.id])) {
+                        this.updatedAtDate[grow.id] = updatedAtDate
+                    }
+
+
+
+                    var difference = now - this.props.liveGrowData[grow.id].time * 1000
+                    if (difference > 10000000) {
+                        indicatorColor = "#989e98"
+                    } else if (difference > 300000) {
+                        indicatorColor = "#fa360a"
+                    } else if (difference > 60000) {
+                        indicatorColor = "#facb23"
+                    } else if (difference < 60000) {
+                        indicatorColor = "#27d927"
+                    }
+
+
+
+                    lastUpdate = moment(updatedAtDate).fromNow()
+                }
+
+
 
                 return (
                     <div className="App-Bar-Button-Grow" key={grow.id} onClick={this.setGrow} data-value={grow.id}>
+                        <div className="App-Bar-Button-Updated" data-value={grow.id}>
+                            <div style={{ paddingBottom: '15px' }}>
+                                {lastUpdate}
+                            </div>
+                            <div style={{ color: indicatorColor, marginLeft: '1px' }}>
+                                ⬤
+                            </div>
+                        </div>
                         <div className="App-Bar-Button-Grow-Name" data-value={grow.id}>
                             {acroName}
                         </div>
