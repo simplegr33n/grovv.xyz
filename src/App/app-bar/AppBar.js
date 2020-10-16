@@ -7,7 +7,7 @@ import '../../styles/App.css';
 import cornerLogo from '../../assets/corner-logo.png'
 
 import { AiOutlineLineChart } from 'react-icons/ai';
-
+import { GiSpellBook } from 'react-icons/gi';
 
 class AppBar extends Component {
 
@@ -25,6 +25,10 @@ class AppBar extends Component {
 
     openGraphs = () => {
         this.props.setMainContent('graphs')
+    }
+
+    openLifetime = () => {
+        this.props.setMainContent('lifetime')
     }
 
     openGrows = () => {
@@ -48,7 +52,7 @@ class AppBar extends Component {
     render() {
 
         var renderedLiveGrowButtons = null;
-        if (this.props.userGrows !== null) {
+        if (this.props.userGrows) {
             renderedLiveGrowButtons = this.props.userGrows.map((grow) => {
 
                 var liveButtonData = null
@@ -139,18 +143,18 @@ class AppBar extends Component {
         return (
 
             <div id="App-Bar" >
-                <div id="App-Bar-Logo" onClick={this.openGrows}>
+                <div id="App-Bar-Logo" onClick={this.openGraphs}>
                     <img src={cornerLogo} alt="App Logo" style={{ maxWidth: "100px" }} />
                 </div>
 
                 {renderedLiveGrowButtons}
 
-                <div className="App-Bar-Button-Grow" style={{ background: '#000' }} onClick={this.openGraphs}>
-                    <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                <div className="App-Bar-Button-Grow" style={{ background: '#6b5729' }} onClick={this.openLifetime}>
+                    <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} /> L
                 </div>
 
-                <div className="App-Bar-Button" onClick={this.openJournals}>
-                    JRNLS
+                <div className="App-Bar-Button-Grow" style={{ background: '#a0823e' }} onClick={this.openJournals}>
+                    <GiSpellBook style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
                 <div className="App-Bar-Filler-Div"></div>

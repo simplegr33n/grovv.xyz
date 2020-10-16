@@ -15,6 +15,7 @@ import SignUp from './auth/SignUp.js'
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
 import GrowPage from './main-content/GrowPage.js'
 import AllGraphs from './main-content/AllGraphs.js'
+import LifetimeGraphs from './main-content/LifetimeGraphs.js'
 
 
 // Top Bar
@@ -33,7 +34,6 @@ class App extends Component {
 			currentGrow: null,
 			growID: null, //todo: remove, use currentGrow
 
-			userGrows: [],
 			userJournals: [],
 			liveGrowData: [],
 
@@ -224,14 +224,17 @@ class App extends Component {
 
 						<div id="App-Body-Content">
 							{(() => {
-								if (this.state.UID) {
+								if (this.state.UID && this.state.userGrows && this.state.user && this.state.threeDayData && this.state.liveGrowData) {
 									switch (this.state.mainContent) {
+										case 'grows':
+											return <GrowPage refreshGrows={this.refreshGrows} setJournalID={this.setJournalID} setGrow={this.setGrow} user={this.state.user} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
-										case 'graphs':
-											return <AllGraphs userGrows={this.state.userGrows} setFirebaseUser={this.setFirebaseUserPrefs} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+										case 'lifetime':
+											return <LifetimeGraphs userGrows={this.state.userGrows} setFirebaseUser={this.setFirebaseUserPrefs} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 										default:
-											return <GrowPage refreshGrows={this.refreshGrows} setJournalID={this.setJournalID} setGrow={this.setGrow} user={this.state.user} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
+											return <AllGraphs setFirebaseUser={this.setFirebaseUserPrefs} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+
 									}
 								} else {
 									switch (this.state.mainContent) {

@@ -17,10 +17,8 @@ class AllGraphs extends Component {
         super(props);
         this.state = {
             grow: this.props.grow,
-            activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
             graphElementSize: [150, 150], // needs init
-            graphSizeUpdated: 0, // init at 0
-            growIDs: []
+            graphSizeUpdated: 0 // init at 0
         };
 
     }
@@ -28,10 +26,15 @@ class AllGraphs extends Component {
     componentDidMount = () => {
         this._ismounted = true;
 
+        console.log("MOUNTED KEEEY", this.props)
+
         if (this.props.userGrows && this.props.user) {
+            if (this.props.userGrows === this.userGrows) {
+                return
+            }
+            this.userGrows = this.props.userGrows
 
             var activeLines = []
-            var growIDs = []
 
             for (const [key] of Object.entries(this.props.userGrows)) {
 
@@ -40,13 +43,10 @@ class AllGraphs extends Component {
                 // add all sensors to active lines
                 var growActiveLines = []
                 this.props.userGrows[key].config.SENSORS.forEach((sensor, key) => {
+
                     if (growActiveLines[key] !== sensor.PID) {
-                        if (!growIDs.includes(grow.id)) {
-                            growIDs[growIDs.length] = grow.id
-                        }
 
                         var tempIdentifier = sensor.PID + "^" + grow.id
-
 
                         if (this.props.user.PREFS) {
                             if (this.props.user.PREFS.GRAPHS) {
@@ -72,7 +72,7 @@ class AllGraphs extends Component {
             this.setState({
                 activeLines: activeLines, // same same for now.. to init
                 groupedSensors: activeLines,
-                growIDs: growIDs
+                // growIDs: growIDs
             });
         }
 
@@ -85,6 +85,33 @@ class AllGraphs extends Component {
 
     componentDidUpdate() {
         this.calcGraphDimensions()
+
+        if (!this.state.growIDs) {
+            // continue     
+        } else if (this.state.growIDs.length !== this.props.userGrows.length) {
+            // continue
+        } else {
+            return
+        }
+
+        if (this.props.userGrows && (!this.state.growIDs || (this.state.growIDs && (this.state.growIDs.length !== this.props.userGrows.length)))) {
+            var growIDs = this.state.growIDs
+            if (!growIDs) {
+                growIDs = []
+            }
+
+
+            for (const [key] of Object.entries(this.props.userGrows)) {
+
+                if (!growIDs || !growIDs.includes(this.props.userGrows[key].id)) {
+                    growIDs[growIDs.length] = this.props.userGrows[key].id
+                }
+            }
+
+            this.setState({
+                growIDs: growIDs
+            });
+        }
     }
 
     initGraphDimensions() {
@@ -262,7 +289,13 @@ class AllGraphs extends Component {
                         <div className="AllGraphs-Graph-Main">
                             <div className="AllGraphs-Info">
                                 <div className="Grow-Box-Info-Graph-Area" >
-                                    <AllGraph parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.props.user} />
+                                    {(() => {
+                                        console.log("OUT!")
+                                        if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
+                                            console.log("IN!!", this.state.growIDs)
+                                            return <AllGraph parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.props.user} />
+                                        }
+                                    })()}
                                 </div>
                             </div>
                         </div>

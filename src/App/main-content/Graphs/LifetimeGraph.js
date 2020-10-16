@@ -6,7 +6,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 import moment from 'moment'
 
 
-class GraphSensorsBox extends Component {
+
+class LifetimeGraph extends Component {
 
     constructor(props) {
         super(props);
@@ -34,42 +35,6 @@ class GraphSensorsBox extends Component {
 
     componentDidUpdate = () => {
 
-        if (this.props.grow.id && this._ismounted) {
-            if (this.props.grow.id !== this.growID) {
-                this.growID = this.props.grow.id;
-            }
-        }
-
-        if (this.props.rawGrowData && this.props.grow.id) {
-
-            var gwID = this.props.grow.id
-            var rawData = this.props.rawGrowData
-
-            if (rawData[gwID]) {
-                var setData = rawData[gwID][rawData[gwID].length - 1]
-
-                if (this.data !== setData) {
-
-                    this.data = setData
-
-
-                    var processedData = []
-                    setData.forEach((dataPoint) => {
-                        var processedPoint = dataPoint
-
-                        if (new Date().getTime() - processedPoint.time < 7200000) {
-                            processedData[processedData.length] = processedPoint
-                        }
-                    })
-
-                    this.setState({
-                        processedData: processedData
-                    });
-
-                }
-            }
-        }
-
     }
 
 
@@ -84,8 +49,9 @@ class GraphSensorsBox extends Component {
         const tooltipItems = rawContent.map((l) =>
             (() => {
                 var tIndex = rawContent.indexOf(l)
+                return <div>sup</div>
 
-                return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}{this.props.grow.config.SENSORS[tIndex].unit} </div>
+                // return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}{this.props.grow.config.SENSORS[tIndex].unit} </div>
 
             })()
         );
@@ -94,23 +60,20 @@ class GraphSensorsBox extends Component {
         return (
             <div className="Grow-Details-Graph-Tooltip">
                 <div>{readableTime}</div>
-
                 {tooltipItems}
-
             </div>
-
         )
     }
 
     render() {
 
-        var renderDayGraph = null
+        var renderLifetimeGraph = null
         if (this.state.processedData && this.state.processedData[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 1)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
-                renderDayGraph = (
+                renderLifetimeGraph = (
                     <LineChart width={xSize} height={ySize} data={this.state.processedData}>
                         <Line yAxisId="left" type="monotone" name="temp" dataKey="sA1_Temp" stroke="#ca2014" dot={false} />
                         <Line yAxisId="right" type="monotone" name="humi" dataKey="sA1_Humi" stroke="#db5e24" dot={false} />
@@ -133,14 +96,12 @@ class GraphSensorsBox extends Component {
 
         return (
 
-
             <div className="Chart-Container-Box">
-                {renderDayGraph}
+                {renderLifetimeGraph}
             </div>
-
 
         );
     }
 }
 
-export default GraphSensorsBox;
+export default LifetimeGraph;

@@ -30,6 +30,7 @@ class AllGraph extends Component {
 
     componentDidMount() {
         this._ismounted = true;
+        console.log("KEEY MOUNTIN--", this.props)
 
         if (this.props.user) {
             if (this.props.user.PREFS) {
@@ -46,10 +47,12 @@ class AllGraph extends Component {
         }
 
         if (this.props.rawGrowData && this.props.growIDs) {
+            console.log("AllMountin", this.props.growIDs)
 
             var newArrayLengths = []
             var valChanged = false
             this.props.growIDs.forEach((gwID) => {
+
 
                 // returns
                 if (!this.props.rawGrowData[gwID]) {
@@ -78,6 +81,8 @@ class AllGraph extends Component {
 
             if (valChanged) {
                 this.DataLengthChecks = newArrayLengths
+                console.log("AllMountin")
+
 
                 this.processData()
             }
@@ -92,6 +97,10 @@ class AllGraph extends Component {
     componentDidUpdate = () => {
 
         if (this.props.rawGrowData && this.props.growIDs) {
+
+            console.log("AllUPPMountin", this.props.growIDs)
+            console.log("AllUPPMountin", this.props)
+
 
             var newArrayLengths = []
             var valChanged = false

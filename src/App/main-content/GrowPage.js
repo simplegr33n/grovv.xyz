@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../../styles/App.css';
 
-import GrowBoxItem from './GrowPage/GrowBoxItem'
 import GrowDetailsPage from './GrowPage/GrowDetailsPage'
 
 
