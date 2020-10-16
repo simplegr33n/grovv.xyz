@@ -29,7 +29,14 @@ class AppBar extends Component {
     }
 
     setGrow = (ev) => {
-        this.props.setGrowByID(ev.target.dataset.value)
+        console.log("EV", ev)
+        console.log("EV", ev.target.dataset.value)
+
+        this.props.userGrows.forEach((grow) => {
+            if (grow.id === ev.target.dataset.value) {
+                this.props.setGrow(grow)
+            }
+        })
     }
 
     handleSignOut = () => {

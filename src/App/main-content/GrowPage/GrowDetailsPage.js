@@ -119,7 +119,7 @@ class GrowDetailsPage extends Component {
 
         // INITIALIZING SENSOR INFO
         var SENSOR_PIDS = []
-        if (this.state.SENSORS_INIT === false && this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
+        if (this.state.SENSORS_INIT !== this.props.grow && this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
             this.props.grow.config.SENSORS.forEach((sensor, key) => {
 
                 if (SENSOR_PIDS[key] !== sensor.PID) {
@@ -131,10 +131,10 @@ class GrowDetailsPage extends Component {
                 SENSOR_PIDS: SENSOR_PIDS
             });
 
-            if (this.state.ACTIVE_INIT === false) {
+            if (this.state.ACTIVE_INIT !== this.props.grow) {
                 this.setState({
                     ACTIVE_LINES: SENSOR_PIDS,
-                    ACTIVE_INIT: true
+                    ACTIVE_INIT: this.props.grow
                 });
             }
         }
@@ -242,6 +242,7 @@ class GrowDetailsPage extends Component {
             <div className="Grow-Details-Main-Data-Display-Row" key={pid}>
 
                 {(() => {
+
                     var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
                     var setOpacity = 0.3
@@ -250,6 +251,10 @@ class GrowDetailsPage extends Component {
                     if (this.state.ACTIVE_LINES.includes(pid)) {
                         setOpacity = 1
                         setPaddingTop = '4px'
+                    }
+
+                    if (!this.props.grow.config.SENSORS[tIndex]) {
+                        return
                     }
 
                     return (
@@ -284,6 +289,10 @@ class GrowDetailsPage extends Component {
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
                     var setIndicatorColor = '#FFF'
 
+                    if (!curSensor) {
+                        return
+                    }
+
                     if ((curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
                         if (((curSensor._mean + (curSensor._deviation * 2)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.state.liveData[pid])) {
                             setIndicatorColor = '#FF0000' // BAD
@@ -309,6 +318,9 @@ class GrowDetailsPage extends Component {
                             {(() => {
                                 var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                                 var curSensor = this.props.grow.config.SENSORS[tIndex]
+                                if (!curSensor) {
+                                    return
+                                }
 
                                 return <div>{Math.round(this.state.liveData[pid] * 10) / 10}{curSensor.unit}</div>
                             })()}
@@ -321,6 +333,9 @@ class GrowDetailsPage extends Component {
                         {(() => {
                             var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                             var curSensor = this.props.grow.config.SENSORS[tIndex]
+                            if (!curSensor) {
+                                return
+                            }
 
                             if (this.state.YEST_AVGS[tIndex]) {
                                 return Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10 + curSensor.unit
@@ -348,6 +363,9 @@ class GrowDetailsPage extends Component {
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                         var curSensor = this.props.grow.config.SENSORS[tIndex]
+                        if (!curSensor) {
+                            return
+                        }
 
                         if (this.state.DAILY_AVGS[tIndex]) {
                             return Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10 + curSensor.unit
@@ -371,6 +389,9 @@ class GrowDetailsPage extends Component {
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                         var curSensor = this.props.grow.config.SENSORS[tIndex]
+                        if (!curSensor) {
+                            return
+                        }
 
                         if (this.state.DAILY_HIGHS) {
                             return Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10 + curSensor.unit
@@ -393,6 +414,9 @@ class GrowDetailsPage extends Component {
                     {(() => {
                         var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                         var curSensor = this.props.grow.config.SENSORS[tIndex]
+                        if (!curSensor) {
+                            return
+                        }
 
                         if (this.state.DAILY_LOWS) {
                             return Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10 + curSensor.unit

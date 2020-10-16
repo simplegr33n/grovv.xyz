@@ -44,6 +44,45 @@ class AllGraph extends Component {
                 }
             }
         }
+
+        if (this.props.rawGrowData && this.props.growIDs) {
+
+            var newArrayLengths = []
+            var valChanged = false
+            this.props.growIDs.forEach((gwID) => {
+
+                // returns
+                if (!this.props.rawGrowData[gwID]) {
+                    newArrayLengths[gwID] = 0
+                    return
+                }
+                if ((this.DataLengthChecks) && (this.DataLengthChecks[gwID] && this.props.rawGrowData[gwID]) && (this.DataLengthChecks[gwID] === this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length)) {
+                    newArrayLengths[gwID] = this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length
+                    return; // 
+                }
+                valChanged = true
+
+                newArrayLengths[gwID] = this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length
+
+                var subConcatData = []
+                this.props.rawGrowData[gwID].forEach((list) => {
+                    subConcatData = subConcatData.concat(list)
+                })
+
+                if (!this.DataLengthChecks || this.DataLengthChecks[gwID] !== subConcatData.length) {
+                    subConcatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+                    this.concatData[gwID] = subConcatData
+                }
+
+            })
+
+            if (valChanged) {
+                this.DataLengthChecks = newArrayLengths
+
+                this.processData()
+            }
+
+        }
     }
 
     componentWillUnmount() {
@@ -230,6 +269,19 @@ class AllGraph extends Component {
 
     render() {
 
+        var defaultWindow = 43200000
+        if (this.props.user) {
+            if (this.props.user.PREFS) {
+                if (this.props.user.PREFS.GRAPHS) {
+                    if (this.props.user.PREFS.GRAPHS.AllGraph) {
+                        if (this.props.user.PREFS.GRAPHS.AllGraph.timeWindow) {
+                            defaultWindow = this.props.user.PREFS.GRAPHS.AllGraph.timeWindow
+                        }
+                    }
+                }
+            }
+        }
+
         if (this.state.combinedProcessedData) {
             var lineItems = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor) => {
                 var dataBlob = sensor.name + "^" + grow.id + "^" + sensor.unit + "^" + sensor.PID
@@ -302,7 +354,9 @@ class AllGraph extends Component {
                 {/* Time Scale Select... */}
                 <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '2%' }}>
 
-                    <select onChange={this.toggleWindow} id="AllGraph-Time-Scale" defaultValue={this.props.user.PREFS.GRAPHS.AllGraph.timeWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+
+
+                    <select onChange={this.toggleWindow} id="AllGraph-Time-Scale" defaultValue={defaultWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;h</option>
                         <option value={10800000}>3h</option>
                         <option value={43200000}>12h</option>

@@ -62,14 +62,6 @@ class GrowPage extends Component {
 
 	render() {
 
-		if (this.props.growID) {
-			this.props.userGrows.forEach((grow) => {
-				if (grow.id === this.props.growID) {
-					this.props.setGrow(grow)
-				}
-			})
-		}
-
 		var renderedGrowBoxes = null;
 		if (this.props.grow === null && this.props.userGrows) {
 			renderedGrowBoxes = this.props.userGrows.map((grow) =>
@@ -125,7 +117,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} refreshGrows={this.props.refreshGrows} openMainPage={this.openMainPage} setJournalID={this.setJournalID} rawGrowData={this.props.rawGrowData} />
+									<GrowDetailsPage grow={this.props.grow} refreshGrows={this.props.refreshGrows} openMainPage={this.openMainPage} setJournalID={this.setJournalID} rawGrowData={this.props.rawGrowData} user={this.props.user} />
 								)
 							}
 						})()}

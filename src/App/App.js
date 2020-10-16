@@ -125,6 +125,7 @@ class App extends Component {
 		previousData[growDeprecate] = tempThreeDayData
 
 		this.setState({ threeDayData: previousData });
+
 	}
 
 
@@ -163,16 +164,6 @@ class App extends Component {
 		});
 	}
 
-	setGrowByID = (growID) => {
-		// TODO: Send actual grow
-		this.setState({
-			mainContent: 'grows',
-			currentGrow: null,
-			growID: growID
-		});
-
-	}
-
 	openJournals = () => {
 		if (this.state.mainContent !== 'journals') {
 			this.setState({
@@ -203,8 +194,8 @@ class App extends Component {
 	setGrow = (grow) => {
 		console.log("APP Setgrow", grow)
 		this.setState({
-			growID: null,
-			currentGrow: grow
+			currentGrow: grow,
+			mainContent: 'grows'
 		});
 	}
 
@@ -224,7 +215,7 @@ class App extends Component {
 
 					{(() => {
 						if (this.state.UID) {
-							return <AppBar mainContent={this.state.mainContent} setGrowByID={this.setGrowByID} setMainContent={this.setMainContent} handleSignOut={this.handleSignOut} liveGrowData={this.state.liveGrowData} userGrows={this.state.userGrows} />
+							return <AppBar mainContent={this.state.mainContent} setMainContent={this.setMainContent} setGrow={this.setGrow} handleSignOut={this.handleSignOut} liveGrowData={this.state.liveGrowData} userGrows={this.state.userGrows} />
 						}
 					})()}
 
@@ -240,7 +231,7 @@ class App extends Component {
 										case 'graphs':
 											return <AllGraphs userGrows={this.state.userGrows} setFirebaseUser={this.setFirebaseUserPrefs} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 										default:
-											return <GrowPage refreshGrows={this.refreshGrows} setJournalID={this.setJournalID} setGrow={this.setGrow} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
+											return <GrowPage refreshGrows={this.refreshGrows} setJournalID={this.setJournalID} setGrow={this.setGrow} user={this.state.user} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 									}
 								} else {
 									switch (this.state.mainContent) {

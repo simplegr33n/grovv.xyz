@@ -262,6 +262,9 @@ class GraphSensors extends Component {
                 if (this.props.activeLines) {
                     var tIndex = this.props.activeLines.indexOf(l.dataKey)
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
+                    if (!curSensor) {
+                        return
+                    }
 
 
                     return (
