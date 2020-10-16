@@ -13,7 +13,7 @@ class GraphSensors extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayWindow: 72, // 1/2, 3, 12, 24, 72
+            displayWindow: 43200000, // 1800000, 10800000, 43200000, 86400000, 259200000
 
             lightsOnArray: [],
             lightsOffArray: [],
@@ -161,92 +161,37 @@ class GraphSensors extends Component {
         var i = -1
         var now = new Date().getTime()
 
-        switch (window) {
-            case 72:
-                data.forEach((dataPoint) => {
-                    i++;
-                    if (i === 0 || i % 10 === 0) {
-                        var processedPoint = dataPoint
-                        processedData[processedData.length] = processedPoint
-                    }
-                })
-
-                if (processedData.length >= data.length / 11) { //TODO: not sure why i've included this check, removed for other hours...
-                    this.setState({
-                        processedData: processedData
-                    });
-                }
-                break;
-            case 24:
-                data.forEach((dataPoint) => {
-                    if (now - dataPoint.time < 86400000) {
-                        i++;
-                        if (i === 0 || i % 4 === 0) {
-                            var processedPoint = dataPoint
-                            processedData[processedData.length] = processedPoint
-                        }
-                    }
-                })
-
-                this.setState({
-                    processedData: processedData
-                });
-                break;
-            case 12:
-                data.forEach((dataPoint) => {
-                    if (now - dataPoint.time < 43200000) {
-                        var processedPoint = dataPoint
-                        processedData[processedData.length] = processedPoint
-                    }
-                })
-
-                this.setState({
-                    processedData: processedData
-                });
-                break;
-            case 3:
-                data.forEach((dataPoint) => {
-                    if (now - dataPoint.time < 10800000) {
-                        var processedPoint = dataPoint
-                        processedData[processedData.length] = processedPoint
-                    }
-                })
-
-                this.setState({
-                    processedData: processedData
-                });
-                break;
-            case 1: // stupid naming for half hour... but if i'm using integers..
-                data.forEach((dataPoint) => {
-                    if (now - dataPoint.time < 1800000) {
-                        var processedPoint = dataPoint
-                        processedData[processedData.length] = processedPoint
-                    }
-                })
-
-                this.setState({
-                    processedData: processedData
-                });
-                break;
-            default: //72
-                data.forEach((dataPoint) => {
-                    i++;
-                    if (i === 0 || i % 10 === 0) {
-                        var processedPoint = dataPoint
-                        processedData[processedData.length] = processedPoint
-                    }
-                })
-
-                if (processedData.length >= data.length / 11) {
-                    this.setState({
-                        processedData: processedData
-                    });
-                }
-                break;
+        var reducerValue = Math.round(window / 10800000)
+        if (reducerValue < 1) {
+            reducerValue = 1
         }
+
+
+        data.forEach((dataPoint) => {
+            if (now - dataPoint.time < window) {
+                i++;
+                if (i === 0 || i % reducerValue === 0) {
+                    var processedPoint = dataPoint
+                    processedData[processedData.length] = processedPoint
+                }
+            }
+        })
+
+        this.setState({
+            processedData: processedData
+        });
 
         this.createTickArray(processedData)
 
+    }
+
+    toggleWindow = (e) => {
+        var setVAl = parseInt(e.target.value)
+        console.log(setVAl)
+
+        this.setState({ displayWindow: setVAl })
+        this.processData(setVAl)
+        this.render()
     }
 
     renderTooltip = (props) => {
@@ -293,31 +238,6 @@ class GraphSensors extends Component {
     }
 
 
-    toggle1 = () => {
-        this.setState({ displayWindow: 1 })
-        this.processData(1)
-    }
-
-    toggle3 = () => {
-        this.setState({ displayWindow: 3 })
-        this.processData(3)
-    }
-
-    toggle12 = () => {
-        this.setState({ displayWindow: 12 })
-        this.processData(12)
-    }
-
-    toggle24 = () => {
-        this.setState({ displayWindow: 24 })
-        this.processData(24)
-    }
-
-    toggle72 = () => {
-        this.setState({ displayWindow: 72 })
-        this.processData(72)
-    }
-
     render() {
 
         const lineItems = this.props.grow.config.SENSORS.map((l) =>
@@ -357,7 +277,7 @@ class GraphSensors extends Component {
                             tick={{ fill: "#B3C2B5" }}
                             dataKey="time"
                             type="number"
-                            domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
+                            domain={[new Date().getTime(), new Date(new Date() - this.state.displayWindow).getTime()]} //fix!
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
@@ -379,45 +299,16 @@ class GraphSensors extends Component {
                 {renderDayGraph}
 
                 {/* Time Scale Select... */}
-                <div style={{ width: '18px', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '1%' }}>
+                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '4%' }}>
 
-                    <div>
-                        {(() => {
-                            if (this.state.displayWindow === 1) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle1}>&#189;h</button>
-                            } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle1}>&#189;h</button>
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayWindow === 3) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle3}>3h</button>
-                            } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle3}>3h</button>
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayWindow === 12) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle12}>12h</button>
-                            } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle12}>12h</button>
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayWindow === 24) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle24}>24h</button>
-                            } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle24}>24h</button>
-                            }
-                        })()}
-                        {(() => {
-                            if (this.state.displayWindow === 72) {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0' }} onClick={this.toggle72}>72h</button>
-                            } else {
-                                return <button style={{ width: '18px', height: '18px', fontSize: '0.45em', padding: '0', color: '#FFF', backgroundColor: '#0b2e11' }} onClick={this.toggle72}>72h</button>
-                            }
-                        })()}
-                    </div>
+                    <select onChange={this.toggleWindow} id="GraphSensors-Time-Scale" defaultValue={43200000} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+                        <option value={1800000}>&#189;h</option>
+                        <option value={10800000}>3h</option>
+                        <option value={43200000}>12h</option>
+                        <option value={86400000}>24h</option>
+                        <option value={259200000}>72h</option>
+                    </select>
+
                 </div>
             </div>
 
