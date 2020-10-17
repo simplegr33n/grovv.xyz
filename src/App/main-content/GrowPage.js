@@ -71,8 +71,10 @@ class GrowPage extends Component {
 							if (this.props.grow === null) {
 								return (
 									<div style={{ height: "100%" }}>
-										<iframe id="Food-Chart" title="FoodChart" src="https://docs.google.com/spreadsheets/d/1P5X98doJf2eJsbkW502PaO9aZghInk86H-kHPO4mV88/edit?usp=sharing">
-										</iframe>
+										{/* nothing... used to be a grows display */}
+
+										{/* <iframe id="Food-Chart" title="FoodChart" src="https://docs.google.com/spreadsheets/d/1P5X98doJf2eJsbkW502PaO9aZghInk86H-kHPO4mV88/edit?usp=sharing">
+										</iframe> */}
 									</div>
 								)
 							}

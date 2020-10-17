@@ -26,8 +26,6 @@ class AllGraphs extends Component {
     componentDidMount = () => {
         this._ismounted = true;
 
-        console.log("MOUNTED KEEEY", this.props)
-
         if (this.props.userGrows && this.props.user) {
             if (this.props.userGrows === this.userGrows) {
                 return
@@ -71,12 +69,11 @@ class AllGraphs extends Component {
 
             this.setState({
                 activeLines: activeLines, // same same for now.. to init
-                groupedSensors: activeLines,
-                // growIDs: growIDs
+                groupedSensors: activeLines
             });
         }
 
-        this.initGraphDimensions()
+        this.calcGraphDimensions()
     }
 
     componentWillUnmount = () => {
@@ -100,7 +97,6 @@ class AllGraphs extends Component {
                 growIDs = []
             }
 
-
             for (const [key] of Object.entries(this.props.userGrows)) {
 
                 if (!growIDs || !growIDs.includes(this.props.userGrows[key].id)) {
@@ -114,30 +110,12 @@ class AllGraphs extends Component {
         }
     }
 
-    initGraphDimensions() {
-        var dateNow = new Date()
-
-        if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]))) {
-
-            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, 500]
-
-            if (tempSize !== this.state.graphElementSize) {
-                if (this._ismounted) {
-                    this.setState({
-                        graphElementSize: tempSize,
-                        graphSizeUpdated: dateNow.getTime()
-                    });
-                }
-            }
-        }
-    }
-
     calcGraphDimensions() {
         var dateNow = new Date()
 
         if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
 
-            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, 500]
+            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 5]
 
             if (tempSize !== this.state.graphElementSize) {
                 if (this._ismounted) {
@@ -218,7 +196,7 @@ class AllGraphs extends Component {
                             }
 
                             return (
-                                <div data-value={dataVal} key={pid} onClick={this.toggleLine} style={{ width: '110px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: grow.config.SENSORS[tIndex].color }}  >
+                                <div data-value={dataVal} key={pid} onClick={this.toggleLine} style={{ width: '113px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: grow.config.SENSORS[tIndex].color }}  >
                                     <div style={{ paddingTop: setPaddingTop }} > {curSensor.name}</div>
 
                                     {(() => {
@@ -261,7 +239,7 @@ class AllGraphs extends Component {
                             }
 
                             return (
-                                <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
+                                <div className="AllGraph-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
 
                                     {(() => {
                                         if (!this.props.liveGrowData[grow.id]) {
@@ -283,16 +261,14 @@ class AllGraphs extends Component {
         }
 
         return (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ width: "100vw" }} ref={element => this.divRef = element} >
+            <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
+                <div style={{ width: "100vw", height: "80vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
                     <div className="AllGraphs-Graph-Item">
                         <div className="AllGraphs-Graph-Main">
                             <div className="AllGraphs-Info">
                                 <div className="Grow-Box-Info-Graph-Area" >
                                     {(() => {
-                                        console.log("OUT!")
                                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
-                                            console.log("IN!!", this.state.growIDs)
                                             return <AllGraph parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.props.user} />
                                         }
                                     })()}

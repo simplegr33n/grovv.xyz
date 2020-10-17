@@ -43,6 +43,41 @@ class DbHelper {
         ref.set(u)
     }
 
+    // .................. //
+    // ADD LIFETIME DATA  //
+    // .................. //
+    getLifetimeData(userID, setData) {
+        console.log("Get Lifetime Data")
+
+        var ref = this.firebase.db.ref().child('lifetime').child(this.userID)
+
+        ref.on('value', (snapshot) => {
+            setData(snapshot.val())
+        }, function (errorObject) {
+            console.log("Get Lifetime Data failed: " + errorObject.code);
+        });
+    }
+
+
+    postLifetimeData(lifetimeObject, growID, year, month, day) {
+        console.log("Post Lifetime Data", lifetimeObject)
+
+        var ref = this.firebase.db.ref().child('lifetime').child(this.userID).child(growID).child(year).child(month).child(day)
+        ref.set(lifetimeObject)
+    }
+
+    getMonthChunk(growID, year, month, setData) {
+        console.log("getMonthCHunk!" + growID + " " + year + " " + month)
+
+
+        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(year).child(month)
+        ref.on('value', (snapshot) => {
+            setData(snapshot.val())
+        }, function (errorObject) {
+            console.log("getMonthChunk: " + errorObject.code);
+        });
+    }
+
 
 
     // .......... //
@@ -56,12 +91,7 @@ class DbHelper {
             // Grow Live Data in firebase
             var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('live_data')
 
-            console.log("GROW GET DATA " + grow.id)
-
             ref.on('value', (snapshot) => {
-
-                console.log(grow.id + " LIVE: ", snapshot.val())
-
                 setData(grow.id, snapshot.val())
             }, function (errorObject) {
                 console.log("follow " + grow + " live failed: " + errorObject.code);

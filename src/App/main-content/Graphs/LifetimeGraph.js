@@ -24,67 +24,90 @@ class LifetimeGraph extends Component {
             }
 
         }
-
     }
 
     componentWillUnmount() {
         this._ismounted = false;
-
-        this.getGraphData = null;
     }
 
     componentDidUpdate = () => {
-
+        if (this.props.normalizedData && this.props.normalizedData !== this.state.normalizedData) {
+            console.log("NORMALIZED DATA", this.props.normalizedData)
+            this.setState({
+                normalizedData: this.props.normalizedData
+            })
+        }
     }
-
 
     renderTooltip = (props) => {
         var rawContent = props.payload
-        if (rawContent.length === 0) {
+        if (rawContent === null || rawContent.length === 0) {
             return;
         }
 
-        var readableTime = moment(props.payload[0].payload.time).fromNow()
+        var readableTime = moment(props.payload[0].payload.time).format('MM-D-YYYY')
 
-        const tooltipItems = rawContent.map((l) =>
+        const listItems = rawContent.map((l) =>
             (() => {
-                var tIndex = rawContent.indexOf(l)
-                return <div>sup</div>
-
-                // return <div className="Grow-Details-Graph-Tooltip-Data" key={this.props.grow.config.SENSORS[tIndex].PID} style={{ color: l.stroke }}>{l.name}: {rawContent[0].payload[l.dataKey]}{this.props.grow.config.SENSORS[tIndex].unit} </div>
-
+                return (
+                    <div style={{ fontSize: '.6em', color: l.stroke }} key={l.dataKey}>{l.dataKey.split("^")[0]} {l.dataKey.split("^")[2]} : {rawContent[0].payload[l.dataKey]}</div>
+                )
             })()
         );
 
-
         return (
-            <div className="Grow-Details-Graph-Tooltip">
+            <div className="Lifetime-Graph-Tooltip">
                 <div>{readableTime}</div>
-                {tooltipItems}
+
+                {listItems}
+
             </div>
+
         )
     }
 
+
     render() {
 
+        var lineItems = null
+        if (this.props.sensorList) {
+            const colours = ["#FFF", "#FF0000", "#00FF00", "#0000FF", "#F0F0F0", "#f542e3", "#52e625", "#25bce6", "#889c54", "#71418a",
+                "#FFF", "#FF0000", "#00FF00", "#0000FF", "#F0F0F0", "#f542e3", "#52e625", "#25bce6", "#889c54", "#71418a"] // possible bug if getting past this number of sensors...
+            var i = 0
+            lineItems = this.props.sensorList.map((sensorID) =>
+                (() => {
+                    i++
+                    if (sensorID.split("^")[2] === "HIGH") {
+                        return <Line yAxisId="left" type="monotone" name={sensorID} dataKey={sensorID} key={sensorID} stroke={"#FF0000"} thickness={0.5} dot={false} />
+                    } else if (sensorID.split("^")[2] === "LOW") {
+                        return <Line yAxisId="left" type="monotone" name={sensorID} dataKey={sensorID} key={sensorID} stroke={"#19b2ff"} thickness={0.5} dot={false} />
+                    } else {
+                        return <Line yAxisId="left" type="monotone" name={sensorID} dataKey={sensorID} key={sensorID} stroke={"#FFFFFF"} thickness={1} dot={false} />
+                    }
+                })()
+            );
+        }
+
+
+
+
         var renderLifetimeGraph = null
-        if (this.state.processedData && this.state.processedData[0]) {
+        if (this.state.normalizedData && this.state.normalizedData[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 1)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderLifetimeGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.state.processedData}>
-                        <Line yAxisId="left" type="monotone" name="temp" dataKey="sA1_Temp" stroke="#ca2014" dot={false} />
-                        <Line yAxisId="right" type="monotone" name="humi" dataKey="sA1_Humi" stroke="#db5e24" dot={false} />
-                        <Line yAxisId="left" type="monotone" name="co2" dataKey="sC1_C02" stroke="#a9a9a9" dot={false} />
-                        <Line yAxisId="right" type="monotone" name="tvoc" dataKey="sC1_TVoc" stroke="#a6a6a6" dot={false} />
+                    <LineChart width={xSize} height={ySize} data={this.state.normalizedData}>
+
+                        {lineItems}
+
                         <XAxis
                             dataKey="time"
                             type="number"
-                            domain={[new Date(this.state.processedData[0].time).getTime(), new Date(this.state.processedData[this.state.processedData.length - 1].time).getTime()]}
-                            tickFormatter={(unixTime) => moment(unixTime).format('HH:mm - MMM Do')}
-                            hide={true} />
+                            domain={[new Date(this.state.normalizedData[0].time).getTime(), new Date(this.state.normalizedData[this.state.normalizedData.length - 1].time).getTime()]}
+                            tickFormatter={(unixTime) => moment(unixTime).format('MM-D-YYYY')}
+                            hide={false} />
                         <YAxis yAxisId="left" orientation="left" domain={[21, 27]} />
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip content={this.renderTooltip} />

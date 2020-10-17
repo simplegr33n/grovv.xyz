@@ -49,6 +49,8 @@ class App extends Component {
 				this.setState({ UID: user.uid });
 				this.getUsername();
 
+				this.dbHelper.getLifetimeData(user.uid, this.stateSetLifetimeData)
+
 				this.dbHelper.getUser(user.uid, this.setUser)
 				this.dbHelper.getUserGrows(this.setUserGrows) // currently grabbing B's hardcoded
 				this.dbHelper.getUserJournals(this.setUserJournals)
@@ -69,6 +71,22 @@ class App extends Component {
 		console.log("temp user GONNASET", u)
 
 		this.dbHelper.setUser(u)
+	}
+
+	// To add lifetime data to components...
+	postLifetimeData = (lifetimeObject, growID, year, month, day) => {
+		// this.setState({ user: u }); // -- set liftime data eventually
+
+		console.log("chunky post LifetimeData", lifetimeObject)
+		this.dbHelper.postLifetimeData(lifetimeObject, growID, year, month, day)
+	}
+
+	stateSetLifetimeData = (lifetimeData) => {
+		this.setState({ lifetimeData: lifetimeData });
+	}
+
+	getMonthChunkData = (growID, year, month, setData) => {
+		this.dbHelper.getMonthChunk(growID, year, month, setData)
 	}
 
 	// when config settings change...
@@ -231,7 +249,7 @@ class App extends Component {
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
 										case 'lifetime':
-											return <LifetimeGraphs userGrows={this.state.userGrows} setFirebaseUser={this.setFirebaseUserPrefs} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+											return <LifetimeGraphs postLifetimeData={this.postLifetimeData} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} />
 										default:
 											return <AllGraphs setFirebaseUser={this.setFirebaseUserPrefs} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 

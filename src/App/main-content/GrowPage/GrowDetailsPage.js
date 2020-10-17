@@ -48,7 +48,26 @@ class GrowDetailsPage extends Component {
     componentDidMount() {
         this._ismounted = true;
 
-        if (this.props.rawGrowData && this.state.SENSOR_PIDS) {
+
+
+        if (this.props.grow && !this.state.SENSOR_DEVIATIONS) {
+            var SENSOR_DEVIATIONS = []
+            var SENSOR_MEANS = []
+
+            for (const [key, value] of Object.entries(this.props.grow.config.SENSORS)) {
+                SENSOR_DEVIATIONS[value.PID] = value._deviation
+                SENSOR_MEANS[value.PID] = value._mean
+            }
+
+            this.setState({
+                SENSOR_DEVIATIONS: SENSOR_DEVIATIONS,
+                SENSOR_MEANS: SENSOR_MEANS
+            })
+        }
+
+
+
+        if (this.props.rawGrowData && this.state.SENSOR_PIDS && this.state.SENSOR_MEANS) {
             if (!this.props.rawGrowData[this.props.grow.id]) {
                 return;
             }
@@ -69,9 +88,29 @@ class GrowDetailsPage extends Component {
     }
 
     componentDidUpdate = () => {
+
         if (this.props.rawGrowData) {
             if (!this.props.rawGrowData[this.props.grow.id]) {
                 return;
+            }
+
+            if (this.props.grow !== this.state.GROW) {
+                console.log("FRESH GROW!", this.props.grow.id)
+                this.harmonyRatiosUpdated = null
+
+                var SENSOR_DEVIATIONS = []
+                var SENSOR_MEANS = []
+
+                for (const [key, value] of Object.entries(this.props.grow.config.SENSORS)) {
+                    SENSOR_DEVIATIONS[value.PID] = value._deviation
+                    SENSOR_MEANS[value.PID] = value._mean
+                }
+
+                this.setState({
+                    GROW: this.props.grow,
+                    SENSOR_DEVIATIONS: SENSOR_DEVIATIONS,
+                    SENSOR_MEANS: SENSOR_MEANS
+                })
             }
 
             var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
@@ -118,6 +157,7 @@ class GrowDetailsPage extends Component {
         var yesterdayData = []
 
         // INITIALIZING SENSOR INFO
+        // get all sensor pids...   ?
         var SENSOR_PIDS = []
         if (this.state.SENSORS_INIT !== this.props.grow && this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
             this.props.grow.config.SENSORS.forEach((sensor, key) => {
@@ -139,6 +179,8 @@ class GrowDetailsPage extends Component {
             }
         }
 
+
+        // ANALYTICS...
         concatData.forEach((dataPoint) => {
             if (now - dataPoint.time < 86400000) {
                 DAILY_POINT_COUNT += 1
@@ -161,7 +203,7 @@ class GrowDetailsPage extends Component {
                             DAILY_LOWS[tIndex] = dataPoint[pid]
                             DAILY_LOWS_TIMES[tIndex] = dataPoint.time
                         }
-                        //AVERAGES
+                        // AVERAGES
                         if (!DAILY_AVGS[tIndex]) {
                             DAILY_AVGS[tIndex] = 0
                         }
@@ -209,6 +251,79 @@ class GrowDetailsPage extends Component {
             DAILY_AVGS: DAILY_AVGS,
             YEST_AVGS: YEST_AVGS
         });
+
+
+        this.processDeviationData(growData)
+
+    }
+
+    processDeviationData = (growData) => {
+
+        var concatData = []
+        growData[this.props.grow.id].forEach((list) => {
+            concatData = concatData.concat(list)
+        })
+        concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+
+        var now = new Date().getTime()
+
+        var HARMONY_POINT_COUNT = []
+        var HARMONY_PLUS_ONE_COUNT = []
+        var HARMONY_PLUS_TWO_COUNT = []
+
+        // INITIALIZING SENSOR INFO
+        // get all sensor pids...   ?
+        concatData.forEach((dataPoint) => {
+            if (now - dataPoint.time < 86400000) { // one day 
+                // for loop sensors rather than datapoint
+                for (const [key, sensor] of Object.entries(this.props.grow.config.SENSORS)) {
+                    var pid = sensor.PID
+
+                    // HARMONY_POINT_COUNT
+                    if (!HARMONY_POINT_COUNT[pid]) {
+                        HARMONY_POINT_COUNT[pid] = 0
+                        HARMONY_PLUS_ONE_COUNT[pid] = 0
+                        HARMONY_PLUS_TWO_COUNT[pid] = 0
+                    }
+                    HARMONY_POINT_COUNT[pid] = HARMONY_POINT_COUNT[pid] + 1
+
+                    // HARMONY_PLUS_TWO_COUNT
+                    if ((dataPoint[pid] > (sensor._mean) + (sensor._deviation * 2)) ||
+                        (dataPoint[pid] < (sensor._mean) - (sensor._deviation * 2))) {
+                        console.log("PLUS2in" + pid, dataPoint[pid] + " " + sensor._mean + " " + sensor._deviation)
+                        HARMONY_PLUS_TWO_COUNT[pid] = HARMONY_PLUS_TWO_COUNT[pid] + 1
+                    } else if ((dataPoint[pid] > (sensor._mean) + (sensor._deviation)) ||
+                        (dataPoint[pid] < (sensor._mean) - (sensor._deviation))) {  // HARMONY_PLUS_ONE_COUNT
+                        HARMONY_PLUS_ONE_COUNT[pid] = HARMONY_PLUS_ONE_COUNT[pid] + 1
+                    }
+                }
+            }
+        })
+
+        // CALCULATE HARMONIES
+        if (Object.keys(HARMONY_POINT_COUNT).length !== 0) {
+
+            console.log("UPDATED HARMONY RATIOS!")
+
+            this.harmonyRatiosUpdated = new Date().valueOf()
+
+            for (const [key, value] of Object.entries(HARMONY_PLUS_ONE_COUNT)) {
+                HARMONY_PLUS_ONE_COUNT[key] = Math.round((HARMONY_PLUS_ONE_COUNT[key] / HARMONY_POINT_COUNT[key]) * 100)
+            }
+
+            for (const [key, value] of Object.entries(HARMONY_PLUS_TWO_COUNT)) {
+                HARMONY_PLUS_TWO_COUNT[key] = Math.round((HARMONY_PLUS_TWO_COUNT[key] / HARMONY_POINT_COUNT[key]) * 100)
+            }
+
+            console.log("HARMONY count", HARMONY_POINT_COUNT)
+            console.log("HARMONY one", HARMONY_PLUS_ONE_COUNT)
+            console.log("HARMONY two", HARMONY_PLUS_TWO_COUNT)
+
+            this.setState({
+                HARMONY_DANGER: HARMONY_PLUS_TWO_COUNT,
+                HARMONY_WARN: HARMONY_PLUS_ONE_COUNT
+            });
+        }
     }
 
     toggleLine = (e) => {
@@ -305,6 +420,8 @@ class GrowDetailsPage extends Component {
 
                     return (
                         <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
+
+
                             {(() => {
                                 if (this.state.liveData[pid] > this.state.lastLiveData[pid]) {
                                     return <div style={{ fontSize: '14px', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
@@ -315,6 +432,7 @@ class GrowDetailsPage extends Component {
                                 }
                             })()}
 
+
                             {(() => {
                                 var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                                 var curSensor = this.props.grow.config.SENSORS[tIndex]
@@ -322,8 +440,36 @@ class GrowDetailsPage extends Component {
                                     return
                                 }
 
-                                return <div>{Math.round(this.state.liveData[pid] * 10) / 10}{curSensor.unit}</div>
+                                return <div style={{ flex: 1 }}>{Math.round(this.state.liveData[pid] * 10) / 10}{curSensor.unit}</div>
                             })()}
+
+
+
+                            <div style={{ width: '1px', background: '#000' }} />
+
+                            {(() => {
+                                var harmonyWarnFlex = 0
+                                var harmonyDangerFlex = 0
+                                var harmonyGoodFlex = 100
+                                if (this.state.HARMONY_WARN) {
+                                    harmonyWarnFlex = this.state.HARMONY_WARN[pid]
+                                }
+                                if (this.state.HARMONY_DANGER) {
+                                    harmonyDangerFlex = this.state.HARMONY_DANGER[pid]
+                                }
+                                harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
+
+                                return (
+                                    <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px" }}>
+                                        <div style={{ flex: harmonyDangerFlex, background: '#FF0000' }} />
+                                        <div style={{ flex: harmonyWarnFlex, background: '#fcba03' }} />
+                                        <div style={{ flex: harmonyGoodFlex, background: '#38c538' }} />
+                                    </div>
+                                )
+                            })()}
+
+                            <div style={{ width: '1px', background: '#000' }} />
+
                         </div>
                     )
                 })()}
