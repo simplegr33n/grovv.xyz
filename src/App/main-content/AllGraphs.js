@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import '../../styles/App.css';
 
-import AllGraph from './Graphs/AllGraph'
+import GraphAllGrows from './Graphs/GraphAllGrows'
+import GrowDataDisplay from './GrowPage/GrowDataDisplay'
 
 // import moment from 'moment' // for datetime...
 
@@ -25,6 +26,13 @@ class AllGraphs extends Component {
 
     componentDidMount = () => {
         this._ismounted = true;
+
+        if (this.props.user) {
+            this.setState({
+                user: this.props.user,
+                activeLines: this.props.user.PREFS.GRAPHS.AllGraph.showSensors
+            })
+        }
 
         if (this.props.userGrows && this.props.user) {
             if (this.props.userGrows === this.userGrows) {
@@ -98,7 +106,6 @@ class AllGraphs extends Component {
             }
 
             for (const [key] of Object.entries(this.props.userGrows)) {
-
                 if (!growIDs || !growIDs.includes(this.props.userGrows[key].id)) {
                     growIDs[growIDs.length] = this.props.userGrows[key].id
                 }
@@ -128,10 +135,12 @@ class AllGraphs extends Component {
         }
     }
 
-    toggleLine = (e) => {
-        var data = e.currentTarget.getAttribute('data-value')
+    toggleLine = (data) => {
+        // var data = e.currentTarget.getAttribute('data-value')
 
-        // update firebase data
+        console.log("DAATAA", data)
+
+        // // update firebase data
         var tempUser = this.props.user
 
         if (tempUser.PREFS) {
@@ -141,6 +150,10 @@ class AllGraphs extends Component {
                         if (tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] === false) {
                             tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = true
                             this.setUserPrefs(tempUser)
+                            this.setState({
+                                user: tempUser,
+                                activeLines: tempUser.PREFS.GRAPHS.AllGraph.showSensors
+                            })
                             return
                         }
                     }
@@ -149,7 +162,10 @@ class AllGraphs extends Component {
         }
         tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = false
         this.setUserPrefs(tempUser)
-
+        this.setState({
+            user: tempUser,
+            activeLines: tempUser.PREFS.GRAPHS.AllGraph.showSensors
+        })
     }
 
     toggleWindow = (tWindow) => {
@@ -166,99 +182,17 @@ class AllGraphs extends Component {
 
     render() {
 
-        var sensorInfoRows = []
-        if (this.state.activeLines) {
-            sensorInfoRows = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor, key) => {
+        var sensorInfoColumns = []
+        if (this.state.activeLines && this.state.growIDs && this.props.userGrows) {
+
+            sensorInfoColumns = this.props.userGrows.map((grow) => {
                 return (
-                    <div className="AllGraph-Main-Data-Display-Row" key={sensor.PID}>
-
-                        {(() => {
-
-                            var pid = sensor.PID
-                            var tIndex = key
-                            var curSensor = grow.config.SENSORS[tIndex]
-                            var dataVal = pid + "^" + grow.id
-
-                            var setOpacity = 1
-                            var setPaddingTop = '4px'
-
-                            if (this.props.user) {
-                                if (this.props.user.PREFS) {
-                                    if (this.props.user.PREFS.GRAPHS) {
-                                        if (this.props.user.PREFS.GRAPHS.AllGraph) {
-                                            if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[dataVal] === false)) {
-                                                setOpacity = 0.3
-                                                setPaddingTop = '3px'
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            return (
-                                <div data-value={dataVal} key={pid} onClick={this.toggleLine} style={{ width: '113px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: grow.config.SENSORS[tIndex].color }}  >
-                                    <div style={{ paddingTop: setPaddingTop }} > {curSensor.name}</div>
-
-                                    {(() => {
-                                        if (curSensor.type === "airTemp") {
-                                            return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
-                                        } else if (curSensor.type === "humidity") {
-                                            return <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
-                                        } else if (curSensor.type === "fan") {
-                                            return <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
-                                        } else if (curSensor.type === "humidifier") {
-                                            return <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
-                                        } else if (curSensor.type === "waterTemp") {
-                                            return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
-                                        } else if (curSensor.type === "co2") {
-                                            return <img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
-                                        } else if (curSensor.type === "tvoc") {
-                                            return <img src={tvocSvg} alt="TVOC Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
-                                        } else {
-                                            return <div />
-                                        }
-                                    })()}
-
-                                </div>
-                            )
-                        })()}
-                        {(() => {
-                            var pid = sensor.PID
-                            var tIndex = key
-                            var curSensor = grow.config.SENSORS[tIndex]
-                            var setIndicatorColor = '#FFF'
-
-                            if (this.props.liveGrowData && this.props.liveGrowData[grow.id] && (curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
-                                if (((curSensor._mean + (curSensor._deviation * 2)) < this.props.liveGrowData[grow.id][pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.props.liveGrowData[grow.id][pid])) {
-                                    setIndicatorColor = '#FF0000' // BAD
-                                } else if (((curSensor._mean + (curSensor._deviation)) < this.props.liveGrowData[grow.id][pid]) || ((curSensor._mean - (curSensor._deviation)) > this.props.liveGrowData[grow.id][pid])) {
-                                    setIndicatorColor = '#ded954' // WARN
-                                } else {
-                                    setIndicatorColor = '#38c538' // GOOD
-                                }
-                            }
-
-                            return (
-                                <div className="AllGraph-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
-
-                                    {(() => {
-                                        if (!this.props.liveGrowData[grow.id]) {
-                                            return
-                                        }
-                                        var tIndex = key
-                                        var curSensor = grow.config.SENSORS[tIndex]
-
-                                        return <div>{Math.round(this.props.liveGrowData[grow.id][pid] * 10) / 10}{curSensor.unit}</div>
-                                    })()}
-                                </div>
-                            )
-                        })()}
-                    </div>
+                    <GrowDataDisplay grow={grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.state.user} activeLines={this.state.activeLines} />
                 )
-            }
-            )
-            );
+            })
+
         }
+
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
@@ -269,7 +203,7 @@ class AllGraphs extends Component {
                                 <div className="Grow-Box-Info-Graph-Area" >
                                     {(() => {
                                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
-                                            return <AllGraph parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.props.user} />
+                                            return <GraphAllGrows parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.state.user} activeLines={this.state.activeLines} />
                                         }
                                     })()}
                                 </div>
@@ -282,7 +216,7 @@ class AllGraphs extends Component {
 
                         <div id="All-Graphs-Buttons">
 
-                            {sensorInfoRows}
+                            {sensorInfoColumns}
 
                         </div>
 

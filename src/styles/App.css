@@ -1365,16 +1365,6 @@ body {
   justify-content: flex-end;
 }
 
-.Grow-Active-Indicator-Circle {
-  border-width: 1px;
-  border-radius: 50%;
-  width: 14px;
-  height: 14px;
-  background-color: #fff;
-  margin-left: 1%;
-  margin-top: 10px;
-}
-
 .Data-Optimal-Background {
   background-color: #91eebb;
 }
@@ -1421,9 +1411,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 1;
-  margin-top: -40px;
-  z-index: 1;
 }
 
 .Grow-Details-Content-Cam {
@@ -1762,13 +1749,14 @@ body {
   font-size: 0.4em;
   font-weight: 200;
   justify-content: flex-end;
-  max-width: 100%;
+  min-width: 100%;
   padding-right: 1px;
   padding-bottom: 1px;
   margin-top: -1px;
   user-select: none;
-  max-height: 7px;
-  margin-bottom: -4px;
+  max-height: 12px;
+  min-height: 12px;
+  margin-bottom: -13px;
   overflow: hidden;
 }
 
@@ -1784,24 +1772,22 @@ body {
 }
 
 .App-Bar-Button-Grow-Temp {
-  font-size: 0.6em;
-  font-weight: bold;
+  font-size: 0.7em;
   padding-left: 1px;
   padding-right: 1px;
   max-height: 100%;
-  font-weight: 500;
+  font-weight: 600;
   background-color: rgb(219, 151, 105);
   user-select: none;
   color: #000;
 }
 
 .App-Bar-Button-Grow-Humidity {
-  font-size: 0.6em;
-  font-weight: bold;
+  font-size: 0.7em;
   padding-left: 1px;
   padding-right: 1px;
   max-height: 100%;
-  font-weight: 500;
+  font-weight: 600;
   background-color: rgb(119, 136, 185);
   user-select: none;
   color: #000;
@@ -2038,4 +2024,12 @@ body {
   flex-wrap: wrap;
   flex-direction: column;
   font-size: 0.75em;
+}
+
+.Lifetime-Graph-Area {
+  flex: 1;
+  margin-left: 50px;
+}
+
+.Component-Grow-Data-Display {
 }

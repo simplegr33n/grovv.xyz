@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../styles/App.css';
 
-import LifetimeGraph from './Graphs/LifetimeGraph'
+import LifetimeGraph from './Graphs/GraphLifetime'
 
 import moment from 'moment' // for datetime...
 
@@ -42,7 +42,7 @@ class LifetimeGraphs extends Component {
 
         if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
 
-            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 5]
+            var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 5]
 
             if (tempSize !== this.state.graphElementSize) {
                 if (this._ismounted) {
@@ -200,7 +200,7 @@ class LifetimeGraphs extends Component {
                     <div className="AllGraphs-Graph-Item">
                         <div className="AllGraphs-Graph-Main">
                             <div className="AllGraphs-Info">
-                                <div className="Grow-Box-Info-Graph-Area" >
+                                <div className="Lifetime-Graph-Area" >
                                     <LifetimeGraph parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} />
                                 </div>
                             </div>

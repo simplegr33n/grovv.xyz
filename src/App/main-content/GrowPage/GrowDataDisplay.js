@@ -1,28 +1,20 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import GrowDetailsGraphs from './GrowDetailsGraphs'
-import GrowSettings from './GrowSettings';
-
-import DbHelper from '../../_utils/DbHelper.js'
-
 
 import moment from 'moment'
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
-import { BsGearFill } from 'react-icons/bs';
 import co2svg from '../../../assets/co2svg.svg'
 import tvocSvg from '../../../assets/tvoc-svg.svg'
 
 
-class GrowDetailsPage extends Component {
+class GrowDataDisplay extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            activeIndicatorStyle: 'Grow-Active-Indicator-Circle',
-
             SENSOR_PIDS: [],
             SENSORS_INIT: false,
 
@@ -37,12 +29,7 @@ class GrowDetailsPage extends Component {
             ACTIVE_INIT: false,
 
             TABLE_INIT: false,
-
-            SHOW_SETTINGS: false
         };
-
-        this.dbHelper = new DbHelper(); // Need for linked journals
-
     }
 
     componentDidMount() {
@@ -67,16 +54,16 @@ class GrowDetailsPage extends Component {
 
 
 
-        if (this.props.rawGrowData && this.state.SENSOR_PIDS && this.state.SENSOR_MEANS) {
-            if (!this.props.rawGrowData[this.props.grow.id]) {
+        if (this.props.threeDayData && this.state.SENSOR_PIDS && this.state.SENSOR_MEANS) {
+            if (!this.props.threeDayData[this.props.grow.id]) {
                 return;
             }
 
-            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.rawGrowData)
+                this.processGrowData(this.props.threeDayData)
             }
             this.forceUpdate()
         }
@@ -89,8 +76,8 @@ class GrowDetailsPage extends Component {
 
     componentDidUpdate = () => {
 
-        if (this.props.rawGrowData) {
-            if (!this.props.rawGrowData[this.props.grow.id]) {
+        if (this.props.threeDayData) {
+            if (!this.props.threeDayData[this.props.grow.id]) {
                 return;
             }
 
@@ -113,15 +100,15 @@ class GrowDetailsPage extends Component {
                 })
             }
 
-            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.rawGrowData)
+                this.processGrowData(this.props.threeDayData)
             } else if (!this.state.TABLE_INIT) {
                 // Gotta get this process in the first time for things to go smooth... not quite sure why.
                 this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.rawGrowData)
+                this.processGrowData(this.props.threeDayData)
                 this.setState({ TABLE_INIT: true })
             }
         }
@@ -173,7 +160,6 @@ class GrowDetailsPage extends Component {
 
             if (this.state.ACTIVE_INIT !== this.props.grow) {
                 this.setState({
-                    ACTIVE_LINES: SENSOR_PIDS,
                     ACTIVE_INIT: this.props.grow
                 });
             }
@@ -281,7 +267,6 @@ class GrowDetailsPage extends Component {
                     // HARMONY_PLUS_TWO_COUNT
                     if ((dataPoint[pid] > (sensor._mean) + (sensor._deviation * 2)) ||
                         (dataPoint[pid] < (sensor._mean) - (sensor._deviation * 2))) {
-                        console.log("PLUS2in" + pid, dataPoint[pid] + " " + sensor._mean + " " + sensor._deviation)
                         HARMONY_PLUS_TWO_COUNT[pid] = HARMONY_PLUS_TWO_COUNT[pid] + 1
                     } else if ((dataPoint[pid] > (sensor._mean) + (sensor._deviation)) ||
                         (dataPoint[pid] < (sensor._mean) - (sensor._deviation))) {  // HARMONY_PLUS_ONE_COUNT
@@ -304,8 +289,6 @@ class GrowDetailsPage extends Component {
                 HARMONY_PLUS_TWO_COUNT[key] = Math.round((HARMONY_PLUS_TWO_COUNT[key] / HARMONY_POINT_COUNT[key]) * 100)
             }
 
-            console.log("UPDATED HARMONY RATIOS!", + "" + " " + " ")
-
             this.setState({
                 HARMONY_DANGER: HARMONY_PLUS_TWO_COUNT,
                 HARMONY_WARN: HARMONY_PLUS_ONE_COUNT
@@ -315,27 +298,7 @@ class GrowDetailsPage extends Component {
 
     toggleLine = (e) => {
         var pid = e.currentTarget.getAttribute('data-value')
-
-        var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-
-        var tActiveLines = this.state.ACTIVE_LINES
-
-        if (tActiveLines.includes(pid)) {
-            tActiveLines[tIndex] = null
-        } else {
-            tActiveLines[tIndex] = pid
-        }
-
-        this.setState({ ACTIVE_LINES: tActiveLines })
-        this.forceUpdate()
-    }
-
-    openCloseSettings = () => {
-        if (this.state.SHOW_SETTINGS) {
-            this.setState({ SHOW_SETTINGS: false })
-        } else {
-            this.setState({ SHOW_SETTINGS: true })
-        }
+        this.props.toggleLine(pid + "^" + this.props.grow.id)
     }
 
     render() {
@@ -370,13 +333,30 @@ class GrowDetailsPage extends Component {
 
                     var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
-                    var setOpacity = 0.3
-                    var setPaddingTop = '3px'
+                    var lineKey = pid + "^" + this.props.grow.id
 
-                    if (this.state.ACTIVE_LINES.includes(pid)) {
-                        setOpacity = 1
-                        setPaddingTop = '4px'
+                    var setOpacity = 1
+                    var setPaddingTop = '4px'
+
+                    // if (this.props.activeLines && this.props.activeLines[this.props.grow.id] && this.props.activeLines[this.props.grow.id].includes(pid + "^" + this.props.grow.id)) {
+                    //     setOpacity = 1
+                    //     setPaddingTop = '4px'
+                    // }
+
+                    if (this.props.user) {
+                        if (this.props.user.PREFS) {
+                            if (this.props.user.PREFS.GRAPHS) {
+                                if (this.props.user.PREFS.GRAPHS.AllGraph) {
+                                    if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[lineKey] === false)) {
+                                        setOpacity = 0.3
+                                        setPaddingTop = '3px'
+                                    }
+                                }
+                            }
+                        }
                     }
+
+
 
                     if (!this.props.grow.config.SENSORS[tIndex]) {
                         return
@@ -586,59 +566,36 @@ class GrowDetailsPage extends Component {
 
         // MAIN RENDER RETURN
         return (
-            <div className="Grow-Details-Page">
-                <div className="Grow-Details-Page-Content">
-                    <div className="Grow-Details-Content-Bottom">
-                        <div className="Grow-Details-Header">
-                            <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-                                <div style={{ color: indicatorColor, marginLeft: '1px', fontSize: '1.1em' }}>
-                                    ⬤
-                                </div>
-                                <div id="Grow-Header-Text">{this.props.grow.name}</div>
-                            </div>
-                            <div onClick={() => this.openCloseSettings()} style={{ paddingRight: '30px', color: '#A9A9A9', userSelect: 'none', cursor: 'pointer' }}>
-                                <BsGearFill style={{ color: '#9e9e9e', fontSize: '22px', marginTop: '8px' }} />
-                            </div>
-                        </div>
-                        <div className="Grow-Details-Bottom-Item" >
-                            <GrowDetailsGraphs activeLines={this.state.ACTIVE_LINES} rawGrowData={this.props.rawGrowData} grow={this.props.grow} />
-                        </div>
-                    </div>
 
+            <div className="Grow-Details-Page-Panel">
+                <div id="Grow-Details-Data-Display">
                     {(() => {
-                        if (this.state.SHOW_SETTINGS) {
+                        if (this.state.liveData) {
                             return (
-                                <GrowSettings grow={this.props.grow} refreshGrows={this.props.refreshGrows} close={this.openCloseSettings} />
+                                <div className="Component-Grow-Data-Display">
+                                    <div className="Grow-Details-Headers-Display-Row">
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', width: '120px', maxWidth: '120px', display: 'flex', flexDirection: 'row' }}>
+                                            <div style={{ color: indicatorColor, marginLeft: '1px', fontSize: '1.1em', marginLeft: '2px', marginRight: '2px', marginTop: '-2px' }}>
+                                                ⬤
+                                            </div>{this.props.grow.name}
+                                        </div>
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '88px', maxWidth: '88px' }}></div>
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h~</div>
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h&#8593;</div>
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h&#8595;</div>
+                                    </div>
+
+                                    {sensorInfoRows}
+
+                                </div>
                             )
                         }
                     })()}
-
-                    <div className="Grow-Details-Page-Panel">
-                        <div id="Grow-Details-Data-Display">
-                            {(() => {
-                                if (this.state.liveData) {
-                                    return (
-                                        <div id="Grow-Details-Main-Data-Display">
-                                            <div className="Grow-Details-Headers-Display-Row">
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', width: '120px', maxWidth: '120px' }}></div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '88px', maxWidth: '88px' }}></div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h~</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h&#8593;</div>
-                                                <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px' }}>24h&#8595;</div>
-                                            </div>
-
-                                            {sensorInfoRows}
-
-                                        </div>
-                                    )
-                                }
-                            })()}
-                        </div>
-                    </div>
                 </div>
-            </div >
+            </div>
+
         );
     }
 }
 
-export default GrowDetailsPage;
+export default GrowDataDisplay;

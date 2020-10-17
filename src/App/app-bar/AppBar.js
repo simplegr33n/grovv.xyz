@@ -81,8 +81,6 @@ class AppBar extends Component {
                         this.updatedAtDate[grow.id] = updatedAtDate
                     }
 
-
-
                     var difference = now - this.props.liveGrowData[grow.id].time * 1000
                     if (difference > 10000000) {
                         indicatorColor = "#989e98"
@@ -93,9 +91,6 @@ class AppBar extends Component {
                     } else if (difference < 60000) {
                         indicatorColor = "#27d927"
                     }
-
-
-
                     lastUpdate = moment(updatedAtDate).fromNow()
                 }
 
@@ -104,10 +99,7 @@ class AppBar extends Component {
                 return (
                     <div className="App-Bar-Button-Grow" key={grow.id} onClick={this.setGrow} data-value={grow.id}>
                         <div className="App-Bar-Button-Updated" data-value={grow.id}>
-                            <div style={{ paddingBottom: '15px' }}>
-                                {lastUpdate}
-                            </div>
-                            <div style={{ color: indicatorColor, marginLeft: '1px' }}>
+                            <div style={{ color: indicatorColor, marginLeft: '1px', fontSize: '10px' }}>
                                 ⬤
                             </div>
                         </div>
