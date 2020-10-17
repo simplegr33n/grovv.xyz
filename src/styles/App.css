@@ -1628,13 +1628,6 @@ body {
 
 /* GRAPHS PAGE */
 
-#Grow-Details-Graphs-Page {
-  width: 100%;
-  height: 100%;
-  background-color: rgb(18, 19, 18);
-  position: relative;
-}
-
 .Chart-Page {
   background-color: #000;
   display: flex;
@@ -1650,7 +1643,7 @@ body {
   flex-direction: row;
   justify-content: flex-start;
   position: relative;
-  margin-left: -2.5%;
+  margin-left: -5%;
 }
 
 .Chart-Container-Box {

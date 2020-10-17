@@ -121,7 +121,7 @@ class AllGraphs extends Component {
 
         if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
 
-            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
+            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 12, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
 
             if (tempSize !== this.state.graphElementSize) {
                 if (this._ismounted) {
@@ -185,7 +185,7 @@ class AllGraphs extends Component {
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
-                <div style={{ width: "100vw", height: "80vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
+                <div style={{ width: "100vw", height: "60vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
                     {(() => {
                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
                             return <GraphAllGrows parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.state.user} />

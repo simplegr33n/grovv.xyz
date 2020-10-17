@@ -389,11 +389,15 @@ class GrowDataDisplay extends Component {
                                 var harmonyWarnFlex = 0
                                 var harmonyDangerFlex = 0
                                 var harmonyGoodFlex = 100
+                                // EXAGERATE WARNINGS *2 / *10
                                 if (this.state.HARMONY_WARN) {
-                                    harmonyWarnFlex = this.state.HARMONY_WARN[pid]
+                                    harmonyWarnFlex = this.state.HARMONY_WARN[pid] * 2
                                 }
                                 if (this.state.HARMONY_DANGER) {
-                                    harmonyDangerFlex = this.state.HARMONY_DANGER[pid]
+                                    harmonyDangerFlex = this.state.HARMONY_DANGER[pid] * 10
+                                }
+                                if (harmonyDangerFlex > 100) {
+                                    harmonyWarnFlex = 0
                                 }
                                 harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
 
