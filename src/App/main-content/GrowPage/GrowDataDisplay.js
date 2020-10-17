@@ -381,9 +381,9 @@ class GrowDataDisplay extends Component {
                                 } else if (curSensor.type === "waterTemp") {
                                     return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
                                 } else if (curSensor.type === "co2") {
-                                    return <img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
+                                    return <img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '20px', marginLeft: '4px', marginRight: '2px' }} />
                                 } else if (curSensor.type === "tvoc") {
-                                    return <img src={tvocSvg} alt="TVOC Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '28px' }} />
+                                    return <img src={tvocSvg} alt="TVOC Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '20px', marginLeft: '4px', marginRight: '2px' }} />
                                 } else {
                                     return <div />
                                 }
