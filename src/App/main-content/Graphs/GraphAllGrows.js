@@ -346,12 +346,12 @@ class AllGraph extends Component {
 
         return (
 
-            <div className="Chart-Container">
+            <div className="Chart-Container" style={{ background: '#000' }}>
 
                 {renderDayGraph}
 
                 {/* Time Scale Select... */}
-                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '2%' }}>
+                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '10px', marginTop: '10px' }}>
 
                     <select onChange={this.toggleWindow} id="AllGraph-Time-Scale" defaultValue={defaultWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;h</option>

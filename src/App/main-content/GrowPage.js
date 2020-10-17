@@ -83,7 +83,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} refreshGrows={this.props.refreshGrows} openMainPage={this.openMainPage} setJournalID={this.setJournalID} rawGrowData={this.props.rawGrowData} liveGrowData={this.props.liveGrowData} user={this.props.user} />
+									<GrowDetailsPage grow={this.props.grow} refreshGrows={this.props.refreshGrows} openMainPage={this.openMainPage} setJournalID={this.setJournalID} rawGrowData={this.props.rawGrowData} liveGrowData={this.props.liveGrowData} user={this.props.user} userGrows={this.props.userGrows} />
 								)
 							}
 						})()}

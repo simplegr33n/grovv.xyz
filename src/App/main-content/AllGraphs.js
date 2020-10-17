@@ -76,7 +76,6 @@ class AllGraphs extends Component {
 
 
             this.setState({
-                activeLines: activeLines, // same same for now.. to init
                 groupedSensors: activeLines
             });
         }
@@ -122,7 +121,7 @@ class AllGraphs extends Component {
 
         if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
 
-            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 5]
+            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
 
             if (tempSize !== this.state.graphElementSize) {
                 if (this._ismounted) {
@@ -136,10 +135,6 @@ class AllGraphs extends Component {
     }
 
     toggleLine = (data) => {
-        // var data = e.currentTarget.getAttribute('data-value')
-
-        console.log("DAATAA", data)
-
         // // update firebase data
         var tempUser = this.props.user
 
@@ -150,10 +145,7 @@ class AllGraphs extends Component {
                         if (tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] === false) {
                             tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = true
                             this.setUserPrefs(tempUser)
-                            this.setState({
-                                user: tempUser,
-                                activeLines: tempUser.PREFS.GRAPHS.AllGraph.showSensors
-                            })
+                            this.setState({ user: tempUser })
                             return
                         }
                     }
@@ -162,10 +154,7 @@ class AllGraphs extends Component {
         }
         tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = false
         this.setUserPrefs(tempUser)
-        this.setState({
-            user: tempUser,
-            activeLines: tempUser.PREFS.GRAPHS.AllGraph.showSensors
-        })
+        this.setState({ user: tempUser })
     }
 
     toggleWindow = (tWindow) => {
@@ -183,11 +172,11 @@ class AllGraphs extends Component {
     render() {
 
         var sensorInfoColumns = []
-        if (this.state.activeLines && this.state.growIDs && this.props.userGrows) {
+        if (this.state.growIDs && this.props.userGrows) {
 
             sensorInfoColumns = this.props.userGrows.map((grow) => {
                 return (
-                    <GrowDataDisplay grow={grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.state.user} activeLines={this.state.activeLines} />
+                    <GrowDataDisplay grow={grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.state.user} />
                 )
             })
 
@@ -197,21 +186,13 @@ class AllGraphs extends Component {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
                 <div style={{ width: "100vw", height: "80vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
-                    <div className="AllGraphs-Graph-Item">
-                        <div className="AllGraphs-Graph-Main">
-                            <div className="AllGraphs-Info">
-                                <div className="Grow-Box-Info-Graph-Area" >
-                                    {(() => {
-                                        if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
-                                            return <GraphAllGrows parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.state.user} activeLines={this.state.activeLines} />
-                                        }
-                                    })()}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {(() => {
+                        if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
+                            return <GraphAllGrows parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.state.user} />
+                        }
+                    })()}
                 </div >
-                <div className="Grow-Details-Page-Panel">
+                <div className="Grow-Details-Page-Panel" style={{ zIndex: 99 }}>
                     <div id="Grow-Details-Data-Display">
 
                         <div id="All-Graphs-Buttons">
