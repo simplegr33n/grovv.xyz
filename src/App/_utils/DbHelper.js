@@ -39,7 +39,6 @@ class DbHelper {
     // Set Grow Config in firebase
     setUser(u) {
         var ref = this.firebase.db.ref().child('users').child(u.uid)
-        console.log("DBU", u)
         ref.set(u)
     }
 
@@ -47,8 +46,6 @@ class DbHelper {
     // ADD LIFETIME DATA  //
     // .................. //
     getLifetimeData(userID, setData) {
-        console.log("Get Lifetime Data")
-
         var ref = this.firebase.db.ref().child('lifetime').child(this.userID)
 
         ref.on('value', (snapshot) => {

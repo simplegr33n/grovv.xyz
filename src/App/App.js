@@ -68,8 +68,6 @@ class App extends Component {
 	setFirebaseUserPrefs = (u) => {
 		this.setState({ user: u });
 
-		console.log("temp user GONNASET", u)
-
 		this.dbHelper.setUser(u)
 	}
 
@@ -98,8 +96,6 @@ class App extends Component {
 	}
 
 	setUserGrows = (userGrows) => {
-		console.log("USER GROWS!", userGrows)
-
 		userGrows.forEach((grow) => {
 			this.dbHelper.getThreeDayData(grow.id, this.setThreeDayData)
 		})
@@ -194,20 +190,6 @@ class App extends Component {
 			});
 		}
 	}
-
-	openGrows = () => {
-		if (this.state.mainContent !== 'grows') {
-			this.setState({
-				mainContent: 'grows',
-				currentGrow: null
-			});
-		} else {
-			this.setState({
-				currentGrow: null
-			});
-		}
-	}
-
 
 	setGrow = (grow) => {
 		console.log("APP Setgrow", grow)

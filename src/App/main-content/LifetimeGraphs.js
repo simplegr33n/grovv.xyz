@@ -66,7 +66,6 @@ class LifetimeGraphs extends Component {
     normalizeLifetimeData() {
         console.log("normalize LIFETIMEDATA!", this.props.lifetimeData)
 
-        var rawData = this.props.lifetimeData
         var allYears = [2019, 2020]
         var allMonths = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
         var allDays = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
@@ -75,6 +74,8 @@ class LifetimeGraphs extends Component {
 
         var normalizedEntries = []
         var sensorList = []
+
+        var sampleHighs = []
 
         allYears.forEach((year) => {
             allMonths.forEach((month) => {
@@ -93,8 +94,12 @@ class LifetimeGraphs extends Component {
                                     if (!sensorList.includes(renamedSensor)) {
                                         sensorList[sensorList.length] = renamedSensor
                                     }
-                                }
 
+                                    // add to sample highs for axis picking if not there
+                                    if (dataType === "HIGH" && !sampleHighs[pid + "^" + growID] || sampleHighs[pid + "^" + growID] < value) {
+                                        sampleHighs[pid + "^" + growID] = value
+                                    }
+                                }
                             }
                         }
                     }
@@ -112,15 +117,16 @@ class LifetimeGraphs extends Component {
         // setState
         this.setState({
             sensorList: sensorList,
-            normalizedData: normalizedEntries
+            normalizedData: normalizedEntries,
+            sampleHighs: sampleHighs
         })
 
     }
 
 
-    // 
-    // CHUNKY stuff
-    // 
+    // ///////////////////////////////
+    // CHUNKY stuff -- Relating to grabbing info from firebase, reading it, and pushing processed data back
+    // ///////////////////////////////
     getMonthChunkData() {
         this.props.getMonthChunkData(this.state.growID, this.state.year, this.state.month, this.setStateMonthChunk)
     }
@@ -196,15 +202,9 @@ class LifetimeGraphs extends Component {
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ width: "100vw", minHeight: "65vh" }} ref={element => this.divRef = element} >
-                    <div className="AllGraphs-Graph-Item">
-                        <div className="AllGraphs-Graph-Main">
-                            <div className="AllGraphs-Info">
-                                <div className="Lifetime-Graph-Area" >
-                                    <LifetimeGraph parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} />
-                                </div>
-                            </div>
-                        </div>
+                <div style={{ width: "100vw", minHeight: "80vh" }} ref={element => this.divRef = element} >
+                    <div className="Lifetime-Graph-Area" >
+                        <LifetimeGraph parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} sampleHighs={this.state.sampleHighs} />
                     </div>
                 </div >
                 <div className="Grow-Details-Page-Panel">

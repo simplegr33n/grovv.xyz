@@ -18,7 +18,7 @@ class GraphSensors extends Component {
             lightsOnArray: [],
             lightsOffArray: [],
             tickArray: [],
-            lightBackgrounds: ['#7344e740', '#fff93640']
+            lightBackgrounds: ['#7344e740', '#fff9365C']
         };
 
         this.displayTemp = true
@@ -139,14 +139,13 @@ class GraphSensors extends Component {
 
         //set backgrounds
         if (tempOnArray.includes(ticks[0])) {
-            this.setState({ lightBackgrounds: ['#7344e740', '#fff93640'] })
+            this.setState({ lightBackgrounds: ['#7344e740', '#fff9365C'] })
         } else {
-            this.setState({ lightBackgrounds: ['#fff93640', '#7344e740'] })
+            this.setState({ lightBackgrounds: ['#fff9365C', '#7344e740'] })
 
         }
 
         this.setState({ tickArray: ticks })
-
     }
 
     processData = (window = this.state.displayWindow) => {
