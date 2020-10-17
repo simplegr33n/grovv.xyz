@@ -385,6 +385,27 @@ class GrowDataDisplay extends Component {
                                 }
                             })()}
 
+                            {(() => {
+                                var harmonyWarnFlex = 0
+                                var harmonyDangerFlex = 0
+                                var harmonyGoodFlex = 100
+                                if (this.state.HARMONY_WARN) {
+                                    harmonyWarnFlex = this.state.HARMONY_WARN[pid]
+                                }
+                                if (this.state.HARMONY_DANGER) {
+                                    harmonyDangerFlex = this.state.HARMONY_DANGER[pid]
+                                }
+                                harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
+
+                                return (
+                                    <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px", maxWidth: "4px", flex: 99 }}>
+                                        <div style={{ flex: harmonyDangerFlex, background: '#FF0000' }} />
+                                        <div style={{ flex: harmonyWarnFlex, background: '#fcba03' }} />
+                                        <div style={{ flex: harmonyGoodFlex, background: '#38c538' }} />
+                                    </div>
+                                )
+                            })()}
+
                         </div>
                     )
                 })()}
@@ -410,27 +431,6 @@ class GrowDataDisplay extends Component {
                     return (
                         <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
 
-                            {(() => {
-                                var harmonyWarnFlex = 0
-                                var harmonyDangerFlex = 0
-                                var harmonyGoodFlex = 100
-                                if (this.state.HARMONY_WARN) {
-                                    harmonyWarnFlex = this.state.HARMONY_WARN[pid]
-                                }
-                                if (this.state.HARMONY_DANGER) {
-                                    harmonyDangerFlex = this.state.HARMONY_DANGER[pid]
-                                }
-                                harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
-
-                                return (
-                                    <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px" }}>
-                                        <div style={{ flex: harmonyDangerFlex, background: '#FF0000' }} />
-                                        <div style={{ flex: harmonyWarnFlex, background: '#fcba03' }} />
-                                        <div style={{ flex: harmonyGoodFlex, background: '#38c538' }} />
-                                    </div>
-                                )
-                            })()}
-
                             <div style={{ width: '1px', background: '#000' }} />
 
                             {(() => {
@@ -440,14 +440,19 @@ class GrowDataDisplay extends Component {
                                     return
                                 }
 
-                                return <div style={{ fontSize: '20px', userSelect: 'none', flex: 1 }}>{Math.round(this.state.liveData[pid] * 10) / 10}{curSensor.unit}</div>
+                                return (
+                                    <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                        <div style={{ fontSize: '20px', userSelect: 'none', display: 'flex', fontWeight: 700 }}>{Math.round(this.state.liveData[pid] * 10) / 10}</div>
+                                        <div style={{ fontSize: '14px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
+                                    </div>
+                                )
                             })()}
 
                             {(() => {
                                 if (this.state.liveData[pid] > this.state.lastLiveData[pid]) {
-                                    return <div style={{ fontSize: '14px', userSelect: 'none', color: '#a02525' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                    return <div style={{ fontSize: '11px', userSelect: 'none', color: '#a02525', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                 } else if (this.state.liveData[pid] < this.state.lastLiveData[pid]) {
-                                    return <div style={{ fontSize: '14px', userSelect: 'none', color: '#242490' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                    return <div style={{ fontSize: '11px', userSelect: 'none', color: '#242490', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                 } else {
                                     return <div />
                                 }
@@ -467,7 +472,13 @@ class GrowDataDisplay extends Component {
                             }
 
                             if (this.state.YEST_AVGS[tIndex]) {
-                                return <div style={{ fontSize: '9px', userSelect: 'none', fontWeight: '400' }}>{Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10 + curSensor.unit}</div>
+
+                                return (
+                                    <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                        <div style={{ fontSize: '9px', userSelect: 'none', display: 'flex', fontWeight: '600' }}>{Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10}</div>
+                                        <div style={{ fontSize: '9px', userSelect: 'none', display: 'flex', fontWeight: 400 }}>{curSensor.unit}</div>
+                                    </div>
+                                )
                             }
                         })()}
 
@@ -478,11 +489,11 @@ class GrowDataDisplay extends Component {
                             if (this.state.DAILY_AVGS[tIndex] && this.state.YEST_AVGS[tIndex]) {
 
                                 if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
-                                    return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                    return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                 } else if (this.state.DAILY_AVGS[tIndex] < this.state.YEST_AVGS[tIndex]) {
-                                    return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                    return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                 } else {
-                                    return <div style={{ fontSize: '9px', visibility: 'hidden', userSelect: 'none' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                    return <div />
                                 }
                             }
                         })()}
@@ -497,7 +508,12 @@ class GrowDataDisplay extends Component {
                         }
 
                         if (this.state.DAILY_AVGS[tIndex]) {
-                            return <div style={{ fontSize: '16px', marginTop: '-1px', userSelect: 'none', fontWeight: '600' }}>{Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10 + curSensor.unit}</div>
+                            return (
+                                <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center', paddingBottom: '2px' }}>
+                                    <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600' }}>{Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10}</div>
+                                    <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
+                                </div>
+                            )
                         }
                     })()}
                 </div>
@@ -510,7 +526,7 @@ class GrowDataDisplay extends Component {
 
                             if (this.state.DAILY_HIGHS_TIMES) {
                                 var m = moment(this.state.DAILY_HIGHS_TIMES[tIndex])
-                                return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200' }}>{m.format('HH:mm')}</div>
+                                return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#4b1a0a' }}>{m.format('HH:mm')}</div>
                             }
                         })()}
                     </div>
@@ -523,7 +539,14 @@ class GrowDataDisplay extends Component {
                         }
 
                         if (this.state.DAILY_HIGHS) {
-                            return <div style={{ fontSize: '16px', marginTop: '-1px', userSelect: 'none', fontWeight: '600' }}>{Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10 + curSensor.unit}</div>
+
+                            return (
+                                <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                    <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10}</div>
+                                    <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
+                                </div>
+                            )
+
                         }
                     })()}
                 </div>
@@ -535,7 +558,7 @@ class GrowDataDisplay extends Component {
 
                             if (this.state.DAILY_LOWS_TIMES) {
                                 var m = moment(this.state.DAILY_LOWS_TIMES[tIndex])
-                                return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200' }}>{m.format('HH:mm')}</div>
+                                return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#20314e' }}>{m.format('HH:mm')}</div>
                             }
                         })()}
                     </div>
@@ -548,7 +571,15 @@ class GrowDataDisplay extends Component {
                         }
 
                         if (this.state.DAILY_LOWS) {
-                            return <div style={{ fontSize: '16px', marginTop: '-1px', userSelect: 'none', fontWeight: '600' }}>{Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10 + curSensor.unit}</div>
+
+
+                            return (
+                                <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                    <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10}</div>
+                                    <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
+                                </div>
+                            )
+
                         }
                     })()}
                 </div>

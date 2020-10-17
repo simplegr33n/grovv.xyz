@@ -1857,6 +1857,8 @@ body {
   display: flex;
   flex-direction: row;
   flex: 1;
+  margin-bottom: 1px;
+  overflow: hidden;
   height: 30px;
 }
 
@@ -1909,7 +1911,6 @@ body {
 .Grow-Details-Main-Data-Current-Data {
   font-weight: 700;
   background-color: #38c538;
-  font-size: 1em;
   color: #000;
   display: flex;
   flex-direction: row;
