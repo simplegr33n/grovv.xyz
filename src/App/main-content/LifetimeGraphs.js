@@ -24,7 +24,7 @@ class LifetimeGraphs extends Component {
     componentDidMount = () => {
         this._ismounted = true;
         if (this.props.lifetimeData) {
-            this.normalizeLifetimeData(this.props.lifetimeData)
+            this.normalizeLifetimeData()
         }
 
         // SCARY TIMES!
@@ -63,8 +63,7 @@ class LifetimeGraphs extends Component {
         this.props.postLifetimeData(lifetimeObject, this.state.growID, this.state.year, this.state.month, day)
     }
 
-    normalizeLifetimeData() {
-        console.log("normalize LIFETIMEDATA!", this.props.lifetimeData)
+    normalizeLifetimeData(rangeMin = 0, rangeMax = new Date().valueOf()) {
 
         var allYears = [2019, 2020]
         var allMonths = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
@@ -79,38 +78,41 @@ class LifetimeGraphs extends Component {
 
         allYears.forEach((year) => {
             allMonths.forEach((month) => {
-                allDays.forEach((day) => {
+                var testDate = new Date(year + "-" + month).valueOf()
 
-                    var normalizedDataPoint = {}
-                    for (const [growID, dataSet] of Object.entries(this.props.lifetimeData)) {
-                        if (dataSet[year] && dataSet[year][month] && dataSet[year][month][day]) {
+                if ((testDate < rangeMax) && (testDate > rangeMin)) {
+                    allDays.forEach((day) => {
+                        var normalizedDataPoint = {}
+                        for (const [growID, dataSet] of Object.entries(this.props.lifetimeData)) {
+                            if (dataSet[year] && dataSet[year][month] && dataSet[year][month][day]) {
 
-                            // add datapieces to normalizedDataPoint
-                            for (const [dataType, values] of Object.entries(dataSet[year][month][day])) {
-                                for (const [pid, value] of Object.entries(values)) {
-                                    var renamedSensor = pid + "^" + growID + "^" + dataType
-                                    normalizedDataPoint[renamedSensor] = value
-                                    // add to sensorlist if not yet there
-                                    if (!sensorList.includes(renamedSensor)) {
-                                        sensorList[sensorList.length] = renamedSensor
-                                    }
+                                // add datapieces to normalizedDataPoint
+                                for (const [dataType, values] of Object.entries(dataSet[year][month][day])) {
+                                    for (const [pid, value] of Object.entries(values)) {
+                                        var renamedSensor = pid + "^" + growID + "^" + dataType
+                                        normalizedDataPoint[renamedSensor] = value
+                                        // add to sensorlist if not yet there
+                                        if (!sensorList.includes(renamedSensor)) {
+                                            sensorList[sensorList.length] = renamedSensor
+                                        }
 
-                                    // add to sample highs for axis picking if not there
-                                    if (dataType === "HIGH" && !sampleHighs[pid + "^" + growID] || sampleHighs[pid + "^" + growID] < value) {
-                                        sampleHighs[pid + "^" + growID] = value
+                                        // add to sample highs for axis picking if not there
+                                        if (dataType === "HIGH" && !sampleHighs[pid + "^" + growID] || sampleHighs[pid + "^" + growID] < value) {
+                                            sampleHighs[pid + "^" + growID] = value
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    if (Object.keys(normalizedDataPoint).length !== 0) {
-                        // add normalized datapoint to normalizedEntries
-                        var aDate = new Date(year + "-" + month + "-" + day).valueOf()
-                        normalizedDataPoint.time = aDate
-                        normalizedEntries[normalizedEntries.length] = normalizedDataPoint
-                    }
-                })
+                        if (Object.keys(normalizedDataPoint).length !== 0) {
+                            // add normalized datapoint to normalizedEntries
+                            var aDate = new Date(year + "-" + month + "-" + day).valueOf()
+                            normalizedDataPoint.time = aDate
+                            normalizedEntries[normalizedEntries.length] = normalizedDataPoint
+                        }
+                    })
+                }
             })
         })
 
@@ -120,8 +122,14 @@ class LifetimeGraphs extends Component {
             normalizedData: normalizedEntries,
             sampleHighs: sampleHighs
         })
-
     }
+
+    updateTimeframe = (rangeMin, rangeMax) => {
+        console.log("MINAND MAX" + rangeMin, rangeMax)
+        this.normalizeLifetimeData(rangeMin, rangeMax)
+    }
+
+
 
 
     // ///////////////////////////////
@@ -204,7 +212,7 @@ class LifetimeGraphs extends Component {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ width: "100vw", minHeight: "80vh" }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
-                        <LifetimeGraph parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} sampleHighs={this.state.sampleHighs} />
+                        <LifetimeGraph updateTimeframe={this.updateTimeframe} parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} sampleHighs={this.state.sampleHighs} />
                     </div>
                 </div >
                 <div className="Grow-Details-Page-Panel">

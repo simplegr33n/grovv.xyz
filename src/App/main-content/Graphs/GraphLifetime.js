@@ -12,6 +12,8 @@ class LifetimeGraph extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            rangeMax: new Date().valueOf(),
+            rangeMin: new Date("2019-05").valueOf()
         };
 
     }
@@ -93,6 +95,30 @@ class LifetimeGraph extends Component {
         }
 
         this.setState({ activeLines: tempActiveLines })
+    }
+
+    toggleRangeMin = (e) => {
+        var newValue = new Date(e.target.value).valueOf()
+        var maxValue = this.state.rangeMax
+        if (!maxValue) {
+            maxValue = new Date().valueOf()
+        }
+
+        this.setState({ rangeMin: newValue })
+
+        this.props.updateTimeframe(newValue, maxValue)
+    }
+
+    toggleRangeMax = (e) => {
+        var newValue = new Date(e.target.value).valueOf() + 3029800000 // add a month here
+        var minValue = this.state.rangeMin
+        if (!minValue) {
+            minValue = 0
+        }
+
+        this.setState({ rangeMax: newValue })
+
+        this.props.updateTimeframe(minValue, newValue)
     }
 
 
@@ -214,11 +240,21 @@ class LifetimeGraph extends Component {
         }
 
 
+
+
         return (
             <div style={{ overflowY: 'auto', overflowX: 'hidden', maxHeight: '100%' }}>
                 <div className="Chart-Container-Box" style={{ marginLeft: '-5%', background: '#000101' }}>
                     {renderLifetimeGraph}
+                    {/* Time Scale Select... */}
+                    <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '36px', marginTop: '18px' }}>
+
+                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2019-05" max={moment(new Date(this.state.rangeMax - 3029800000)).format('YYYY-MM')} type="month" defaultValue={"2019-05"} style={{ fontSize: '0.8em', padding: 0, maxWidth: '40px', marginTop: '1px' }} />
+                        <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 3029800000)).format('YYYY-MM')} max={moment(new Date()).format('YYYY-MM')} type="month" defaultValue={moment(new Date()).format('YYYY-MM')} style={{ fontSize: '0.8em', padding: 0, marginTop: '1px' }} />
+
+                    </div>
                 </div>
+
                 <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', padding: '10px' }}>
                     {renderButtonItems}
                 </div>

@@ -281,8 +281,6 @@ class GrowDataDisplay extends Component {
         // CALCULATE HARMONIES
         if (Object.keys(HARMONY_POINT_COUNT).length !== 0) {
 
-            this.harmonyRatiosUpdated = new Date().valueOf()
-
             for (const [key, value] of Object.entries(HARMONY_PLUS_ONE_COUNT)) {
                 HARMONY_PLUS_ONE_COUNT[key] = Math.round((HARMONY_PLUS_ONE_COUNT[key] / HARMONY_POINT_COUNT[key]) * 100)
             }
@@ -610,7 +608,7 @@ class GrowDataDisplay extends Component {
                                             if (!this.props.activeLines) {
                                                 return (
                                                     <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '12px', userSelect: 'none', width: '120px', maxWidth: '120px', display: 'flex', flexDirection: 'row' }}>
-                                                        <div style={{ color: indicatorColor, marginLeft: '1px', marginLeft: '2px', marginRight: '2px', marginTop: '-1px' }}>
+                                                        <div style={{ color: indicatorColor, marginLeft: '2px', marginRight: '2px', marginTop: '-1px' }}>
                                                             ⬤
                                                         </div>
                                                         {this.props.grow.name}

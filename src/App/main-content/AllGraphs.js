@@ -4,13 +4,6 @@ import '../../styles/App.css';
 import GraphAllGrows from './Graphs/GraphAllGrows'
 import GrowDataDisplay from './GrowPage/GrowDataDisplay'
 
-// import moment from 'moment' // for datetime...
-
-import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
-import co2svg from '../../assets/co2svg.svg'
-import tvocSvg from '../../assets/tvoc-svg.svg'
-
-
 
 class AllGraphs extends Component {
 
