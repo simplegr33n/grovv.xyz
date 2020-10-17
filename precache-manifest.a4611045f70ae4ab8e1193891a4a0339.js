@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "831a8f4ac3a0802a61d6",
-    "url": "/grovv.xyz/static/css/main.f1daacba.chunk.css"
+    "revision": "e67d856aa63b915aa772",
+    "url": "/grovv.xyz/static/css/main.cde0cef6.chunk.css"
   },
   {
-    "revision": "831a8f4ac3a0802a61d6",
-    "url": "/grovv.xyz/static/js/main.4c9567a2.chunk.js"
+    "revision": "e67d856aa63b915aa772",
+    "url": "/grovv.xyz/static/js/main.6e091826.chunk.js"
   },
   {
     "revision": "11f44ca7cbfb1074bb97",
@@ -20,19 +20,19 @@ self.__precacheManifest = [
     "url": "/grovv.xyz/static/js/2.1763acea.chunk.js"
   },
   {
-    "revision": "fc43d34595051319c7ea0dc0d532b577",
-    "url": "/grovv.xyz/static/media/co2svg.fc43d345.svg"
+    "revision": "dd2f146102be3474989f6e6dc479eb5d",
+    "url": "/grovv.xyz/static/media/co2svg.dd2f1461.svg"
   },
   {
-    "revision": "86ee762c8b1c2aa1ec64834494e0b48d",
-    "url": "/grovv.xyz/static/media/tvoc-svg.86ee762c.svg"
+    "revision": "f301a5367961a01316a8adee457a7fe1",
+    "url": "/grovv.xyz/static/media/tvoc-svg.f301a536.svg"
   },
   {
     "revision": "5ece3763128ed876ff790e1b1fa23a5c",
     "url": "/grovv.xyz/static/media/corner-logo.5ece3763.png"
   },
   {
-    "revision": "d6de834ddb3b09d62bf377dde597cef3",
+    "revision": "f2596d0956e6d5bbe39b5a434f7ab861",
     "url": "/grovv.xyz/index.html"
   }
 ];
