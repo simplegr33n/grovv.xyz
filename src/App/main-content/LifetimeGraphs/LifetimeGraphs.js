@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import '../../styles/App.css';
+import '../../../styles/App.css';
 
-import LifetimeGraph from './Graphs/GraphLifetime'
+import LifetimeGraph from '../_Graphs/GraphLifetime'
+import LifetimeDataColumn from './LifetimeDataColumn'
 
 import moment from 'moment' // for datetime...
 
@@ -16,7 +17,7 @@ class LifetimeGraphs extends Component {
 
             growID: '-C02kOvSXRrm1zIZ6EOx', // hardcoded for now // '-LdtkOvSXRrm1zIZ6EOx' // '-LdtfBTlG6Fgg-ADD8-b' // '-C02kOvSXRrm1zIZ6EOx'
             year: '2020',
-            month: '09',
+            month: '10',
         };
 
     }
@@ -125,7 +126,6 @@ class LifetimeGraphs extends Component {
     }
 
     updateTimeframe = (rangeMin, rangeMax) => {
-        console.log("MINAND MAX" + rangeMin, rangeMax)
         this.normalizeLifetimeData(rangeMin, rangeMax)
     }
 
@@ -212,12 +212,9 @@ class LifetimeGraphs extends Component {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ width: "100vw", minHeight: "80vh" }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
-                        <LifetimeGraph updateTimeframe={this.updateTimeframe} parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} sampleHighs={this.state.sampleHighs} />
+                        <LifetimeGraph updateTimeframe={this.updateTimeframe} parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} sampleHighs={this.state.sampleHighs} userGrows={this.props.userGrows} />
                     </div>
                 </div >
-                <div className="Grow-Details-Page-Panel">
-
-                </div>
             </div>
 
         );

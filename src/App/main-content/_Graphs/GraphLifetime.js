@@ -4,6 +4,7 @@ import '../../../styles/App.css';
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment, { relativeTimeThreshold } from 'moment'
+import LifetimeDataColumn from '../LifetimeGraphs/LifetimeDataColumn'
 
 
 
@@ -20,12 +21,6 @@ class LifetimeGraph extends Component {
 
     componentDidMount() {
         this._ismounted = true;
-        if (this.props.grow && this._ismounted) {
-            if (this.props.grow.id !== this.growID) {
-                this.growID = this.props.grow.id;
-            }
-        }
-
     }
 
     componentWillUnmount() {
@@ -40,17 +35,15 @@ class LifetimeGraph extends Component {
         }
 
         if (!this.state.activeLines && this.props.sensorList) {
-            var newList = []
+            var activeLines = []
+            var sensorList = []
             this.props.sensorList.forEach((sensorID) => {
-                newList[newList.length] = sensorID
+                activeLines[activeLines.length] = sensorID
+                sensorList[sensorList.length] = sensorID
             })
             this.setState({
-                activeLines: newList
-            })
-        }
-        if (!this.state.sensorList && this.props.sensorList) {
-            this.setState({
-                sensorList: this.props.sensorList
+                activeLines: activeLines,
+                sensorList: sensorList
             })
         }
     }
@@ -121,63 +114,114 @@ class LifetimeGraph extends Component {
         this.props.updateTimeframe(minValue, newValue)
     }
 
+    handleLineToggle = (lineName) => {
+        var tempActiveLines = this.state.activeLines
+        if (tempActiveLines.includes(lineName)) {
+            const index = tempActiveLines.indexOf(lineName);
+            if (index > -1) {
+                tempActiveLines.splice(index, 1);
+            }
+        } else {
+            tempActiveLines[tempActiveLines.length] = lineName
+        }
+
+        this.setState({ activeLines: tempActiveLines })
+    }
+
+    toggleSensorLines = (rawID) => {
+        const cycleList = ['^AVERAGE', '^HIGH', '^LOW']
+        var tempName = rawID.split("^")[0] + "^" + rawID.split("^")[1]
+
+        var tempActiveLines = this.state.activeLines
+        var tempActivatedGrows = this.state.activatedGrows
+
+        cycleList.forEach((type) => {
+            var value = tempName + type
+
+            if (!tempActivatedGrows) {
+                tempActivatedGrows = []
+            }
+
+            if (tempActivatedGrows[value] === false) {
+                tempActivatedGrows[value] = true
+                this.state.sensorList.forEach((sensor) => {
+                    // ADD
+                    if (value === sensor) {
+                        if (!tempActiveLines.includes(sensor)) {
+                            tempActiveLines[tempActiveLines.length] = sensor
+                        }
+                    }
+                })
+            } else if (!tempActivatedGrows[value] || tempActivatedGrows[value] === true) {
+                tempActivatedGrows[value] = false
+                this.state.sensorList.forEach((sensor) => {
+                    // REMOVE
+                    if (value === sensor) {
+                        if (tempActiveLines.includes(sensor)) {
+                            const index = tempActiveLines.indexOf(sensor);
+                            if (index > -1) {
+                                tempActiveLines.splice(index, 1);
+                            }
+                        }
+                    }
+                })
+
+            }
+        })
+
+        this.setState({
+            activatedGrows: tempActivatedGrows,
+            activeLines: tempActiveLines
+        })
+    }
+
+    toggleGrowLines = (value) => {
+        var tempActiveLines = this.state.activeLines
+        var tempActivatedGrows = this.state.activatedGrows
+        if (!tempActivatedGrows) {
+            tempActivatedGrows = []
+        }
+
+        if (tempActivatedGrows[value] === false) {
+            tempActivatedGrows[value] = true
+            this.state.sensorList.forEach((sensor) => {
+                // ADD
+                if (value === sensor.split("^")[1]) {
+                    if (!tempActiveLines.includes(sensor)) {
+                        tempActiveLines[tempActiveLines.length] = sensor
+                    }
+                }
+            })
+        } else if (!tempActivatedGrows[value] || tempActivatedGrows[value] === true) {
+            tempActivatedGrows[value] = false
+            this.state.sensorList.forEach((sensor) => {
+                // REMOVE
+                if (value === sensor.split("^")[1]) {
+                    if (tempActiveLines.includes(sensor)) {
+                        const index = tempActiveLines.indexOf(sensor);
+                        if (index > -1) {
+                            tempActiveLines.splice(index, 1);
+                        }
+                    }
+                }
+            })
+
+        }
+
+        this.setState({
+            activatedGrows: tempActivatedGrows,
+            activeLines: tempActiveLines
+        })
+    }
+
 
     render() {
 
-        var renderButtonItems = null
-        if (this.props.sensorList) {
-            renderButtonItems = this.props.sensorList.map((sensorID) =>
-                (() => {
-                    if (sensorID.split("^")[2] !== "HIGH") {
-                        return
-                    }
-
-                    var reducedID = sensorID.split("^")[0] + "^" + sensorID.split("^")[1]
-
-                    var buttonBackground = "#1b5926"
-                    var setOpacity = 0.25
-                    var highOpacitySetting = 0.25
-                    var avgsOpacitySetting = 0.25
-                    var lowOpacitySetting = 0.25
-                    if (this.state.activeLines) {
-                        if (this.state.activeLines.includes(reducedID + "^HIGH")) {
-                            buttonBackground = "#1e7c2e"
-                            setOpacity = 1
-                            highOpacitySetting = 1
-                        }
-                        if (this.state.activeLines.includes(reducedID + "^AVERAGE")) {
-                            buttonBackground = "#1e7c2e"
-                            setOpacity = 1
-                            avgsOpacitySetting = 1
-                        }
-                        if (this.state.activeLines.includes(reducedID + "^LOW")) {
-                            buttonBackground = "#1e7c2e"
-                            setOpacity = 1
-                            lowOpacitySetting = 1
-                        }
-                    }
-
-
-                    return (
-                        <div data-value={sensorID} key={sensorID} style={{ width: '200px', height: '80px', maxWidth: '200px', maxHeight: '80px', margin: '2px', background: buttonBackground, opacity: setOpacity, overflow: 'hidden' }}>
-                            <div style={{ fontSize: "8px", userSelect: 'none', background: '#000' }}>{sensorID.split("^")[1]}</div>
-                            <div style={{ fontSize: "16px", userSelect: 'none' }}>{sensorID.split("^")[0]}</div>
-                            <div style={{ display: 'flex', userSelect: 'none', flexDirection: 'row', justifyContent: 'space-around', fontSize: '10px' }}>
-                                <div data-value={reducedID + "^HIGH"} onClick={this.toggleLine} style={{ background: '#000', cursor: 'pointer', padding: '10px', opacity: highOpacitySetting }}>
-                                    HIGHS
-                                </div>
-                                <div data-value={reducedID + "^AVERAGE"} onClick={this.toggleLine} style={{ background: '#000', cursor: 'pointer', padding: '10px', opacity: avgsOpacitySetting }}>
-                                    AVGS
-                                </div>
-                                <div data-value={reducedID + "^LOW"} onClick={this.toggleLine} style={{ background: '#000', cursor: 'pointer', padding: '10px', opacity: lowOpacitySetting }}>
-                                    LOWS
-                                </div>
-                            </div>
-                        </div>
-                    )
-
-                })()
-            );
+        var renderLifetimeColumns = null
+        if (this.props.sensorList && this.props.userGrows) {
+            renderLifetimeColumns = this.props.userGrows.map((grow) => {
+                return <LifetimeDataColumn handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} sensorList={this.props.sensorList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} />
+            })
         }
 
         var renderLineItems = null
@@ -205,7 +249,7 @@ class LifetimeGraph extends Component {
                     } else if (sensorID.split("^")[2] === "LOW") {
                         return <Line yAxisId={yAxisId} type="monotone" name={sensorID} dataKey={sensorID} key={sensorID} stroke={"#19b2ff"} thickness={0.25} dot={false} />
                     } else {
-                        return <Line yAxisId={yAxisId} type="monotone" name={sensorID} dataKey={sensorID} key={sensorID} stroke={"#FFFFFF"} thickness={3} dot={false} />
+                        return <Line yAxisId={yAxisId} type="monotone" name={sensorID} dataKey={sensorID} key={sensorID} stroke={"#62ce92"} thickness={3} dot={false} />
                     }
                 })()
             );
@@ -255,8 +299,8 @@ class LifetimeGraph extends Component {
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', padding: '10px' }}>
-                    {renderButtonItems}
+                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', padding: '2px' }}>
+                    {renderLifetimeColumns}
                 </div>
             </div>
         );

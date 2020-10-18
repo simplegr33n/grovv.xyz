@@ -5,9 +5,10 @@ import moment from 'moment'
 import '../../styles/App.css';
 
 import cornerLogo from '../../assets/corner-logo.png'
+import { ReactComponent as TobyFace } from '../../assets/tobyface.svg';
 
 import { AiOutlineLineChart } from 'react-icons/ai';
-import { GiSpellBook } from 'react-icons/gi';
+
 
 class AppBar extends Component {
 
@@ -19,20 +20,9 @@ class AppBar extends Component {
 
     }
 
-    openJournals = () => {
-        this.props.setMainContent('journals')
-    }
 
-    openGraphs = () => {
-        this.props.setMainContent('graphs')
-    }
-
-    openLifetime = () => {
-        this.props.setMainContent('lifetime')
-    }
-
-    openGrows = () => {
-        this.props.setMainContent('grows')
+    setMainContent = (e) => {
+        this.props.setMainContent(e.currentTarget.getAttribute('data-value'))
     }
 
     setGrow = (ev) => {
@@ -46,8 +36,6 @@ class AppBar extends Component {
     handleSignOut = () => {
         this.props.handleSignOut()
     }
-
-
 
     render() {
 
@@ -135,21 +123,33 @@ class AppBar extends Component {
         return (
 
             <div id="App-Bar" >
-                <div id="App-Bar-Logo" onClick={this.openGraphs}>
+                <div id="App-Bar-Logo" onClick={this.openGraphs} data-value={'graphs'}>
                     <img src={cornerLogo} alt="App Logo" style={{ maxWidth: "100px" }} />
                 </div>
 
                 {renderedLiveGrowButtons}
 
-                <div className="App-Bar-Button-Grow" style={{ background: '#6b5729' }} onClick={this.openLifetime}>
+                <div className="App-Bar-Button-Grow" style={{ background: '#6b5729' }} onClick={this.setMainContent} data-value={'lifetime'}>
                     <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} /> L
                 </div>
 
-                <div className="App-Bar-Button-Grow" style={{ background: '#a0823e' }} onClick={this.openJournals}>
-                    <GiSpellBook style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                <div className="App-Bar-Button-Grow" style={{ background: '#43b3b3', paddingTop: '3px', paddingRight: '1px' }} onClick={this.setMainContent} data-value={'tobytiles'}>
+                    <TobyFace height="90%"
+                        preserveAspectRatio="xMinYMin slice"
+                        width="90%"
+                        viewBox="0 0 120 120" />
                 </div>
 
+
+
+
+
                 <div className="App-Bar-Filler-Div"></div>
+
+
+
+
+
                 <div className="App-Bar-Logout-Button" onClick={this.handleSignOut}>
                     &#10162;
                 </div>

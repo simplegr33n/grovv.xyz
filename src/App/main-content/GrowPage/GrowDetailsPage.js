@@ -9,7 +9,7 @@ import GrowSettings from './GrowSettings';
 import moment from 'moment'
 
 
-import { BsGearFill } from 'react-icons/bs';
+import { AiFillControl } from 'react-icons/ai';
 
 
 
@@ -165,7 +165,7 @@ class GrowDetailsPage extends Component {
                                 <div id="Grow-Header-Text">{this.props.grow.name}</div>
                             </div>
                             <div onClick={() => this.openCloseSettings()} style={{ paddingRight: '30px', color: '#A9A9A9', userSelect: 'none', cursor: 'pointer' }}>
-                                <BsGearFill style={{ color: '#9e9e9e', fontSize: '22px', marginTop: '8px' }} />
+                                <AiFillControl style={{ color: '#9e9e9e', fontSize: '22px', marginTop: '8px' }} />
                             </div>
                         </div>
                         <div className="Grow-Details-Bottom-Item" >

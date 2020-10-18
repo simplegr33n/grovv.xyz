@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import '../../styles/App.css';
+import '../../../styles/App.css';
 
-import GrowDetailsPage from './GrowPage/GrowDetailsPage'
+import GrowDetailsPage from './GrowDetailsPage'
 
 
 class GrowPage extends Component {

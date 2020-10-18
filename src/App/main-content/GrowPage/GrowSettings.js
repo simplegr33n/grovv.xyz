@@ -8,6 +8,7 @@ import DbHelper from '../../_utils/DbHelper.js'
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
 import co2svg from '../../../assets/co2svg.svg'
 import tvocSvg from '../../../assets/tvoc-svg.svg'
+import { AiFillControl } from 'react-icons/ai';
 
 
 
@@ -288,15 +289,20 @@ class GrowSettings extends Component {
                 <div style={{ margin: 'auto', width: '90%', height: '90%', border: '3px solid #262626', padding: '10px', background: '#303630', color: '#d3dbd5' }}>
 
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <div style={{ fontSize: '1.2em', userSelect: 'none' }}></div>
-                        <div style={{ fontSize: '1em', fontWeight: '100', userSelect: 'none' }}>Settings</div>
-                        <div onClick={this.close} style={{ fontSize: '1.2em', color: '#FF0000', userSelect: 'none', cursor: 'pointer' }}>X</div>
+                        <AiFillControl style={{ color: '#9e9e9e', fontSize: '22px' }} />
+                        <div style={{ fontSize: '1em', fontWeight: '100', userSelect: 'none', display: 'flex', flexDirection: 'row' }}>
+
+                            <div>
+                                Settings
+                            </div>
+                        </div>
+                        <div onClick={this.close} style={{ fontSize: '1.2em', color: '#9e9e9e', userSelect: 'none', cursor: 'pointer', marginRight: '4px' }}>X</div>
                     </div>
                     {(() => {
                         if (this.state.config) {
                             return (
                                 <div id="Grow-Details-Config-Settings-Div" style={{ margin: '4px', height: "95%" }}>
-                                    <div id="Grow-Details-Config-Scroll" style={{ overflowY: 'scroll' }}>
+                                    <div id="Grow-Details-Config-Scroll" style={{ overflowY: 'auto', height: '100%' }}>
 
                                         {/* LIGHTS */}
                                         {(() => {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import GraphSensors from '../Graphs/GraphSensors.js'
+import GraphSensors from '../_Graphs/GraphSensors.js'
 
 
 class GrowDetailsGraphs extends Component {

@@ -13,13 +13,15 @@ import SignUp from './auth/SignUp.js'
 
 // Main Content
 import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
-import GrowPage from './main-content/GrowPage.js'
-import AllGraphs from './main-content/AllGraphs.js'
-import LifetimeGraphs from './main-content/LifetimeGraphs.js'
-
+import GrowPage from './main-content/GrowPage/GrowPage.js'
+import AllGraphs from './main-content/AllGraphs/AllGraphs.js'
+import LifetimeGraphs from './main-content/LifetimeGraphs/LifetimeGraphs.js'
 
 // Top Bar
 import AppBar from './app-bar/AppBar.js'
+
+// GAMES
+import TobyTiles from './main-content/_Games/TobyTiles/TobyTiles.js'
 
 
 class App extends Component {
@@ -231,7 +233,9 @@ class App extends Component {
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
 										case 'lifetime':
-											return <LifetimeGraphs postLifetimeData={this.postLifetimeData} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} />
+											return <LifetimeGraphs postLifetimeData={this.postLifetimeData} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} />
+										case 'tobytiles':
+											return <TobyTiles />
 										default:
 											return <AllGraphs setFirebaseUser={this.setFirebaseUserPrefs} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 

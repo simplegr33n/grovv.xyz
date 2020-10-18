@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import '../../styles/App.css';
+import '../../../styles/App.css';
 
-import GraphAllGrows from './Graphs/GraphAllGrows'
-import GrowDataDisplay from './GrowPage/GrowDataDisplay'
+import GraphAllGrows from '../_Graphs/GraphAllGrows.js'
+import GrowDataDisplay from '../GrowPage/GrowDataDisplay.js'
 
 
 class AllGraphs extends Component {
@@ -169,7 +169,7 @@ class AllGraphs extends Component {
 
             sensorInfoColumns = this.props.userGrows.map((grow) => {
                 return (
-                    <GrowDataDisplay grow={grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.state.user} />
+                    <GrowDataDisplay grow={grow} key={grow.id} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.state.user} />
                 )
             })
 
