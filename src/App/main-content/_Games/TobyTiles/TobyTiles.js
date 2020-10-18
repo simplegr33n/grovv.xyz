@@ -94,8 +94,8 @@ class TobyTiles extends Component {
 
 		return (
 
-			<div style={{ minHeight: "100%", minWidth: '100%', justifyContent: 'center', userSelect: 'none', display: 'flex' }}>
-				<div id={"TobyTiles-Main"} style={{ backgroundColor: '#243124', minWidth: '100%', minHeight: '100%', maxWidth: '100%', maxHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+			<div style={{ minHeight: "100%", maxHeight: '100%', minWidth: '100%', justifyContent: 'center', userSelect: 'none', display: 'flex' }}>
+				<div id={"TobyTiles-Main"} style={{ backgroundColor: '#243124', display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '90vh', height: '100%', maxHeight: '100vw' }}>
 					{renderTobyRows}
 				</div>
 

@@ -37,17 +37,15 @@ class TobyTileRow extends Component {
 			renderTobyTiles = this.props.row.map((tile, index) => {
 
 				var tileKey = tile + "^" + index
-
 				var backgroundColor = "#158a8a"
 
 				if (tile === "GoldenBindy") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ background: '#99a72b', flex: 1, margin: '2px' }}>
-							<div style={{ paddingTop: '40%', paddingLeft: '30%' }}>
-								<TobyFace height="100%"
-									preserveAspectRatio="xMinYMin slice"
-									width="100%"
-									viewBox="0 0 200 200" />
+							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1 }}>
+								<TobyFace
+									viewBox="0 0 110 110"
+									style={{ flex: 1, height: "30%", padding: '30%' }} />
 							</div>
 
 						</div>
@@ -55,13 +53,11 @@ class TobyTileRow extends Component {
 				} else if (tile === "Scoby") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ background: backgroundColor, flex: 1, margin: '2px' }}>
-							<div style={{ paddingTop: '40%', paddingLeft: '30%' }}>
-								<TobyFace height="100%"
-									preserveAspectRatio="xMinYMin slice"
-									width="100%"
-									viewBox="0 0 200 200" />
+							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1 }}>
+								<TobyFace
+									viewBox="0 0 110 110"
+									style={{ flex: 1, height: "30%", padding: '30%' }} />
 							</div>
-
 						</div>
 					)
 				} else if (tile === "GoThumbsdown") {
