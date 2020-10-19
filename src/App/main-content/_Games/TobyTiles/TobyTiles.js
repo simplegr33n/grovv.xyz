@@ -87,7 +87,11 @@ class TobyTiles extends Component {
 	clickTile = (tile) => {
 		var tempSelectedTiles = this.state.selectedTiles
 		var tempFoundTiles = this.state.foundTiles
+		if (tempFoundTiles.includes(tile)) {
+			return
+		}
 		if (tempSelectedTiles.length >= 2 || tile === tempSelectedTiles[0] || this.state.clickTime !== 2) {
+			this.stopAndResetDisplayTimer()
 			return
 		}
 
@@ -125,6 +129,7 @@ class TobyTiles extends Component {
 			console.log("WON!")
 			var newLevel = this.state.level + 1
 			this.setState({
+				shuffledDeck: [],
 				level: newLevel
 			})
 			this.initializeLevel(newLevel)

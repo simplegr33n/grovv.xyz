@@ -39,27 +39,34 @@ class TobyTileRow extends Component {
 			renderTobyTiles = this.props.row.map((tile, index) => {
 
 				var tileKey = tile + "^" + this.props.rowIndex + "^" + index
-				var cardBackground = "#158a8a"
+				var cardBackground = "#317b8c"
 				var cardOpacity = 1
 				var cardCursor = "pointer"
 				var imageOpacity = 0
 
 				if ((this.props.selectedTiles && (this.props.selectedTiles.includes(tileKey)))) {
 					imageOpacity = 1
+					cardBackground = "#a7b7bb"
+					if (tile === "GoldenBindy") {
+						cardBackground = "#b0b927"
+					}
 				}
 
 				if ((this.props.foundTiles && (this.props.foundTiles.includes(tileKey)))) {
 					imageOpacity = 1
 					cardOpacity = 0.2
+					if (tile === "GoldenBindy") {
+						cardBackground = "#b0b927"
+					}
 				}
 
 				if (tile === "GoldenBindy") {
 					return (
-						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ background: '#99a72b', flex: 1, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
+						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ background: cardBackground, flex: 1, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
 							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, opacity: imageOpacity }}>
 								<TobyFace
 									viewBox="0 0 110 110"
-									style={{ flex: 1, height: "30%", padding: '30%' }} />
+									style={{ flex: 1, height: "40%", padding: '20%' }} />
 							</div>
 						</div>
 					)
@@ -69,134 +76,134 @@ class TobyTileRow extends Component {
 							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, opacity: imageOpacity }}>
 								<TobyFace
 									viewBox="0 0 110 110"
-									style={{ flex: 1, height: "30%", padding: '30%' }} />
+									style={{ flex: 1, height: "40%", padding: '20%' }} />
 							</div>
 						</div>
 					)
 				} else if (tile === "GiSpellBook") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiSpellBook style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiSpellBook style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GoThumbsdown") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GoThumbsdown style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GoThumbsdown style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GoThumbsup") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GoThumbsup style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GoThumbsup style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GoPackage") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GoPackage style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GoPackage style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GoPaintcan") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GoPaintcan style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GoPaintcan style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GoSquirrel") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GoSquirrel style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GoSquirrel style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiSnowBottle") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiSnowBottle style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiSnowBottle style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiBullyMinion") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiBullyMinion style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiBullyMinion style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiPegasus") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiPegasus style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiPegasus style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiCaravan") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiCaravan style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiCaravan style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiCurlingStone") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiCurlingStone style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiCurlingStone style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiDrakkar") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiDrakkar style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiDrakkar style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiDuck") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiDuck style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiDuck style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiRaiseSkeleton") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiRaiseSkeleton style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiRaiseSkeleton style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiSnowman") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiSnowman style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiSnowman style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiSpadeSkull") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiSpadeSkull style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiSpadeSkull style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiEgyptianBird") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiEgyptianBird style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiEgyptianBird style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiFullMotorcycleHelmet") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiFullMotorcycleHelmet style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiFullMotorcycleHelmet style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiLockedChest") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiLockedChest style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiLockedChest style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiLindenLeaf") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiLindenLeaf style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiLindenLeaf style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				} else if (tile === "GiFuji") {
 					return (
 						<div onClick={this.clickTile} key={tileKey} data-value={tileKey} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: cardBackground, margin: '2px', cursor: cardCursor, opacity: cardOpacity }}>
-							<GiFuji style={{ flex: 1, height: '30%', color: '#000', opacity: imageOpacity }} />
+							<GiFuji style={{ flex: 1, height: '40%', color: '#000', opacity: imageOpacity }} />
 						</div>
 					)
 				}

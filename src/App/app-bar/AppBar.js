@@ -123,8 +123,8 @@ class AppBar extends Component {
         return (
 
             <div id="App-Bar" >
-                <div id="App-Bar-Logo" onClick={this.openGraphs} data-value={'graphs'}>
-                    <img src={cornerLogo} alt="App Logo" style={{ maxWidth: "100px" }} />
+                <div id="App-Bar-Logo" onClick={this.setMainContent} data-value={'graphs'}>
+                    <img src={cornerLogo} alt="App Logo" style={{ maxWidth: "100%", maxHeight: "100%" }} />
                 </div>
 
                 {renderedLiveGrowButtons}

@@ -1679,10 +1679,8 @@ body {
 
 #App-Bar-Logo {
   cursor: pointer;
-  font-size: 20px;
-  width: 100px;
-  max-width: 100px;
-  font-weight: bolder;
+  width: 40px;
+  max-width: 40px;
   user-select: none;
   background-color: #477915;
 }
