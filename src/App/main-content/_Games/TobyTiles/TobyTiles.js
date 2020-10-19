@@ -3,16 +3,8 @@ import '../../../../styles/App.css';
 
 import TobyTileRow from './TobyTileRow.js'
 
-// CARDS
-// 100 POINTS
-import { ReactComponent as TobyFace } from '../../../../assets/tobyface.svg';
 
-import {
-	GiSpellBook, GiFuji, GiLindenLeaf, GiLockedChest, GiFullMotorcycleHelmet, GiEgyptianBird, GiSpadeSkull, GiSnowman,
-	GiRaiseSkeleton, GiDuck, GiDrakkar, GiCurlingStone, GiCaravan, GiBullyMinion, GiPegasus, GiSnowBottle
-} from 'react-icons/gi';
-import { GoSquirrel, GoPaintcan, GoPackage, GoThumbsup, GoThumbsdown } from 'react-icons/go';
-import { AiOutlineConsoleSql } from 'react-icons/ai';
+import { ReactComponent as TobyFace } from '../../../../assets/tobyface.svg';
 
 
 class TobyTiles extends Component {
@@ -20,8 +12,14 @@ class TobyTiles extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			level: 0
+			clickTime: 2,
+			level: 0,
+			selectedTiles: [],
+			foundTiles: []
 		};
+
+		this.startDisplayTimer = this.startDisplayTimer.bind(this)
+		this.stopAndResetDisplayTimer = this.stopAndResetDisplayTimer.bind(this)
 	}
 
 	componentDidMount() {
@@ -47,7 +45,6 @@ class TobyTiles extends Component {
 			ACTIVE_DECK[ACTIVE_DECK.length] = WHOLE_DECK[tIndex]
 		}
 
-		console.log(ACTIVE_DECK)
 		// SHUFFLE
 		var SHUFFLED_DECK = []
 		while (ACTIVE_DECK.length !== 0) {
@@ -56,7 +53,29 @@ class TobyTiles extends Component {
 			ACTIVE_DECK.splice(cIndex, 1)
 		}
 
-		this.setState({ shuffledDeck: SHUFFLED_DECK })
+		this.setState({
+			clickTime: 2,
+			foundTiles: [],
+			selectedTiles: [],
+			shuffledDeck: SHUFFLED_DECK
+		})
+	}
+
+	startDisplayTimer() {
+		this.timer = setInterval(() =>
+			this.setState({
+				clickTime: this.state.clickTime - 1
+			}), 1000)
+	}
+
+	stopAndResetDisplayTimer() {
+		clearInterval(this.timer)
+
+		this.setState({
+			clickTime: 2,
+			selectedTiles: []
+		})
+
 	}
 
 	startGame = () => {
@@ -65,7 +84,58 @@ class TobyTiles extends Component {
 		this.initializeLevel(1)
 	}
 
+	clickTile = (tile) => {
+		var tempSelectedTiles = this.state.selectedTiles
+		var tempFoundTiles = this.state.foundTiles
+		if (tempSelectedTiles.length >= 2 || tile === tempSelectedTiles[0] || this.state.clickTime !== 2) {
+			return
+		}
+
+		// Deal with GoldenBindy
+		if (tile.split("^")[0] === "GoldenBindy") {
+			this.setState({
+				clickTime: 2
+			})
+			tempFoundTiles[tempFoundTiles.length] = tile
+		} else {
+			tempSelectedTiles[tempSelectedTiles.length] = tile
+		}
+
+		if (tempSelectedTiles.length >= 2) {
+			var testA = tempSelectedTiles[0].split("^")[0]
+			var testB = tempSelectedTiles[1].split("^")[0]
+
+			// Matched Pair / else
+			if (testA === testB) {
+				tempFoundTiles[tempFoundTiles.length] = tempSelectedTiles[0]
+				tempFoundTiles[tempFoundTiles.length] = tile
+
+				tempSelectedTiles = []
+			} else {
+				this.startDisplayTimer()
+			}
+		}
+
+		this.setState({
+			foundTiles: tempFoundTiles,
+			selectedTiles: tempSelectedTiles
+		})
+
+		if (tempFoundTiles.length === this.state.shuffledDeck.length) {
+			console.log("WON!")
+			var newLevel = this.state.level + 1
+			this.setState({
+				level: newLevel
+			})
+			this.initializeLevel(newLevel)
+		}
+	}
+
 	render() {
+		// Show pair of cards after click for only so long (clickTime)
+		if (this.state.clickTime === 0) {
+			this.stopAndResetDisplayTimer()
+		}
 
 		var renderTobyRows = null
 		if (this.state.shuffledDeck) {
@@ -85,7 +155,7 @@ class TobyTiles extends Component {
 
 			renderTobyRows = rowList.map((row, index) => {
 				return (
-					<TobyTileRow key={index} row={row} />
+					<TobyTileRow clickTile={this.clickTile} key={index} row={row} rowIndex={index} foundTiles={this.state.foundTiles} selectedTiles={this.state.selectedTiles} />
 				)
 			})
 		}
