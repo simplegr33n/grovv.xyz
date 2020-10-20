@@ -19,6 +19,10 @@ class LifetimeDataColumn extends Component {
         };
     }
 
+    processGrowData = () => {
+        // process it!
+    }
+
     toggleLine = (e) => {
         this.props.handleLineToggle(e.currentTarget.getAttribute('data-value'))
     }
@@ -50,24 +54,20 @@ class LifetimeDataColumn extends Component {
 
                     var reducedID = sensorID.split("^")[0] + "^" + sensorID.split("^")[1]
 
-                    var buttonBackground = "#1b5926"
                     var setOpacity = 0.25
                     var highOpacitySetting = 0.25
                     var avgsOpacitySetting = 0.25
                     var lowOpacitySetting = 0.25
                     if (this.props.activeLines) {
                         if (this.props.activeLines.includes(reducedID + "^HIGH")) {
-                            buttonBackground = "#1e7c2e"
                             setOpacity = 1
                             highOpacitySetting = 1
                         }
                         if (this.props.activeLines.includes(reducedID + "^AVERAGE")) {
-                            buttonBackground = "#1e7c2e"
                             setOpacity = 1
                             avgsOpacitySetting = 1
                         }
                         if (this.props.activeLines.includes(reducedID + "^LOW")) {
-                            buttonBackground = "#1e7c2e"
                             setOpacity = 1
                             lowOpacitySetting = 1
                         }
@@ -75,40 +75,132 @@ class LifetimeDataColumn extends Component {
 
 
                     return (
-                        <div data-value={sensorID} key={sensorID} style={{ margin: '2px', background: buttonBackground, opacity: setOpacity, overflow: 'hidden' }}>
+                        <div data-value={sensorID} key={sensorID} style={{ margin: '2px', opacity: setOpacity, overflow: 'hidden' }}>
+
                             <div style={{ userSelect: 'none' }}>
-                                <div style={{ display: 'flex', flexDirection: 'row', background: '#233a27' }}>
-                                    <BiHide data-value={sensorID} onClick={this.toggleSensorLines} style={{ fontSize: "14px", padding: "2px", cursor: 'pointer', background: "#355526" }} />
-                                    <div style={{ flex: 1 }} />
-                                    <div style={{ marginTop: '-2px', marginRight: '2px', fontSize: '14px', fontWeight: 600 }} >
-                                        {sensorID.split("^")[0]}
-                                    </div>
+                                <div style={{ display: 'flex', flexDirection: 'row', background: '#233a27', height: '24px' }}>
                                     <div style={{ marginTop: '-2px', marginRight: '2px', fontSize: '14px', fontWeight: 600 }} >
                                         (?)
                                     </div>
+                                    <div style={{ marginTop: '-2px', marginRight: '2px', fontSize: '16px', fontWeight: 600 }} >
+                                        {sensorID.split("^")[0]}
+                                    </div>
+                                    <div style={{ flex: 1 }} />
+                                    <BiHide data-value={sensorID} onClick={this.toggleSensorLines} style={{ fontSize: "14px", padding: "2px", cursor: 'pointer', background: "#355526" }} />
                                 </div>
-
-
                             </div>
-                            <div style={{ display: 'flex', userSelect: 'none', flexDirection: 'row', fontSize: '10px', fontWeight: 600, background: '#000' }}>
-                                <div data-value={reducedID + "^HIGH"} onClick={this.toggleLine} style={{ minWidth: '60px', minHeight: '20px', flex: 1, background: '#b44b00', cursor: 'pointer', opacity: highOpacitySetting }}>
-                                    <div style={{ width: '100%', height: '4px', background: '#FF0000' }} />
-                                    <div>
-                                        highs
+
+                            <div style={{ display: 'flex', userSelect: 'none', flexDirection: 'column', fontSize: '10px', fontWeight: 600, background: '#1a241a' }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }} />
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }}>
+                                        <div>
+                                            &#8593;
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }}>
+                                        <div>
+                                            &#8595;
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }}>
+                                        <div>
+                                            ~
+                                        </div>
                                     </div>
                                 </div>
-                                <div data-value={reducedID + "^AVERAGE"} onClick={this.toggleLine} style={{ minWidth: '60px', minHeight: '20px', flex: 1, background: '#495a65', marginRight: '2px', marginLeft: '2px', cursor: 'pointer', opacity: avgsOpacitySetting }}>
-                                    <div style={{ width: '100%', height: '4px', background: '#62ce92' }} />
-                                    <div>
-                                        averages
+
+
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
+                                    <div data-value={reducedID + "^AVERAGE"} onClick={this.toggleLine} style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#495a65', cursor: 'pointer', opacity: avgsOpacitySetting }}>
+                                        <div style={{ width: '100%', height: '4px', background: '#62ce92' }} />
+                                        <div>
+                                            averages
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
                                     </div>
                                 </div>
-                                <div data-value={reducedID + "^LOW"} onClick={this.toggleLine} style={{ minWidth: '60px', minHeight: '20px', flex: 1, background: '#2c48ad', cursor: 'pointer', opacity: lowOpacitySetting }}>
-                                    <div style={{ width: '100%', height: '4px', background: '#19b2ff' }} />
-                                    <div>
-                                        lows
+
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
+                                    <div data-value={reducedID + "^HIGH"} onClick={this.toggleLine} style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', flex: 1, background: '#b44b00', cursor: 'pointer', opacity: highOpacitySetting }}>
+                                        <div style={{ width: '100%', height: '4px', background: '#FF0000' }} />
+                                        <div>
+                                            highs
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
+                                    <div data-value={reducedID + "^LOW"} onClick={this.toggleLine} style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', flex: 1, background: '#2c48ad', cursor: 'pointer', opacity: lowOpacitySetting }}>
+                                        <div style={{ width: '100%', height: '4px', background: '#19b2ff' }} />
+                                        <div>
+                                            lows
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', flex: 1, cursor: 'pointer' }}>
+
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', fontSize: '12px', marginLeft: '2px' }}>
+
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', fontSize: '10px', marginLeft: '2px', paddingTop: '6px' }}>
+                                        deviation
+                                    </div>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#3c3c3c', fontSize: '14px', marginLeft: '2px', paddingTop: '3px' }}>
+                                        <div>
+                                            78888
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
                     )

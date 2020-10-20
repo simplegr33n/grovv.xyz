@@ -1,17 +1,17 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
-import 'firebase/auth' 
-import 'firebase/storage' 
+import 'firebase/auth'
+import 'firebase/storage'
 
 
 // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyBJuUseKfGN_MjNEWg722WY1FsO2xZ1AuE",
-    authDomain: "grovv-22cbd.firebaseapp.com",
-    databaseURL: "https://grovv-22cbd.firebaseio.com",
-    projectId: "grovv-22cbd",
-    storageBucket: "grovv-22cbd.appspot.com",
-    messagingSenderId: "30272449560"
+    apiKey: "AIzaSyDj3nUoOGPgtU7OFOBv9UpGf6YQGMBixKI",
+    authDomain: "grovv2-4e8e5.firebaseapp.com",
+    databaseURL: "https://grovv2-4e8e5.firebaseio.com",
+    projectId: "grovv2-4e8e5",
+    storageBucket: "grovv2-4e8e5.appspot.com",
+    messagingSenderId: "419338421156",
 };
 
 class Firebase {

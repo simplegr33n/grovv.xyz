@@ -8,6 +8,7 @@ import cornerLogo from '../../assets/corner-logo.png'
 import { ReactComponent as TobyFace } from '../../assets/tobyface.svg';
 
 import { AiOutlineLineChart } from 'react-icons/ai';
+import { TiThMenu } from 'react-icons/ti';
 
 
 class AppBar extends Component {
@@ -31,6 +32,13 @@ class AppBar extends Component {
                 this.props.setGrow(grow)
             }
         })
+    }
+
+    // /////////
+    // UI 
+    // /////////
+    dropdownMenu = () => {
+        // this.props.handleSignOut()
     }
 
     handleSignOut = () => {
@@ -133,25 +141,32 @@ class AppBar extends Component {
                     <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} /> L
                 </div>
 
-                <div className="App-Bar-Button-Grow" style={{ background: '#43b3b3', paddingTop: '3px', paddingRight: '1px' }} onClick={this.setMainContent} data-value={'tobytiles'}>
-                    <TobyFace height="90%"
-                        preserveAspectRatio="xMinYMin slice"
-                        width="90%"
-                        viewBox="0 0 120 120" />
-                </div>
+                <div style={{ flex: 1 }} ></div>
 
+                {/* SubMenu */}
+                <div className="App-Bar-Dropdown-Icon">
+                    <TiThMenu style={{ paddingLeft: '7px', color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                    <div className="App-Bar-Submenu" style={{ width: '200px', background: '#FFF', position: 'fixed', right: '0px', top: '40px', color: "#000" }}>
+                        <div className="App-Bar-Submenu-Item" onClick={this.setMainContent} data-value={'tobytiles'}>
+                            <div style={{ flex: 1, paddingTop: '10px' }} >
+                                TobyTiles
+                            </div>
+                            <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                                <TobyFace
+                                    viewBox="0 0 110 110"
+                                    style={{ flex: 1, height: "60%", padding: '20%' }} />
+                            </div>
+                        </div>
 
-
-
-
-                <div className="App-Bar-Filler-Div"></div>
-
-
-
-
-
-                <div className="App-Bar-Logout-Button" onClick={this.handleSignOut}>
-                    &#10162;
+                        <div className="App-Bar-Submenu-Logout" onClick={this.handleSignOut}>
+                            <div style={{ flex: 1, paddingTop: '10px' }} >
+                                Logout
+                            </div>
+                            <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden', fontSize: '30px' }}>
+                                &#10162;
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div >
 

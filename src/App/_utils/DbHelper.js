@@ -7,7 +7,7 @@ class DbHelper {
 
         this.firebase = new Firebase();
 
-        this.userID = 'wR4QKyZ77mho1fL0FQWSMBQ170S2' // Hardcoded to bradyn's for now
+        this.userID = 'FjfypUxF0ddiUjuFytPU5vES5B42' // Hardcoded to bradyn's for now
 
     }
 
@@ -103,113 +103,9 @@ class DbHelper {
     // ....... //
 
     // Get 3 day data window from firebase
-    async getThreeDays(growID, setData) {
-
-        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
-
-
-        var date = new Date();
-        var year = date.getFullYear().toString()
-        var month = (date.getMonth() + 1).toString()
-        if (month.length < 2) {
-            month = '0' + month
-        }
-
-        var days = []
-        var tempDay = null
-        var dy = date.getDate()
-        if ((dy - 2) >= 1) {
-            tempDay = dy - 2
-            if (tempDay.toString().length < 2) {
-                tempDay = '0' + tempDay
-            }
-            days[days.length] = tempDay
-        }
-        if ((dy - 1) >= 1) {
-            tempDay = dy - 1
-            if (tempDay.toString().length < 2) {
-                tempDay = '0' + tempDay
-            }
-            days[days.length] = tempDay
-        }
-        if (dy.toString().length < 2) {
-            dy = '0' + dy
-        }
-        days[days.length] = dy
-
-        var i = 0;
-
-        var staticTwoDayData = []
-        var getTwoDaysAddedDays = []
-
-        days.forEach((day) => {
-            if (day.toString() === dy.toString()) {
-                return;
-            }
-
-            ref.child(year).child(month).child(day).on("value", (snapshot) => {
-                if (!getTwoDaysAddedDays.includes(day)) {
-                    getTwoDaysAddedDays[getTwoDaysAddedDays.length] = day
-                } else {
-                    return;
-                }
-                snapshot.forEach((child) => {
-                    child.forEach((gChild) => {
-                        i++;
-                        if (i % 10 === 0 || i === 0) {
-                            var dataPoint = gChild.val()
-                            var dataTime = new Date(dataPoint.time).getTime()
-                            dataPoint.time = dataTime
-                            staticTwoDayData[staticTwoDayData.length] = dataPoint;
-                        }
-                    });
-                });
-
-                if ((getTwoDaysAddedDays.length === days.length - 1)) {
-
-
-                    ref.child(year).child(month).child(dy).on("value", (snapshot) => {
-
-                        var tempCurrentData = [];
-
-
-                        snapshot.forEach((child) => {
-                            child.forEach((gChild) => {
-                                i++;
-                                if (i % 10 === 0 || i === 0) {
-                                    var dataPoint = gChild.val()
-                                    var dataTime = new Date(dataPoint.time).getTime()
-                                    dataPoint.time = dataTime
-                                    tempCurrentData[tempCurrentData.length] = dataPoint;
-                                }
-                            });
-                        });
-
-                        tempCurrentData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                        console.log("DBHELPER Test 3-day Datapoints to return... grow:" + growID)
-                        console.log(tempCurrentData.length);
-                        console.log(tempCurrentData[0]);
-                        console.log(tempCurrentData[tempCurrentData.length - 1]);
-
-                        var fullData = staticTwoDayData.concat(tempCurrentData);
-
-                        fullData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-
-                        setData(fullData);
-
-                    });
-                }
-            });
-        });
-    }
-
-    // Get 3 day data window from firebase
     getThreeDayData(growID, setData) {
 
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
-
 
         var date = new Date();
         var year = date.getFullYear().toString()
@@ -250,14 +146,14 @@ class DbHelper {
                 snapshot.forEach((child) => {
                     child.forEach((gChild) => {
                         var dataPoint = gChild.val()
-
                         dataPoint.time = dataPoint.time * 1000
-
                         dayData[dayData.length] = dataPoint;
                     });
                 });
 
                 dayData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+
+                console.log("dayData", dayData)
 
                 setData(growID, day, dayData);
             });

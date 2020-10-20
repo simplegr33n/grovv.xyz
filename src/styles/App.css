@@ -1784,29 +1784,63 @@ body {
   color: #000;
 }
 
-.App-Bar-Filler-Div {
-  flex: 1;
-}
-
-.App-Bar-Logout-Button {
+.App-Bar-Dropdown-Icon {
   color: #fff;
   display: flex;
   font-size: 30px;
   font-weight: bolder;
+  width: 40px;
+  text-align: center;
   padding-right: 2px;
   user-select: none;
   cursor: pointer;
   margin-top: -2px;
 }
 
-.App-Bar-Logout-Button:hover {
+.App-Bar-Dropdown-Icon:hover {
   background-color: rgb(107, 112, 107);
   margin-top: 0px;
 }
 
-.App-Bar-Logout-Button:active {
-  background-color: rgb(150, 160, 150);
-  color: rgb(26, 25, 25);
+.App-Bar-Dropdown-Icon:hover .App-Bar-Submenu {
+  visibility: visible;
+  cursor: pointer;
+}
+
+.App-Bar-Submenu {
+  visibility: hidden;
+}
+
+.App-Bar-Submenu-Item {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-bottom: 2px;
+  font-size: 18px;
+  background: #43b3b3;
+}
+
+.App-Bar-Submenu-Item:hover {
+  background: #b8d2b8;
+}
+
+.App-Bar-Submenu-Logout {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 4px;
+  padding-right: 4px;
+  margin-bottom: 2px;
+  font-size: 18px;
+  background: #cfaa25;
+}
+
+.App-Bar-Submenu-Logout:hover {
+  background: #ee7b2e;
 }
 
 /* ...else.. */

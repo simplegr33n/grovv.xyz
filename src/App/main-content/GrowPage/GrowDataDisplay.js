@@ -33,30 +33,27 @@ class GrowDataDisplay extends Component {
     }
 
     componentDidMount() {
-        this._ismounted = true;
-
-
-
-        if (this.props.grow && !this.state.SENSOR_DEVIATIONS) {
-            var SENSOR_DEVIATIONS = []
-            var SENSOR_MEANS = []
-
-            for (const [key, value] of Object.entries(this.props.grow.config.SENSORS)) {
-                SENSOR_DEVIATIONS[value.PID] = value._deviation
-                SENSOR_MEANS[value.PID] = value._mean
-            }
-
-            this.setState({
-                SENSOR_DEVIATIONS: SENSOR_DEVIATIONS,
-                SENSOR_MEANS: SENSOR_MEANS
-            })
-        }
-
-
-
-        if (this.props.threeDayData && this.state.SENSOR_PIDS && this.state.SENSOR_MEANS) {
+        if (this.props.threeDayData) {
             if (!this.props.threeDayData[this.props.grow.id]) {
                 return;
+            }
+
+            if (this.props.grow !== this.state.GROW) {
+                this.harmonyRatiosUpdated = null
+
+                var SENSOR_DEVIATIONS = []
+                var SENSOR_MEANS = []
+
+                for (const [key, value] of Object.entries(this.props.grow.config.SENSORS)) {
+                    SENSOR_DEVIATIONS[value.PID] = value._deviation
+                    SENSOR_MEANS[value.PID] = value._mean
+                }
+
+                this.setState({
+                    GROW: this.props.grow,
+                    SENSOR_DEVIATIONS: SENSOR_DEVIATIONS,
+                    SENSOR_MEANS: SENSOR_MEANS
+                })
             }
 
             var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
@@ -64,14 +61,14 @@ class GrowDataDisplay extends Component {
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
                 this.processGrowData(this.props.threeDayData)
+            } else if (!this.state.TABLE_INIT) {
+                // Gotta get this process in the first time for things to go smooth... not quite sure why.
+                this.dataLengthRef = dataLengthRef
+                this.processGrowData(this.props.threeDayData)
+                this.setState({ TABLE_INIT: true })
             }
-            this.forceUpdate()
         }
 
-    }
-
-    componentWillUnmount = () => {
-        this._ismounted = false;
     }
 
     componentDidUpdate = () => {
@@ -446,6 +443,10 @@ class GrowDataDisplay extends Component {
                                     return
                                 }
 
+                                if (!this.state.liveData || !this.state.liveData[pid]) {
+                                    return
+                                }
+
                                 return (
                                     <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
                                         <div style={{ fontSize: '20px', userSelect: 'none', display: 'flex', fontWeight: 700 }}>{Math.round(this.state.liveData[pid] * 10) / 10}</div>
@@ -455,12 +456,14 @@ class GrowDataDisplay extends Component {
                             })()}
 
                             {(() => {
-                                if (this.state.liveData[pid] > this.state.lastLiveData[pid]) {
-                                    return <div style={{ fontSize: '11px', userSelect: 'none', color: '#a02525', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
-                                } else if (this.state.liveData[pid] < this.state.lastLiveData[pid]) {
-                                    return <div style={{ fontSize: '11px', userSelect: 'none', color: '#242490', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
-                                } else {
-                                    return <div />
+                                if (this.state.liveData && this.state.liveData[pid]) {
+                                    if ((this.state.liveData[pid] > this.state.lastLiveData[pid])) {
+                                        return <div style={{ fontSize: '11px', userSelect: 'none', color: '#a02525', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                    } else if (this.state.liveData[pid] < this.state.lastLiveData[pid]) {
+                                        return <div style={{ fontSize: '11px', userSelect: 'none', color: '#242490', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                    } else {
+                                        return <div />
+                                    }
                                 }
                             })()}
 

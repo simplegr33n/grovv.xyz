@@ -132,7 +132,7 @@ class LifetimeGraphs extends Component {
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ width: "100vw", minHeight: "80vh" }} ref={element => this.divRef = element} >
+                <div style={{ width: "100vw", minHeight: "80vh", maxHeight: "80vh" }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
                         <GraphLifetime updateTimeframe={this.updateLifetimeDisplayWindow} parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} displayWindow={this.props.displayWindow} />
                     </div>

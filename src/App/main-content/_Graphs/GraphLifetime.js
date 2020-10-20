@@ -220,7 +220,7 @@ class LifetimeGraph extends Component {
         var renderLifetimeColumns = null
         if (this.props.allSensorsList && this.props.userGrows) {
             renderLifetimeColumns = this.props.userGrows.map((grow) => {
-                return <LifetimeDataColumn handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} allSensorsList={this.props.allSensorsList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} />
+                return <LifetimeDataColumn handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} allSensorsList={this.props.allSensorsList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} normalizedLifetimeData={this.state.normalizedLifetimeData} />
             })
         }
 
