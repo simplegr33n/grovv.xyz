@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../../../styles/App.css';
 
-import GraphAllGrows from '../_Graphs/GraphAllGrows.js'
+import GraphAllGrows from './GraphAllGrows.js'
 import GrowDataDisplay from '../GrowPage/GrowDataDisplay.js'
 
 
@@ -108,7 +108,7 @@ class AllGraphs extends Component {
 
         if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
 
-            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 12, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
+            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
 
             if (tempSize !== this.state.graphElementSize) {
                 this.setState({
@@ -162,7 +162,7 @@ class AllGraphs extends Component {
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
-                <div style={{ width: "100vw", height: "60vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
+                <div style={{ width: "100vw", height: "60vh", minHeight: "60vh", background: "#000" }} ref={element => this.divRef = element} >
                     {(() => {
                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
                             return <GraphAllGrows setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} parentSize={this.state.graphElementSize} combinedProcessedData={this.props.combinedProcessedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />

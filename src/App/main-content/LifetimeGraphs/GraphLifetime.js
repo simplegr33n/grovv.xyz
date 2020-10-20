@@ -4,7 +4,7 @@ import '../../../styles/App.css';
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment, { relativeTimeThreshold } from 'moment'
-import LifetimeDataColumn from '../LifetimeGraphs/LifetimeDataColumn'
+import LifetimeDataColumn from './LifetimeDataColumn'
 
 
 

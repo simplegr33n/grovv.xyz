@@ -238,7 +238,6 @@ class GrowDataDisplay extends Component {
 
         if (!this.processedDevs || (now - this.processedDevs > 150000)) {
             this.processDevs = now
-            console.log("PROCESS DEVIATION")
             this.processDeviationData(concatData, now)
         }
     }

@@ -98,13 +98,9 @@ class ProcessingFunctions {
                 subConcatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
                 concatData[grow.id] = subConcatData
             }
-
-            console.log("CAGAAS", concatData)
-            console.log("RAW GROW", rawGrowData)
         })
 
         if (valChanged) {
-            console.log(concatData)
             setAllGrowsConcat(concatData, newCheckLengths)
         }
     }
@@ -131,11 +127,6 @@ class ProcessingFunctions {
             var i = -1
             superData[grow.id].forEach((dataPoint) => {
 
-                console.log("SUPER", dataPoint)
-                console.log("WINDOW", window)
-                console.log("NOW", now)
-
-
                 var subCombined = {}
 
                 var reducerValue = Math.round(window / 10800000)
@@ -145,9 +136,6 @@ class ProcessingFunctions {
 
                 if (now - dataPoint.time < window) {
                     i++;
-
-                    console.log("WINDOW", dataPoint)
-
                     if (i === 0 || i % reducerValue === 0) {
                         var processedPoint = dataPoint
 
@@ -170,8 +158,6 @@ class ProcessingFunctions {
         })
 
         combinedProcessedData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-        console.log("combinedProcessedData", combinedProcessedData)
 
         returnData(combinedProcessedData, processedData)
     }

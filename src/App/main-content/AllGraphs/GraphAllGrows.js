@@ -187,7 +187,7 @@ class AllGraph extends Component {
                 {renderDayGraph}
 
                 {/* Time Scale Select... */}
-                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '36px', marginTop: '18px' }}>
+                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '4px', marginTop: '18px' }}>
 
                     <select onChange={this.toggleWindow} id="AllGraph-Time-Scale" defaultValue={defaultWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;h</option>

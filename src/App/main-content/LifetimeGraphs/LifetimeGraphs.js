@@ -3,7 +3,7 @@ import '../../../styles/App.css';
 
 import ProcessingFunctions from '../../_utils/ProcessingFunctions'
 
-import GraphLifetime from '../_Graphs/GraphLifetime'
+import GraphLifetime from './GraphLifetime'
 
 
 class LifetimeGraphs extends Component {

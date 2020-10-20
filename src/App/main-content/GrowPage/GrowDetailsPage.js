@@ -3,7 +3,7 @@ import '../../../styles/App.css';
 
 import GrowDetailsGraphs from './GrowDetailsGraphs'
 import GrowDataDisplay from './GrowDataDisplay'
-import GrowSettings from './GrowSettings';
+import GrowPageSettings from './GrowPageSettings';
 
 
 import moment from 'moment'
@@ -165,15 +165,13 @@ class GrowDetailsPage extends Component {
                                 <AiFillControl style={{ color: '#9e9e9e', fontSize: '22px', marginTop: '8px' }} />
                             </div>
                         </div>
-                        <div className="Grow-Details-Bottom-Item" >
-                            <GrowDetailsGraphs setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} processedData={this.props.processedData} grow={this.props.grow} />
-                        </div>
+                        <GrowDetailsGraphs setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} processedData={this.props.processedData} grow={this.props.grow} />
                     </div>
 
                     {(() => {
                         if (this.state.SHOW_SETTINGS) {
                             return (
-                                <GrowSettings grow={this.props.grow} refreshGrows={this.props.refreshGrows} close={this.openCloseSettings} />
+                                <GrowPageSettings grow={this.props.grow} refreshGrows={this.props.refreshGrows} close={this.openCloseSettings} />
                             )
                         }
                     })()}

@@ -9,12 +9,11 @@ import ProcessingFunctions from './_utils/ProcessingFunctions.js'
 
 
 // Auth
-import SignIn from './auth/SignIn.js'
-import SignUp from './auth/SignUp.js'
+import SignIn from './_auth/SignIn.js'
+import SignUp from './_auth/SignUp.js'
 
 // Main Content
-import GrowJournal from './main-content/GrowJournal/GrowJournal.js'
-import GrowPage from './main-content/GrowPage/GrowPage.js'
+import GrowDetailsPage from './main-content/GrowPage/GrowDetailsPage.js'
 import AllGraphs from './main-content/AllGraphs/AllGraphs.js'
 import LifetimeGraphs from './main-content/LifetimeGraphs/LifetimeGraphs.js'
 
@@ -33,13 +32,10 @@ class App extends Component {
 			mainContent: 'signin', // signin, signup, main, journal, grows, etc.
 			UID: null,
 			username: '',
-			journalID: null,
 			currentGrow: null,
-			growID: null, //todo: remove, use currentGrow
 			displayWindow: 259200000, // 1800000, 10800000, 43200000, 86400000, 259200000
 			lifetimeDisplayWindow: [new Date("05-01-2019").valueOf(), new Date().valueOf()],
 
-			userJournals: [],
 			liveGrowData: [],
 
 			threeDayData: [],
@@ -62,7 +58,6 @@ class App extends Component {
 
 				this.dbHelper.getUser(user.uid, this.setUser)
 				this.dbHelper.getUserGrows(this.setUserGrows) // currently grabbing B's hardcoded
-				this.dbHelper.getUserJournals(this.setUserJournals)
 			}
 		});
 
@@ -139,18 +134,21 @@ class App extends Component {
 
 		this.processingFunctions.concatAllGrowsData(this.concatAllData, tempData, this.state.userGrows, this.dataCheckLengths, this.setAllGrowsConcat)
 	}
+
 	setAllGrowsConcat = (concatData, newCheckLengths) => {
 		this.dataCheckLengths = newCheckLengths
 		this.concatAllData = concatData
 
 		this.processingFunctions.processAllGrowsData(this.concatAllData, this.state.userGrows, this.setAllGrowsProcessed, this.state.displayWindow)
 	}
+
 	setAllGrowsProcessed = (combinedProcessedData, processedData) => {
 		this.setState({
 			combinedProcessedData: combinedProcessedData,
 			processedData: processedData
 		});
 	}
+
 	setDisplayWindow = (displayWindow) => {
 		this.setState({
 			displayWindow: displayWindow
@@ -162,6 +160,7 @@ class App extends Component {
 		tempUser.PREFS.GRAPHS.AllGraph.timeWindow = displayWindow
 		this.postFirebaseUser(tempUser)
 	}
+
 	setNormalizedLifetimeData = (allSensorsList, normalizedLifetimeData, sampleHighs) => {
 		// setState
 		this.setState({
@@ -170,6 +169,7 @@ class App extends Component {
 			sampleHighs: sampleHighs
 		})
 	}
+
 	updateLifetimeDisplayWindow = (rangeMin, rangeMax) => {
 		console.log("RANGE" + rangeMin, rangeMax)
 
@@ -178,8 +178,6 @@ class App extends Component {
 		})
 		this.processingFunctions.normalizeLifetimeData(this.state.lifetimeData, this.setNormalizedLifetimeData, rangeMin, rangeMax)
 	}
-
-
 
 	setMainContent = (setValue) => {
 		this.setState({
@@ -193,14 +191,6 @@ class App extends Component {
 		this.setState({
 			currentGrow: grow,
 			mainContent: 'grows'
-		});
-	}
-
-	setJournalID = (journalID) => {
-		console.log("APP SetJournalID", journalID)
-		this.setState({
-			mainContent: 'journals',
-			journalID: journalID
 		});
 	}
 
@@ -277,9 +267,7 @@ class App extends Component {
 								if (this.state.UID && this.state.userGrows && this.state.user && this.state.threeDayData && this.state.liveGrowData) {
 									switch (this.state.mainContent) {
 										case 'grows':
-											return <GrowPage refreshGrows={this.refreshGrows} setJournalID={this.setJournalID} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} user={this.state.user} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} threeDayData={this.state.threeDayData} />
-										case 'journals':
-											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
+											return <GrowDetailsPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData[this.state.currentGrow.id]} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
 										case 'lifetime':
 											return <LifetimeGraphs postLifetimeData={this.postLifetimeData} updateLifetimeDisplayWindow={this.updateLifetimeDisplayWindow} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} allSensorsList={this.state.allSensorsList} normalizedLifetimeData={this.state.normalizedLifetimeData} sampleHighs={this.state.sampleHighs} displayWindow={this.state.lifetimeDisplayWindow} />
 										case 'tobytiles':

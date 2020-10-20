@@ -90,12 +90,10 @@ class GraphSensors extends Component {
 
     }
 
-    createTickArray = (processedData = this.props.processedData) => {
-        if (!processedData || !processedData[0]) {
-            return
-        }
+    createTickArray() {
+        var now = new Date().getTime()
 
-        var tickRange = [new Date(processedData[0].time).getTime(), new Date(processedData[processedData.length - 1].time).getTime()]
+        var tickRange = [now - this.props.displayWindow, now]
 
         var ticks = []
 
@@ -107,7 +105,6 @@ class GraphSensors extends Component {
         }
 
         var sourceArray = tempOnArray.concat(tempOffArray)
-
         sourceArray.sort((a, b) => (a > b) ? 1 : -1)
 
         sourceArray.forEach((tick) => {
@@ -237,7 +234,7 @@ class GraphSensors extends Component {
                 {renderDayGraph}
 
                 {/* Time Scale Select... */}
-                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '4%' }}>
+                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '4px', marginTop: '18px' }}>
 
                     <select onChange={this.toggleWindow} id="GraphSensors-Time-Scale" defaultValue={parseInt(this.props.displayWindow)} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;h</option>
