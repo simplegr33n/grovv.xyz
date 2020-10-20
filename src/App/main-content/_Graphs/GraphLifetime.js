@@ -28,22 +28,22 @@ class LifetimeGraph extends Component {
     }
 
     componentDidUpdate = () => {
-        if (this.props.normalizedData && this.props.normalizedData !== this.state.normalizedData) {
+        if (this.props.normalizedLifetimeData && this.props.normalizedLifetimeData !== this.state.normalizedLifetimeData) {
             this.setState({
-                normalizedData: this.props.normalizedData
+                normalizedLifetimeData: this.props.normalizedLifetimeData
             })
         }
 
-        if (!this.state.activeLines && this.props.sensorList) {
+        if (!this.state.activeLines && this.props.allSensorsList) {
             var activeLines = []
-            var sensorList = []
-            this.props.sensorList.forEach((sensorID) => {
+            var allSensorsList = []
+            this.props.allSensorsList.forEach((sensorID) => {
                 activeLines[activeLines.length] = sensorID
-                sensorList[sensorList.length] = sensorID
+                allSensorsList[allSensorsList.length] = sensorID
             })
             this.setState({
                 activeLines: activeLines,
-                sensorList: sensorList
+                allSensorsList: allSensorsList
             })
         }
     }
@@ -144,7 +144,7 @@ class LifetimeGraph extends Component {
 
             if (tempActivatedGrows[value] === false) {
                 tempActivatedGrows[value] = true
-                this.state.sensorList.forEach((sensor) => {
+                this.state.allSensorsList.forEach((sensor) => {
                     // ADD
                     if (value === sensor) {
                         if (!tempActiveLines.includes(sensor)) {
@@ -154,7 +154,7 @@ class LifetimeGraph extends Component {
                 })
             } else if (!tempActivatedGrows[value] || tempActivatedGrows[value] === true) {
                 tempActivatedGrows[value] = false
-                this.state.sensorList.forEach((sensor) => {
+                this.state.allSensorsList.forEach((sensor) => {
                     // REMOVE
                     if (value === sensor) {
                         if (tempActiveLines.includes(sensor)) {
@@ -184,7 +184,7 @@ class LifetimeGraph extends Component {
 
         if (tempActivatedGrows[value] === false) {
             tempActivatedGrows[value] = true
-            this.state.sensorList.forEach((sensor) => {
+            this.state.allSensorsList.forEach((sensor) => {
                 // ADD
                 if (value === sensor.split("^")[1]) {
                     if (!tempActiveLines.includes(sensor)) {
@@ -194,7 +194,7 @@ class LifetimeGraph extends Component {
             })
         } else if (!tempActivatedGrows[value] || tempActivatedGrows[value] === true) {
             tempActivatedGrows[value] = false
-            this.state.sensorList.forEach((sensor) => {
+            this.state.allSensorsList.forEach((sensor) => {
                 // REMOVE
                 if (value === sensor.split("^")[1]) {
                     if (tempActiveLines.includes(sensor)) {
@@ -218,9 +218,9 @@ class LifetimeGraph extends Component {
     render() {
 
         var renderLifetimeColumns = null
-        if (this.props.sensorList && this.props.userGrows) {
+        if (this.props.allSensorsList && this.props.userGrows) {
             renderLifetimeColumns = this.props.userGrows.map((grow) => {
-                return <LifetimeDataColumn handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} sensorList={this.props.sensorList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} />
+                return <LifetimeDataColumn handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} allSensorsList={this.props.allSensorsList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} />
             })
         }
 
@@ -256,20 +256,20 @@ class LifetimeGraph extends Component {
         }
 
         var renderLifetimeGraph = null
-        if (this.state.normalizedData && this.state.normalizedData[0]) {
+        if (this.state.normalizedLifetimeData && this.state.normalizedLifetimeData[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 1)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderLifetimeGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.state.normalizedData}>
+                    <LineChart width={xSize} height={ySize} data={this.state.normalizedLifetimeData}>
 
                         {renderLineItems}
 
                         <XAxis
                             dataKey="time"
                             type="number"
-                            domain={[new Date(this.state.normalizedData[0].time).getTime(), new Date(this.state.normalizedData[this.state.normalizedData.length - 1].time).getTime()]}
+                            domain={[new Date(this.props.displayWindow[0]).getTime(), new Date(this.props.displayWindow[1]).getTime()]}
                             tickFormatter={(unixTime) => moment(unixTime).format('MM-D-YYYY')}
                             hide={false} />
                         <YAxis yAxisId="temperature" orientation="left" domain={[20]} tick={{ fill: "#B3C2B5" }} />

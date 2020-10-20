@@ -67,21 +67,61 @@ class ProcessingFunctions {
 
 
     // GRAPH ALL GROWS
-    processAllGrowsData = (superData, growIDs, returnData, window = 10800000) => {
+    concatAllGrowsData = (concatData, rawGrowData, userGrows, DataCheckLengths, setAllGrowsConcat) => {
+        var newCheckLengths = []
+        var valChanged = false
+
+        userGrows.forEach((grow) => {
+
+            // returns
+            if (!rawGrowData[grow.id]) {
+                newCheckLengths[grow.id] = 0
+                return
+            }
+            if ((DataCheckLengths) && (DataCheckLengths[grow.id] && rawGrowData[grow.id]) && (DataCheckLengths[grow.id] === rawGrowData[grow.id][rawGrowData[grow.id].length - 1].length)) {
+                newCheckLengths[grow.id] = rawGrowData[grow.id][rawGrowData[grow.id].length - 1].length
+                return; // 
+            }
+            valChanged = true
+
+            newCheckLengths[grow.id] = rawGrowData[grow.id][rawGrowData[grow.id].length - 1].length
+
+            var subConcatData = []
+            rawGrowData[grow.id].forEach((list) => {
+                subConcatData = subConcatData.concat(list)
+            })
+
+            if (!DataCheckLengths || DataCheckLengths[grow.id] !== subConcatData.length) {
+                subConcatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+                concatData[grow.id] = subConcatData
+            }
+        })
+
+        if (valChanged) {
+            setAllGrowsConcat(concatData, newCheckLengths)
+        }
+    }
+
+    processAllGrowsData = (superData, userGrows, returnData, window = 10800000) => {
         var now = new Date().getTime()
         var processedData = []
         var combinedProcessedData = []
 
+        //remove....TODO
+        if (!userGrows) {
+            return
+        }
+
         //forEach
-        growIDs.forEach((id) => {
-            if (!superData[id]) {
+        userGrows.forEach((grow) => {
+            if (!superData[grow.id]) {
                 return
             }
 
             var subProcessedData = []
 
             var i = -1
-            superData[id].forEach((dataPoint) => {
+            superData[grow.id].forEach((dataPoint) => {
 
                 var subCombined = {}
 
@@ -98,7 +138,7 @@ class ProcessingFunctions {
 
                         for (const [key, value] of Object.entries(processedPoint)) {
                             if (key !== "time") {
-                                subCombined[key + "^" + id] = value
+                                subCombined[key + "^" + grow.id] = value
                             } else {
                                 subCombined.time = value
                             }
@@ -111,48 +151,13 @@ class ProcessingFunctions {
                 }
             })
 
-            processedData[id] = subProcessedData
+            processedData[grow.id] = subProcessedData
         })
 
         combinedProcessedData.sort((a, b) => (a.time > b.time) ? 1 : -1)
 
         returnData(combinedProcessedData, processedData)
     }
-
-    concatAllGrowsData = (concatData, rawGrowData, growIDs, DataCheckLengths, setAllGrowsConcat) => {
-        var newCheckLengths = []
-        var valChanged = false
-        growIDs.forEach((gwID) => {
-
-            // returns
-            if (!rawGrowData[gwID]) {
-                newCheckLengths[gwID] = 0
-                return
-            }
-            if ((DataCheckLengths) && (DataCheckLengths[gwID] && rawGrowData[gwID]) && (DataCheckLengths[gwID] === rawGrowData[gwID][rawGrowData[gwID].length - 1].length)) {
-                newCheckLengths[gwID] = rawGrowData[gwID][rawGrowData[gwID].length - 1].length
-                return; // 
-            }
-            valChanged = true
-
-            newCheckLengths[gwID] = rawGrowData[gwID][rawGrowData[gwID].length - 1].length
-
-            var subConcatData = []
-            rawGrowData[gwID].forEach((list) => {
-                subConcatData = subConcatData.concat(list)
-            })
-
-            if (!DataCheckLengths || DataCheckLengths[gwID] !== subConcatData.length) {
-                subConcatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-                concatData[gwID] = subConcatData
-            }
-        })
-
-        if (valChanged) {
-            setAllGrowsConcat(concatData, newCheckLengths)
-        }
-    }
-
 
 }
 

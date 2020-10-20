@@ -10,21 +10,20 @@ class GrowPage extends Component {
 		super(props);
 		this.state = {
 			displayContent: "main", // main
-			grow: this.props.grow
+			grow: this.props.grow,
+			processedData: this.props.processedData[this.props.grow.id]
 		};
 	}
 
 	componentDidMount() {
-		this._ismounted = true;
-	}
-
-	componentWillUnmount() {
-		this._ismounted = false;
+		if (this.props.processedData && this.props.processedData[this.props.grow.id] !== this.state.processedData) {
+			this.setState({ processedData: this.props.processedData[this.props.grow.id] });
+		}
 	}
 
 	componentDidUpdate = () => {
-		if (!this._ismounted) {
-			return;
+		if (this.props.processedData && this.props.processedData[this.props.grow.id] !== this.state.processedData) {
+			this.setState({ processedData: this.props.processedData[this.props.grow.id] });
 		}
 	}
 
@@ -83,7 +82,7 @@ class GrowPage extends Component {
 						{(() => {
 							if (this.props.grow) {
 								return (
-									<GrowDetailsPage grow={this.props.grow} refreshGrows={this.props.refreshGrows} openMainPage={this.openMainPage} setJournalID={this.setJournalID} rawGrowData={this.props.rawGrowData} liveGrowData={this.props.liveGrowData} user={this.props.user} userGrows={this.props.userGrows} />
+									<GrowDetailsPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} grow={this.props.grow} refreshGrows={this.props.refreshGrows} processedData={this.state.processedData} openMainPage={this.openMainPage} setJournalID={this.setJournalID} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.props.user} userGrows={this.props.userGrows} />
 								)
 							}
 						})()}

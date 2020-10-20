@@ -33,36 +33,33 @@ class GrowDetailsPage extends Component {
     }
 
     componentDidMount() {
-        this._ismounted = true;
-
-        if (this.props.rawGrowData && this.state.SENSOR_PIDS && this.state.SENSOR_MEANS) {
-            if (!this.props.rawGrowData[this.props.grow.id]) {
+        if (this.props.threeDayData) {
+            if (!this.props.threeDayData[this.props.grow.id]) {
                 return;
             }
 
-            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
                 this.initializeGrowPage()
+            } else if (!this.state.TABLE_INIT) {
+                // Gotta get this process in the first time for things to go smooth... not quite sure why.
+                this.dataLengthRef = dataLengthRef
+                this.initializeGrowPage()
+                this.setState({ TABLE_INIT: true })
             }
-            this.forceUpdate()
         }
-
-    }
-
-    componentWillUnmount = () => {
-        this._ismounted = false;
     }
 
     componentDidUpdate = () => {
 
-        if (this.props.rawGrowData) {
-            if (!this.props.rawGrowData[this.props.grow.id]) {
+        if (this.props.threeDayData) {
+            if (!this.props.threeDayData[this.props.grow.id]) {
                 return;
             }
 
-            var dataLengthRef = this.props.rawGrowData[this.props.grow.id][this.props.rawGrowData[this.props.grow.id].length - 1].length
+            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
 
             if (this.dataLengthRef !== dataLengthRef) {
                 this.dataLengthRef = dataLengthRef
@@ -169,7 +166,7 @@ class GrowDetailsPage extends Component {
                             </div>
                         </div>
                         <div className="Grow-Details-Bottom-Item" >
-                            <GrowDetailsGraphs activeLines={this.state.ACTIVE_LINES} rawGrowData={this.props.rawGrowData} grow={this.props.grow} />
+                            <GrowDetailsGraphs setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} processedData={this.props.processedData} grow={this.props.grow} />
                         </div>
                     </div>
 
@@ -183,7 +180,7 @@ class GrowDetailsPage extends Component {
 
                     <div className="Grow-Details-Page-Panel">
                         <div id="Grow-Details-Data-Display">
-                            <GrowDataDisplay grow={this.props.grow} toggleLine={this.toggleLine} threeDayData={this.props.rawGrowData} liveGrowData={this.props.liveGrowData} user={this.props.user} activeLines={this.state.ACTIVE_LINES} />
+                            <GrowDataDisplay grow={this.props.grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.props.user} activeLines={this.state.ACTIVE_LINES} />
                         </div>
                     </div>
                 </div>

@@ -17,8 +17,8 @@ class AllGraphs extends Component {
 
     }
 
-    componentDidMount = () => {
-        this._ismounted = true;
+    componentDidMount() {
+        this.calcGraphDimensions()
 
         if (this.props.user) {
             this.setState({
@@ -72,12 +72,6 @@ class AllGraphs extends Component {
                 groupedSensors: activeLines
             });
         }
-
-        this.calcGraphDimensions()
-    }
-
-    componentWillUnmount = () => {
-        this._ismounted = false;
     }
 
     componentDidUpdate() {
@@ -117,12 +111,10 @@ class AllGraphs extends Component {
             var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 12, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
 
             if (tempSize !== this.state.graphElementSize) {
-                if (this._ismounted) {
-                    this.setState({
-                        graphElementSize: tempSize,
-                        graphSizeUpdated: dateNow.getTime()
-                    });
-                }
+                this.setState({
+                    graphElementSize: tempSize,
+                    graphSizeUpdated: dateNow.getTime()
+                });
             }
         }
     }
@@ -149,14 +141,6 @@ class AllGraphs extends Component {
         this.postUserPrefs(tempUser)
         this.setState({ user: tempUser })
     }
-
-    toggleWindow = (tWindow) => {
-        // update firebase data
-        var tempUser = this.props.user
-        tempUser.PREFS.GRAPHS.AllGraph.timeWindow = tWindow
-        this.postUserPrefs(tempUser)
-    }
-
     postUserPrefs = (data) => {
         this.props.postFirebaseUser(data)
     }
@@ -181,7 +165,7 @@ class AllGraphs extends Component {
                 <div style={{ width: "100vw", height: "60vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
                     {(() => {
                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
-                            return <GraphAllGrows toggleWindow={this.toggleWindow} parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} user={this.state.user} />
+                            return <GraphAllGrows setDisplayWindow={this.props.setDisplayWindow} parentSize={this.state.graphElementSize} combinedProcessedData={this.props.combinedProcessedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
                         }
                     })()}
                 </div >

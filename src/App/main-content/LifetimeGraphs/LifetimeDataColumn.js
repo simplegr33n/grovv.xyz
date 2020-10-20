@@ -38,8 +38,8 @@ class LifetimeDataColumn extends Component {
     render() {
 
         var renderButtonItems = null
-        if (this.props.sensorList) {
-            renderButtonItems = this.props.sensorList.map((sensorID) =>
+        if (this.props.allSensorsList) {
+            renderButtonItems = this.props.allSensorsList.map((sensorID) =>
                 (() => {
                     if ((sensorID.split("^")[1] !== this.props.grow.id)) {
                         return

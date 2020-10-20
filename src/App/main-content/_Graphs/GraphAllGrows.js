@@ -5,8 +5,6 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
 
 import moment from 'moment'
 
-import ProcessingFunctions from '../../_utils/ProcessingFunctions'
-
 
 class AllGraph extends Component {
 
@@ -20,12 +18,6 @@ class AllGraph extends Component {
             tickArray: [],
             lightBackgrounds: ['#7344e740', '#fff93640'],
         };
-
-        this.DataCheckLengths = []
-        this.concatData = []
-
-        this.processingFunctions = new ProcessingFunctions()
-
     }
 
     componentDidMount() {
@@ -45,9 +37,6 @@ class AllGraph extends Component {
             }
         }
 
-        if (this.props.rawGrowData && this.props.growIDs) {
-            this.processingFunctions.concatAllGrowsData(this.concatData, this.props.rawGrowData, this.props.growIDs, this.DataCheckLengths, this.setAllGrowsConcat)
-        }
     }
 
     componentWillUnmount() {
@@ -56,37 +45,13 @@ class AllGraph extends Component {
 
     componentDidUpdate = () => {
 
-        if (this.props.rawGrowData && this.props.growIDs) {
-            this.processingFunctions.concatAllGrowsData(this.concatData, this.props.rawGrowData, this.props.growIDs, this.DataCheckLengths, this.setAllGrowsConcat)
-        }
-
-    }
-
-    setProcessedData = (combinedProcessedData, processedData) => {
-        this.setState({
-            combinedProcessedData: combinedProcessedData,
-            processedData: processedData
-        });
-    }
-
-    setAllGrowsConcat = (concatData, newCheckLengths) => {
-        this.DataCheckLengths = newCheckLengths
-        this.concatData = concatData
-        this.processingFunctions.processAllGrowsData(concatData, this.props.growIDs, this.setProcessedData, this.state.displayWindow)
-
-        // if (valChanged) {
-        //     DataCheckLengths = newArrayLengths
-        //     this.processingFunctions.processAllGrowsData(this.concatData, this.props.growIDs, this.setProcessedData, this.state.displayWindow)
-        // }
     }
 
 
     toggleWindow = (e) => {
         this.setState({ displayWindow: e.target.value })
 
-        this.processingFunctions.processAllGrowsData(this.concatData, this.props.growIDs, this.setProcessedData, e.target.value)
-
-        this.props.toggleWindow(e.target.value)
+        this.props.setDisplayWindow(parseInt(e.target.value))
     }
 
 
@@ -146,9 +111,7 @@ class AllGraph extends Component {
         return (
             <div className="AllGraph-Tooltip" >
                 <div>{readableTime}</div>
-
                 { listItems}
-
             </div>
 
         )
@@ -172,7 +135,7 @@ class AllGraph extends Component {
             }
         }
 
-        if (this.state.combinedProcessedData) {
+        if (this.props.combinedProcessedData) {
             var lineItems = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor) => {
                 var dataBlob = sensor.name + "^" + grow.id + "^" + sensor.unit + "^" + sensor.PID
                 var lineKey = sensor.PID + "^" + grow.id
@@ -210,7 +173,7 @@ class AllGraph extends Component {
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderDayGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.state.combinedProcessedData}>
+                    <LineChart width={xSize} height={ySize} data={this.props.combinedProcessedData}>
 
                         {lineItems}
 

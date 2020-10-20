@@ -3,7 +3,7 @@ import '../../../styles/App.css';
 
 import ProcessingFunctions from '../../_utils/ProcessingFunctions'
 
-import LifetimeGraph from '../_Graphs/GraphLifetime'
+import GraphLifetime from '../_Graphs/GraphLifetime'
 
 
 class LifetimeGraphs extends Component {
@@ -23,17 +23,13 @@ class LifetimeGraphs extends Component {
 
     }
 
-    componentDidMount = () => {
-        this._ismounted = true;
-        if (this.props.lifetimeData) {
-            // this.normalizeLifetimeData()
-            this.processingFunctions.normalizeLifetimeData(this.props.lifetimeData, this.setProcessedData, 0, new Date().valueOf())
-        }
+    componentDidMount() {
+        this.calcGraphDimensions()
 
+        // /////////////
         // SCARY TIMES!
         // this.getMonthChunkData()
 
-        this.calcGraphDimensions()
     }
 
     componentDidUpdate() {
@@ -46,29 +42,17 @@ class LifetimeGraphs extends Component {
         if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
 
             var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 5]
-
             if (tempSize !== this.state.graphElementSize) {
-                if (this._ismounted) {
-                    this.setState({
-                        graphElementSize: tempSize,
-                        graphSizeUpdated: dateNow.getTime()
-                    });
-                }
+                this.setState({
+                    graphElementSize: tempSize,
+                    graphSizeUpdated: dateNow.getTime()
+                });
             }
         }
     }
 
-    setProcessedData = (sensorList, normalizedData, sampleHighs) => {
-        // setState
-        this.setState({
-            sensorList: sensorList,
-            normalizedData: normalizedData,
-            sampleHighs: sampleHighs
-        })
-    }
-
-    updateTimeframe = (rangeMin, rangeMax) => {
-        this.processingFunctions.normalizeLifetimeData(this.props.lifetimeData, this.setProcessedData, rangeMin, rangeMax)
+    updateLifetimeDisplayWindow = (rangeMin, rangeMax) => {
+        this.props.updateLifetimeDisplayWindow(rangeMin, rangeMax)
     }
 
 
@@ -137,7 +121,6 @@ class LifetimeGraphs extends Component {
             this.postProcessedDayData(lifetimeObject, day)
         }
     }
-
     postProcessedDayData(lifetimeObject, day) {
         this.props.postLifetimeData(lifetimeObject, this.state.growID, this.state.year, this.state.month, day)
     }
@@ -145,11 +128,13 @@ class LifetimeGraphs extends Component {
 
     render() {
 
+
+
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ width: "100vw", minHeight: "80vh" }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
-                        <LifetimeGraph updateTimeframe={this.updateTimeframe} parentSize={this.state.graphElementSize} normalizedData={this.state.normalizedData} sensorList={this.state.sensorList} sampleHighs={this.state.sampleHighs} userGrows={this.props.userGrows} />
+                        <GraphLifetime updateTimeframe={this.updateLifetimeDisplayWindow} parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} displayWindow={this.props.displayWindow} />
                     </div>
                 </div >
             </div>

@@ -13,60 +13,44 @@ class GraphSensors extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayWindow: 43200000, // 1800000, 10800000, 43200000, 86400000, 259200000
-
             lightsOnArray: [],
             lightsOffArray: [],
             tickArray: [],
             lightBackgrounds: ['#7344e740', '#fff9365C']
         };
 
+        this.displayWindow = 0
+        this.growID = null
+
     }
 
     componentDidMount() {
-        this._ismounted = true;
-    }
-
-    componentWillUnmount() {
-        this._ismounted = false;
+        if ((this.displayWindow !== this.props.displayWindow) || (this.props.grow.id !== this.growID)) {
+            this.growID = this.props.grow.id
+            this.displayWindow = this.props.displayWindow
+            this.generateTickSourceArrays()
+        }
     }
 
     componentDidUpdate = () => {
-
-        if (this.props.grow && this.growConfig !== this.props.grow.config) {
-            this.growConfig = this.props.grow.config
+        if ((this.displayWindow !== this.props.displayWindow) || (this.props.grow.id !== this.growID)) {
+            this.growID = this.props.grow.id
+            this.displayWindow = this.props.displayWindow
             this.generateTickSourceArrays()
         }
-
-        if (this.props.rawGrowData && this.props.grow) {
-
-            var gwID = this.props.grow.id
-            var rawData = this.props.rawGrowData
-
-            if (rawData[gwID] && ((!this.rawRef) || rawData[gwID][rawData[gwID].length - 1] !== this.rawRef)) {
-                this.rawRef = rawData[gwID][rawData[gwID].length - 1]
-
-                var concatData = []
-
-                rawData[gwID].forEach((list) => {
-                    concatData = concatData.concat(list)
-                })
-
-                if (this.dataLength !== concatData.length) {
-                    this.dataLength = concatData.length
-                    concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                    // process data
-                    this.concatData = concatData
-                    this.processData()
-                }
-            }
-        }
-
     }
 
     generateTickSourceArrays = () => {
         if (!this.props.grow.config.LIGHTS) {
+            this.setState({
+                lightsOnArray: [],
+                lightsOffArray: []
+            })
+
+            this.lightsOnArray = []
+            this.lightsOffArray = []
+
+            this.createTickArray()
             return;
         }
 
@@ -106,7 +90,7 @@ class GraphSensors extends Component {
 
     }
 
-    createTickArray = (processedData = this.state.processedData) => {
+    createTickArray = (processedData = this.props.processedData) => {
         if (!processedData || !processedData[0]) {
             return
         }
@@ -143,48 +127,8 @@ class GraphSensors extends Component {
         this.setState({ tickArray: ticks })
     }
 
-    processData = (window = this.state.displayWindow) => {
-        var data = null
-        if (!this.concatData) {
-            return;
-        } else {
-            data = this.concatData
-        }
-
-        var processedData = []
-        var i = -1
-        var now = new Date().getTime()
-
-        var reducerValue = Math.round(window / 10800000)
-        if (reducerValue < 1) {
-            reducerValue = 1
-        }
-
-
-        data.forEach((dataPoint) => {
-            if (now - dataPoint.time < window) {
-                i++;
-                if (i === 0 || i % reducerValue === 0) {
-                    var processedPoint = dataPoint
-                    processedData[processedData.length] = processedPoint
-                }
-            }
-        })
-
-        this.setState({
-            processedData: processedData
-        });
-
-        this.createTickArray(processedData)
-
-    }
-
     toggleWindow = (e) => {
-        var setVAl = parseInt(e.target.value)
-
-        this.setState({ displayWindow: setVAl })
-        this.processData(setVAl)
-        this.render()
+        this.props.setDisplayWindow(parseInt(e.target.value))
     }
 
     renderTooltip = (props) => {
@@ -234,11 +178,6 @@ class GraphSensors extends Component {
     render() {
 
         var now = new Date().getTime()
-        var rangeMin = now.valueOf() - this.state.displayWindow
-
-        // console.log("DISPLAY WINDOW", this.state.displayWindow)
-        // console.log("NEWEW" + now, rangeMin)
-
 
         const lineItems = this.props.grow.config.SENSORS.map((l) =>
             (() => {
@@ -261,13 +200,13 @@ class GraphSensors extends Component {
 
 
         var renderDayGraph = null
-        if (this.state.processedData && this.state.processedData[0]) {
+        if (this.props.processedData && this.props.processedData[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 0.91)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderDayGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.state.processedData}>
+                    <LineChart width={xSize} height={ySize} data={this.props.processedData}>
 
                         {lineItems}
 
@@ -277,7 +216,7 @@ class GraphSensors extends Component {
                             tick={{ fill: "#B3C2B5" }}
                             dataKey="time"
                             type="number"
-                            domain={[new Date(now - this.state.displayWindow).getTime(), now]} //fix!
+                            domain={[new Date(now - this.props.displayWindow).getTime(), now]} //fix!
                             allowDataOverflow={true}
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
@@ -300,7 +239,7 @@ class GraphSensors extends Component {
                 {/* Time Scale Select... */}
                 <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '2.5%', marginTop: '4%' }}>
 
-                    <select onChange={this.toggleWindow} id="GraphSensors-Time-Scale" defaultValue={43200000} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+                    <select onChange={this.toggleWindow} id="GraphSensors-Time-Scale" defaultValue={parseInt(this.props.displayWindow)} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;h</option>
                         <option value={10800000}>3h</option>
                         <option value={43200000}>12h</option>
