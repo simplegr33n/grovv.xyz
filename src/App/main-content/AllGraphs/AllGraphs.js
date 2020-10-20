@@ -137,7 +137,7 @@ class AllGraphs extends Component {
                     if (tempUser.PREFS.GRAPHS.AllGraph.showSensors) {
                         if (tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] === false) {
                             tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = true
-                            this.setUserPrefs(tempUser)
+                            this.postUserPrefs(tempUser)
                             this.setState({ user: tempUser })
                             return
                         }
@@ -146,7 +146,7 @@ class AllGraphs extends Component {
             }
         }
         tempUser.PREFS.GRAPHS.AllGraph.showSensors[data] = false
-        this.setUserPrefs(tempUser)
+        this.postUserPrefs(tempUser)
         this.setState({ user: tempUser })
     }
 
@@ -154,11 +154,11 @@ class AllGraphs extends Component {
         // update firebase data
         var tempUser = this.props.user
         tempUser.PREFS.GRAPHS.AllGraph.timeWindow = tWindow
-        this.setUserPrefs(tempUser)
+        this.postUserPrefs(tempUser)
     }
 
-    setUserPrefs = (data) => {
-        this.props.setFirebaseUser(data)
+    postUserPrefs = (data) => {
+        this.props.postFirebaseUser(data)
     }
 
 
@@ -181,7 +181,7 @@ class AllGraphs extends Component {
                 <div style={{ width: "100vw", height: "60vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
                     {(() => {
                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
-                            return <GraphAllGrows parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} toggleWindow={this.toggleWindow} user={this.state.user} />
+                            return <GraphAllGrows toggleWindow={this.toggleWindow} parentSize={this.state.graphElementSize} rawGrowData={this.props.threeDayData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} growIDs={this.state.growIDs} user={this.state.user} />
                         }
                     })()}
                 </div >

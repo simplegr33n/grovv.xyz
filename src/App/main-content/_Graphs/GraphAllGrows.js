@@ -5,7 +5,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
 
 import moment from 'moment'
 
-
+import ProcessingFunctions from '../../_utils/ProcessingFunctions'
 
 
 class AllGraph extends Component {
@@ -21,10 +21,10 @@ class AllGraph extends Component {
             lightBackgrounds: ['#7344e740', '#fff93640'],
         };
 
+        this.DataCheckLengths = []
         this.concatData = []
 
-        this.firstPointTime = 0
-        this.lastPointTime = 0
+        this.processingFunctions = new ProcessingFunctions()
 
     }
 
@@ -46,42 +46,7 @@ class AllGraph extends Component {
         }
 
         if (this.props.rawGrowData && this.props.growIDs) {
-            var newArrayLengths = []
-            var valChanged = false
-            this.props.growIDs.forEach((gwID) => {
-
-
-                // returns
-                if (!this.props.rawGrowData[gwID]) {
-                    newArrayLengths[gwID] = 0
-                    return
-                }
-                if ((this.DataLengthChecks) && (this.DataLengthChecks[gwID] && this.props.rawGrowData[gwID]) && (this.DataLengthChecks[gwID] === this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length)) {
-                    newArrayLengths[gwID] = this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length
-                    return; // 
-                }
-                valChanged = true
-
-                newArrayLengths[gwID] = this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length
-
-                var subConcatData = []
-                this.props.rawGrowData[gwID].forEach((list) => {
-                    subConcatData = subConcatData.concat(list)
-                })
-
-                if (!this.DataLengthChecks || this.DataLengthChecks[gwID] !== subConcatData.length) {
-                    subConcatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-                    this.concatData[gwID] = subConcatData
-                }
-
-            })
-
-            if (valChanged) {
-                this.DataLengthChecks = newArrayLengths
-
-                this.processData()
-            }
-
+            this.processingFunctions.concatAllGrowsData(this.concatData, this.props.rawGrowData, this.props.growIDs, this.DataCheckLengths, this.setAllGrowsConcat)
         }
     }
 
@@ -92,111 +57,35 @@ class AllGraph extends Component {
     componentDidUpdate = () => {
 
         if (this.props.rawGrowData && this.props.growIDs) {
-            var newArrayLengths = []
-            var valChanged = false
-            this.props.growIDs.forEach((gwID) => {
-
-                // returns
-                if (!this.props.rawGrowData[gwID]) {
-                    newArrayLengths[gwID] = 0
-                    return
-                }
-                if ((this.DataLengthChecks) && (this.DataLengthChecks[gwID] && this.props.rawGrowData[gwID]) && (this.DataLengthChecks[gwID] === this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length)) {
-                    newArrayLengths[gwID] = this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length
-                    return; // 
-                }
-                valChanged = true
-
-                newArrayLengths[gwID] = this.props.rawGrowData[gwID][this.props.rawGrowData[gwID].length - 1].length
-
-                var subConcatData = []
-                this.props.rawGrowData[gwID].forEach((list) => {
-                    subConcatData = subConcatData.concat(list)
-                })
-
-                if (!this.DataLengthChecks || this.DataLengthChecks[gwID] !== subConcatData.length) {
-                    subConcatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-                    this.concatData[gwID] = subConcatData
-                }
-
-            })
-
-            if (valChanged) {
-                this.DataLengthChecks = newArrayLengths
-
-                this.processData()
-            }
-
+            this.processingFunctions.concatAllGrowsData(this.concatData, this.props.rawGrowData, this.props.growIDs, this.DataCheckLengths, this.setAllGrowsConcat)
         }
 
     }
 
-    processData = (window = this.state.displayWindow) => {
-        var superData = null
-        if (!this.concatData) {
-            return;
-        } else {
-            superData = this.concatData
-        }
-
-        var now = new Date().getTime()
-        var processedData = []
-        var combinedProcessedData = []
-
-        //forEach
-        this.props.growIDs.forEach((id) => {
-            if (!superData[id]) {
-                return
-            }
-
-            var subProcessedData = []
-
-            var i = -1
-            superData[id].forEach((dataPoint) => {
-
-                var subCombined = {}
-
-                var reducerValue = Math.round(this.state.displayWindow / 10800000)
-                if (reducerValue < 1) {
-                    reducerValue = 1
-                }
-
-                if (now - dataPoint.time < window) {
-                    i++;
-
-                    if (i === 0 || i % reducerValue === 0) {
-                        var processedPoint = dataPoint
-
-                        for (const [key, value] of Object.entries(processedPoint)) {
-                            if (key !== "time") {
-                                subCombined[key + "^" + id] = value
-                            } else {
-                                subCombined.time = value
-                            }
-                        }
-
-                        combinedProcessedData[combinedProcessedData.length] = subCombined
-
-                        subProcessedData[subProcessedData.length] = processedPoint
-                    }
-                }
-            })
-
-            processedData[id] = subProcessedData
-        })
-
-        combinedProcessedData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
+    setProcessedData = (combinedProcessedData, processedData) => {
         this.setState({
             combinedProcessedData: combinedProcessedData,
             processedData: processedData
         });
     }
 
+    setAllGrowsConcat = (concatData, newCheckLengths) => {
+        this.DataCheckLengths = newCheckLengths
+        this.concatData = concatData
+        this.processingFunctions.processAllGrowsData(concatData, this.props.growIDs, this.setProcessedData, this.state.displayWindow)
+
+        // if (valChanged) {
+        //     DataCheckLengths = newArrayLengths
+        //     this.processingFunctions.processAllGrowsData(this.concatData, this.props.growIDs, this.setProcessedData, this.state.displayWindow)
+        // }
+    }
+
 
     toggleWindow = (e) => {
         this.setState({ displayWindow: e.target.value })
-        this.processData(e.target.value)
+
+        this.processingFunctions.processAllGrowsData(this.concatData, this.props.growIDs, this.setProcessedData, e.target.value)
+
         this.props.toggleWindow(e.target.value)
     }
 
@@ -268,6 +157,8 @@ class AllGraph extends Component {
 
     render() {
 
+        var now = new Date().getTime()
+
         var defaultWindow = 43200000
         if (this.props.user) {
             if (this.props.user.PREFS) {
@@ -329,11 +220,12 @@ class AllGraph extends Component {
                             tick={{ fill: "#B3C2B5" }}
                             dataKey="time"
                             type="number"
-                            domain={[new Date().getTime(), new Date(new Date() - this.state.displayWindow).getTime()]} //fix!
+                            domain={[new Date(now - this.state.displayWindow).getTime(), now]} //fix!
+                            allowDataOverflow={true}
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="temperature" orientation="left" domain={[24]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="temperature" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#false" }} />
                         <YAxis yAxisId="ppb" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "false" }} />

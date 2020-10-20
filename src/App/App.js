@@ -5,6 +5,7 @@ import '../styles/App.css';
 import Firebase from '../config/firebaseConfig.js'
 
 import DbHelper from './_utils/DbHelper.js'
+import ProcessingFunctions from './_utils/DbHelper.js'
 
 
 // Auth
@@ -42,6 +43,8 @@ class App extends Component {
 			threeDayData: []
 		};
 
+		this.processingFunctions = new ProcessingFunctions();
+
 		this.dbHelper = new DbHelper();
 
 		this.firebase = new Firebase();
@@ -51,7 +54,7 @@ class App extends Component {
 				this.setState({ UID: user.uid });
 				this.getUsername();
 
-				this.dbHelper.getLifetimeData(user.uid, this.stateSetLifetimeData)
+				this.dbHelper.getLifetimeData(user.uid, this.setLifetimeData)
 
 				this.dbHelper.getUser(user.uid, this.setUser)
 				this.dbHelper.getUserGrows(this.setUserGrows) // currently grabbing B's hardcoded
@@ -62,39 +65,15 @@ class App extends Component {
 
 	}
 
+	// //////////////
+	// State setting
+	// //////////////
 	setUser = (u) => {
 		this.setState({ user: u });
 	}
 
-	// To pass to components...
-	setFirebaseUserPrefs = (u) => {
-		this.setState({ user: u });
-
-		this.dbHelper.setUser(u)
-	}
-
-	// To add lifetime data to components...
-	postLifetimeData = (lifetimeObject, growID, year, month, day) => {
-		// this.setState({ user: u }); // -- set liftime data eventually
-
-		console.log("chunky post LifetimeData", lifetimeObject)
-		this.dbHelper.postLifetimeData(lifetimeObject, growID, year, month, day)
-	}
-
-	stateSetLifetimeData = (lifetimeData) => {
+	setLifetimeData = (lifetimeData) => {
 		this.setState({ lifetimeData: lifetimeData });
-	}
-
-	getMonthChunkData = (growID, year, month, setData) => {
-		this.dbHelper.getMonthChunk(growID, year, month, setData)
-	}
-
-	// when config settings change...
-	refreshGrows = (newGrowConfig) => {
-		var tempGrow = this.state.currentGrow
-		tempGrow.config = newGrowConfig
-
-		this.setState({ currentGrow: tempGrow });
 	}
 
 	setUserGrows = (userGrows) => {
@@ -105,6 +84,14 @@ class App extends Component {
 		this.setState({ userGrows: userGrows });
 
 		this.dbHelper.getLiveGrowData(userGrows, this.setLiveGrowData)
+	}
+
+	refreshGrows = (newGrowConfig) => { // For config settings changes..
+		var tempGrow = this.state.currentGrow
+		tempGrow.config = newGrowConfig
+
+		this.setState({ currentGrow: tempGrow });
+
 	}
 
 	setUserJournals = (userJournals) => {
@@ -141,56 +128,13 @@ class App extends Component {
 		previousData[growDeprecate] = tempThreeDayData
 
 		this.setState({ threeDayData: previousData });
-
 	}
 
-
-	getUsername = () => {
-		// Users location in tree
-		var ref = this.firebase.db.ref().child('users').child(this.state.UID)
-
-		ref.on("value", (snapshot) => {
-			this.setState({ username: snapshot.val().username });
-		}, function (errorObject) {
-			console.log("The username read failed: " + errorObject.code);
-		});
-
-	}
-
-	handleSignOut = () => {
-		this.setState({
-			UID: null
-		});
-		this.firebase.auth.signOut().then(function () {
-			// Sign-out successful.
-			console.log(`signed out`)
-			window.location.reload()
-		}).catch(function (error) {
-			// An error happened.
-			console.log(`Error signing out: ${error}`)
-		});
-	}
-
-	setMainContent = (setValue, id) => {
+	setMainContent = (setValue) => {
 		this.setState({
 			mainContent: setValue,
-			currentGrow: null,
-			growID: id,
 			journalID: null
 		});
-	}
-
-	openJournals = () => {
-		if (this.state.mainContent !== 'journals') {
-			this.setState({
-				mainContent: 'journals',
-				journalID: null
-			});
-		} else {
-			this.setState({
-				journalID: null
-			});
-		}
 	}
 
 	setGrow = (grow) => {
@@ -208,6 +152,54 @@ class App extends Component {
 			journalID: journalID
 		});
 	}
+
+	handleSignOut = () => {
+		this.setState({
+			UID: null
+		});
+		this.firebase.auth.signOut().then(function () {
+			// Sign-out successful.
+			console.log(`signed out`)
+			window.location.reload()
+		}).catch(function (error) {
+			// An error happened.
+			console.log(`Error signing out: ${error}`)
+		});
+	}
+
+
+	// ////////////////
+	// Firebase Posting
+	// ////////////////
+	postFirebaseUser = (u) => {
+		this.setState({ user: u });
+
+		this.dbHelper.setUser(u)
+	}
+	postLifetimeData = (lifetimeObject, growID, year, month, day) => {
+		// this.setState({ user: u }); // -- set liftime data eventually
+
+		console.log("chunky post LifetimeData", lifetimeObject)
+		this.dbHelper.postLifetimeData(lifetimeObject, growID, year, month, day)
+	}
+
+	// ////////////////
+	// Firebase Getting
+	// ////////////////
+	getUsername = () => {
+		// Users location in tree
+		var ref = this.firebase.db.ref().child('users').child(this.state.UID)
+
+		ref.on("value", (snapshot) => {
+			this.setState({ username: snapshot.val().username });
+		}, function (errorObject) {
+			console.log("The username read failed: " + errorObject.code);
+		});
+	}
+	getMonthChunkData = (growID, year, month, setData) => {
+		this.dbHelper.getMonthChunk(growID, year, month, setData)
+	}
+
 
 	render() {
 
@@ -229,7 +221,7 @@ class App extends Component {
 								if (this.state.UID && this.state.userGrows && this.state.user && this.state.threeDayData && this.state.liveGrowData) {
 									switch (this.state.mainContent) {
 										case 'grows':
-											return <GrowPage refreshGrows={this.refreshGrows} setJournalID={this.setJournalID} setGrow={this.setGrow} user={this.state.user} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
+											return <GrowPage refreshGrows={this.refreshGrows} setJournalID={this.setJournalID} user={this.state.user} grow={this.state.currentGrow} growID={this.state.growID} userGrows={this.state.userGrows} liveGrowData={this.state.liveGrowData} rawGrowData={this.state.threeDayData} />
 										case 'journals':
 											return <GrowJournal setJournalID={this.setJournalID} journalID={this.state.journalID} userJournals={this.state.userJournals} />
 										case 'lifetime':
@@ -237,7 +229,7 @@ class App extends Component {
 										case 'tobytiles':
 											return <TobyTiles />
 										default:
-											return <AllGraphs setFirebaseUser={this.setFirebaseUserPrefs} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+											return <AllGraphs postFirebaseUser={this.postFirebaseUser} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 
 									}
 								} else {

@@ -21,11 +21,6 @@ class GraphSensors extends Component {
             lightBackgrounds: ['#7344e740', '#fff9365C']
         };
 
-        this.displayTemp = true
-        this.displayFan = true
-        this.displayHumidity = true
-        this.displayHumidifier = true
-
     }
 
     componentDidMount() {
@@ -238,6 +233,13 @@ class GraphSensors extends Component {
 
     render() {
 
+        var now = new Date().getTime()
+        var rangeMin = now.valueOf() - this.state.displayWindow
+
+        // console.log("DISPLAY WINDOW", this.state.displayWindow)
+        // console.log("NEWEW" + now, rangeMin)
+
+
         const lineItems = this.props.grow.config.SENSORS.map((l) =>
             (() => {
                 if (this.props.activeLines && this.props.activeLines.includes(l.PID)) {
@@ -275,19 +277,18 @@ class GraphSensors extends Component {
                             tick={{ fill: "#B3C2B5" }}
                             dataKey="time"
                             type="number"
-                            domain={[new Date().getTime(), new Date(new Date() - this.state.displayWindow).getTime()]} //fix!
+                            domain={[new Date(now - this.state.displayWindow).getTime(), now]} //fix!
+                            allowDataOverflow={true}
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
                         />
-                        <YAxis yAxisId="left" orientation="left" domain={[24]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="left" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="right" hide={true} orientation="right" tick={{ fill: "#B3C2B5" }} />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
                 );
             }
         }
-
-
 
 
         return (
