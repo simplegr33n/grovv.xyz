@@ -285,7 +285,7 @@ class App extends Component {
 										case 'tobytiles':
 											return <TobyTiles />
 										default:
-											return <AllGraphs postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+											return <AllGraphs postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 
 									}
 								} else {

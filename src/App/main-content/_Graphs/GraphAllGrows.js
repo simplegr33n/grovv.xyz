@@ -11,7 +11,7 @@ class AllGraph extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayWindow: 43200000, // 1800000, 10800000, 43200000, 86400000, 259200000
+            // displayWindow: 43200000, // 1800000, 10800000, 43200000, 86400000, 259200000
 
             lightsOnArray: [],
             lightsOffArray: [],
@@ -21,29 +21,10 @@ class AllGraph extends Component {
     }
 
     componentDidMount() {
-        this._ismounted = true;
-
-        if (this.props.user) {
-            if (this.props.user.PREFS) {
-                if (this.props.user.PREFS.GRAPHS) {
-                    if (this.props.user.PREFS.GRAPHS.AllGraph) {
-                        if (this.props.user.PREFS.GRAPHS.AllGraph.timeWindow && (this.props.user.PREFS.GRAPHS.AllGraph.timeWindow !== this.state.displayWindow)) {
-                            this.setState({
-                                displayWindow: this.props.user.PREFS.GRAPHS.AllGraph.timeWindow
-                            });
-                        }
-                    }
-                }
-            }
-        }
 
     }
 
-    componentWillUnmount() {
-        this._ismounted = false;
-    }
-
-    componentDidUpdate = () => {
+    componentDidUpdate() {
 
     }
 
@@ -183,10 +164,10 @@ class AllGraph extends Component {
                             tick={{ fill: "#B3C2B5" }}
                             dataKey="time"
                             type="number"
-                            domain={[new Date(now - this.state.displayWindow).getTime(), now]} //fix!
+                            domain={[now - this.props.displayWindow, now]}
                             allowDataOverflow={true}
                             ticks={this.state.tickArray}
-                            tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
+                            tickFormatter={(tick) => moment(tick * 1).format('MMM DDᵗʰ - HH:mm')}
                         />
                         <YAxis yAxisId="temperature" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />

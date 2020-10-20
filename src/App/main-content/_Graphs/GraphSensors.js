@@ -216,10 +216,10 @@ class GraphSensors extends Component {
                             tick={{ fill: "#B3C2B5" }}
                             dataKey="time"
                             type="number"
-                            domain={[new Date(now - this.props.displayWindow).getTime(), now]} //fix!
+                            domain={[now - this.props.displayWindow, now]}
                             allowDataOverflow={true}
                             ticks={this.state.tickArray}
-                            tickFormatter={(tick) => moment(tick * 1).format('ddd - HH:mm')}
+                            tickFormatter={(tick) => moment(tick * 1).format('MMM DDᵗʰ - HH:mm')}
                         />
                         <YAxis yAxisId="left" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="right" hide={true} orientation="right" tick={{ fill: "#B3C2B5" }} />

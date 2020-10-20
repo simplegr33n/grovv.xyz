@@ -165,7 +165,7 @@ class AllGraphs extends Component {
                 <div style={{ width: "100vw", height: "60vh", minHeight: "60vh" }} ref={element => this.divRef = element} >
                     {(() => {
                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
-                            return <GraphAllGrows setDisplayWindow={this.props.setDisplayWindow} parentSize={this.state.graphElementSize} combinedProcessedData={this.props.combinedProcessedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
+                            return <GraphAllGrows setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} parentSize={this.state.graphElementSize} combinedProcessedData={this.props.combinedProcessedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
                         }
                     })()}
                 </div >
