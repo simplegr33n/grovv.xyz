@@ -275,7 +275,6 @@ class DbHelper {
     //    FEED      //
     // ............ //
     getFeedData(UID, setData) {
-
         // Config data isResetting in firebase 
         var ref = this.firebase.db.ref().child('feed').child(this.userID)
 
@@ -285,12 +284,10 @@ class DbHelper {
                 setData(false);
                 return;
             }
-
             setData(snapshot.val())
 
-
         }, function (errorObject) {
-            console.log("get user failed: " + errorObject.code);
+            console.log('get user failed: ', errorObject.code);
         });
     }
 
@@ -306,6 +303,13 @@ class DbHelper {
         ref.push(feedRun)
     }
 
+    postFeedEntry(UID, growID, runID, entry, year, month) {
+
+        console.log("POSTFEED", entry)
+
+        var ref = this.firebase.db.ref().child('feed').child(this.userID).child(growID).child(runID).child('ENTRIES').child(year).child(month)
+        ref.push(entry)
+    }
 
     // .............. //
     //   DEVICE RESET  //

@@ -281,9 +281,6 @@ class LifetimeGraph extends Component {
         }
 
 
-        console.log("DISPLAY WINDOW", this.props.displayWindow)
-
-
         return (
             <div style={{ overflowY: 'auto', overflowX: 'hidden', maxHeight: '100%' }}>
                 <div className="Chart-Container">

@@ -46,6 +46,11 @@ class LifetimeDataRow extends Component {
 
     render() {
 
+        var barOpacity = 1
+        if (this.state.allHidden) {
+            barOpacity = 0.5
+        }
+
         var renderButtonItems = null
         if (this.props.allSensorsList) {
             renderButtonItems = this.props.allSensorsList.map((sensorID) =>
@@ -62,10 +67,10 @@ class LifetimeDataRow extends Component {
 
                     var reducedID = sensorID.split("^")[0] + "^" + sensorID.split("^")[1]
 
-                    var setOpacity = 0.25
-                    var highOpacitySetting = 0.25
-                    var avgsOpacitySetting = 0.25
-                    var lowOpacitySetting = 0.25
+                    var setOpacity = 0.4
+                    var highOpacitySetting = 0.4
+                    var avgsOpacitySetting = 0.4
+                    var lowOpacitySetting = 0.4
                     if (this.props.activeLines) {
                         if (this.props.activeLines.includes(reducedID + "^HIGH")) {
                             setOpacity = 1
@@ -83,125 +88,126 @@ class LifetimeDataRow extends Component {
 
 
                     return (
-                        <div data-value={sensorID} key={sensorID} style={{ margin: '2px', opacity: setOpacity, overflow: 'hidden' }}>
+                        <div data-value={sensorID} key={sensorID} style={{ margin: '1px', opacity: setOpacity, overflow: 'hidden' }}>
 
                             <div style={{ userSelect: 'none' }}>
-                                <div style={{ display: 'flex', flexDirection: 'row', background: '#233a27', height: '24px' }}>
-                                    <div style={{ marginTop: '-2px', marginRight: '2px', fontSize: '14px', fontWeight: 600 }} >
+                                <div style={{ display: 'flex', flexDirection: 'row', background: '#3d5674', height: '24px' }}>
+                                    <div style={{ padding: '2px', fontSize: '14px', fontWeight: 600 }} >
                                         (?)
                                     </div>
-                                    <div style={{ marginTop: '-2px', marginRight: '2px', fontSize: '16px', fontWeight: 600 }} >
+                                    <div style={{ padding: '2px', fontSize: '16px', fontWeight: 600 }} >
                                         {sensorID.split("^")[0]}
                                     </div>
                                     <div style={{ flex: 1 }} />
-                                    <BiHide data-value={sensorID} onClick={this.toggleSensorLines} style={{ fontSize: "14px", padding: "2px", cursor: 'pointer', background: "#355526" }} />
+                                    <BiHide data-value={sensorID} onClick={this.toggleSensorLines} style={{ fontSize: "14px", padding: "2px", cursor: 'pointer', background: "#5882bf" }} />
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', userSelect: 'none', flexDirection: 'column', fontSize: '10px', fontWeight: 600, background: '#1a241a' }}>
-                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }} />
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }}>
-                                        <div>
+                            <div style={{ display: 'flex', userSelect: 'none', flexDirection: 'column', fontSize: '10px', background: '#6088a9', color: '#000', padding: '2px' }}>
+
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px', maxHeight: '10px', color: '#000', fontSize: '12px', fontWeight: 1000, color: '#FFF' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '10px' }} />
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '10px', marginLeft: '2px', background: '#526d88' }}>
+                                        <div style={{ marginTop: '-4px' }}>
                                             &#8593;
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }}>
-                                        <div>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '10px', marginLeft: '2px', background: '#526d88' }}>
+                                        <div style={{ marginTop: '-4px' }}>
                                             &#8595;
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '10px', marginLeft: '2px' }}>
-                                        <div>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '10px', marginLeft: '2px', background: '#526d88' }}>
+                                        <div style={{ marginTop: '-4px' }}>
                                             ~
                                         </div>
                                     </div>
                                 </div>
 
 
-                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
-                                    <div data-value={reducedID + "^AVERAGE"} onClick={this.toggleLine} style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#495a65', cursor: 'pointer', opacity: avgsOpacitySetting }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px', color: '#FFF' }}>
+                                    <div data-value={reducedID + "^AVERAGE"} onClick={this.toggleLine} style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#495a65', cursor: 'pointer', opacity: avgsOpacitySetting }}>
                                         <div style={{ width: '100%', height: '4px', background: '#62ce92' }} />
                                         <div>
                                             averages
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
-                                    <div data-value={reducedID + "^HIGH"} onClick={this.toggleLine} style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', flex: 1, background: '#b44b00', cursor: 'pointer', opacity: highOpacitySetting }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px', color: '#FFF' }}>
+                                    <div data-value={reducedID + "^HIGH"} onClick={this.toggleLine} style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', flex: 1, background: '#b44b00', cursor: 'pointer', opacity: highOpacitySetting }}>
                                         <div style={{ width: '100%', height: '4px', background: '#FF0000' }} />
                                         <div>
                                             highs
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
-                                    <div data-value={reducedID + "^LOW"} onClick={this.toggleLine} style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', flex: 1, background: '#2c48ad', cursor: 'pointer', opacity: lowOpacitySetting }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px', color: '#FFF' }}>
+                                    <div data-value={reducedID + "^LOW"} onClick={this.toggleLine} style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', flex: 1, background: '#2c48ad', cursor: 'pointer', opacity: lowOpacitySetting }}>
                                         <div style={{ width: '100%', height: '4px', background: '#19b2ff' }} />
                                         <div>
                                             lows
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
                                             78888
                                         </div>
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px' }}>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', flex: 1, cursor: 'pointer' }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', marginBottom: '2px', color: '#FFF' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', flex: 1, cursor: 'pointer' }}>
 
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', fontSize: '12px', marginLeft: '2px' }}>
 
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', fontSize: '10px', marginLeft: '2px', paddingTop: '6px', color: '#d6c5c5' }}>
-                                        deviation
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', fontSize: '10px', marginLeft: '2px', paddingTop: '6px', background: '#526d88' }}>
+                                        deviation:
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#3c3c3c', fontSize: '14px', marginLeft: '2px', paddingTop: '3px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#3c3c3c', fontSize: '14px', marginLeft: '2px', paddingTop: '3px' }}>
                                         <div>
                                             78888
                                         </div>
@@ -219,20 +225,20 @@ class LifetimeDataRow extends Component {
 
         // MAIN RENDER RETURN
         return (
-            <div style={{ background: "#000", width: '100%' }}>
+            <div style={{ width: '100%', marginLeft: '4px', opacity: barOpacity }}>
                 <div style={{ textAlign: 'left', fontSize: '30px', userSelect: 'none', display: 'flex', flexDirection: 'row', background: "#1e4354", marginBottom: '2px' }}>
 
-                    <MdSettingsApplications data-value={this.props.grow} onClick={this.openGrowLineSettings} style={{ fontSize: "30px", padding: "4px", background: "#555555", cursor: 'pointer', marginRight: "16px" }} />
+                    <MdSettingsApplications data-value={this.props.grow} onClick={this.openGrowLineSettings} style={{ fontSize: "30px", padding: "4px", background: "#555555", cursor: 'pointer' }} />
 
                     <div style={{ fontSize: "24px", marginLeft: "2px", marginBottom: '2px' }}>
                         {this.props.grow.name}
                     </div>
                     <div style={{ flex: 1 }} />
 
-                    <BiHide onClick={this.toggleGrowLines} style={{ fontSize: "24px", padding: "4px", cursor: 'pointer', background: "#222f4b", marginRight: '10px' }} />
+                    <BiHide onClick={this.toggleGrowLines} style={{ fontSize: "24px", padding: "4px", cursor: 'pointer', background: "#5882bf" }} />
 
                 </div >
-                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', marginLeft: '2px', marginRight: '2px' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', marginLeft: '4px' }}>
                     {renderButtonItems}
                 </div>
             </div>

@@ -16,7 +16,7 @@ class LifetimePage extends Component {
             graphSizeUpdated: 0, // init at 0
 
             // TEMP HERE -- for getting lifetime data to process
-            growID: 'EC1_0__FC:F5:C4:96:8C:A0', // hardcoded for now // '-LdtkOvSXRrm1zIZ6EOx' // '-LdtfBTlG6Fgg-ADD8-b' // '-C02kOvSXRrm1zIZ6EOx' // 'EC1_0__FC:F5:C4:96:8C:A0'
+            growID: 'EC1_0__D8:F1:5B:10:AB:04', // hardcoded for now // '-LdtkOvSXRrm1zIZ6EOx' // '-LdtfBTlG6Fgg-ADD8-b' // 'EC1_0__D8:F1:5B:10:AB:04' // 'EC1_0__FC:F5:C4:96:8C:A0'
             year: '2020',
             month: '10',
         };
@@ -129,9 +129,9 @@ class LifetimePage extends Component {
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', maxWidth: '100%', maxHeight: '100%' }}>
-                <div style={{ width: "100vw", minHeight: "80vh", maxHeight: "80vh" }} ref={element => this.divRef = element} >
+                <div style={{ width: "100%", minHeight: "80vh", maxHeight: "80vh" }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
-                        <GraphLifetime parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} displayWindow={this.props.displayWindow} />
+                        <GraphLifetime parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} />
                     </div>
                 </div >
             </div>

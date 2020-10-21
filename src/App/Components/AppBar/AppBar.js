@@ -96,10 +96,10 @@ class AppBar extends Component {
                             {acroName}
                         </div>
                         {(() => {
-                            if (liveButtonData && liveButtonData.sA1_Temp) {
+                            if (liveButtonData && liveButtonData.s1t) {
                                 return (
                                     <div ref={this.flowerTempRef} className="App-Bar-Button-Grow-Temp" data-value={grow.id}>
-                                        {Math.round(liveButtonData.sA1_Temp * 10) / 10}°C
+                                        {Math.round(liveButtonData.s1t * 10) / 10}°C
                                     </div>
                                 )
                             }
@@ -107,10 +107,10 @@ class AppBar extends Component {
 
 
                         {(() => {
-                            if (liveButtonData && liveButtonData.sA1_Humi) {
+                            if (liveButtonData && liveButtonData.s1h) {
                                 return (
                                     <div ref={this.flowerHumidityRef} className="App-Bar-Button-Grow-Humidity" data-value={grow.id}>
-                                        {Math.round(liveButtonData.sA1_Humi * 10) / 10}%
+                                        {Math.round(liveButtonData.s1h * 10) / 10}%
                                     </div>
                                 )
                             }
@@ -134,7 +134,7 @@ class AppBar extends Component {
                     <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
-                <div className="App-Bar-Button-Grow" style={{ background: '#af8b28' }} onClick={this.setMainContent} data-value={'feed'}>
+                <div className="App-Bar-Button-Grow" style={{ background: '#77864a' }} onClick={this.setMainContent} data-value={'feed'}>
                     <FaPrescriptionBottle style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
