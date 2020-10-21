@@ -9,6 +9,7 @@ import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterio
 import co2svg from '../../../../assets/co2svg.svg'
 import tvocSvg from '../../../../assets/tvoc-svg.svg'
 import { AiFillControl } from 'react-icons/ai';
+import { IoIosExit } from 'react-icons/io';
 
 
 
@@ -168,6 +169,11 @@ class GrowSettings extends Component {
         this.props.close();
     }
 
+    resetDevice = () => {
+        this.dbHelper.resetDevice("useridblank", this.props.grow.id)
+        this.props.close()
+    }
+
 
     render() {
 
@@ -304,24 +310,24 @@ class GrowSettings extends Component {
 
         return (
 
-            <div style={{ height: '100%', maxHeight: '100%', width: '100%', maxWidth: '100%', backgroundColor: '#000000BF', position: 'fixed', justifyItems: 'center', justifyContent: 'center', alignContent: 'center', zIndex: 3 }}>
-                <div style={{ margin: 'auto', width: '90%', height: '90%', border: '3px solid #262626', padding: '10px', background: '#303630', color: '#d3dbd5' }}>
+            <div style={{ height: '95%', maxHeight: '95%', width: '100%', maxWidth: '100%', backgroundColor: '#000000BF', position: 'absolute', justifyItems: 'center', justifyContent: 'center', alignContent: 'center', zIndex: 3 }}>
+                <div style={{ maxHeight: '95%', border: '3px solid #262626', background: '#303630', color: '#d3dbd5', overflowY: 'auto', position: 'absolute', right: 0 }}>
 
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <AiFillControl style={{ color: '#9e9e9e', fontSize: '22px' }} />
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', backgroundColor: '#14363e' }}>
+                        <AiFillControl style={{ color: '#9e9e9e', fontSize: '28px' }} />
                         <div style={{ fontSize: '1em', fontWeight: '100', userSelect: 'none', display: 'flex', flexDirection: 'row' }}>
-
                             <div>
                                 Settings
                             </div>
                         </div>
-                        <div onClick={this.close} style={{ fontSize: '1.2em', color: '#9e9e9e', userSelect: 'none', cursor: 'pointer', marginRight: '4px' }}>X</div>
+                        <IoIosExit onClick={this.close} style={{ color: '#9e9e9e', fontSize: '28px', cursor: 'pointer' }} />
                     </div>
                     {(() => {
                         if (this.state.config) {
                             return (
-                                <div id="Grow-Details-Config-Settings-Div" style={{ margin: '4px', height: "95%" }}>
-                                    <div id="Grow-Details-Config-Scroll" style={{ overflowY: 'auto', height: '100%' }}>
+
+                                <div style={{ maxHeight: '100%' }}>
+                                    <div >
 
                                         {/* LIGHTS */}
                                         {(() => {
@@ -356,24 +362,26 @@ class GrowSettings extends Component {
                                         {sensorSettingRows}
 
 
-                                        {/* Doubly hid for now */}
-                                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
-                                            <div id="GROW-DETAILS-SAVE-CONFIG-BTN" onClick={() => this.postConfig()}>SAVE <br></br> SETTINGS</div>
+                                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
+                                                <div id="GROW-DETAILS-SAVE-CONFIG-BTN" style={{ background: '#aa8b3b' }} onClick={() => this.resetDevice()}>RESET <br></br> BRAIN</div>
+                                            </div>
+
+                                            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
+                                                <div id="GROW-DETAILS-SAVE-CONFIG-BTN" style={{ background: '#3ba2aa' }} onClick={() => this.postConfig()}>SAVE <br></br> SETTINGS</div>
+                                            </div>
                                         </div>
+
+
                                     </div>
                                 </div>
+
                             )
                         }
                     })()}
 
 
                 </div>
-
-                {/* use me! */}
-                {
-                    (() => {
-                    })()
-                }
             </div >
 
         );

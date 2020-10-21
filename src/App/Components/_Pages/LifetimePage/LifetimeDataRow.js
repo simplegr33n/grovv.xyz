@@ -15,7 +15,7 @@ class LifetimeDataRow extends Component {
         super(props);
 
         this.state = {
-
+            allHidden: false
         };
     }
 
@@ -32,6 +32,11 @@ class LifetimeDataRow extends Component {
     }
 
     toggleGrowLines = (e) => {
+        var tempBool = true
+        if (this.state.allHidden) {
+            tempBool = false
+        }
+        this.setState({ allHidden: tempBool })
         this.props.toggleGrowLines(this.props.grow.id)
     }
 
@@ -45,6 +50,9 @@ class LifetimeDataRow extends Component {
         if (this.props.allSensorsList) {
             renderButtonItems = this.props.allSensorsList.map((sensorID) =>
                 (() => {
+                    if (this.state.allHidden) {
+                        return
+                    }
                     if ((sensorID.split("^")[1] !== this.props.grow.id)) {
                         return
                     }
@@ -190,7 +198,7 @@ class LifetimeDataRow extends Component {
                                     <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', fontSize: '12px', marginLeft: '2px' }}>
 
                                     </div>
-                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', fontSize: '10px', marginLeft: '2px', paddingTop: '6px' }}>
+                                    <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', fontSize: '10px', marginLeft: '2px', paddingTop: '6px', color: '#d6c5c5' }}>
                                         deviation
                                     </div>
                                     <div style={{ minWidth: '60px', maxWidth: '60px', minHeight: '20px', background: '#3c3c3c', fontSize: '14px', marginLeft: '2px', paddingTop: '3px' }}>
@@ -212,15 +220,19 @@ class LifetimeDataRow extends Component {
         // MAIN RENDER RETURN
         return (
             <div style={{ background: "#000", width: '100%' }}>
-                <div style={{ textAlign: 'left', fontSize: '30px', userSelect: 'none', display: 'flex', flexDirection: 'row', background: "#1e4354" }}>
-                    <BiHide onClick={this.toggleGrowLines} style={{ fontSize: "24px", padding: "4px", cursor: 'pointer', background: "#222f4b" }} />
-                    <div style={{ fontSize: "24px", marginLeft: "4px", marginBottom: '2px' }}>
+                <div style={{ textAlign: 'left', fontSize: '30px', userSelect: 'none', display: 'flex', flexDirection: 'row', background: "#1e4354", marginBottom: '2px' }}>
+
+                    <MdSettingsApplications data-value={this.props.grow} onClick={this.openGrowLineSettings} style={{ fontSize: "30px", padding: "4px", background: "#555555", cursor: 'pointer', marginRight: "16px" }} />
+
+                    <div style={{ fontSize: "24px", marginLeft: "2px", marginBottom: '2px' }}>
                         {this.props.grow.name}
                     </div>
                     <div style={{ flex: 1 }} />
-                    <MdSettingsApplications data-value={this.props.grow} onClick={this.openGrowLineSettings} style={{ fontSize: "30px", padding: "4px", background: "#555555", cursor: 'pointer', marginRight: "16px" }} />
+
+                    <BiHide onClick={this.toggleGrowLines} style={{ fontSize: "24px", padding: "4px", cursor: 'pointer', background: "#222f4b", marginRight: '10px' }} />
+
                 </div >
-                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', marginLeft: '2px', marginRight: '2px' }}>
                     {renderButtonItems}
                 </div>
             </div>

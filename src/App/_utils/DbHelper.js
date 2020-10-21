@@ -294,7 +294,6 @@ class DbHelper {
         });
     }
 
-    // Get Reset Value
     createFeedRun(UID, growID, name, setData) {
 
         var feedRun = []
@@ -308,6 +307,15 @@ class DbHelper {
     }
 
 
+    // .............. //
+    //   DEVICE RESET  //
+    // .............. //
+
+
+    resetDevice(UID, growID) {
+        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config-hardware').child('reset')
+        ref.set(1)
+    }
 
 }
 

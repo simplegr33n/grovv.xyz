@@ -192,7 +192,7 @@ class GrowPage extends Component {
 
                     <div className="Grow-Details-Page-Panel">
                         <div id="Grow-Details-Data-Display">
-                            <GrowDataDisplay grow={this.props.grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.props.user} activeLines={this.state.ACTIVE_LINES} />
+                            <GrowDataDisplay key={this.props.grow.id} grow={this.props.grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.props.user} activeLines={this.state.ACTIVE_LINES} />
                         </div>
                     </div>
                 </div>

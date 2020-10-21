@@ -14,7 +14,7 @@ class LifetimeGraph extends Component {
         super(props);
         this.state = {
             rangeMax: new Date().valueOf(),
-            rangeMin: new Date("2019-05").valueOf()
+            rangeMin: new Date("2020-10-18").valueOf()
         };
 
     }
@@ -98,20 +98,16 @@ class LifetimeGraph extends Component {
         }
 
         this.setState({ rangeMin: newValue })
-
-        this.props.updateTimeframe(newValue, maxValue)
     }
 
     toggleRangeMax = (e) => {
-        var newValue = new Date(e.target.value).valueOf() + 3029800000 // add a month here
+        var newValue = new Date(e.target.value).valueOf()
         var minValue = this.state.rangeMin
         if (!minValue) {
             minValue = 0
         }
 
         this.setState({ rangeMax: newValue })
-
-        this.props.updateTimeframe(minValue, newValue)
     }
 
     handleLineToggle = (lineName) => {
@@ -269,7 +265,8 @@ class LifetimeGraph extends Component {
                         <XAxis
                             dataKey="time"
                             type="number"
-                            domain={[new Date(this.props.displayWindow[0]).getTime(), new Date(this.props.displayWindow[1]).getTime()]}
+                            allowDataOverflow={true}
+                            domain={[this.state.rangeMin, this.state.rangeMax]}
                             tickFormatter={(unixTime) => moment(unixTime).format('MM-D-YYYY')}
                             hide={false} />
                         <YAxis yAxisId="temperature" orientation="left" domain={[20]} tick={{ fill: "#B3C2B5" }} />
@@ -284,17 +281,20 @@ class LifetimeGraph extends Component {
         }
 
 
+        console.log("DISPLAY WINDOW", this.props.displayWindow)
 
 
         return (
             <div style={{ overflowY: 'auto', overflowX: 'hidden', maxHeight: '100%' }}>
-                <div className="Chart-Container-Box" style={{ marginLeft: '-5%', background: '#000101' }}>
-                    {renderLifetimeGraph}
-                    {/* Time Scale Select... */}
-                    <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '2px', top: '42px' }}>
+                <div className="Chart-Container">
 
-                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2020-09" max={moment(new Date(this.state.rangeMax - 3029800000)).format('YYYY-MM')} type="month" defaultValue={"2020-09"} style={{ fontSize: '0.8em', padding: 0, maxWidth: '40px', marginTop: '1px' }} />
-                        <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 3029800000)).format('YYYY-MM')} max={moment(new Date()).format('YYYY-MM')} type="month" defaultValue={moment(new Date()).format('YYYY-MM')} style={{ fontSize: '0.8em', padding: 0, marginTop: '1px' }} />
+                    {renderLifetimeGraph}
+
+                    {/* Time Scale Select... */}
+                    <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '2px', top: '18px' }}>
+
+                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2020-10-01" max={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMin)).format('YYYY-MM-DD')} style={{ fontSize: '0.8em', padding: 0, maxWidth: '40px', marginTop: '1px' }} />
+                        <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 86400000)).format('YYYY-MM-DD')} max={moment(new Date()).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} style={{ fontSize: '0.8em', padding: 0, marginTop: '1px' }} />
 
                     </div>
                 </div>

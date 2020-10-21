@@ -299,6 +299,8 @@ class GrowDataDisplay extends Component {
 
     render() {
 
+
+
         var indicatorColor = "#FFF"
         if (this.props.liveGrowData && this.props.liveGrowData[this.props.grow.id]) {
 
@@ -317,13 +319,15 @@ class GrowDataDisplay extends Component {
         }
 
         const sensorInfoRows = this.state.SENSOR_PIDS.map((pid) =>
-            <div className="Grow-Details-Main-Data-Display-Row" key={pid}>
+            <div className="Grow-Details-Main-Data-Display-Row" key={pid + "^" + this.props.grow.id}>
 
                 {(() => {
 
                     var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
                     var lineKey = pid + "^" + this.props.grow.id
+
+                    console.log("props", curSensor)
 
                     var setOpacity = 1
                     var setPaddingTop = '4px'
@@ -354,13 +358,11 @@ class GrowDataDisplay extends Component {
                     }
 
                     return (
-                        <div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                        <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: this.props.grow.config.SENSORS[tIndex].color }}  >
                             <div style={{ paddingTop: setPaddingTop, fontSize: '12px', lineHeight: '12px', overflow: 'hidden', fontWeight: '500' }} > {curSensor.name}</div>
 
 
                             {(() => {
-                                console.log("cursor", curSensor)
-
                                 if (curSensor.type === "airTemp") {
                                     return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
                                 } else if (curSensor.type === "humidity") {

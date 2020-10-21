@@ -155,7 +155,7 @@ class AllPage extends Component {
 
             sensorInfoColumns = this.props.userGrows.map((grow) => {
                 return (
-                    <GrowDataDisplay grow={grow} key={grow.id} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.state.user} />
+                    <GrowDataDisplay grow={grow} key={grow.id + "^allpage"} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.state.user} />
                 )
             })
 

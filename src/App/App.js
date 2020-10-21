@@ -35,7 +35,6 @@ class App extends Component {
 			username: '',
 			currentGrow: null,
 			displayWindow: 259200000, // 1800000, 10800000, 43200000, 86400000, 259200000
-			lifetimeDisplayWindow: [new Date("9-30-2020").valueOf(), new Date().valueOf()],
 
 			liveGrowData: [],
 
@@ -77,7 +76,7 @@ class App extends Component {
 	setLifetimeData = (lifetimeData) => {
 		this.setState({ lifetimeData: lifetimeData });
 
-		this.processingFunctions.normalizeLifetimeData(lifetimeData, this.setNormalizedLifetimeData, this.state.lifetimeDisplayWindow[0], this.state.lifetimeDisplayWindow[1])
+		this.processingFunctions.normalizeLifetimeData(lifetimeData, this.setNormalizedLifetimeData)
 	}
 
 	setUserGrows = (userGrows) => {
@@ -169,15 +168,6 @@ class App extends Component {
 			normalizedLifetimeData: normalizedLifetimeData,
 			sampleHighs: sampleHighs
 		})
-	}
-
-	updateLifetimeDisplayWindow = (rangeMin, rangeMax) => {
-		console.log("updateLifetimeDisplayWindow: " + rangeMin, rangeMax)
-
-		this.setState({
-			lifetimeDisplayWindow: [rangeMin, rangeMax]
-		})
-		this.processingFunctions.normalizeLifetimeData(this.state.lifetimeData, this.setNormalizedLifetimeData, rangeMin, rangeMax)
 	}
 
 	setMainContent = (setValue) => {
