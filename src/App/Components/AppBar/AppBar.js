@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 
-import moment from 'moment'
+import '../../../styles/App.css';
 
-import '../../styles/App.css';
-
-import cornerLogo from '../../assets/corner-logo.png'
-import { ReactComponent as TobyFace } from '../../assets/tobyface.svg';
+import cornerLogo from '../../../assets/corner-logo.png'
+import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg';
 
 import { AiOutlineLineChart } from 'react-icons/ai';
 import { TiThMenu } from 'react-icons/ti';
@@ -68,16 +66,11 @@ class AppBar extends Component {
                 }
 
                 var indicatorColor = "#FF0000"
-                var lastUpdate = null;
+
                 if (this.props.liveGrowData[grow.id]) {
                     var now = new Date().getTime();
-                    var updatedAtDate = new Date(this.props.liveGrowData[grow.id].time * 1000)
-
-                    if (this.updatedAtDate && (updatedAtDate !== this.updatedAtDate[grow.id])) {
-                        this.updatedAtDate[grow.id] = updatedAtDate
-                    }
-
                     var difference = now - this.props.liveGrowData[grow.id].time * 1000
+
                     if (difference > 10000000) {
                         indicatorColor = "#989e98"
                     } else if (difference > 300000) {
@@ -87,7 +80,6 @@ class AppBar extends Component {
                     } else if (difference < 60000) {
                         indicatorColor = "#27d927"
                     }
-                    lastUpdate = moment(updatedAtDate).fromNow()
                 }
 
 

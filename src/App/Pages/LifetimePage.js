@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../styles/App.css';
 
-import ProcessingFunctions from '../../_utils/ProcessingFunctions'
+import ProcessingFunctions from '../_utils/ProcessingFunctions.js'
 
-import GraphLifetime from './GraphLifetime'
+import GraphLifetime from '../Components/_Pages/LifetimePage/GraphLifetime.js'
 
 
-class LifetimeGraphs extends Component {
+class LifetimePage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            // Graph sizing
             graphElementSize: [150, 150], // needs init
             graphSizeUpdated: 0, // init at 0
 
+            // TEMP HERE -- for getting lifetime data to process
             growID: '-C02kOvSXRrm1zIZ6EOx', // hardcoded for now // '-LdtkOvSXRrm1zIZ6EOx' // '-LdtfBTlG6Fgg-ADD8-b' // '-C02kOvSXRrm1zIZ6EOx'
             year: '2020',
             month: '10',
@@ -143,4 +145,4 @@ class LifetimeGraphs extends Component {
     }
 }
 
-export default LifetimeGraphs;
+export default LifetimePage;

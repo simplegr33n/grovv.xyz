@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../styles/App.css';
 
-import GraphAllGrows from './GraphAllGrows.js'
-import GrowDataDisplay from '../GrowPage/GrowDataDisplay.js'
+import GraphAllPage from '../Components/_Pages/AllPage/GraphAllPage.js'
+import GrowDataDisplay from '../Components/_Pages/GrowPage/GrowDataDisplay.js'
 
 
-class AllGraphs extends Component {
+class AllPage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             grow: this.props.grow,
+
+            // Graph sizing
             graphElementSize: [150, 150], // needs init
             graphSizeUpdated: 0 // init at 0
         };
@@ -165,7 +167,7 @@ class AllGraphs extends Component {
                 <div style={{ width: "100vw", height: "60vh", minHeight: "60vh", background: "#000" }} ref={element => this.divRef = element} >
                     {(() => {
                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
-                            return <GraphAllGrows setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} parentSize={this.state.graphElementSize} combinedProcessedData={this.props.combinedProcessedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
+                            return <GraphAllPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} parentSize={this.state.graphElementSize} combinedProcessedData={this.props.combinedProcessedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
                         }
                     })()}
                 </div >
@@ -186,4 +188,4 @@ class AllGraphs extends Component {
     }
 }
 
-export default AllGraphs;
+export default AllPage;

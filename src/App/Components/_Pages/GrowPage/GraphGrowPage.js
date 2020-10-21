@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../../../styles/App.css';
 
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
@@ -8,7 +8,7 @@ import moment from 'moment'
 
 
 
-class GraphSensors extends Component {
+class GraphGrowPage extends Component {
 
     constructor(props) {
         super(props);
@@ -251,4 +251,4 @@ class GraphSensors extends Component {
     }
 }
 
-export default GraphSensors;
+export default GraphGrowPage;

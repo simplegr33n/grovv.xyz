@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../../../styles/App.css';
 
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
-import moment, { relativeTimeThreshold } from 'moment'
+import moment from 'moment'
 import LifetimeDataColumn from './LifetimeDataColumn'
 
 

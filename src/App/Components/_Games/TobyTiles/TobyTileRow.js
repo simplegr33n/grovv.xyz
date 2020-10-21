@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../../../../styles/App.css';
 
-import menuHandle from '../../../../assets/menu-handle.png';
 
 // CARDS
 // 100 POINTS

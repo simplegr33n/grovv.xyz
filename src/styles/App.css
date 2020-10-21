@@ -2026,3 +2026,33 @@ body {
 .Lifetime-Graph-Area {
   flex: 1;
 }
+
+/* TOBY SCREENSAVER */
+.Loading-Screensaver {
+  text-align: center;
+  max-width: 100vw;
+  max-height: 100vh;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.Flying-toby {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .Flying-toby {
+    animation: Flying-toby-spin infinite 20s linear;
+  }
+}
+
+@keyframes Flying-toby-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

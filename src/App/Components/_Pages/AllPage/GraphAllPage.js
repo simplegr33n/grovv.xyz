@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../../../styles/App.css';
 
 import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 import moment from 'moment'
 
 
-class AllGraph extends Component {
+class GraphAllPage extends Component {
 
     constructor(props) {
         super(props);
@@ -204,4 +204,4 @@ class AllGraph extends Component {
     }
 }
 
-export default AllGraph;
+export default GraphAllPage;

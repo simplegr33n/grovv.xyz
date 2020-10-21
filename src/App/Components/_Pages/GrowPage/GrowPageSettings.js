@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../../../styles/App.css';
 
 import TimePicker from 'react-time-picker'
 
-import DbHelper from '../../_utils/DbHelper.js'
+import DbHelper from '../../../_utils/DbHelper.js'
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
-import co2svg from '../../../assets/co2svg.svg'
-import tvocSvg from '../../../assets/tvoc-svg.svg'
+import co2svg from '../../../../assets/co2svg.svg'
+import tvocSvg from '../../../../assets/tvoc-svg.svg'
 import { AiFillControl } from 'react-icons/ai';
 
 

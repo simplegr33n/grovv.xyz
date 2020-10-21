@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import '../../../styles/App.css';
+import '../../../../styles/App.css';
 
 
 import moment from 'moment'
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
-import co2svg from '../../../assets/co2svg.svg'
-import tvocSvg from '../../../assets/tvoc-svg.svg'
+import co2svg from '../../../../assets/co2svg.svg'
+import tvocSvg from '../../../../assets/tvoc-svg.svg'
 
 
 class GrowDataDisplay extends Component {
@@ -300,16 +300,11 @@ class GrowDataDisplay extends Component {
     render() {
 
         var indicatorColor = "#FFF"
-        var lastUpdate = null;
         if (this.props.liveGrowData && this.props.liveGrowData[this.props.grow.id]) {
+
             var now = new Date().getTime();
-            var updatedAtDate = new Date(this.props.liveGrowData[this.props.grow.id].time * 1000)
-
-            if (this.updatedAtDate && (updatedAtDate !== this.updatedAtDate[this.props.grow.id])) {
-                this.updatedAtDate[this.props.grow.id] = updatedAtDate
-            }
-
             var difference = now - this.props.liveGrowData[this.props.grow.id].time * 1000
+
             if (difference > 10000000) {
                 indicatorColor = "#989e98"
             } else if (difference > 300000) {
@@ -319,7 +314,6 @@ class GrowDataDisplay extends Component {
             } else if (difference < 60000) {
                 indicatorColor = "#27d927"
             }
-            lastUpdate = moment(updatedAtDate).fromNow()
         }
 
         const sensorInfoRows = this.state.SENSOR_PIDS.map((pid) =>

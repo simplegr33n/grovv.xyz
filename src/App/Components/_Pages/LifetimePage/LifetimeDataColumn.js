@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import '../../../styles/App.css'
+import '../../../../styles/App.css'
 
 import { BiHide } from 'react-icons/bi'
 import { MdSettingsApplications } from 'react-icons/md'
 
 import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi'
-import co2svg from '../../../assets/co2svg.svg'
-import tvocSvg from '../../../assets/tvoc-svg.svg'
+import co2svg from '../../../../assets/co2svg.svg'
+import tvocSvg from '../../../../assets/tvoc-svg.svg'
 
 
 class LifetimeDataColumn extends Component {

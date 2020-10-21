@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import '../../styles/App.css';
 import Firebase from '../../config/firebaseConfig.js'
 
+import { ReactComponent as TobyFace } from '../../assets/tobyface.svg';
+
 
 class SignIn extends Component {
 
@@ -139,15 +141,15 @@ class SignIn extends Component {
                     </div>
                     <div>
                         Password:
-                        <input type="password" id="signin-password" value={this.state.password} 
-                        onChange={this.handlePasswordChange}
-                        onKeyPress={(ev) => {
-                            console.log(`Pressed keyCode ${ev.key}`);
-                            if (ev.key === 'Enter' || ev.key === '13') {
-                              // Do code here
-                              this.enterSubmit()
-                            }
-                          }} />
+                        <input type="password" id="signin-password" value={this.state.password}
+                            onChange={this.handlePasswordChange}
+                            onKeyPress={(ev) => {
+                                console.log(`Pressed keyCode ${ev.key}`);
+                                if (ev.key === 'Enter' || ev.key === '13') {
+                                    // Do code here
+                                    this.enterSubmit()
+                                }
+                            }} />
                     </div>
                     <div>
                         <button id="submit-signin-btn" onClick={this.handleSubmit} > Sign in! </button>
@@ -159,8 +161,17 @@ class SignIn extends Component {
             );
         } else {
             return (
-                <div>
-                    One Moment...
+                <div className="Loading-Screensaver">
+
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1 }}>
+                        <TobyFace
+                            className="Flying-toby"
+                            viewBox="0 0 110 110"
+                            style={{ flex: 1, height: "10%", paddingLeft: "30%", paddingRight: "30%", paddingTop: "10%" }} />
+                    </div>
+
+                  LOADING...
+
                 </div>
             );
         }

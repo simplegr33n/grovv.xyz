@@ -13,15 +13,15 @@ import SignIn from './_auth/SignIn.js'
 import SignUp from './_auth/SignUp.js'
 
 // Main Content
-import GrowDetailsPage from './main-content/GrowPage/GrowDetailsPage.js'
-import AllGraphs from './main-content/AllGraphs/AllGraphs.js'
-import LifetimeGraphs from './main-content/LifetimeGraphs/LifetimeGraphs.js'
+import GrowPage from './Pages/GrowPage.js'
+import AllPage from './Pages/AllPage.js'
+import LifetimePage from './Pages/LifetimePage.js'
 
 // Top Bar
-import AppBar from './app-bar/AppBar.js'
+import AppBar from './Components/AppBar/AppBar.js'
 
 // GAMES
-import TobyTiles from './main-content/_Games/TobyTiles/TobyTiles.js'
+import TobyTiles from './Components/_Games/TobyTiles/TobyTiles.js'
 
 
 class App extends Component {
@@ -267,13 +267,13 @@ class App extends Component {
 								if (this.state.UID && this.state.userGrows && this.state.user && this.state.threeDayData && this.state.liveGrowData) {
 									switch (this.state.mainContent) {
 										case 'grows':
-											return <GrowDetailsPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData[this.state.currentGrow.id]} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
+											return <GrowPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData[this.state.currentGrow.id]} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
 										case 'lifetime':
-											return <LifetimeGraphs postLifetimeData={this.postLifetimeData} updateLifetimeDisplayWindow={this.updateLifetimeDisplayWindow} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} allSensorsList={this.state.allSensorsList} normalizedLifetimeData={this.state.normalizedLifetimeData} sampleHighs={this.state.sampleHighs} displayWindow={this.state.lifetimeDisplayWindow} />
+											return <LifetimePage postLifetimeData={this.postLifetimeData} updateLifetimeDisplayWindow={this.updateLifetimeDisplayWindow} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} allSensorsList={this.state.allSensorsList} normalizedLifetimeData={this.state.normalizedLifetimeData} sampleHighs={this.state.sampleHighs} displayWindow={this.state.lifetimeDisplayWindow} />
 										case 'tobytiles':
 											return <TobyTiles />
 										default:
-											return <AllGraphs postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+											return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 
 									}
 								} else {
