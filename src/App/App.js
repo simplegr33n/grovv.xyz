@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import '../styles/App.css';
+import React, { Component } from 'react'
+import '../styles/App.css'
 
 
 import Firebase from '../config/firebaseConfig.js'
@@ -16,6 +16,7 @@ import SignUp from './_auth/SignUp.js'
 import GrowPage from './Pages/GrowPage.js'
 import AllPage from './Pages/AllPage.js'
 import LifetimePage from './Pages/LifetimePage.js'
+import FeedPage from './Pages/FeedPage.js'
 
 // Top Bar
 import AppBar from './Components/AppBar/AppBar.js'
@@ -34,7 +35,7 @@ class App extends Component {
 			username: '',
 			currentGrow: null,
 			displayWindow: 259200000, // 1800000, 10800000, 43200000, 86400000, 259200000
-			lifetimeDisplayWindow: [new Date("05-01-2019").valueOf(), new Date().valueOf()],
+			lifetimeDisplayWindow: [new Date("9-30-2020").valueOf(), new Date().valueOf()],
 
 			liveGrowData: [],
 
@@ -171,7 +172,7 @@ class App extends Component {
 	}
 
 	updateLifetimeDisplayWindow = (rangeMin, rangeMax) => {
-		console.log("RANGE" + rangeMin, rangeMax)
+		console.log("updateLifetimeDisplayWindow: " + rangeMin, rangeMax)
 
 		this.setState({
 			lifetimeDisplayWindow: [rangeMin, rangeMax]
@@ -187,7 +188,6 @@ class App extends Component {
 	}
 
 	setGrow = (grow) => {
-		console.log("APP Setgrow", grow)
 		this.setState({
 			currentGrow: grow,
 			mainContent: 'grows'
@@ -270,6 +270,8 @@ class App extends Component {
 											return <GrowPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData[this.state.currentGrow.id]} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
 										case 'lifetime':
 											return <LifetimePage postLifetimeData={this.postLifetimeData} updateLifetimeDisplayWindow={this.updateLifetimeDisplayWindow} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} allSensorsList={this.state.allSensorsList} normalizedLifetimeData={this.state.normalizedLifetimeData} sampleHighs={this.state.sampleHighs} displayWindow={this.state.lifetimeDisplayWindow} />
+										case 'feed':
+											return <FeedPage user={this.state.user} />
 										case 'tobytiles':
 											return <TobyTiles />
 										default:

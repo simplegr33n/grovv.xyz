@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import '../../styles/App.css';
+import React, { Component } from 'react'
+import '../../styles/App.css'
 
 import GraphGrowPage from '../Components/_Pages/GrowPage/GraphGrowPage.js'
 import GrowDataDisplay from '../Components/_Pages/GrowPage/GrowDataDisplay.js'
-import GrowPageSettings from '../Components/_Pages/GrowPage/GrowPageSettings.js';
+import GrowPageSettings from '../Components/_Pages/GrowPage/GrowPageSettings.js'
 
 
-import { AiFillControl } from 'react-icons/ai';
+import { AiFillControl } from 'react-icons/ai'
 
 
 

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import '../../styles/App.css';
+import React, { Component } from 'react'
+import '../../styles/App.css'
 
 import ProcessingFunctions from '../_utils/ProcessingFunctions.js'
 
@@ -16,7 +16,7 @@ class LifetimePage extends Component {
             graphSizeUpdated: 0, // init at 0
 
             // TEMP HERE -- for getting lifetime data to process
-            growID: '-C02kOvSXRrm1zIZ6EOx', // hardcoded for now // '-LdtkOvSXRrm1zIZ6EOx' // '-LdtfBTlG6Fgg-ADD8-b' // '-C02kOvSXRrm1zIZ6EOx'
+            growID: 'EC1_0__FC:F5:C4:96:8C:A0', // hardcoded for now // '-LdtkOvSXRrm1zIZ6EOx' // '-LdtfBTlG6Fgg-ADD8-b' // '-C02kOvSXRrm1zIZ6EOx' // 'EC1_0__FC:F5:C4:96:8C:A0'
             year: '2020',
             month: '10',
         };
@@ -66,7 +66,7 @@ class LifetimePage extends Component {
         this.props.getMonthChunkData(this.state.growID, this.state.year, this.state.month, this.processChunk)
     }
 
-    processChunk(chunk) {
+    processChunk = (chunk) => {
         // JUST A HUGE FCKN function for now why not
         // Iterate over days
         console.log("chunky0PRIME ", chunk)
@@ -123,7 +123,7 @@ class LifetimePage extends Component {
             this.postProcessedDayData(lifetimeObject, day)
         }
     }
-    postProcessedDayData(lifetimeObject, day) {
+    postProcessedDayData = (lifetimeObject, day) => {
         this.props.postLifetimeData(lifetimeObject, this.state.growID, this.state.year, this.state.month, day)
     }
 

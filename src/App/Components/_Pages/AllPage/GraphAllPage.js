@@ -187,9 +187,10 @@ class GraphAllPage extends Component {
                 {renderDayGraph}
 
                 {/* Time Scale Select... */}
-                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '4px', marginTop: '18px' }}>
+                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', top: '2px' }}>
 
-                    <select onChange={this.toggleWindow} id="AllGraph-Time-Scale" defaultValue={defaultWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+                    <select onChange={this.toggleWindow
+                    } id="AllGraph-Time-Scale" defaultValue={defaultWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;h</option>
                         <option value={10800000}>3h</option>
                         <option value={43200000}>12h</option>
@@ -198,7 +199,7 @@ class GraphAllPage extends Component {
                     </select>
 
                 </div>
-            </div>
+            </div >
 
         );
     }

@@ -212,40 +212,59 @@ class GrowSettings extends Component {
                             </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ fontSize: '0.7em', userSelect: 'none' }}>
-                                Type
-                            </div>
-                            <div>
-                                <select onChange={this.sensorTypeChange} id={sensor.PID} defaultValue={sensor.type} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
-                                    <option value="airTemp">airTemp</option>
-                                    <option value="waterTemp">waterTemp</option>
-                                    <option value="humidity">humidity</option>
-                                    <option value="co2">CO&#8322;</option>
-                                    <option value="fan">fan</option>
-                                    <option value="humidifier">humidifier</option>
-                                </select>
-                            </div>
-                        </div>
+
+                        {(() => {
+                            var sensorType = ""
+                            if (sensor.type) {
+                                sensorType = sensor.type
+                            }
+
+                            return (
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ fontSize: '0.7em', userSelect: 'none' }}>
+                                        Type
+                                    </div>
+                                    <div>
+                                        <select onChange={this.sensorTypeChange} id={sensor.PID} defaultValue={sensor.type} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+                                            <option value="airTemp">airTemp</option>
+                                            <option value="waterTemp">waterTemp</option>
+                                            <option value="humidity">humidity</option>
+                                            <option value="co2">CO&#8322;</option>
+                                            <option value="fan">fan</option>
+                                            <option value="humidifier">humidifier</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            )
+                        })()}
 
 
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ fontSize: '0.7em', userSelect: 'none' }}>
-                                Weight
-                            </div>
-                            <div>
-                                <select onChange={this.sensorWeightChange} id={sensor.PID} defaultValue={sensor.thickness} style={{ fontSize: '0.7em', maxWidth: "44px", height: '20px' }} >
-                                    <option value="3">3</option>
-                                    <option value="2">2</option>
-                                    <option value="1.5">1.5</option>
-                                    <option value="1">1</option>
-                                    <option value="0.75">0.75</option>
-                                    <option value="0.5">0.5</option>
-                                    <option value="0.25">0.25</option>
-                                </select>
-                            </div>
-                        </div>
 
+                        {(() => {
+                            var sensorThickness = ""
+                            if (sensor.thickness) {
+                                sensorThickness = sensor.thickness
+                            }
+
+                            return (
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ fontSize: '0.7em', userSelect: 'none' }}>
+                                        Weight
+                            </div>
+                                    <div>
+                                        <select onChange={this.sensorWeightChange} id={sensor.PID} defaultValue={sensorThickness} style={{ fontSize: '0.7em', maxWidth: "44px", height: '20px' }} >
+                                            <option value="3">3</option>
+                                            <option value="2">2</option>
+                                            <option value="1.5">1.5</option>
+                                            <option value="1">1</option>
+                                            <option value="0.75">0.75</option>
+                                            <option value="0.5">0.5</option>
+                                            <option value="0.25">0.25</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            )
+                        })()}
 
 
                         <div style={{ display: 'flex', flexDirection: 'column' }}>

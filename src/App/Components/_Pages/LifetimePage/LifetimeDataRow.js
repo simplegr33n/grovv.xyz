@@ -9,7 +9,7 @@ import co2svg from '../../../../assets/co2svg.svg'
 import tvocSvg from '../../../../assets/tvoc-svg.svg'
 
 
-class LifetimeDataColumn extends Component {
+class LifetimeDataRow extends Component {
 
     constructor(props) {
         super(props);
@@ -228,4 +228,4 @@ class LifetimeDataColumn extends Component {
     }
 }
 
-export default LifetimeDataColumn;
+export default LifetimeDataRow;

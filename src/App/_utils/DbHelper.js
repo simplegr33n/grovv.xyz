@@ -14,7 +14,7 @@ class DbHelper {
     // ............ //
     //    USER      //
     // ............ //
-    // Get Reset Value
+    // Get User
     getUser(UID, setData) {
 
         // Config data isResetting in firebase 
@@ -269,6 +269,45 @@ class DbHelper {
         });
 
     }
+
+
+    // ............ //
+    //    FEED      //
+    // ............ //
+    getFeedData(UID, setData) {
+
+        // Config data isResetting in firebase 
+        var ref = this.firebase.db.ref().child('feed').child(this.userID)
+
+        ref.on('value', (snapshot) => {
+
+            if (snapshot.val() === null) {
+                setData(false);
+                return;
+            }
+
+            setData(snapshot.val())
+
+
+        }, function (errorObject) {
+            console.log("get user failed: " + errorObject.code);
+        });
+    }
+
+    // Get Reset Value
+    createFeedRun(UID, growID, name, setData) {
+
+        var feedRun = []
+        feedRun._createdAt = Math.floor(new Date().getTime() / 1000)
+        feedRun._name = name
+        feedRun._isActive = true
+
+        var ref = this.firebase.db.ref().child('feed').child(this.userID).child(growID)
+
+        ref.push(feedRun)
+    }
+
+
 
 }
 

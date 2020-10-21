@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import '../../../styles/App.css';
+import '../../../styles/App.css'
 
 import cornerLogo from '../../../assets/corner-logo.png'
-import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg';
+import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
 
-import { AiOutlineLineChart } from 'react-icons/ai';
-import { TiThMenu } from 'react-icons/ti';
+import { AiOutlineLineChart } from 'react-icons/ai'
+import { TiThMenu } from 'react-icons/ti'
+import { FaPrescriptionBottle } from 'react-icons/fa'
 
 
 class AppBar extends Component {
@@ -129,8 +130,12 @@ class AppBar extends Component {
 
                 {renderedLiveGrowButtons}
 
-                <div className="App-Bar-Button-Grow" style={{ background: '#6b5729' }} onClick={this.setMainContent} data-value={'lifetime'}>
-                    <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} /> L
+                <div className="App-Bar-Button-Grow" style={{ background: '#4d55b1' }} onClick={this.setMainContent} data-value={'lifetime'}>
+                    <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                </div>
+
+                <div className="App-Bar-Button-Grow" style={{ background: '#af8b28' }} onClick={this.setMainContent} data-value={'feed'}>
+                    <FaPrescriptionBottle style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
                 <div style={{ flex: 1 }} ></div>

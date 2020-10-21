@@ -4,7 +4,7 @@ import '../../../../styles/App.css';
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment from 'moment'
-import LifetimeDataColumn from './LifetimeDataColumn'
+import LifetimeDataRow from './LifetimeDataRow.js'
 
 
 
@@ -220,7 +220,7 @@ class LifetimeGraph extends Component {
         var renderLifetimeColumns = null
         if (this.props.allSensorsList && this.props.userGrows) {
             renderLifetimeColumns = this.props.userGrows.map((grow) => {
-                return <LifetimeDataColumn handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} allSensorsList={this.props.allSensorsList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} normalizedLifetimeData={this.state.normalizedLifetimeData} />
+                return <LifetimeDataRow handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} allSensorsList={this.props.allSensorsList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} normalizedLifetimeData={this.state.normalizedLifetimeData} />
             })
         }
 
@@ -291,9 +291,9 @@ class LifetimeGraph extends Component {
                 <div className="Chart-Container-Box" style={{ marginLeft: '-5%', background: '#000101' }}>
                     {renderLifetimeGraph}
                     {/* Time Scale Select... */}
-                    <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', marginLeft: '36px', marginTop: '18px' }}>
+                    <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '2px', top: '42px' }}>
 
-                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2019-05" max={moment(new Date(this.state.rangeMax - 3029800000)).format('YYYY-MM')} type="month" defaultValue={"2019-05"} style={{ fontSize: '0.8em', padding: 0, maxWidth: '40px', marginTop: '1px' }} />
+                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2020-09" max={moment(new Date(this.state.rangeMax - 3029800000)).format('YYYY-MM')} type="month" defaultValue={"2020-09"} style={{ fontSize: '0.8em', padding: 0, maxWidth: '40px', marginTop: '1px' }} />
                         <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 3029800000)).format('YYYY-MM')} max={moment(new Date()).format('YYYY-MM')} type="month" defaultValue={moment(new Date()).format('YYYY-MM')} style={{ fontSize: '0.8em', padding: 0, marginTop: '1px' }} />
 
                     </div>

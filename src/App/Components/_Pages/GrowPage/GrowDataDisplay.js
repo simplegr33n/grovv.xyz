@@ -357,7 +357,10 @@ class GrowDataDisplay extends Component {
                         <div data-value={pid} key={pid} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', opacity: setOpacity, color: this.props.grow.config.SENSORS[tIndex].color }}  >
                             <div style={{ paddingTop: setPaddingTop, fontSize: '12px', lineHeight: '12px', overflow: 'hidden', fontWeight: '500' }} > {curSensor.name}</div>
 
+
                             {(() => {
+                                console.log("cursor", curSensor)
+
                                 if (curSensor.type === "airTemp") {
                                     return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
                                 } else if (curSensor.type === "humidity") {
@@ -394,7 +397,7 @@ class GrowDataDisplay extends Component {
                                 harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
 
                                 return (
-                                    <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px", maxWidth: "4px", flex: 99 }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px", maxWidth: "4px", minWidth: '4px', flex: 99 }}>
                                         <div style={{ flex: harmonyDangerFlex, background: '#FF0000' }} />
                                         <div style={{ flex: harmonyWarnFlex, background: '#fcba03' }} />
                                         <div style={{ flex: harmonyGoodFlex, background: '#38c538' }} />
@@ -414,15 +417,18 @@ class GrowDataDisplay extends Component {
                         return
                     }
 
-                    if ((curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
-                        if (((curSensor._mean + (curSensor._deviation * 2)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.state.liveData[pid])) {
-                            setIndicatorColor = '#FF0000' // BAD
-                        } else if (((curSensor._mean + (curSensor._deviation)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation)) > this.state.liveData[pid])) {
-                            setIndicatorColor = '#ded954' // WARN
-                        } else {
-                            setIndicatorColor = '#38c538' // GOOD
+                    if (this.state.liveData) {
+                        if ((curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
+                            if (((curSensor._mean + (curSensor._deviation * 2)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.state.liveData[pid])) {
+                                setIndicatorColor = '#FF0000' // BAD
+                            } else if (((curSensor._mean + (curSensor._deviation)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation)) > this.state.liveData[pid])) {
+                                setIndicatorColor = '#ded954' // WARN
+                            } else {
+                                setIndicatorColor = '#38c538' // GOOD
+                            }
                         }
                     }
+
 
                     return (
                         <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
