@@ -38,8 +38,8 @@ class FeedEntriesRow extends Component {
 
         // MAIN RENDER RETURN
         return (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
 
+            <div style={{ display: 'flex', flexDirection: 'column', background: '#667951', marginBottom: '2px' }}>
 
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div style={{ width: '40px', fontSize: '12px', textAlight: 'right', marginRight: '1px', background: '#000' }}>
@@ -68,19 +68,19 @@ class FeedEntriesRow extends Component {
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                         <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
                             ppm pre
-                        </div>
-
-                        <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                            ppm post
-                        </div>
+                            </div>
 
                         <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
                             pH pre
-                        </div>
+                            </div>
+
+                        <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
+                            ppm post
+                            </div>
 
                         <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
                             pH post
-                        </div>
+                            </div>
 
                     </div>
                 </div>
@@ -111,6 +111,21 @@ class FeedEntriesRow extends Component {
                         })()}
 
                         {(() => {
+                            if (this.props.entry['ph_pre']) {
+                                return (
+                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
+                                        {this.props.entry['ph_pre']}
+                                    </div>
+                                )
+                            } else {
+                                return (
+                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
+                                    </div>
+                                )
+                            }
+                        })()}
+
+                        {(() => {
                             if (this.props.entry['ppm_post']) {
                                 return (
                                     <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
@@ -125,20 +140,6 @@ class FeedEntriesRow extends Component {
                             }
                         })()}
 
-                        {(() => {
-                            if (this.props.entry['ph_pre']) {
-                                return (
-                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                        {this.props.entry['ph_pre']}
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                    </div>
-                                )
-                            }
-                        })()}
 
                         {(() => {
                             if (this.props.entry['ph_post']) {
@@ -158,8 +159,9 @@ class FeedEntriesRow extends Component {
                     </div>
                 </div>
 
-
             </div>
+
+
 
         );
     }

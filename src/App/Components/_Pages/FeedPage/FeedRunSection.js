@@ -95,7 +95,7 @@ class FeedRunSection extends Component {
         })
 
         var renderFeedEntriesRows = entriesList.map((entry) => {
-            return <FeedEntriesRow key={entry.time} entry={entry} substancesList={substancesList} feedData={this.props.feedData} />
+            return <FeedEntriesRow key={entry.time} entry={entry} substancesList={substancesList} feedData={this.props.feedData} style={{ marginBottom: '4px' }} />
         })
 
 
@@ -105,15 +105,31 @@ class FeedRunSection extends Component {
 
                 <div style={{ textAlign: 'left', fontSize: '30px', userSelect: 'none', display: 'flex', flexDirection: 'row', background: '#658b3b', marginTop: '2px' }}>
 
+                    {(() => {
+
+                        if (!this.state.ADDING_ENTRY) {
+                            return (
+                                <div onClick={this.toggleNewEntryDisplay} style={{ width: '40px', background: '#43b443', fontSize: '24px', cursor: 'pointer', alignContent: 'center' }} >
+                                    <IoIosAddCircle style={{ fontSize: "24px", padding: '4px 0px 0px 8px' }} />
+                                </div>
+                            )
+                        } else {
+                            return (
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div onClick={this.toggleNewEntryDisplay} style={{ width: '40px', background: '#e63838', fontSize: '24px', cursor: 'pointer', alignContent: 'center' }} >
+                                        <AiOutlineCloseCircle style={{ fontSize: "24px", padding: '4px 0px 0px 8px' }} />
+                                    </div>
+                                </div>
+
+                            )
+                        }
+                    })()}
+
                     <div style={{ fontSize: '22px', marginLeft: '4px', paddingBottom: '4px' }}>
                         {this.props.run[1]._name}
                     </div>
 
                     <div style={{ flex: 1 }} />
-
-                    <div style={{ fontSize: '14px', marginRight: '4px', paddingBottom: '4px', fontStyle: 'italic' }}>
-                        (lastUpdate...)
-                    </div>
 
                     <BiHide style={{ fontSize: "22px", padding: "4px", cursor: 'pointer', background: '#222f4b' }} />
                 </div >
@@ -126,21 +142,13 @@ class FeedRunSection extends Component {
 
                         {(() => {
 
-                            if (!this.state.ADDING_ENTRY) {
-                                return (
-                                    <div onClick={this.toggleNewEntryDisplay} style={{ height: '20px', maxHeight: '20px', width: '40px', margin: '1px 1px 1px 0px', background: '#43b443', fontSize: '16px', cursor: 'pointer' }} >
-                                        <IoIosAddCircle style={{ fontSize: "18px", padding: "4px", marginTop: '-4px' }} />
-                                    </div>
-                                )
-                            } else {
+                            if (this.state.ADDING_ENTRY) {
                                 return (
                                     <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                        <div onClick={this.toggleNewEntryDisplay} style={{ height: '20px', maxHeight: '20px', width: '40px', margin: '1px 1px 1px 0px', background: '#e63838', fontSize: '16px', cursor: 'pointer' }} >
-                                            <AiOutlineCloseCircle style={{ fontSize: "20px", padding: "4px", marginTop: '-4px' }} />
+                                        <div style={{ height: '20px', maxHeight: '20px', width: '40px', margin: '1px 1px 1px 0px', fontSize: '16px' }} >
                                         </div>
                                         {renderFeedEntryHeaders}
                                     </div>
-
                                 )
                             }
                         })()}
@@ -155,8 +163,8 @@ class FeedRunSection extends Component {
                             return (
                                 <div style={{ display: 'flex', flexDirection: 'row', background: '#343e2b', fontSize: '12px' }}>
 
-                                    <div onClick={this.addEntry} style={{ height: '30px', maxHeight: '30px', width: '40px', margin: '1px 1px 1px 0px', background: '#43b443', fontSize: '16px', cursor: 'pointer' }} >
-                                        <AiOutlineCheckCircle style={{ fontSize: "20px", padding: "4px" }} />
+                                    <div onClick={this.addEntry} style={{ width: '40px', margin: '1px 1px 1px 0px', background: '#43b443', fontSize: '24px', cursor: 'pointer' }} >
+                                        <AiOutlineCheckCircle style={{ fontSize: "24px", padding: "4px" }} />
                                     </div>
 
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -168,17 +176,19 @@ class FeedRunSection extends Component {
 
                                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
+
+
                                                 <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
                                                     ppm pre
                                                 </div>
 
                                                 <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                                                    ppm post
-                                                </div>
-
-                                                <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
                                                     pH pre
                                                     </div>
+
+                                                <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
+                                                    ppm post
+                                                </div>
 
                                                 <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
                                                     pH post
@@ -196,13 +206,15 @@ class FeedRunSection extends Component {
                                                 </div>
 
                                                 <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
+                                                    <input onChange={this.entryValueChange} data-value={'ph_pre'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
+                                                </div>
+
+                                                <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
                                                     <input onChange={this.entryValueChange} data-value={'ppm_post'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
                                                 </div>
 
 
-                                                <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
-                                                    <input onChange={this.entryValueChange} data-value={'ph_pre'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
-                                                </div>
+
 
 
                                                 <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
