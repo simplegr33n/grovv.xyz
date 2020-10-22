@@ -4,9 +4,7 @@ import '../../../../styles/App.css'
 import { BiHide } from 'react-icons/bi'
 import { MdSettingsApplications } from 'react-icons/md'
 
-import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi'
-import co2svg from '../../../../assets/co2svg.svg'
-import tvocSvg from '../../../../assets/tvoc-svg.svg'
+import DisplayFunctions from '../../../_utils/DisplayFunctions.js'
 
 
 class LifetimeDataRow extends Component {
@@ -17,11 +15,10 @@ class LifetimeDataRow extends Component {
         this.state = {
             allHidden: false
         };
+
+        this.displayFunctions = new DisplayFunctions()
     }
 
-    processGrowData = () => {
-        // process it!
-    }
 
     toggleLine = (e) => {
         this.props.handleLineToggle(e.currentTarget.getAttribute('data-value'))
@@ -46,13 +43,15 @@ class LifetimeDataRow extends Component {
 
     render() {
 
+        console.log("props", this.props)
+
         var barOpacity = 1
         if (this.state.allHidden) {
             barOpacity = 0.5
         }
 
         var renderButtonItems = null
-        if (this.props.allSensorsList) {
+        if (this.props.allSensorsList && this.props.tableData) {
             renderButtonItems = this.props.allSensorsList.map((sensorID) =>
                 (() => {
                     if (this.state.allHidden) {
@@ -66,6 +65,7 @@ class LifetimeDataRow extends Component {
                     }
 
                     var reducedID = sensorID.split("^")[0] + "^" + sensorID.split("^")[1]
+                    var sensorPID = sensorID.split("^")[0]
 
                     var setOpacity = 0.4
                     var highOpacitySetting = 0.4
@@ -86,6 +86,23 @@ class LifetimeDataRow extends Component {
                         }
                     }
 
+                    var sensorName = sensorID.split("^")[0]
+                    var sensorType = "(?)"
+                    var sensorUnit = ""
+                    for (const [key, sensor] of Object.entries(this.props.grow.config.SENSORS)) {
+                        if (sensorName === sensor.PID) {
+                            if (sensor.name) (
+                                sensorName = sensor.name
+                            )
+                            if (sensor.type) {
+                                sensorType = sensor.type
+                            }
+                            if (sensor.unit) {
+                                sensorUnit = sensor.unit
+                            }
+                        }
+                    }
+
 
                     return (
                         <div data-value={sensorID} key={sensorID} style={{ margin: '1px', opacity: setOpacity, overflow: 'hidden' }}>
@@ -93,10 +110,10 @@ class LifetimeDataRow extends Component {
                             <div style={{ userSelect: 'none' }}>
                                 <div style={{ display: 'flex', flexDirection: 'row', background: '#3d5674', height: '24px' }}>
                                     <div style={{ padding: '2px', fontSize: '14px', fontWeight: 600 }} >
-                                        (?)
+                                        {this.displayFunctions.displaySensorTypeIcon(sensorType)}
                                     </div>
                                     <div style={{ padding: '2px', fontSize: '16px', fontWeight: 600 }} >
-                                        {sensorID.split("^")[0]}
+                                        {sensorName}
                                     </div>
                                     <div style={{ flex: 1 }} />
                                     <BiHide data-value={sensorID} onClick={this.toggleSensorLines} style={{ fontSize: "14px", padding: "2px", cursor: 'pointer', background: "#5882bf" }} />
@@ -134,17 +151,17 @@ class LifetimeDataRow extends Component {
                                     </div>
                                     <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['AVERAGE'][sensorPID].highValue} {sensorUnit}
                                         </div>
                                     </div>
                                     <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['AVERAGE'][sensorPID].lowValue} {sensorUnit}
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#4a6168', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['AVERAGE'][sensorPID].averageValue} {sensorUnit}
                                         </div>
                                     </div>
                                 </div>
@@ -158,17 +175,17 @@ class LifetimeDataRow extends Component {
                                     </div>
                                     <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['HIGH'][sensorPID].highValue} {sensorUnit}
                                         </div>
                                     </div>
                                     <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['HIGH'][sensorPID].lowValue} {sensorUnit}
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#4a6168', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['HIGH'][sensorPID].averageValue} {sensorUnit}
                                         </div>
                                     </div>
                                 </div>
@@ -182,17 +199,17 @@ class LifetimeDataRow extends Component {
                                     </div>
                                     <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#843c2c', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['LOW'][sensorPID].highValue} {sensorUnit}
                                         </div>
                                     </div>
                                     <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#171263', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['LOW'][sensorPID].lowValue} {sensorUnit}
                                         </div>
                                     </div>
-                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#727572', fontSize: '12px', marginLeft: '2px' }}>
+                                    <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#4a6168', fontSize: '12px', marginLeft: '2px' }}>
                                         <div>
-                                            78888
+                                            {this.props.tableData[this.props.grow.id]['LOW'][sensorPID].averageValue} {sensorUnit}
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +226,7 @@ class LifetimeDataRow extends Component {
                                     </div>
                                     <div style={{ minWidth: '54px', maxWidth: '54px', minHeight: '20px', background: '#3c3c3c', fontSize: '14px', marginLeft: '2px', paddingTop: '3px' }}>
                                         <div>
-                                            78888
+                                            {Math.round(((this.props.tableData[this.props.grow.id]['HIGH'][sensorPID].averageValue - this.props.tableData[this.props.grow.id]['LOW'][sensorPID].averageValue) / 2) * 10) / 10} {sensorUnit}
                                         </div>
                                     </div>
                                 </div>

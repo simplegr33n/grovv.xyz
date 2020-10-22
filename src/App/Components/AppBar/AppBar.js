@@ -44,6 +44,10 @@ class AppBar extends Component {
         this.props.handleSignOut()
     }
 
+    alertBroken = () => {
+        alert("broken for now")
+    }
+
     render() {
 
         var renderedLiveGrowButtons = null;
@@ -124,7 +128,7 @@ class AppBar extends Component {
         return (
 
             <div id="App-Bar" >
-                <div id="App-Bar-Logo" onClick={this.setMainContent} data-value={'graphs'}>
+                <div id="App-Bar-Logo" onClick={this.alertBroken} data-value={'graphs'}>
                     <img src={cornerLogo} alt="App Logo" style={{ maxWidth: "100%", maxHeight: "100%" }} />
                 </div>
 

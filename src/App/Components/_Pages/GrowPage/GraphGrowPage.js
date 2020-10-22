@@ -150,7 +150,7 @@ class GraphGrowPage extends Component {
 
                     return (
                         <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: sensor.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
-                            <div style={{ color: sensor.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
+                            <div style={{ color: sensor.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between', fontSize: '10px' }}>
                                 <div>{sensor.name}: </div>
                                 <div style={{ fontWeight: 600 }} >{rawContent[0].payload[sensor.dataKey]} {curSensor.unit}</div>
                             </div>

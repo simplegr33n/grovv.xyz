@@ -27,9 +27,9 @@ class DisplayFunctions {
         } else if (sensorType === "pressure") {
             return (<WiBarometer style={{ fontSize: '20px', color: '#fff', padding: '1px' }} />)
         } else if (sensorType === "co2") {
-            return (<img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '55%', color: '#fff', padding: '2px' }} />)
+            return (<img src={co2svg} alt="CO2 Icon" style={{ maxHeight: '70%', maxWidth: '20px', color: '#fff', padding: '2px' }} />)
         } else if (sensorType === "tvoc") {
-            return (<img src={tvocSvg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '55%', color: '#fff', padding: '2px' }} />)
+            return (<img src={tvocSvg} alt="TVoC Icon" style={{ maxHeight: '70%', maxWidth: '20px', color: '#fff', padding: '2px' }} />)
         } else {
             return (<div />)
         }

@@ -48,31 +48,6 @@ class LifetimeGraph extends Component {
         }
     }
 
-    renderTooltip = (props) => {
-        var rawContent = props.payload
-        if (rawContent === null || rawContent.length === 0) {
-            return;
-        }
-
-        var readableTime = moment(props.payload[0].payload.time).format('MM-D-YYYY')
-
-        const listItems = rawContent.map((l) =>
-            (() => {
-                return (
-                    <div style={{ fontSize: '.6em', color: l.stroke }} key={l.dataKey}>{l.dataKey.split("^")[0]} {l.dataKey.split("^")[2]} : {rawContent[0].payload[l.dataKey]}</div>
-                )
-            })()
-        );
-
-        return (
-            <div className="Lifetime-Graph-Tooltip">
-                <div>{readableTime}</div>
-
-                {listItems}
-
-            </div>
-        )
-    }
 
     toggleLine = (e) => {
         var sensorID = e.currentTarget.getAttribute('data-value')
@@ -211,12 +186,45 @@ class LifetimeGraph extends Component {
     }
 
 
+    renderTooltip = (props) => {
+        var rawContent = props.payload
+        if (rawContent === null || rawContent.length === 0) {
+            return;
+        }
+
+        var readableTime = moment(props.payload[0].payload.time).format('MM-D-YYYY')
+
+        const listItems = rawContent.map((sensor) =>
+            (() => {
+                return (
+                    <div className="Grow-Details-Graph-Tooltip-Data" key={sensor.dataKey} style={{ color: sensor.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
+                        <div style={{ color: sensor.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between', fontSize: '10px' }}>
+                            <div>{sensor.dataKey.split("^")[0]} {sensor.dataKey.split("^")[2]}: </div>
+                            <div style={{ fontWeight: 600 }} >{rawContent[0].payload[sensor.dataKey]}</div>
+                        </div>
+                        <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
+                    </div>
+                )
+            })()
+        );
+
+        return (
+            <div className="Lifetime-Graph-Tooltip">
+                <div>{readableTime}</div>
+
+                {listItems}
+
+            </div>
+        )
+    }
+
+
     render() {
 
         var renderLifetimeColumns = null
         if (this.props.allSensorsList && this.props.userGrows) {
             renderLifetimeColumns = this.props.userGrows.map((grow) => {
-                return <LifetimeDataRow handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} allSensorsList={this.props.allSensorsList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} normalizedLifetimeData={this.state.normalizedLifetimeData} />
+                return <LifetimeDataRow handleLineToggle={this.handleLineToggle} toggleGrowLines={this.toggleGrowLines} toggleSensorLines={this.toggleSensorLines} grow={grow} allSensorsList={this.props.allSensorsList} data-value={grow.id} key={grow.id} activeLines={this.state.activeLines} normalizedLifetimeData={this.state.normalizedLifetimeData} tableData={this.props.tableData} />
             })
         }
 

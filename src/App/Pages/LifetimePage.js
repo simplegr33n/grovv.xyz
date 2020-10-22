@@ -32,6 +32,8 @@ class LifetimePage extends Component {
         // SCARY TIMES!
         // this.getMonthChunkData()
 
+        this.analyseLifetimeData()
+
     }
 
     componentDidUpdate() {
@@ -53,6 +55,65 @@ class LifetimePage extends Component {
         }
     }
 
+    // ///////////////////////////////
+    // Lifetime Data Analysis Function
+    // ///////////////////////////////
+    analyseLifetimeData = () => {
+
+        var jabbaTheObject = []
+
+        for (const [growID, growLifetimeData] of Object.entries(this.props.lifetimeData)) {
+            if (!jabbaTheObject[growID]) { jabbaTheObject[growID] = [] }
+            for (const [year, month] of Object.entries(growLifetimeData)) {
+                for (const [day, daysData] of Object.entries(month)) {
+                    for (const [combinedPointKey, combinedPoint] of Object.entries(daysData)) {
+                        for (const [dataType, dataPoint] of Object.entries(combinedPoint)) {
+                            if (!jabbaTheObject[growID][dataType]) { jabbaTheObject[growID][dataType] = [] }
+                            for (const [sensor, value] of Object.entries(dataPoint)) {
+
+                                if (!jabbaTheObject[growID][dataType][sensor]) {
+                                    jabbaTheObject[growID][dataType][sensor] = []
+                                    jabbaTheObject[growID][dataType][sensor].dataPoints = 0
+                                    jabbaTheObject[growID][dataType][sensor].highValue = value
+                                    jabbaTheObject[growID][dataType][sensor].lowValue = value
+                                    jabbaTheObject[growID][dataType][sensor].averageValue = 0
+                                }
+
+                                // Count Datapoints
+                                jabbaTheObject[growID][dataType][sensor].dataPoints = jabbaTheObject[growID][dataType][sensor].dataPoints + 1
+
+                                // High Value
+                                if (value > jabbaTheObject[growID][dataType][sensor].highValue) {
+                                    jabbaTheObject[growID][dataType][sensor].highValue = value
+                                }
+
+                                // Low Value
+                                if (value < jabbaTheObject[growID][dataType][sensor].lowValue) {
+                                    jabbaTheObject[growID][dataType][sensor].lowValue = value
+                                }
+
+                                // Average Sums Value
+                                jabbaTheObject[growID][dataType][sensor].averageValue = jabbaTheObject[growID][dataType][sensor].averageValue + value
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        for (const [growID, growData] of Object.entries(jabbaTheObject)) {
+            for (const [dataType, sensors] of Object.entries(growData)) {
+                for (const [sensor, fullTypedObject] of Object.entries(sensors)) {
+                    jabbaTheObject[growID][dataType][sensor].averageValue = Math.round((jabbaTheObject[growID][dataType][sensor].averageValue / jabbaTheObject[growID][dataType][sensor].dataPoints) * 10) / 10
+                }
+            }
+        }
+
+        this.setState({ tableData: jabbaTheObject })
+
+    }
+
 
     // ///////////////////////////////
     // CHUNKY stuff -- Relating to grabbing info from firebase, reading it, and pushing processed data back
@@ -64,7 +125,7 @@ class LifetimePage extends Component {
     processChunk = (chunk) => {
         // JUST A HUGE FCKN function for now why not
         // Iterate over days
-        console.log("chunky0PRIME ", chunk)
+        console.log('chunky0PRIME ', chunk)
         for (const [day, dayChunk] of Object.entries(chunk)) {
             var datapointCount = []
             var averagesObject = []
@@ -75,7 +136,14 @@ class LifetimePage extends Component {
                 for (const [entryID, entry] of Object.entries(hourChunk)) {
                     for (const [sensorPID, value] of Object.entries(entry)) {
                         // skip time
-                        if (sensorPID === "time") {
+                        if (sensorPID === 'time') {
+                            continue
+                        }
+
+                        var numValue = parseFloat(value)
+                        // skip non-numbers
+                        if (numValue + "" === 'NaN') {
+                            console.log("HA?", numValue)
                             continue
                         }
 
@@ -125,13 +193,11 @@ class LifetimePage extends Component {
 
     render() {
 
-
-
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', maxWidth: '100%', maxHeight: '100%' }}>
                 <div style={{ width: "100%", minHeight: "80vh", maxHeight: "80vh" }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
-                        <GraphLifetime parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} />
+                        <GraphLifetime parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} tableData={this.state.tableData} />
                     </div>
                 </div >
             </div>

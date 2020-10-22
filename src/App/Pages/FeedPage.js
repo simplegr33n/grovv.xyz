@@ -46,6 +46,7 @@ class FeedPage extends Component {
                 </div>
 
                 {renderGrowRows}
+
             </div>
 
         );
