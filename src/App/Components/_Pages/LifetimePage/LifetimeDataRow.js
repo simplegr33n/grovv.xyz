@@ -43,8 +43,6 @@ class LifetimeDataRow extends Component {
 
     render() {
 
-        console.log("props", this.props)
-
         var barOpacity = 1
         if (this.state.allHidden) {
             barOpacity = 0.5
@@ -112,7 +110,7 @@ class LifetimeDataRow extends Component {
                                     <div style={{ padding: '2px', fontSize: '14px', fontWeight: 600 }} >
                                         {this.displayFunctions.displaySensorTypeIcon(sensorType)}
                                     </div>
-                                    <div style={{ padding: '2px', fontSize: '16px', fontWeight: 600 }} >
+                                    <div style={{ padding: '2px', fontSize: '16px', fontWeight: 600, marginTop: '-2px', marginLeft: '-4px' }} >
                                         {sensorName}
                                     </div>
                                     <div style={{ flex: 1 }} />

@@ -194,8 +194,8 @@ class LifetimePage extends Component {
     render() {
 
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', maxWidth: '100%', maxHeight: '100%' }}>
-                <div style={{ width: "100%", minHeight: "80vh", maxHeight: "80vh" }} ref={element => this.divRef = element} >
+            <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', minWidth: '100%', maxWidth: '100%', maxHeight: '100%' }}>
+                <div style={{ width: '100%', minWidth: '100%', minHeight: '70vh', maxHeight: '70vh' }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
                         <GraphLifetime parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} tableData={this.state.tableData} />
                     </div>

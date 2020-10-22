@@ -163,8 +163,8 @@ class AllPage extends Component {
 
 
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden' }}>
-                <div style={{ width: "100vw", height: "60vh", minHeight: "60vh", background: "#000" }} ref={element => this.divRef = element} >
+            <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', minWidth: '100%' }}>
+                <div style={{ width: "100%", height: "60vh", minHeight: "60vh", background: "#000" }} ref={element => this.divRef = element} >
                     {(() => {
                         if (this.state.growIDs && this.state.graphElementSize && this.state.groupedSensors) {
                             return <GraphAllPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} parentSize={this.state.graphElementSize} combinedProcessedData={this.props.combinedProcessedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
@@ -179,7 +179,6 @@ class AllPage extends Component {
                             {sensorInfoColumns}
 
                         </div>
-
                     </div>
                 </div>
             </div>

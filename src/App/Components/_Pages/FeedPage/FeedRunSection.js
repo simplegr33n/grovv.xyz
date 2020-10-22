@@ -7,6 +7,7 @@ import FeedEntriesRow from './FeedEntriesRow.js'
 
 import { BiHide } from 'react-icons/bi'
 import { IoIosAddCircle } from 'react-icons/io'
+import { GrTableAdd } from 'react-icons/gr'
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai'
 
 
@@ -108,8 +109,8 @@ class FeedRunSection extends Component {
 
                         if (!this.state.ADDING_ENTRY) {
                             return (
-                                <div onClick={this.toggleNewEntryDisplay} style={{ width: '40px', background: '#43b443', fontSize: '24px', cursor: 'pointer', alignContent: 'center' }} >
-                                    <IoIosAddCircle style={{ fontSize: "24px", padding: '4px 0px 0px 8px' }} />
+                                <div onClick={this.toggleNewEntryDisplay} style={{ width: '40px', background: '#43b443', color: '#fff', fontSize: '24px', cursor: 'pointer', alignContent: 'center' }} >
+                                    <GrTableAdd style={{ fontSize: "20px", fill: '#fff', padding: '4px 0px 0px 8px' }} />
                                 </div>
                             )
                         } else {

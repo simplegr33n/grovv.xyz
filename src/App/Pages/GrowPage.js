@@ -166,38 +166,51 @@ class GrowPage extends Component {
             }
         }
 
+
+
+        // .Grow-Details-Page-Content {
+        //     display: flex;
+        //     min-height: 100%;
+        //     max-width: 100%;
+        //     overflow: hidden;
+        //     flex-direction: row;
+        //     flex-wrap: wrap;
+        //     flex: 1;
+        //   }
+
         // MAIN RENDER RETURN
         return (
             <div className="Grow-Details-Page">
-                <div className="Grow-Details-Page-Content">
-                    <div className="Grow-Details-Content-Bottom">
-                        <div className="Grow-Details-Header">
-                            <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-                                <div style={{ color: indicatorColor, marginLeft: '1px', fontSize: '1.1em', userSelect: 'none' }}>⬤</div>
-                                <div id="Grow-Header-Text">{this.props.grow.name}</div>
-                            </div>
-                            <div onClick={() => this.openCloseSettings()} style={{ paddingRight: '30px', color: '#A9A9A9', userSelect: 'none', cursor: 'pointer' }}>
-                                <AiFillControl style={{ color: '#9e9e9e', fontSize: '22px', marginTop: '8px' }} />
-                            </div>
-                        </div>
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minWidth: '100%' }} >
 
-                        <div style={{ position: 'relative', width: "100vw", height: "80vh", minHeight: "80vh", background: "#000" }} ref={element => this.divRef = element}>
-                            <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} parentSize={this.state.graphElementSize} processedData={this.props.processedData} grow={this.props.grow} />
+                    <div className="Grow-Details-Header">
+                        <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+                            <div style={{ color: indicatorColor, marginLeft: '1px', fontSize: '1.1em', userSelect: 'none' }}>⬤</div>
+                            <div id="Grow-Header-Text">{this.props.grow.name}</div>
+                        </div>
+                        <div onClick={() => this.openCloseSettings()} style={{ paddingRight: '30px', color: '#A9A9A9', userSelect: 'none', cursor: 'pointer' }}>
+                            <AiFillControl style={{ color: '#9e9e9e', fontSize: '22px', marginTop: '8px' }} />
                         </div>
                     </div>
 
-                    {(() => {
-                        if (this.state.SHOW_SETTINGS) {
-                            return <GrowPageSettings grow={this.props.grow} refreshGrows={this.props.refreshGrows} close={this.openCloseSettings} />
-                        }
-                    })()}
+                    <div style={{ position: 'relative', width: "100%", height: "70vh", minHeight: "70vh", background: "#000" }} ref={element => this.divRef = element}>
+                        <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} parentSize={this.state.graphElementSize} processedData={this.props.processedData} grow={this.props.grow} />
+                    </div>
 
                     <div className="Grow-Details-Page-Panel">
                         <div id="Grow-Details-Data-Display">
                             <GrowDataDisplay key={this.props.grow.id} grow={this.props.grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.props.user} activeLines={this.state.ACTIVE_LINES} />
                         </div>
                     </div>
+
                 </div>
+
+                {(() => {
+                    if (this.state.SHOW_SETTINGS) {
+                        return <GrowPageSettings grow={this.props.grow} refreshGrows={this.props.refreshGrows} close={this.openCloseSettings} />
+                    }
+                })()}
+
             </div >
         );
     }

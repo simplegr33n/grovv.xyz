@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
-import '../../../styles/App.css'
+import '../../../../styles/App.css'
 
-import cornerLogo from '../../../assets/corner-logo.png'
-import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
+import cornerLogo from '../../../../assets/corner-logo.png'
+import { ReactComponent as TobyFace } from '../../../../assets/tobyface.svg'
 
 import { AiOutlineLineChart } from 'react-icons/ai'
 import { TiThMenu } from 'react-icons/ti'
@@ -36,17 +36,11 @@ class AppBar extends Component {
     // /////////
     // UI 
     // /////////
-    dropdownMenu = () => {
-        // this.props.handleSignOut()
-    }
-
     handleSignOut = () => {
         this.props.handleSignOut()
     }
 
-    alertBroken = () => {
-        alert("broken for now")
-    }
+
 
     render() {
 
@@ -128,7 +122,7 @@ class AppBar extends Component {
         return (
 
             <div id="App-Bar" >
-                <div id="App-Bar-Logo" onClick={this.alertBroken} data-value={'graphs'}>
+                <div id="App-Bar-Logo" onClick={this.setMainContent} data-value={'graphs'}>
                     <img src={cornerLogo} alt="App Logo" style={{ maxWidth: "100%", maxHeight: "100%" }} />
                 </div>
 
@@ -148,6 +142,18 @@ class AppBar extends Component {
                 <div className="App-Bar-Dropdown-Icon">
                     <TiThMenu style={{ paddingLeft: '7px', color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                     <div className="App-Bar-Submenu" style={{ width: '200px', background: '#FFF', position: 'fixed', right: '0px', top: '40px', color: "#000" }}>
+
+                        <div className="App-Bar-Submenu-Settings" onClick={this.setMainContent} data-value={'settings'}>
+                            <div style={{ flex: 1, paddingTop: '10px' }} >
+                                App Settings
+                            </div>
+                            <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                                <TobyFace
+                                    viewBox="0 0 110 110"
+                                    style={{ flex: 1, height: "60%", padding: '20%' }} />
+                            </div>
+                        </div>
+
                         <div className="App-Bar-Submenu-Item" onClick={this.setMainContent} data-value={'tobytiles'}>
                             <div style={{ flex: 1, paddingTop: '10px' }} >
                                 TobyTiles
@@ -159,6 +165,9 @@ class AppBar extends Component {
                             </div>
                         </div>
 
+
+
+
                         <div className="App-Bar-Submenu-Logout" onClick={this.handleSignOut}>
                             <div style={{ flex: 1, paddingTop: '10px' }} >
                                 Logout
@@ -167,6 +176,8 @@ class AppBar extends Component {
                                 &#10162;
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div >
