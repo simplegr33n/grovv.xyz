@@ -83,7 +83,7 @@ class GrowPage extends Component {
 
         if (((this.state.graphElementSize !== [this.divRef.clientWidth, this.divRef.clientHeight]) && ((dateNow.getTime() - this.state.graphSizeUpdated) > 500))) {
 
-            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 10, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
+            var tempSize = [this.divRef.clientWidth + (this.divRef.clientWidth / 100) * 8, this.divRef.clientHeight + (this.divRef.clientHeight / 100) * 14]
 
             if (tempSize !== this.state.graphElementSize) {
                 this.setState({
@@ -193,7 +193,7 @@ class GrowPage extends Component {
                         </div>
                     </div>
 
-                    <div style={{ position: 'relative', width: "100%", height: "70vh", minHeight: "70vh", background: "#000" }} ref={element => this.divRef = element}>
+                    <div style={{ position: 'relative', width: "100%", maxWidth: '100%', height: "70vh", minHeight: "70vh", background: "#000" }} ref={element => this.divRef = element}>
                         <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} parentSize={this.state.graphElementSize} processedData={this.props.processedData} grow={this.props.grow} />
                     </div>
 

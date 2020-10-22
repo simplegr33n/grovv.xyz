@@ -249,43 +249,37 @@ class App extends Component {
 						}
 					})()}
 
-					<div id="App-Inner-Body">
-
-
-						<div id="App-Body-Content">
-							{(() => {
-								if (this.state.UID && this.state.userGrows && this.state.user && this.state.threeDayData && this.state.liveGrowData) {
-									switch (this.state.mainContent) {
-										case 'grows':
-											return <GrowPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData[this.state.currentGrow.id]} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
-										case 'lifetime':
-											return <LifetimePage postLifetimeData={this.postLifetimeData} updateLifetimeDisplayWindow={this.updateLifetimeDisplayWindow} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} allSensorsList={this.state.allSensorsList} normalizedLifetimeData={this.state.normalizedLifetimeData} sampleHighs={this.state.sampleHighs} displayWindow={this.state.lifetimeDisplayWindow} />
-										case 'feed':
-											return <FeedPage user={this.state.user} />
-										// case 'graphs':
-										// return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
-										case 'tobytiles':
-											return <TobyTiles />
-										// todo: return to graphs when possible.
-										default:
-											return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
-
-
-									}
-								} else {
-									switch (this.state.mainContent) {
-										case 'signin':
-											return <SignIn gotoSignUp={this.setMainContent} />;
-										case 'signup':
-											return <SignUp gotoSignIn={this.setMainContent} />;
-										default:
-											return <SignIn gotoSignUp={this.setMainContent} />;
-									}
+					<div id="App-Body-Content">
+						{(() => {
+							if (this.state.UID && this.state.userGrows && this.state.user && this.state.threeDayData && this.state.liveGrowData) {
+								switch (this.state.mainContent) {
+									case 'grows':
+										return <GrowPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData[this.state.currentGrow.id]} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
+									case 'lifetime':
+										return <LifetimePage postLifetimeData={this.postLifetimeData} updateLifetimeDisplayWindow={this.updateLifetimeDisplayWindow} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} allSensorsList={this.state.allSensorsList} normalizedLifetimeData={this.state.normalizedLifetimeData} sampleHighs={this.state.sampleHighs} displayWindow={this.state.lifetimeDisplayWindow} />
+									case 'feed':
+										return <FeedPage user={this.state.user} />
+									// case 'graphs':
+									// return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+									case 'tobytiles':
+										return <TobyTiles />
+									// todo: return to graphs when possible.
+									default:
+										return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
 								}
-							})()}
-
-						</div>
+							} else {
+								switch (this.state.mainContent) {
+									case 'signin':
+										return <SignIn gotoSignUp={this.setMainContent} />;
+									case 'signup':
+										return <SignUp gotoSignIn={this.setMainContent} />;
+									default:
+										return <SignIn gotoSignUp={this.setMainContent} />;
+								}
+							}
+						})()}
 					</div>
+
 				</header>
 			</div>
 		);
