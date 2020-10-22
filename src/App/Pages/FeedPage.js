@@ -4,7 +4,7 @@ import '../../styles/App.css'
 import '../_utils/DbHelper.js'
 import DbHelper from '../_utils/DbHelper.js';
 
-import FeedPageRow from '../Components/_Pages/FeedPage/FeedPageRow.js'
+import FeedGrowSection from '../Components/_Pages/FeedPage/FeedGrowSection.js'
 
 
 class FeedPage extends Component {
@@ -35,7 +35,7 @@ class FeedPage extends Component {
 
         if (this.state.feedData) {
             var renderGrowRows = Object.entries(this.props.user.grows).map((userGrowData) => {
-                return <FeedPageRow key={userGrowData[0]} feedData={this.state.feedData} userGrowData={userGrowData} />
+                return <FeedGrowSection key={userGrowData[0]} feedData={this.state.feedData} userGrowData={userGrowData} />
             })
         }
 

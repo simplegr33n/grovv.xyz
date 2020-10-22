@@ -4,9 +4,7 @@ import '../../../../styles/App.css';
 
 import moment from 'moment'
 
-import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
-import co2svg from '../../../../assets/co2svg.svg'
-import tvocSvg from '../../../../assets/tvoc-svg.svg'
+import DisplayFunctions from '../../../_utils/DisplayFunctions.js'
 
 
 class GrowDataDisplay extends Component {
@@ -30,6 +28,8 @@ class GrowDataDisplay extends Component {
 
             TABLE_INIT: false,
         };
+
+        this.displayFunctions = new DisplayFunctions()
     }
 
     componentDidMount() {
@@ -355,29 +355,10 @@ class GrowDataDisplay extends Component {
                         }
 
                         return (
-                            <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', fontSize: '0.65em', cursor: 'pointer', background: '#0c140d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                            <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', cursor: 'pointer', marginBottom: '1px', background: '#0c140d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
                                 <div style={{ paddingTop: setPaddingTop, fontSize: '12px', lineHeight: '12px', overflow: 'hidden', fontWeight: '500', textAlign: 'right' }} > {curSensor.name}</div>
 
-
-                                {(() => {
-                                    if (curSensor.type === "airTemp") {
-                                        return <WiThermometer style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "humidity") {
-                                        return <WiHumidity style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "fan") {
-                                        return <WiHurricane style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "humidifier") {
-                                        return <WiCloudUp style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "waterTemp") {
-                                        return <WiThermometerExterior style={{ color: '#FFF', fontSize: '30px' }} />
-                                    } else if (curSensor.type === "co2") {
-                                        return <img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '20px', marginLeft: '4px', marginRight: '2px' }} />
-                                    } else if (curSensor.type === "tvoc") {
-                                        return <img src={tvocSvg} alt="TVOC Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '20px', marginLeft: '4px', marginRight: '2px' }} />
-                                    } else {
-                                        return <div />
-                                    }
-                                })()}
+                                {this.displayFunctions.displaySensorTypeIcon(curSensor.type)}
 
                                 {(() => {
                                     var harmonyWarnFlex = 0
@@ -396,7 +377,7 @@ class GrowDataDisplay extends Component {
                                     harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
 
                                     return (
-                                        <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px", maxWidth: "4px", minWidth: '4px', flex: 99 }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px", maxWidth: "4px", minWidth: '4px' }}>
                                             <div style={{ flex: harmonyDangerFlex, background: '#FF0000' }} />
                                             <div style={{ flex: harmonyWarnFlex, background: '#fcba03' }} />
                                             <div style={{ flex: harmonyGoodFlex, background: '#38c538' }} />
@@ -447,7 +428,7 @@ class GrowDataDisplay extends Component {
 
                                     return (
                                         <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                                            <div style={{ fontSize: '20px', userSelect: 'none', display: 'flex', fontWeight: 700 }}>{Math.round(this.state.liveData[pid] * 10) / 10}</div>
+                                            <div style={{ fontSize: '18px', userSelect: 'none', display: 'flex', fontWeight: 700 }}>{Math.round(this.state.liveData[pid] * 10) / 10}</div>
                                             <div style={{ fontSize: '14px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
                                         </div>
                                     )

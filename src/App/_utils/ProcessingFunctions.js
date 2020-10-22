@@ -1,5 +1,3 @@
-
-
 class ProcessingFunctions {
 
     constructor() {

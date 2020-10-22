@@ -5,9 +5,9 @@ import TimePicker from 'react-time-picker'
 
 import DbHelper from '../../../_utils/DbHelper.js'
 
-import { WiThermometer, WiHumidity, WiHurricane, WiCloudUp, WiThermometerExterior } from 'react-icons/wi';
-import co2svg from '../../../../assets/co2svg.svg'
-import tvocSvg from '../../../../assets/tvoc-svg.svg'
+import DisplayFunctions from '../../../_utils/DisplayFunctions.js'
+
+
 import { AiFillControl } from 'react-icons/ai';
 import { IoIosExit } from 'react-icons/io';
 
@@ -22,6 +22,8 @@ class GrowSettings extends Component {
         };
 
         this.dbHelper = new DbHelper()
+
+        this.displayFunctions = new DisplayFunctions()
     }
 
     componentDidMount() {
@@ -184,25 +186,8 @@ class GrowSettings extends Component {
 
                     <div style={{ userSelect: 'none', fontsize: '0.6em', color: "#FFF", background: '#131B14', maxHeight: '30px', height: '30px' }} >
 
-                        {(() => {
-                            if (sensor.type === "airTemp") {
-                                return (<WiThermometer style={{ fontSize: '1.3em', color: sensor.color }} />)
-                            } else if (sensor.type === "waterTemp") {
-                                return (<WiThermometerExterior style={{ fontSize: '1.3em', color: sensor.color }} />)
-                            } else if (sensor.type === "humidity") {
-                                return (<WiHumidity style={{ fontSize: '1.3em', color: sensor.color }} />)
-                            } else if (sensor.type === "fan") {
-                                return (<WiHurricane style={{ fontSize: '1.3em', color: sensor.color }} />)
-                            } else if (sensor.type === "humidifier") {
-                                return (<WiCloudUp style={{ fontSize: '1.3em', color: sensor.color }} />)
-                            } else if (sensor.type === "co2") {
-                                return (<img src={co2svg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '80%', color: sensor.color }} />)
-                            } else if (sensor.type === "tvoc") {
-                                return (<img src={tvocSvg} alt="CO2 Icon" style={{ position: 'relative', display: 'inline-block', maxHeight: '80%', color: sensor.color }} />)
-                            } else {
-                                return (<div />)
-                            }
-                        })()}
+                        {this.displayFunctions.displaySensorTypeIcon(sensor.type)}
+
                         {sensor.PID}
 
                     </div>
@@ -232,12 +217,14 @@ class GrowSettings extends Component {
                                     </div>
                                     <div>
                                         <select onChange={this.sensorTypeChange} id={sensor.PID} defaultValue={sensor.type} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
-                                            <option value="airTemp">airTemp</option>
-                                            <option value="waterTemp">waterTemp</option>
-                                            <option value="humidity">humidity</option>
+                                            <option value="airTemp">Air Temp</option>
+                                            <option value="waterTemp">Water Temp</option>
+                                            <option value="humidity">Humidity</option>
+                                            <option value="pressure">Pressure</option>
                                             <option value="co2">CO&#8322;</option>
-                                            <option value="fan">fan</option>
-                                            <option value="humidifier">humidifier</option>
+                                            <option value="tvoc">TVoC</option>
+                                            <option value="fan">Fan</option>
+                                            <option value="humidifier">Humidifier</option>
                                         </select>
                                     </div>
                                 </div>

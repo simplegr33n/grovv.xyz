@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import '../../../../styles/App.css'
 
-import FeedRunRow from './FeedRunRow.js'
+import FeedRunSection from './FeedRunSection.js'
 
 import { BiHide } from 'react-icons/bi'
 import { MdSettingsApplications } from 'react-icons/md'
 
 
-class FeedPageRow extends Component {
+class FeedGrowSection extends Component {
 
     constructor(props) {
         super(props);
@@ -24,11 +24,10 @@ class FeedPageRow extends Component {
 
     render() {
 
-        var renderFeedRunRows = null
-
+        var renderFeedRunSection = null
         if (this.props.feedData[this.props.userGrowData[0]]) {
-            var renderFeedRunRows = Object.entries(this.props.feedData[this.props.userGrowData[0]]).map((run) => {
-                return <FeedRunRow key={run[0]} feedData={this.props.feedData} run={run} growID={this.props.userGrowData[0]} />
+            var renderFeedRunSection = Object.entries(this.props.feedData[this.props.userGrowData[0]]).map((run) => {
+                return <FeedRunSection key={run[0]} feedData={this.props.feedData} run={run} growID={this.props.userGrowData[0]} />
             })
         }
 
@@ -50,7 +49,7 @@ class FeedPageRow extends Component {
                 </div >
                 <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
 
-                    {renderFeedRunRows}
+                    {renderFeedRunSection}
 
                 </div>
             </div>
@@ -58,4 +57,4 @@ class FeedPageRow extends Component {
     }
 }
 
-export default FeedPageRow;
+export default FeedGrowSection;
