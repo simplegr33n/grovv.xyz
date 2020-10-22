@@ -20,13 +20,13 @@ class FeedEntriesRow extends Component {
         var entryTime = new Date(this.props.entry.time * 1000)
 
 
-        var renderFeedEntryHeaders = this.props.substancesList.map((substance) => {
+        var renderFeedEntryHeaders = this.props.runSubstancesList.map((substance) => {
             return (
-                <div key={substance} style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }} >{substance}</div>
+                <div key={substance} style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }} >{this.props.feedData._SUBSTANCE_DEFS[substance].name}</div>
             )
         })
 
-        var renderEntryValueColumns = this.props.substancesList.map((substance) => {
+        var renderEntryValueColumns = this.props.runSubstancesList.map((substance) => {
             if (this.props.entry[substance]) {
                 return <div key={substance + this.props.entry.time} style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>{this.props.entry[substance]}</div>
             } else {

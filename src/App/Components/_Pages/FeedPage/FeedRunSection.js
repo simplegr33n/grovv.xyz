@@ -60,7 +60,7 @@ class FeedRunSection extends Component {
         var now = new Date()
 
         var entriesList = []
-        var substancesList = []
+        var runSubstancesList = []
 
         if (this.props.run[1].ENTRIES) {
             for (const [entryKey, entry] of Object.entries(this.props.run[1].ENTRIES[now.getFullYear()][now.getMonth() + 1])) {
@@ -68,8 +68,8 @@ class FeedRunSection extends Component {
                 for (const [substance, value] of Object.entries(entry)) {
                     if ((substance !== 'time') && (substance !== 'ph_pre') && (substance !== 'ph_post') && (substance !== 'ppm_pre') && (substance !== 'ppm_post')) {
                         // add to substance list if not there
-                        if (!substancesList.includes(substance)) {
-                            substancesList[substancesList.length] = substance
+                        if (!runSubstancesList.includes(substance)) {
+                            runSubstancesList[runSubstancesList.length] = substance
                         }
 
                     }
@@ -77,16 +77,15 @@ class FeedRunSection extends Component {
             }
         }
 
-
         entriesList.sort((a, b) => (a.time < b.time) ? 1 : -1)
 
-        var renderFeedEntryHeaders = substancesList.map((substance) => {
+        var renderFeedEntryHeaders = this.props.fullSubstancesList.map((substance) => {
             return (
-                <div key={substance} style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }} >{substance}</div>
+                <div key={substance} style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }} >{this.props.feedData._SUBSTANCE_DEFS[substance].name}</div>
             )
         })
 
-        var renderNewFeedEntryRow = substancesList.map((substance) => {
+        var renderNewFeedEntryRow = this.props.fullSubstancesList.map((substance) => {
             return (
                 <div key={substance} style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
                     <input onChange={this.entryValueChange} data-value={substance} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
@@ -95,7 +94,7 @@ class FeedRunSection extends Component {
         })
 
         var renderFeedEntriesRows = entriesList.map((entry) => {
-            return <FeedEntriesRow key={entry.time} entry={entry} substancesList={substancesList} feedData={this.props.feedData} style={{ marginBottom: '4px' }} />
+            return <FeedEntriesRow key={entry.time} entry={entry} runSubstancesList={runSubstancesList} feedData={this.props.feedData} style={{ marginBottom: '4px' }} />
         })
 
 
@@ -212,10 +211,6 @@ class FeedRunSection extends Component {
                                                 <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
                                                     <input onChange={this.entryValueChange} data-value={'ppm_post'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
                                                 </div>
-
-
-
-
 
                                                 <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
                                                     <input onChange={this.entryValueChange} data-value={'ph_post'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />

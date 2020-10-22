@@ -24,11 +24,15 @@ class FeedGrowSection extends Component {
 
     render() {
 
-        var renderFeedRunSection = null
+        var fullSubstancesList = []
+        for (const [key, value] of Object.entries(this.props.feedData._SUBSTANCE_DEFS)) {
+            fullSubstancesList[fullSubstancesList.length] = key
+        }
 
+        var renderFeedRunSection = null
         if (this.props.feedData[this.props.userGrowData[0]]) {
             var renderFeedRunSection = Object.entries(this.props.feedData[this.props.userGrowData[0]]).map((run) => {
-                return <FeedRunSection key={run[0]} feedData={this.props.feedData} run={run} growID={this.props.userGrowData[0]} />
+                return <FeedRunSection key={run[0]} feedData={this.props.feedData} run={run} growID={this.props.userGrowData[0]} fullSubstancesList={fullSubstancesList} />
             })
         }
 
