@@ -136,10 +136,12 @@ class GraphGrowPage extends Component {
 
         var readableTime = moment(props.payload[0].payload.time).format('ddd - HH:mm')
 
-        const listItems = rawContent.map((l) =>
+        const listItems = rawContent.map((sensor) =>
             (() => {
                 if (this.props.activeLines) {
-                    var tIndex = this.props.activeLines.indexOf(l.dataKey)
+
+                    var tIndex = this.props.activeLines.indexOf(sensor.dataKey)
+
                     var curSensor = this.props.grow.config.SENSORS[tIndex]
                     if (!curSensor) {
                         return
@@ -147,10 +149,10 @@ class GraphGrowPage extends Component {
 
 
                     return (
-                        <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: l.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
-                            <div style={{ color: l.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
-                                <div>{l.name}: </div>
-                                <div style={{ fontWeight: 600 }} >{rawContent[0].payload[l.dataKey]} {curSensor.unit}</div>
+                        <div className="Grow-Details-Graph-Tooltip-Data" key={curSensor.PID} style={{ color: sensor.stroke, paddingLeft: '2px', paddingRight: '2px' }}>
+                            <div style={{ color: sensor.stroke, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
+                                <div>{sensor.name}: </div>
+                                <div style={{ fontWeight: 600 }} >{rawContent[0].payload[sensor.dataKey]} {curSensor.unit}</div>
                             </div>
                             <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
                         </div>
@@ -183,6 +185,13 @@ class GraphGrowPage extends Component {
                 var lineName = sensor.name
 
 
+                if (this.props.activeLines) {
+                    var tIndex = this.props.activeLines.indexOf(sensor.PID)
+                    if (tIndex < 0) {
+                        return
+                    }
+                }
+
                 if (sensor.type === "airTemp" || sensor.type === "waterTemp") {
                     return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.type === "humidifier" || sensor.type === "fan" || sensor.type === "humidity") {
@@ -196,6 +205,9 @@ class GraphGrowPage extends Component {
                 } else {
                     return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 }
+
+
+
 
             })()
         );

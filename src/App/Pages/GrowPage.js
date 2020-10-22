@@ -132,6 +132,8 @@ class GrowPage extends Component {
             tActiveLines[tIndex] = pid
         }
 
+        console.log("tactive", tActiveLines)
+
         this.setState({ ACTIVE_LINES: tActiveLines })
         this.forceUpdate()
     }
@@ -180,7 +182,7 @@ class GrowPage extends Component {
                         </div>
 
                         <div style={{ position: 'relative', width: "100vw", height: "80vh", minHeight: "80vh", background: "#000" }} ref={element => this.divRef = element}>
-                            <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.props.activeLines} parentSize={this.state.graphElementSize} processedData={this.props.processedData} grow={this.props.grow} />
+                            <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} parentSize={this.state.graphElementSize} processedData={this.props.processedData} grow={this.props.grow} />
                         </div>
                     </div>
 

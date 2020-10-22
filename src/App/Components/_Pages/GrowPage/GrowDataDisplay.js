@@ -299,8 +299,6 @@ class GrowDataDisplay extends Component {
 
     render() {
 
-
-
         var indicatorColor = "#FFF"
         if (this.props.liveGrowData && this.props.liveGrowData[this.props.grow.id]) {
 
@@ -355,7 +353,8 @@ class GrowDataDisplay extends Component {
                         }
 
                         return (
-                            <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', cursor: 'pointer', marginBottom: '1px', background: '#0c140d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                            <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', cursor: 'pointer', marginBottom: '1px', background: '#1c241d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+
                                 <div style={{ paddingTop: setPaddingTop, fontSize: '12px', lineHeight: '12px', overflow: 'hidden', fontWeight: '500', textAlign: 'right' }} > {curSensor.name}</div>
 
                                 {this.displayFunctions.displaySensorTypeIcon(curSensor.type)}
