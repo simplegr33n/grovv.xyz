@@ -133,7 +133,6 @@ class GraphAllPage extends Component {
                     }
                 }
 
-
                 if (sensor.type === "airTemp" || sensor.type === "waterTemp") {
                     return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.type === "humidifier" || sensor.type === "fan" || sensor.type === "humidity") {
@@ -142,6 +141,8 @@ class GraphAllPage extends Component {
                     return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.unit === "ᵖᵖᵇ") {
                     return <Line yAxisId="ppb" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else if (sensor.unit === "kPa") {
+                    return <Line yAxisId="pressure" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else {
                     return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 }
@@ -171,8 +172,9 @@ class GraphAllPage extends Component {
                         />
                         <YAxis yAxisId="temperature" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
-                        <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#false" }} />
-                        <YAxis yAxisId="ppb" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "false" }} />
+                        <YAxis yAxisId="pressure" orientation="right" hide={true} domain={[95]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "#false" }} />
+                        <YAxis yAxisId="ppb" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "false" }} />
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
                 );

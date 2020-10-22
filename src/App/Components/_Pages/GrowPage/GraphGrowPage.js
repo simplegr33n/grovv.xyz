@@ -176,22 +176,27 @@ class GraphGrowPage extends Component {
 
         var now = new Date().getTime()
 
-        const lineItems = this.props.grow.config.SENSORS.map((l) =>
+        const lineItems = this.props.grow.config.SENSORS.map((sensor) =>
             (() => {
-                if (this.props.activeLines && this.props.activeLines.includes(l.PID)) {
-                    if (l.type === "airTemp" || l.type === "waterTemp" || l.type === "co2") {
-                        return <Line yAxisId="left" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
-                    } else {
-                        return <Line yAxisId="right" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
-                    }
-                    // temp solition for the multi graph page
-                } else if (!this.props.activeLines) {
-                    if (l.type === "airTemp" || l.type === "waterTemp" || l.type === "co2") {
-                        return <Line yAxisId="left" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
-                    } else {
-                        return <Line yAxisId="right" type="monotone" name={l.name} dataKey={l.PID} key={l.PID} stroke={l.color} strokeWidth={l.thickness} dot={false} />
-                    }
+
+                var lineKey = sensor.PID
+                var lineName = sensor.name
+
+
+                if (sensor.type === "airTemp" || sensor.type === "waterTemp") {
+                    return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else if (sensor.type === "humidifier" || sensor.type === "fan" || sensor.type === "humidity") {
+                    return <Line yAxisId="percent" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else if (sensor.unit === "ᵖᵖᵐ") {
+                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else if (sensor.unit === "ᵖᵖᵇ") {
+                    return <Line yAxisId="ppb" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else if (sensor.unit === "kPa") {
+                    return <Line yAxisId="pressure" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                } else {
+                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 }
+
             })()
         );
 
@@ -216,10 +221,14 @@ class GraphGrowPage extends Component {
                             domain={[now - this.props.displayWindow, now]}
                             allowDataOverflow={true}
                             ticks={this.state.tickArray}
-                            tickFormatter={(tick) => moment(tick * 1).format('MMM DDᵗʰ - HH:mm')}
-                        />
-                        <YAxis yAxisId="left" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
-                        <YAxis yAxisId="right" hide={true} orientation="right" tick={{ fill: "#B3C2B5" }} />
+                            tickFormatter={(tick) => moment(tick * 1).format('MMM DDᵗʰ - HH:mm')} />
+
+                        <YAxis yAxisId="temperature" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="pressure" orientation="right" hide={true} domain={[95]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "#false" }} />
+                        <YAxis yAxisId="ppb" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "false" }} />
+
                         <Tooltip content={this.renderTooltip} />
                     </LineChart>
                 );
