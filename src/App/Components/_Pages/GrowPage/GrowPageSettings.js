@@ -217,6 +217,7 @@ class GrowSettings extends Component {
                                     </div>
                                     <div>
                                         <select onChange={this.sensorTypeChange} id={sensor.PID} defaultValue={sensor.type} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+                                            <option value="" disabled selected>...</option>
                                             <option value="airTemp">Air Temp</option>
                                             <option value="waterTemp">Water Temp</option>
                                             <option value="humidity">Humidity</option>
@@ -246,6 +247,7 @@ class GrowSettings extends Component {
                             </div>
                                     <div>
                                         <select onChange={this.sensorWeightChange} id={sensor.PID} defaultValue={sensorThickness} style={{ fontSize: '0.7em', maxWidth: "44px", height: '20px' }} >
+                                            <option value="" disabled selected>...</option>
                                             <option value="3">3</option>
                                             <option value="2">2</option>
                                             <option value="1.5">1.5</option>
