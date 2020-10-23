@@ -7,7 +7,6 @@ import FeedEntriesRow from './FeedEntriesRow.js'
 
 import { BiHide } from 'react-icons/bi'
 import { IoIosAddCircle } from 'react-icons/io'
-import { GrTableAdd } from 'react-icons/gr'
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from 'react-icons/ai'
 
 
@@ -82,14 +81,14 @@ class FeedRunSection extends Component {
 
         var renderFeedEntryHeaders = this.props.fullSubstancesList.map((substance) => {
             return (
-                <div key={substance} style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }} >{this.props.feedData._SUBSTANCE_DEFS[substance].name}</div>
+                <div key={substance} style={{ background: '#821f76', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }} >{this.props.feedData._SUBSTANCE_DEFS[substance].name}</div>
             )
         })
 
         var renderNewFeedEntryRow = this.props.fullSubstancesList.map((substance) => {
             return (
-                <div key={substance} style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
-                    <input onChange={this.entryValueChange} data-value={substance} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
+                <div key={substance} style={{ height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
+                    <input onChange={this.entryValueChange} data-value={substance} type='number' style={{ maxWidth: '80%', marginTop: '1px', fontSize: '10px' }} />
                 </div>
             )
         })
@@ -102,23 +101,21 @@ class FeedRunSection extends Component {
         // MAIN RENDER RETURN
         return (
             <div style={{ width: '100%', marginLeft: '4px' }}>
-
                 <div style={{ textAlign: 'left', fontSize: '30px', userSelect: 'none', display: 'flex', flexDirection: 'row', background: '#658b3b', marginTop: '2px' }}>
 
                     {(() => {
 
                         if (!this.state.ADDING_ENTRY) {
                             return (
-                                <div onClick={this.toggleNewEntryDisplay} style={{ width: '40px', background: '#43b443', color: '#fff', fontSize: '24px', cursor: 'pointer', alignContent: 'center' }} >
-                                    <GrTableAdd style={{ fontSize: "20px", fill: '#fff', padding: '4px 0px 0px 8px' }} />
+                                <div onClick={this.toggleNewEntryDisplay} style={{ width: '40px', color: '#fff', fontSize: '24px', cursor: 'pointer', alignContent: 'center' }} >
+                                    <IoIosAddCircle style={{ fontSize: "24px", padding: '4px 0px 0px 8px' }} />
                                 </div>
                             )
                         } else {
                             return (
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <div onClick={this.toggleNewEntryDisplay} style={{ width: '40px', background: '#e63838', fontSize: '24px', cursor: 'pointer', alignContent: 'center' }} >
-                                        <AiOutlineCloseCircle style={{ fontSize: "24px", padding: '4px 0px 0px 8px' }} />
-                                    </div>
+                                    <div style={{ width: '40px', background: '#577758', fontSize: '24px', alignContent: 'center' }} />
+
                                 </div>
 
                             )
@@ -136,16 +133,17 @@ class FeedRunSection extends Component {
 
 
 
-                <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', background: '#343e2b' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', background: '#1d2447' }}>
 
-                    <div style={{ display: 'flex', flexDirection: 'row', background: '#343e2b', fontSize: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', fontSize: '12px' }}>
 
                         {(() => {
 
                             if (this.state.ADDING_ENTRY) {
                                 return (
                                     <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                        <div style={{ height: '20px', maxHeight: '20px', width: '40px', margin: '1px 1px 1px 0px', fontSize: '16px' }} >
+                                        <div onClick={this.toggleNewEntryDisplay} style={{ height: '20px', maxHeight: '20px', width: '40px', background: '#e63838', margin: '1px 1px 1px 0px', fontSize: '16px', cursor: 'pointer' }} >
+                                            <AiOutlineCloseCircle style={{ fontSize: "16px" }} />
                                         </div>
                                         {renderFeedEntryHeaders}
                                     </div>
@@ -161,7 +159,7 @@ class FeedRunSection extends Component {
                     {(() => {
                         if (this.state.ADDING_ENTRY) {
                             return (
-                                <div style={{ display: 'flex', flexDirection: 'row', background: '#343e2b', fontSize: '12px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'row', fontSize: '12px' }}>
 
                                     <div onClick={this.addEntry} style={{ width: '40px', margin: '1px 1px 1px 0px', background: '#43b443', fontSize: '24px', cursor: 'pointer' }} >
                                         <AiOutlineCheckCircle style={{ fontSize: "24px", padding: "4px" }} />
@@ -176,23 +174,13 @@ class FeedRunSection extends Component {
 
                                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                                <div style={{ background: '#8a6f3d', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}> ppm pre </div>
+                                                <div style={{ background: '#985ca2', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}> pH pre </div>
 
+                                                <div style={{ height: '20px', width: '50px', margin: '1px' }} />
 
-                                                <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                                                    ppm pre
-                                                </div>
-
-                                                <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                                                    pH pre
-                                                    </div>
-
-                                                <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                                                    ppm post
-                                                </div>
-
-                                                <div style={{ background: '#b78427', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                                                    pH post
-                                                </div>
+                                                <div style={{ background: '#8a6f3d', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}> ppm post </div>
+                                                <div style={{ background: '#985ca2', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}> pH post</div>
                                             </div>
                                         </div>
 
@@ -201,20 +189,22 @@ class FeedRunSection extends Component {
                                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
 
-                                                <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
-                                                    <input onChange={this.entryValueChange} data-value={'ppm_pre'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
+                                                <div style={{ height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
+                                                    <input onChange={this.entryValueChange} data-value={'ppm_pre'} type='number' style={{ maxWidth: '80%', marginTop: '1px', fontSize: '10px' }} />
                                                 </div>
 
-                                                <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
-                                                    <input onChange={this.entryValueChange} data-value={'ph_pre'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
+                                                <div style={{ height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
+                                                    <input onChange={this.entryValueChange} data-value={'ph_pre'} type='number' style={{ maxWidth: '80%', marginTop: '1px', fontSize: '10px' }} />
                                                 </div>
 
-                                                <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
-                                                    <input onChange={this.entryValueChange} data-value={'ppm_post'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
+                                                <div style={{ height: '20px', width: '50px', margin: '1px' }} />
+
+                                                <div style={{ height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
+                                                    <input onChange={this.entryValueChange} data-value={'ppm_post'} type='number' style={{ maxWidth: '80%', marginTop: '1px', fontSize: '10px' }} />
                                                 </div>
 
-                                                <div style={{ background: '#e6ece4', height: '30px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
-                                                    <input onChange={this.entryValueChange} data-value={'ph_post'} type='number' style={{ maxWidth: '80%', marginTop: '4px', fontSize: '10px' }} />
+                                                <div style={{ height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} >
+                                                    <input onChange={this.entryValueChange} data-value={'ph_post'} type='number' style={{ maxWidth: '80%', marginTop: '1px', fontSize: '10px' }} />
                                                 </div>
 
                                             </div>

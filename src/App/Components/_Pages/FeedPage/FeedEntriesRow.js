@@ -61,107 +61,90 @@ class FeedEntriesRow extends Component {
                 </div>
 
 
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ width: '40px', fontSize: '12px', textAlight: 'right', marginRight: '1px', background: '#000' }}>
-                    </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                            ppm pre
+                {(() => {
+                    if (this.props.entry['ppm_pre']) {
+                        return (
+                            <div>
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div style={{ width: '40px', fontSize: '12px', textAlight: 'right', marginRight: '1px', background: '#000' }}>
+                                    </div>
+
+                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <div style={{ background: '#8a6f3d', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}> ppm pre </div>
+                                        <div style={{ background: '#985ca2', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>pH pre</div>
+
+                                        <div style={{ height: '20px', width: '50px', margin: '1px' }} />
+
+                                        <div style={{ background: '#8a6f3d', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>ppm post</div>
+                                        <div style={{ background: '#985ca2', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>pH post</div>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div style={{ width: '40px', fontSize: '12px', textAlight: 'right', marginRight: '1px', background: '#000' }}>
+                                    </div>
+
+                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+
+                                        {(() => {
+                                            if (this.props.entry['ppm_pre']) {
+                                                return (
+                                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>{this.props.entry['ppm_pre']}</div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} />
+                                                )
+                                            }
+                                        })()}
+
+                                        {(() => {
+                                            if (this.props.entry['ph_pre']) {
+                                                return (
+                                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>{this.props.entry['ph_pre']} </div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} />
+                                                )
+                                            }
+                                        })()}
+
+                                        <div style={{ height: '20px', width: '50px', margin: '1px' }} />
+
+                                        {(() => {
+                                            if (this.props.entry['ppm_post']) {
+                                                return (
+                                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>{this.props.entry['ppm_post']}</div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} />
+                                                )
+                                            }
+                                        })()}
+
+
+                                        {(() => {
+                                            if (this.props.entry['ph_post']) {
+                                                return (
+                                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>{this.props.entry['ph_post']}</div>
+                                                )
+                                            } else {
+                                                return (
+                                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }} />
+                                                )
+                                            }
+                                        })()}
+                                    </div>
+                                </div>
                             </div>
-
-                        <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                            pH pre
-                            </div>
-
-                        <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                            ppm post
-                            </div>
-
-                        <div style={{ background: '#236313', height: '20px', width: '50px', margin: '1px', color: '#fff', fontSize: '10px' }}>
-                            pH post
-                            </div>
-
-                    </div>
-                </div>
-
-
-
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ width: '40px', fontSize: '12px', textAlight: 'right', marginRight: '1px', background: '#000' }}>
-                    </div>
-
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-
-
-
-                        {(() => {
-                            if (this.props.entry['ppm_pre']) {
-                                return (
-                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                        {this.props.entry['ppm_pre']}
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                    </div>
-                                )
-                            }
-                        })()}
-
-                        {(() => {
-                            if (this.props.entry['ph_pre']) {
-                                return (
-                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                        {this.props.entry['ph_pre']}
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                    </div>
-                                )
-                            }
-                        })()}
-
-                        {(() => {
-                            if (this.props.entry['ppm_post']) {
-                                return (
-                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                        {this.props.entry['ppm_post']}
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                    </div>
-                                )
-                            }
-                        })()}
-
-
-                        {(() => {
-                            if (this.props.entry['ph_post']) {
-                                return (
-                                    <div style={{ background: '#a8be9d', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                        {this.props.entry['ph_post']}
-                                    </div>
-                                )
-                            } else {
-                                return (
-                                    <div style={{ background: '#263225', height: '20px', width: '50px', margin: '1px', color: '#000', fontSize: '10px' }}>
-                                    </div>
-                                )
-                            }
-                        })()}
-
-                    </div>
-                </div>
+                        )
+                    }
+                })()}
 
             </div>
-
-
 
         );
     }
