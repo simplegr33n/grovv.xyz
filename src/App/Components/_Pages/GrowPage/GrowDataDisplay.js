@@ -334,7 +334,7 @@ class GrowDataDisplay extends Component {
                                         }
 
                                         return (
-                                            <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
+                                            <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center', overflow: 'hidden', userSelect: 'none' }}>
                                                 <div style={{ fontSize: '18px', userSelect: 'none', display: 'flex', fontWeight: 700 }}>{Math.round(this.state.liveData[pid] * 10) / 10}</div>
                                                 <div style={{ fontSize: '14px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
                                             </div>
@@ -342,7 +342,7 @@ class GrowDataDisplay extends Component {
                                     })()}
 
                                     {(() => {
-                                        if (this.state.liveData && this.state.liveData[pid]) {
+                                        if (this.state.liveData && this.state.liveData[pid] && this.state.lastLiveData) {
                                             if ((this.state.liveData[pid] > this.state.lastLiveData[pid])) {
                                                 return <div style={{ fontSize: '11px', userSelect: 'none', color: '#a02525', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
                                             } else if (this.state.liveData[pid] < this.state.lastLiveData[pid]) {

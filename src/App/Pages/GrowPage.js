@@ -118,6 +118,8 @@ class GrowPage extends Component {
 
     render() {
 
+        console.log("props", this.props)
+
         var indicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[this.props.grow.id])
 
         // MAIN RENDER RETURN

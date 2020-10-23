@@ -9,6 +9,7 @@ class DbHelper {
 
         this.userID = 'FjfypUxF0ddiUjuFytPU5vES5B42' // Hardcoded to bradyn's for now
 
+        this.runningData = []
     }
 
     // ............ //
@@ -21,14 +22,8 @@ class DbHelper {
         var ref = this.firebase.db.ref().child('users').child(UID)
 
         ref.on('value', (snapshot) => {
-
-            if (snapshot.val() === null) {
-                setData(false);
-                return;
-            }
-
             setData(snapshot.val())
-
+            ref.off('value')
 
         }, function (errorObject) {
             console.log("get user failed: " + errorObject.code);
@@ -50,11 +45,12 @@ class DbHelper {
 
         ref.on('value', (snapshot) => {
             setData(snapshot.val())
+            ref.off('value')
+
         }, function (errorObject) {
             console.log("Get Lifetime Data failed: " + errorObject.code);
         });
     }
-
 
     postLifetimeData(lifetimeObject, growID, year, month, day) {
         console.log("Post Lifetime Data", lifetimeObject)
@@ -66,15 +62,14 @@ class DbHelper {
     getMonthChunk(growID, year, month, setData) {
         console.log("getMonthCHunk!" + growID + " " + year + " " + month)
 
-
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(year).child(month)
         ref.on('value', (snapshot) => {
             setData(snapshot.val())
+            ref.off('value')
         }, function (errorObject) {
             console.log("getMonthChunk: " + errorObject.code);
         });
     }
-
 
 
     // .......... //
@@ -85,59 +80,27 @@ class DbHelper {
     // ....... //
 
     // Get 3 day data window from firebase
-    getThreeDayData(growID, setData) {
+    getThreeDayData(growID, updateThreeDayData) {
 
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
 
+        if (!this.runningData[growID]) {
+            this.runningData[growID] = []
+        }
+
         var date = new Date();
-        var year = date.getFullYear().toString()
-        var month = (date.getMonth() + 1).toString()
-        if (month.length < 2) {
-            month = '0' + month
-        }
 
-        var days = []
-        var tempDay = null
-        var dy = date.getDate()
-        if ((dy - 2) >= 1) {
-            tempDay = dy - 2
-            if (tempDay.toString().length < 2) {
-                tempDay = '0' + tempDay
-            }
-            days[days.length] = tempDay
-        }
-        if ((dy - 1) >= 1) {
-            tempDay = dy - 1
-            if (tempDay.toString().length < 2) {
-                tempDay = '0' + tempDay
-            }
-            days[days.length] = tempDay
-        }
-        if (dy.toString().length < 2) {
-            dy = '0' + dy
-        }
-        days[days.length] = dy
 
-        days.forEach((day) => {
+        ref.child(date.getFullYear()).child((date.getMonth() + 1).toString()).child(date.getDate()).child(date.getHours()).on("child_added", (snapshot) => {
+            var dataPoint = snapshot.val()
 
-            ref.child(year).child(month).child(day).on("value", (snapshot) => {
+            dataPoint.time = dataPoint.time * 1000
+            this.runningData[growID][this.runningData[growID].length] = dataPoint
 
-                // TODO: on child added listener instead, this this var stored outside the "on()" event
-                var dayData = []
+            updateThreeDayData(this.runningData);
 
-                snapshot.forEach((child) => {
-                    child.forEach((gChild) => {
-                        var dataPoint = gChild.val()
-                        dataPoint.time = dataPoint.time * 1000
-                        dayData[dayData.length] = dataPoint;
-                    });
-                });
-
-                dayData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-                setData(growID, day, dayData);
-            });
         });
+
     }
 
     // ............ //

@@ -15,6 +15,11 @@ class ProcessingFunctions {
         this.dataCheckLengths = []
         this.previousDataCheckLengths = []
 
+
+        this.rawData = []
+        this.rawDataLengths = []
+        this.processedData = []
+
     }
 
     // //////////////////////////
@@ -37,138 +42,57 @@ class ProcessingFunctions {
         this.appUpdateObject['displayWindow'] = u.PREFS.GRAPHS.AllGraph.timeWindow
     }
 
-    setUserGrows = (userGrows, setUserGrows) => {
-        userGrows.forEach((grow) => {
-            this.dbHelper.getThreeDayData(grow.id, this.setThreeDayData)
-        })
-
+    setUserGrows = (userGrows) => {
         this.appUpdateObject['userGrows'] = userGrows
-    }
-
-
-    setThreeDayData = (growID, day, data) => {
-        var tempData = this.threeDayData
-
-        var tempThreeDayData = []
-
-        day = parseInt(day)
-
-        if (tempData[growID]) {
-            tempThreeDayData = tempData[growID]
-        }
-
-        if (tempThreeDayData[day]) {
-            tempThreeDayData[day] = null
-        }
-
-        tempThreeDayData[day] = data
-
-        tempData[growID] = tempThreeDayData
-
-        this.threeDayData = tempData
-
-        this.concatAllGrowsData(this.concatAllData, tempData, this.appUpdateObject.userGrows, this.dataCheckLengths, this.setAllGrowsConcat)
-    }
-
-    // GRAPH ALL GROWS
-    concatAllGrowsData = (concatData, rawGrowData, userGrows, DataCheckLengths, setAllGrowsConcat) => {
-        var newCheckLengths = []
-        var valChanged = false
 
         userGrows.forEach((grow) => {
-
-            // returns
-            if (!rawGrowData[grow.id]) {
-                newCheckLengths[grow.id] = 0
-                return
-            }
-            if ((DataCheckLengths) && (DataCheckLengths[grow.id] && rawGrowData[grow.id]) && (DataCheckLengths[grow.id] === rawGrowData[grow.id][rawGrowData[grow.id].length - 1].length)) {
-                newCheckLengths[grow.id] = rawGrowData[grow.id][rawGrowData[grow.id].length - 1].length
-                return; // 
-            }
-            valChanged = true
-
-            newCheckLengths[grow.id] = rawGrowData[grow.id][rawGrowData[grow.id].length - 1].length
-
-            var subConcatData = []
-            rawGrowData[grow.id].forEach((list) => {
-                subConcatData = subConcatData.concat(list)
-            })
-
-            if (!DataCheckLengths || DataCheckLengths[grow.id] !== subConcatData.length) {
-                subConcatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-                concatData[grow.id] = subConcatData
-            }
+            this.dbHelper.getThreeDayData(grow.id, this.updateThreeDayData)
         })
-
-        if (valChanged) {
-            setAllGrowsConcat(concatData, newCheckLengths)
-        }
     }
 
 
+    updateThreeDayData = (data) => {
+        this.rawData = data
 
-    setAllGrowsConcat = (concatData, newCheckLengths) => {
-        this.dataCheckLengths = newCheckLengths
-        this.concatAllData = concatData
-
-        this.processAllGrowsData(this.appUpdateObject.userGrows, this.appUpdateObject.displayWindow)
+        this.processAllGrowsData()
     }
 
-    processAllGrowsData = (userGrows, window = 10800000) => {
-
+    processAllGrowsData = (window = 10800000) => {
         var now = Math.floor(new Date().getTime() / 1000)
-        var processedData = []
 
-        //remove....TODO
-        if (!userGrows) {
-            return
+        var reducerValue = Math.round(window / 10800000)
+        if (reducerValue < 1) {
+            reducerValue = 1
         }
 
         //forEach
-        userGrows.forEach((grow) => {
-            if (!this.concatAllData[grow.id]) {
+        this.appUpdateObject.userGrows.forEach((grow) => {
+            if (!this.rawData[grow.id]) {
                 return
             }
 
             var subProcessedData = []
 
             var i = -1
-            this.concatAllData[grow.id].forEach((dataPoint) => {
-
-                var subCombined = {}
-
-                var reducerValue = Math.round(window / 10800000)
-                if (reducerValue < 1) {
-                    reducerValue = 1
-                }
+            this.rawData[grow.id].forEach((dataPoint) => {
 
                 if (now - dataPoint.time < window) {
+
                     i++;
                     if (i === 0 || i % reducerValue === 0) {
-                        var processedPoint = dataPoint
-
-                        for (const [key, value] of Object.entries(processedPoint)) {
-                            if (key !== "time") {
-                                subCombined[key + "^" + grow.id] = value
-                            } else {
-                                subCombined.time = value
-                            }
-                        }
-
-                        subProcessedData[subProcessedData.length] = processedPoint
+                        subProcessedData[subProcessedData.length] = dataPoint
                     }
                 }
             })
 
-            processedData[grow.id] = subProcessedData
+            this.processedData[grow.id] = subProcessedData
         })
 
-        this.setAllGrowsProcessed(processedData)
+        this.setAllGrowsProcessed()
     }
 
-    setAllGrowsProcessed = (processedData) => {
-        this.appUpdateObject['processedData'] = processedData
+    setAllGrowsProcessed = () => {
+        this.appUpdateObject['processedData'] = this.processedData
         this.appUpdateObject['dataCheckLengths'] = this.dataCheckLengths
 
         if (this.dataCheckLengths !== this.previousDataCheckLengths) {
