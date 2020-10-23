@@ -410,7 +410,7 @@ class GrowDataDisplay extends Component {
 
 
                         return (
-                            <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor }}>
+                            <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor, overflow: 'hidden' }}>
 
                                 <div style={{ width: '1px', background: '#000' }} />
 
@@ -449,7 +449,7 @@ class GrowDataDisplay extends Component {
                         )
                     })()}
 
-                    <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px' }}>
+                    <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px', overflow: 'hidden' }}>
                         <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', fontSize: '10px', userSelect: 'none' }}>
                             {(() => {
                                 var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
@@ -506,7 +506,7 @@ class GrowDataDisplay extends Component {
                     </div>
 
 
-                    <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px' }}>
+                    <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px', overflow: 'hidden' }}>
                         <div className="Grow-Details-Main-Data-Time">
                             {(() => {
                                 var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
@@ -538,7 +538,7 @@ class GrowDataDisplay extends Component {
                         })()}
                     </div>
 
-                    <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px' }}>
+                    <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px', overflow: 'hidden' }}>
                         <div className="Grow-Details-Main-Data-Time">
                             {(() => {
                                 var tIndex = this.state.SENSOR_PIDS.indexOf(pid)

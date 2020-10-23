@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
-import '../../../../styles/App.css'
+import '../../../styles/App.css'
 
-import cornerLogo from '../../../../assets/corner-logo.png'
-import { ReactComponent as TobyFace } from '../../../../assets/tobyface.svg'
+import cornerLogo from '../../../assets/corner-logo.png'
+import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
 
 import { AiOutlineLineChart } from 'react-icons/ai'
 import { TiThMenu } from 'react-icons/ti'

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../../styles/App.css'
 
+import DbHelper from '../_utils/DbHelper.js'
 import ProcessingFunctions from '../_utils/ProcessingFunctions.js'
 
 import GraphLifetime from '../Components/_Pages/LifetimePage/GraphLifetime.js'
@@ -21,18 +22,19 @@ class LifetimePage extends Component {
             month: '10',
         };
 
+        this.dbHelper = new DbHelper()
+
         this.processingFunctions = new ProcessingFunctions()
 
     }
 
     componentDidMount() {
         this.calcGraphDimensions()
+        this.dbHelper.getLifetimeData(this.props.user.uid, this.setLifetimeData)
 
         // /////////////
         // SCARY TIMES!
         // this.getMonthChunkData()
-
-        this.analyseLifetimeData()
 
     }
 
@@ -55,6 +57,23 @@ class LifetimePage extends Component {
         }
     }
 
+    setLifetimeData = (lifetimeData) => {
+        this.setState({ lifetimeData: lifetimeData })
+
+        this.processingFunctions.normalizeLifetimeData(lifetimeData, this.setNormalizedLifetimeData)
+    }
+
+    setNormalizedLifetimeData = (allSensorsList, normalizedLifetimeData, sampleHighs) => {
+        // setState
+        this.setState({
+            allSensorsList: allSensorsList,
+            normalizedLifetimeData: normalizedLifetimeData,
+            sampleHighs: sampleHighs
+        })
+
+        this.analyseLifetimeData()
+    }
+
     // ///////////////////////////////
     // Lifetime Data Analysis Function
     // ///////////////////////////////
@@ -62,7 +81,7 @@ class LifetimePage extends Component {
 
         var jabbaTheObject = []
 
-        for (const [growID, growLifetimeData] of Object.entries(this.props.lifetimeData)) {
+        for (const [growID, growLifetimeData] of Object.entries(this.state.lifetimeData)) {
             if (!jabbaTheObject[growID]) { jabbaTheObject[growID] = [] }
             for (const [year, month] of Object.entries(growLifetimeData)) {
                 for (const [day, daysData] of Object.entries(month)) {
@@ -119,7 +138,7 @@ class LifetimePage extends Component {
     // CHUNKY stuff -- Relating to grabbing info from firebase, reading it, and pushing processed data back
     // ///////////////////////////////
     getMonthChunkData() {
-        this.props.getMonthChunkData(this.state.growID, this.state.year, this.state.month, this.processChunk)
+        this.dbHelper.getMonthChunk(this.state.growID, this.state.year, this.state.month, this.processChunk)
     }
 
     processChunk = (chunk) => {
@@ -186,8 +205,10 @@ class LifetimePage extends Component {
             this.postProcessedDayData(lifetimeObject, day)
         }
     }
+
     postProcessedDayData = (lifetimeObject, day) => {
-        this.props.postLifetimeData(lifetimeObject, this.state.growID, this.state.year, this.state.month, day)
+        console.log("CHUNKY post LifetimeData", lifetimeObject)
+        this.dbHelper.postLifetimeData(lifetimeObject, this.state.growID, this.state.year, this.state.month, day)
     }
 
 
@@ -197,7 +218,7 @@ class LifetimePage extends Component {
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', minWidth: '100%', maxWidth: '100%', maxHeight: '100%' }}>
                 <div style={{ width: '100%', minWidth: '100%', minHeight: '70vh', maxHeight: '70vh' }} ref={element => this.divRef = element} >
                     <div className="Lifetime-Graph-Area" >
-                        <GraphLifetime parentSize={this.state.graphElementSize} normalizedLifetimeData={this.props.normalizedLifetimeData} allSensorsList={this.props.allSensorsList} sampleHighs={this.props.sampleHighs} userGrows={this.props.userGrows} tableData={this.state.tableData} />
+                        <GraphLifetime parentSize={this.state.graphElementSize} normalizedLifetimeData={this.state.normalizedLifetimeData} allSensorsList={this.state.allSensorsList} sampleHighs={this.state.sampleHighs} userGrows={this.props.userGrows} tableData={this.state.tableData} />
                     </div>
                 </div >
             </div>

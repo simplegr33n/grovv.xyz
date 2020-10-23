@@ -19,7 +19,7 @@ import LifetimePage from './Pages/LifetimePage.js'
 import FeedPage from './Pages/FeedPage.js'
 
 // Top Bar
-import AppBar from './Components/_App/AppBar/AppBar.js'
+import AppBar from './Components/_App/AppBar.js'
 
 // GAMES
 import TobyTiles from './Components/_Games/TobyTiles/TobyTiles.js'
@@ -54,8 +54,6 @@ class App extends Component {
 				this.setState({ UID: user.uid })
 				this.getUsername()
 
-				this.dbHelper.getLifetimeData(user.uid, this.setLifetimeData)
-
 				this.dbHelper.getUser(user.uid, this.setUser)
 				this.dbHelper.getUserGrows(this.setUserGrows) // currently grabbing B's hardcoded
 			}
@@ -71,12 +69,6 @@ class App extends Component {
 			user: u,
 			displayWindow: u.PREFS.GRAPHS.AllGraph.timeWindow
 		});
-	}
-
-	setLifetimeData = (lifetimeData) => {
-		this.setState({ lifetimeData: lifetimeData });
-
-		this.processingFunctions.normalizeLifetimeData(lifetimeData, this.setNormalizedLifetimeData)
 	}
 
 	setUserGrows = (userGrows) => {
@@ -161,15 +153,6 @@ class App extends Component {
 		this.postFirebaseUser(tempUser)
 	}
 
-	setNormalizedLifetimeData = (allSensorsList, normalizedLifetimeData, sampleHighs) => {
-		// setState
-		this.setState({
-			allSensorsList: allSensorsList,
-			normalizedLifetimeData: normalizedLifetimeData,
-			sampleHighs: sampleHighs
-		})
-	}
-
 	setMainContent = (setValue) => {
 		this.setState({
 			mainContent: setValue,
@@ -207,12 +190,6 @@ class App extends Component {
 
 		this.dbHelper.setUser(u)
 	}
-	postLifetimeData = (lifetimeObject, growID, year, month, day) => {
-		// this.setState({ user: u }); // -- set liftime data eventually
-
-		console.log("chunky post LifetimeData", lifetimeObject)
-		this.dbHelper.postLifetimeData(lifetimeObject, growID, year, month, day)
-	}
 
 	// ////////////////
 	// Firebase Getting
@@ -227,9 +204,7 @@ class App extends Component {
 			console.log("The username read failed: " + errorObject.code);
 		});
 	}
-	getMonthChunkData = (growID, year, month, setData) => {
-		this.dbHelper.getMonthChunk(growID, year, month, setData)
-	}
+
 
 	// ////////////////
 	// PROCESSING 
@@ -256,7 +231,7 @@ class App extends Component {
 									case 'grows':
 										return <GrowPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData[this.state.currentGrow.id]} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
 									case 'lifetime':
-										return <LifetimePage postLifetimeData={this.postLifetimeData} updateLifetimeDisplayWindow={this.updateLifetimeDisplayWindow} getMonthChunkData={this.getMonthChunkData} user={this.state.user} lifetimeData={this.state.lifetimeData} userGrows={this.state.userGrows} allSensorsList={this.state.allSensorsList} normalizedLifetimeData={this.state.normalizedLifetimeData} sampleHighs={this.state.sampleHighs} displayWindow={this.state.lifetimeDisplayWindow} />
+										return <LifetimePage user={this.state.user} userGrows={this.state.userGrows} />
 									case 'feed':
 										return <FeedPage user={this.state.user} />
 									case 'graphs':
