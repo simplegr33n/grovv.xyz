@@ -35,6 +35,27 @@ class DisplayFunctions {
         }
     }
 
+    /////////////////////
+    // Grow Active? Color
+    /////////////////////
+    returnActiveIndicatorColor = (processedData, growID) => {
+        if (!growID && processedData && processedData[processedData.length - 1]) {
+            var now = new Date().getTime();
+            var difference = now - processedData[processedData.length - 1].time * 1000
+
+            if (difference > 10000000) {
+                return "#989e98"
+            } else if (difference > 300000) {
+                return "#fa360a"
+            } else if (difference > 60000) {
+                return "#facb23"
+            } else if (difference < 60000) {
+                return "#27d927"
+            } else {
+                return "#000"
+            }
+        }
+    }
 }
 
 export default DisplayFunctions;

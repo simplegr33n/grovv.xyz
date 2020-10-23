@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import '../../../../styles/App.css';
 
-import { LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
-
-import moment from 'moment'
+import HighStock from 'highcharts/highstock'
+import HighchartsReact from 'highcharts-react-official'
 
 
 class GraphAllPage extends Component {
@@ -11,196 +10,112 @@ class GraphAllPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // displayWindow: 43200000, // 1800000, 10800000, 43200000, 86400000, 259200000
-
-            lightsOnArray: [],
-            lightsOffArray: [],
-            tickArray: [],
-            lightBackgrounds: ['#7344e740', '#fff93640'],
         };
+
+        this.seriesCounter = 0
     }
+
+
 
     componentDidMount() {
 
     }
 
     componentDidUpdate() {
+        if (this.props.combinedProcessedData && (this.props.combinedProcessedData.length !== 0) && this.props.combinedProcessedData.length !== this.combinedProcessedDataLength) {
+            this.combinedProcessedDataLength = this.props.combinedProcessedData.length
 
-    }
-
-
-    toggleWindow = (e) => {
-        this.setState({ displayWindow: e.target.value })
-
-        this.props.setDisplayWindow(parseInt(e.target.value))
-    }
-
-
-
-    renderTooltip = (props) => {
-        var rawContent = props.payload
-        if (rawContent === null || rawContent.length === 0) {
-            return;
+            this.setGraphOptions(this.props.combinedProcessedData)
         }
+    }
 
-        var readableTime = moment(props.payload[0].payload.time).format('ddd - HH:mm')
+    setGraphOptions(combinedProcessedData) {
 
-        const listItems = rawContent.map((curSensor) => {
-            var tID = curSensor.name.split("^")[1]
-            var tPID = curSensor.name.split("^")[3]
+        var processedSeries = []
 
-            if (this.props.user) {
-                if (this.props.user.PREFS) {
-                    if (this.props.user.PREFS.GRAPHS) {
-                        if (this.props.user.PREFS.GRAPHS.AllGraph) {
-                            if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[curSensor.dataKey] === false)) {
-                                return
-                            }
-                        }
-                    }
-                }
+        combinedProcessedData.forEach((dataObject) => {
+
+            var time = 0
+            if (dataObject['time']) {
+                time = dataObject['time']
             }
 
-            var grow = null
-            this.props.userGrows.forEach((g) => {
-                if (g.id === tID) {
-                    grow = g
-                    return
-                } else {
-                    return
+            for (const [key, value] of Object.entries(dataObject)) {
+                if (key === 'time') {
+                    continue
                 }
-            })
 
-            var sensor = null
-            grow.config.SENSORS.forEach((s) => {
-                if (s.PID === tPID) {
-                    sensor = s
+                if (!processedSeries[key]) {
+                    processedSeries[key] = []
                 }
-            })
 
-            return (
-                <div className="AllGraph-Tooltip-Data" key={curSensor.dataKey} style={{ color: sensor.color, paddingLeft: '2px', paddingRight: '2px' }}>
-                    <div style={{ color: sensor.color, display: "flex", flexDirection: "row", justifyContent: 'space-between' }}>
-                        <div>{sensor.name}: </div>
-                        <div style={{ fontWeight: 800 }} >{curSensor.payload[curSensor.dataKey]} {sensor.unit}</div>
-                    </div>
-                    <div style={{ width: "100%", height: '1px', background: "#2d2d2e" }} />
-                </div>
-            )
-        });
+                var processedPoint = []
+                processedPoint[0] = time
+                processedPoint[1] = parseFloat(value)
 
-        return (
-            <div className="AllGraph-Tooltip" >
-                <div>{readableTime}</div>
-                { listItems}
-            </div>
+                var processedPointObject = []
+                processedPointObject.name = key
+                processedPointObject.data = processedPoint
+                // console.log("processed point", processedPointObject)
 
-        )
+                // processedSeries[key][processedSeries[key].length] = new Object()
+                // processedSeries[key][processedSeries[key].length].name = key
+                // processedSeries[key][processedSeries[key].length].data = processedPoint
+
+
+                processedSeries[processedSeries.length] = processedPointObject
+
+
+                // processedSeries[key][processedSeries[key].length].push(time)
+                // // processedSeries[key][processedSeries[key].length].push(parseFloat(value))
+
+                // console.log("HMM" + key, processedSeries[key])
+                // console.log("HMM" + key, processedSeries[key][0])
+            }
+        })
+
+        console.log("processed")
+
+        this.createChart(processedSeries);
+
     }
 
+    createChart = (processedSeries) => {
+
+
+        console.log("processedser", processedSeries)
+
+
+
+        this.setState({
+            options: {
+                title: {
+                    text: 'Test All Chart'
+                },
+
+                series: processedSeries
+
+                // series: [{
+                //     data: [[Date.UTC(2013, 5, 2), 0.7695],
+                //     [Date.UTC(2013, 5, 3), 0.7648],
+                //     ...
+                //     [Date.UTC(2013, 5, 24), 0.7623],]
+                // }]
+            }
+        })
+    }
 
     render() {
 
-        var now = new Date().getTime()
 
-        var defaultWindow = 43200000
-        if (this.props.user) {
-            if (this.props.user.PREFS) {
-                if (this.props.user.PREFS.GRAPHS) {
-                    if (this.props.user.PREFS.GRAPHS.AllGraph) {
-                        if (this.props.user.PREFS.GRAPHS.AllGraph.timeWindow) {
-                            defaultWindow = this.props.user.PREFS.GRAPHS.AllGraph.timeWindow
-                        }
-                    }
-                }
-            }
-        }
-
-        if (this.props.combinedProcessedData) {
-            var lineItems = this.props.userGrows.map(grow => grow.config.SENSORS.map((sensor) => {
-                var dataBlob = sensor.name + "^" + grow.id + "^" + sensor.unit + "^" + sensor.PID
-                var lineKey = sensor.PID + "^" + grow.id
-
-                if (this.props.user) {
-                    if (this.props.user.PREFS) {
-                        if (this.props.user.PREFS.GRAPHS) {
-                            if (this.props.user.PREFS.GRAPHS.AllGraph) {
-                                if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[lineKey] === false)) {
-                                    return
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (sensor.type === "airTemp" || sensor.type === "waterTemp") {
-                    return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                } else if (sensor.type === "humidifier" || sensor.type === "fan" || sensor.type === "humidity") {
-                    return <Line yAxisId="percent" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                } else if (sensor.unit === "ᵖᵖᵐ") {
-                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                } else if (sensor.unit === "ᵖᵖᵇ") {
-                    return <Line yAxisId="ppb" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                } else if (sensor.unit === "kPa") {
-                    return <Line yAxisId="pressure" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                } else {
-                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={dataBlob} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
-                }
-            }));
-
-
-            var renderDayGraph = null
-            if (this.props.parentSize) {
-                var xSize = Math.floor(this.props.parentSize[0] * 0.9)
-                var ySize = Math.floor(this.props.parentSize[1] * 0.9)
-
-                renderDayGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.props.combinedProcessedData}>
-
-                        {lineItems}
-
-                        <CartesianGrid vertical horizontal={false} verticalFill={[this.state.lightBackgrounds[0], this.state.lightBackgrounds[1]]} stroke="none" fillOpacity={0.2} />
-
-                        <XAxis
-                            tick={{ fill: "#B3C2B5" }}
-                            dataKey="time"
-                            type="number"
-                            domain={[now - this.props.displayWindow, now]}
-                            allowDataOverflow={true}
-                            ticks={this.state.tickArray}
-                            tickFormatter={(tick) => moment(tick * 1).format('MMM DDᵗʰ - HH:mm')}
-                        />
-                        <YAxis yAxisId="temperature" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
-                        <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
-                        <YAxis yAxisId="pressure" orientation="right" hide={true} domain={[95]} tick={{ fill: "#B3C2B5" }} />
-                        <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "#false" }} />
-                        <YAxis yAxisId="ppb" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "false" }} />
-                        <Tooltip content={this.renderTooltip} />
-                    </LineChart>
-                );
-            }
-
-        }
 
         return (
 
-            <div className="Chart-Container" style={{ background: '#000' }}>
-
-                {renderDayGraph}
-
-                {/* Time Scale Select... */}
-                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', top: '18px', left: '2px' }}>
-
-                    <select onChange={this.toggleWindow
-                    } id="AllGraph-Time-Scale" defaultValue={defaultWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
-                        <option value={1800000}>&#189;ʰ</option>
-                        <option value={10800000}>3h</option>
-                        <option value={43200000}>12h</option>
-                        <option value={86400000}>24h</option>
-                        <option value={259200000}>72h</option>
-                    </select>
-
-                </div>
+            <div style={{ background: '#000' }}>
+                <HighchartsReact
+                    highcharts={HighStock}
+                    constructorType={'stockChart'}
+                    options={this.state.options} />
             </div >
 
         );

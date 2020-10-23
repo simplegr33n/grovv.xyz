@@ -13,116 +13,75 @@ class GrowDataDisplay extends Component {
         super(props);
 
         this.state = {
-            SENSOR_PIDS: [],
-            SENSORS_INIT: false,
-
             DAILY_HIGHS: [],
             DAILY_HIGHS_TIMES: [],
             DAILY_LOWS: [],
             DAILY_LOWS_TIMES: [],
             DAILY_AVGS: [],
-            YEST_AVGS: [],
-
-            ACTIVE_LINES: [],
-            ACTIVE_INIT: false,
-
-            TABLE_INIT: false,
+            YEST_AVGS: []
         };
 
         this.displayFunctions = new DisplayFunctions()
     }
 
     componentDidMount() {
-        if (this.props.threeDayData) {
-            if (!this.props.threeDayData[this.props.grow.id]) {
-                return;
+
+        if (this.props.processedData && this.props.sensorPIDS) {
+            this.grow = this.props.grow
+            this.dataLengthRef = this.props.processedData.length
+
+            this.harmonyRatiosUpdated = null
+
+            var SENSOR_DEVIATIONS = []
+            var SENSOR_MEANS = []
+
+            for (const [key, value] of Object.entries(this.props.grow.config.SENSORS)) {
+                SENSOR_DEVIATIONS[value.PID] = value._deviation
+                SENSOR_MEANS[value.PID] = value._mean
             }
 
-            if (this.props.grow !== this.state.GROW) {
-                this.harmonyRatiosUpdated = null
+            this.setState({
+                SENSOR_DEVIATIONS: SENSOR_DEVIATIONS,
+                SENSOR_MEANS: SENSOR_MEANS,
+                liveData: this.props.processedData[this.props.processedData.length - 1],
+                lastLiveData: this.props.processedData[this.props.processedData.length - 2]
+            })
 
-                var SENSOR_DEVIATIONS = []
-                var SENSOR_MEANS = []
-
-                for (const [key, value] of Object.entries(this.props.grow.config.SENSORS)) {
-                    SENSOR_DEVIATIONS[value.PID] = value._deviation
-                    SENSOR_MEANS[value.PID] = value._mean
-                }
-
-                this.setState({
-                    GROW: this.props.grow,
-                    SENSOR_DEVIATIONS: SENSOR_DEVIATIONS,
-                    SENSOR_MEANS: SENSOR_MEANS
-                })
-            }
-
-            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
-
-            if (this.dataLengthRef !== dataLengthRef) {
-                this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.threeDayData)
-            } else if (!this.state.TABLE_INIT) {
-                // Gotta get this process in the first time for things to go smooth... not quite sure why.
-                this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.threeDayData)
-                this.setState({ TABLE_INIT: true })
-            }
+            this.processGrowData(this.props.processedData)
         }
-
     }
 
     componentDidUpdate = () => {
+        if (this.props.processedData && this.props.sensorPIDS) {
+            if ((this.grow != this.props.grow) || (this.dataLengthRef !== this.props.processedData.length)) {
+                this.grow = this.props.grow
+                this.dataLengthRef = this.props.processedData.length
 
-        if (this.props.threeDayData) {
-            if (!this.props.threeDayData[this.props.grow.id]) {
-                return;
-            }
-
-            if (this.props.grow !== this.state.GROW) {
                 this.harmonyRatiosUpdated = null
 
                 var SENSOR_DEVIATIONS = []
                 var SENSOR_MEANS = []
 
-                for (const [key, value] of Object.entries(this.props.grow.config.SENSORS)) {
-                    SENSOR_DEVIATIONS[value.PID] = value._deviation
-                    SENSOR_MEANS[value.PID] = value._mean
+                for (const [sensorConfig] of Object.entries(this.props.grow.config.SENSORS)) {
+                    SENSOR_DEVIATIONS[sensorConfig.PID] = sensorConfig._deviation
+                    SENSOR_MEANS[sensorConfig.PID] = sensorConfig._mean
                 }
 
                 this.setState({
-                    GROW: this.props.grow,
                     SENSOR_DEVIATIONS: SENSOR_DEVIATIONS,
-                    SENSOR_MEANS: SENSOR_MEANS
+                    SENSOR_MEANS: SENSOR_MEANS,
+                    liveData: this.props.processedData[this.props.processedData.length - 1],
+                    lastLiveData: this.props.processedData[this.props.processedData.length - 2]
                 })
-            }
 
-            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
-
-            if (this.dataLengthRef !== dataLengthRef) {
-                this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.threeDayData)
-            } else if (!this.state.TABLE_INIT) {
-                // Gotta get this process in the first time for things to go smooth... not quite sure why.
-                this.dataLengthRef = dataLengthRef
-                this.processGrowData(this.props.threeDayData)
-                this.setState({ TABLE_INIT: true })
+                this.processGrowData(this.props.processedData)
             }
         }
-
     }
 
-    processGrowData = (growData) => {
+    processGrowData = (preProcessedData) => {
 
-        var concatData = []
-        growData[this.props.grow.id].forEach((list) => {
-            concatData = concatData.concat(list)
-        })
-        concatData.sort((a, b) => (a.time > b.time) ? 1 : -1)
-
-        this.setState({
-            liveData: concatData[concatData.length - 1],
-            lastLiveData: concatData[concatData.length - 2],
-        })
+        console.log("GrowDataDisplay[" + this.props.grow.id + "] processing length:", preProcessedData.length)
 
         var now = new Date().valueOf()
 
@@ -139,31 +98,9 @@ class GrowDataDisplay extends Component {
         var lastDayData = []
         var yesterdayData = []
 
-        // INITIALIZING SENSOR INFO
-        // get all sensor pids...   ?
-        var SENSOR_PIDS = []
-        if (this.state.SENSORS_INIT !== this.props.grow && this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
-            this.props.grow.config.SENSORS.forEach((sensor, key) => {
-
-                if (SENSOR_PIDS[key] !== sensor.PID) {
-                    SENSOR_PIDS[key] = sensor.PID
-                }
-            });
-
-            this.setState({
-                SENSOR_PIDS: SENSOR_PIDS
-            });
-
-            if (this.state.ACTIVE_INIT !== this.props.grow) {
-                this.setState({
-                    ACTIVE_INIT: this.props.grow
-                });
-            }
-        }
-
 
         // ANALYTICS...
-        concatData.forEach((dataPoint) => {
+        preProcessedData.forEach((dataPoint) => {
             if (now - dataPoint.time < 86400000) {
                 DAILY_POINT_COUNT += 1
 
@@ -172,8 +109,8 @@ class GrowDataDisplay extends Component {
                 // DATA and CALCS for avgs/lows/highs
                 for (const pid in dataPoint) {
 
-                    if (SENSOR_PIDS.includes(pid)) {
-                        var tIndex = SENSOR_PIDS.indexOf(pid)
+                    if (this.props.sensorPIDS.includes(pid)) {
+                        var tIndex = this.props.sensorPIDS.indexOf(pid)
 
                         // HIGHS
                         if (!DAILY_HIGHS[tIndex] || parseFloat(dataPoint[pid]) >= DAILY_HIGHS[tIndex]) {
@@ -203,8 +140,8 @@ class GrowDataDisplay extends Component {
                 // DATA and CALCS for avgs/lows/highs
                 for (const pid in dataPoint) {
 
-                    if (SENSOR_PIDS.includes(pid)) {
-                        var yIndex = SENSOR_PIDS.indexOf(pid)
+                    if (this.props.sensorPIDS.includes(pid)) {
+                        var yIndex = this.props.sensorPIDS.indexOf(pid)
 
                         //AVERAGES
                         if (!YEST_AVGS[yIndex]) {
@@ -234,11 +171,9 @@ class GrowDataDisplay extends Component {
             YEST_AVGS: YEST_AVGS
         });
 
-
-
         if (!this.processedDevs || (now - this.processedDevs > 150000)) {
             this.processDevs = now
-            this.processDeviationData(concatData, now)
+            this.processDeviationData(preProcessedData, now)
         }
     }
 
@@ -293,289 +228,264 @@ class GrowDataDisplay extends Component {
     }
 
     toggleLine = (e) => {
-        var pid = e.currentTarget.getAttribute('data-value')
-        this.props.toggleLine(pid + "^" + this.props.grow.id)
+        this.props.toggleLine(e.currentTarget.getAttribute('data-value'))
     }
 
     render() {
 
-        var indicatorColor = "#FFF"
-        if (this.props.liveGrowData && this.props.liveGrowData[this.props.grow.id]) {
+        var indicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData)
 
-            var now = new Date().getTime();
-            var difference = now - this.props.liveGrowData[this.props.grow.id].time * 1000
+        var sensorInfoRows = null
+        if (this.props.sensorPIDS && this.state.liveData) {
 
-            if (difference > 10000000) {
-                indicatorColor = "#989e98"
-            } else if (difference > 300000) {
-                indicatorColor = "#fa360a"
-            } else if (difference > 60000) {
-                indicatorColor = "#facb23"
-            } else if (difference < 60000) {
-                indicatorColor = "#27d927"
-            }
-        }
+            console.log('we here..', this.props.sensorPIDS)
 
-        const sensorInfoRows = this.state.SENSOR_PIDS.map((pid) => {
-            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-            var curSensor = this.props.grow.config.SENSORS[tIndex]
-            var lineKey = pid + "^" + this.props.grow.id
+            sensorInfoRows = this.props.sensorPIDS.map((pid) => {
+                var tIndex = this.props.sensorPIDS.indexOf(pid)
+                var curSensor = this.props.grow.config.SENSORS[tIndex]
+                var lineKey = pid + "^" + this.props.grow.id
 
-            var setOpacity = 1
-            var setPaddingTop = '5px'
+                console.log('we here..', curSensor)
 
-            // for ALL graph
-            if (!this.props.activeLines && this.props.user) {
-                if (this.props.user.PREFS) {
-                    if (this.props.user.PREFS.GRAPHS) {
-                        if (this.props.user.PREFS.GRAPHS.AllGraph) {
-                            if (this.props.user.PREFS.GRAPHS.AllGraph.showSensors && (this.props.user.PREFS.GRAPHS.AllGraph.showSensors[lineKey] === false)) {
-                                setOpacity = 0.5
-                                setPaddingTop = '6px'
-                            }
-                        }
-                    }
+                var setOpacity = 1
+                var setPaddingTop = '5px'
+
+                if (this.props.activeLines && !this.props.activeLines.includes(pid)) {
+                    setOpacity = 0.5
+                    setPaddingTop = '6px'
                 }
-            }
-            // For individual graphs
-            if (this.props.activeLines && !this.props.activeLines.includes(pid)) {
-                setOpacity = 0.5
-                setPaddingTop = '6px'
-            }
 
-            return (
-                <div className="Grow-Details-Main-Data-Display-Row" style={{ opacity: setOpacity }} key={pid + "^" + this.props.grow.id}>
+                return (
+                    <div className="Grow-Details-Main-Data-Display-Row" style={{ opacity: setOpacity }} key={pid + "^" + this.props.grow.id}>
 
-                    {(() => {
+                        {(() => {
 
-                        if (!this.props.grow.config.SENSORS[tIndex]) {
-                            return
-                        }
+                            if (!this.props.grow.config.SENSORS[tIndex]) {
+                                return
+                            }
 
-                        return (
-                            <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', cursor: 'pointer', marginBottom: '1px', background: '#1c241d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                            return (
+                                <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', cursor: 'pointer', marginBottom: '1px', background: '#1c241d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
 
-                                <div style={{ paddingTop: setPaddingTop, fontSize: '12px', lineHeight: '12px', overflow: 'hidden', fontWeight: '500', textAlign: 'right' }} > {curSensor.name}</div>
+                                    <div style={{ paddingTop: setPaddingTop, fontSize: '12px', lineHeight: '12px', overflow: 'hidden', fontWeight: '500', textAlign: 'right' }} > {curSensor.name}</div>
 
-                                {this.displayFunctions.displaySensorTypeIcon(curSensor.type)}
+                                    {this.displayFunctions.displaySensorTypeIcon(curSensor.type)}
 
-                                {(() => {
-                                    var harmonyWarnFlex = 0
-                                    var harmonyDangerFlex = 0
-                                    var harmonyGoodFlex = 100
-                                    // EXAGERATE WARNINGS *2 / *10
-                                    if (this.state.HARMONY_WARN) {
-                                        harmonyWarnFlex = this.state.HARMONY_WARN[pid] * 2
+                                    {(() => {
+                                        var harmonyWarnFlex = 0
+                                        var harmonyDangerFlex = 0
+                                        var harmonyGoodFlex = 100
+                                        // EXAGERATE WARNINGS *2 / *10
+                                        if (this.state.HARMONY_WARN) {
+                                            harmonyWarnFlex = this.state.HARMONY_WARN[pid] * 2
+                                        }
+                                        if (this.state.HARMONY_DANGER) {
+                                            harmonyDangerFlex = this.state.HARMONY_DANGER[pid] * 10
+                                        }
+                                        if (harmonyDangerFlex > 100) {
+                                            harmonyWarnFlex = 0
+                                        }
+                                        harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
+
+                                        return (
+                                            <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px", maxWidth: "4px", minWidth: '4px' }}>
+                                                <div style={{ flex: harmonyDangerFlex, background: '#FF0000' }} />
+                                                <div style={{ flex: harmonyWarnFlex, background: '#fcba03' }} />
+                                                <div style={{ flex: harmonyGoodFlex, background: '#38c538' }} />
+                                            </div>
+                                        )
+                                    })()}
+
+                                </div>
+                            )
+                        })()}
+                        {(() => {
+                            var tIndex = this.props.sensorPIDS.indexOf(pid)
+                            var curSensor = this.props.grow.config.SENSORS[tIndex]
+                            var setIndicatorColor = '#FFF'
+
+                            if (!curSensor) {
+                                return
+                            }
+
+                            if (this.state.liveData) {
+                                if ((curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
+                                    if (((curSensor._mean + (curSensor._deviation * 2)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.state.liveData[pid])) {
+                                        setIndicatorColor = '#FF0000' // BAD
+                                    } else if (((curSensor._mean + (curSensor._deviation)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation)) > this.state.liveData[pid])) {
+                                        setIndicatorColor = '#ded954' // WARN
+                                    } else {
+                                        setIndicatorColor = '#38c538' // GOOD
                                     }
-                                    if (this.state.HARMONY_DANGER) {
-                                        harmonyDangerFlex = this.state.HARMONY_DANGER[pid] * 10
-                                    }
-                                    if (harmonyDangerFlex > 100) {
-                                        harmonyWarnFlex = 0
-                                    }
-                                    harmonyGoodFlex = harmonyGoodFlex - harmonyWarnFlex - harmonyDangerFlex
-
-                                    return (
-                                        <div style={{ display: 'flex', flexDirection: 'column', height: "100%", width: "4px", maxWidth: "4px", minWidth: '4px' }}>
-                                            <div style={{ flex: harmonyDangerFlex, background: '#FF0000' }} />
-                                            <div style={{ flex: harmonyWarnFlex, background: '#fcba03' }} />
-                                            <div style={{ flex: harmonyGoodFlex, background: '#38c538' }} />
-                                        </div>
-                                    )
-                                })()}
-
-                            </div>
-                        )
-                    })()}
-                    {(() => {
-                        var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-                        var curSensor = this.props.grow.config.SENSORS[tIndex]
-                        var setIndicatorColor = '#FFF'
-
-                        if (!curSensor) {
-                            return
-                        }
-
-                        if (this.state.liveData) {
-                            if ((curSensor._mean || curSensor._mean === 0) && (curSensor._deviation || curSensor._deviation === 0)) {
-                                if (((curSensor._mean + (curSensor._deviation * 2)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation * 2)) > this.state.liveData[pid])) {
-                                    setIndicatorColor = '#FF0000' // BAD
-                                } else if (((curSensor._mean + (curSensor._deviation)) < this.state.liveData[pid]) || ((curSensor._mean - (curSensor._deviation)) > this.state.liveData[pid])) {
-                                    setIndicatorColor = '#ded954' // WARN
-                                } else {
-                                    setIndicatorColor = '#38c538' // GOOD
                                 }
                             }
-                        }
 
 
-                        return (
-                            <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor, overflow: 'hidden' }}>
+                            return (
+                                <div className="Grow-Details-Main-Data-Current-Data" style={{ background: setIndicatorColor, overflow: 'hidden' }}>
 
-                                <div style={{ width: '1px', background: '#000' }} />
+                                    <div style={{ width: '1px', background: '#000' }} />
 
+                                    {(() => {
+                                        var tIndex = this.props.sensorPIDS.indexOf(pid)
+                                        var curSensor = this.props.grow.config.SENSORS[tIndex]
+                                        if (!curSensor) {
+                                            return
+                                        }
+
+                                        if (!this.state.liveData || !this.state.liveData[pid]) {
+                                            return
+                                        }
+
+                                        return (
+                                            <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
+                                                <div style={{ fontSize: '18px', userSelect: 'none', display: 'flex', fontWeight: 700 }}>{Math.round(this.state.liveData[pid] * 10) / 10}</div>
+                                                <div style={{ fontSize: '14px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
+                                            </div>
+                                        )
+                                    })()}
+
+                                    {(() => {
+                                        if (this.state.liveData && this.state.liveData[pid]) {
+                                            if ((this.state.liveData[pid] > this.state.lastLiveData[pid])) {
+                                                return <div style={{ fontSize: '11px', userSelect: 'none', color: '#a02525', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                            } else if (this.state.liveData[pid] < this.state.lastLiveData[pid]) {
+                                                return <div style={{ fontSize: '11px', userSelect: 'none', color: '#242490', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                            } else {
+                                                return <div />
+                                            }
+                                        }
+                                    })()}
+
+                                </div>
+                            )
+                        })()}
+
+                        <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px', overflow: 'hidden' }}>
+                            <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', fontSize: '10px', userSelect: 'none' }}>
                                 {(() => {
-                                    var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                                    var tIndex = this.props.sensorPIDS.indexOf(pid)
                                     var curSensor = this.props.grow.config.SENSORS[tIndex]
                                     if (!curSensor) {
                                         return
                                     }
 
-                                    if (!this.state.liveData || !this.state.liveData[pid]) {
-                                        return
-                                    }
+                                    if (this.state.YEST_AVGS[tIndex]) {
 
-                                    return (
-                                        <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                                            <div style={{ fontSize: '18px', userSelect: 'none', display: 'flex', fontWeight: 700 }}>{Math.round(this.state.liveData[pid] * 10) / 10}</div>
-                                            <div style={{ fontSize: '14px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
-                                        </div>
-                                    )
+                                        return (
+                                            <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                                <div style={{ fontSize: '9px', userSelect: 'none', display: 'flex', fontWeight: '600' }}>{Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10}</div>
+                                                <div style={{ fontSize: '9px', userSelect: 'none', display: 'flex', fontWeight: 400 }}>{curSensor.unit}</div>
+                                            </div>
+                                        )
+                                    }
                                 })()}
 
+
                                 {(() => {
-                                    if (this.state.liveData && this.state.liveData[pid]) {
-                                        if ((this.state.liveData[pid] > this.state.lastLiveData[pid])) {
-                                            return <div style={{ fontSize: '11px', userSelect: 'none', color: '#a02525', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
-                                        } else if (this.state.liveData[pid] < this.state.lastLiveData[pid]) {
-                                            return <div style={{ fontSize: '11px', userSelect: 'none', color: '#242490', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
+                                    var tIndex = this.props.sensorPIDS.indexOf(pid)
+
+                                    if (this.state.DAILY_AVGS[tIndex] && this.state.YEST_AVGS[tIndex]) {
+
+                                        if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
+                                            return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
+                                        } else if (this.state.DAILY_AVGS[tIndex] < this.state.YEST_AVGS[tIndex]) {
+                                            return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
                                         } else {
                                             return <div />
                                         }
                                     }
                                 })()}
-
                             </div>
-                        )
-                    })()}
 
-                    <div className="Grow-Details-Main-Data-Data" style={{ marginBottom: '1px', overflow: 'hidden' }}>
-                        <div className="Grow-Details-Main-Yest-Data" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', fontSize: '10px', userSelect: 'none' }}>
+
                             {(() => {
-                                var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                                var tIndex = this.props.sensorPIDS.indexOf(pid)
                                 var curSensor = this.props.grow.config.SENSORS[tIndex]
                                 if (!curSensor) {
                                     return
                                 }
 
-                                if (this.state.YEST_AVGS[tIndex]) {
-
+                                if (this.state.DAILY_AVGS[tIndex]) {
                                     return (
-                                        <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                                            <div style={{ fontSize: '9px', userSelect: 'none', display: 'flex', fontWeight: '600' }}>{Math.round(this.state.YEST_AVGS[tIndex] * 10) / 10}</div>
-                                            <div style={{ fontSize: '9px', userSelect: 'none', display: 'flex', fontWeight: 400 }}>{curSensor.unit}</div>
+                                        <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center', paddingBottom: '2px' }}>
+                                            <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600' }}>{Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10}</div>
+                                            <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
                                         </div>
                                     )
                                 }
                             })()}
+                        </div>
 
 
-                            {(() => {
-                                var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px', overflow: 'hidden' }}>
+                            <div className="Grow-Details-Main-Data-Time">
+                                {(() => {
+                                    var tIndex = this.props.sensorPIDS.indexOf(pid)
 
-                                if (this.state.DAILY_AVGS[tIndex] && this.state.YEST_AVGS[tIndex]) {
-
-                                    if (this.state.DAILY_AVGS[tIndex] > this.state.YEST_AVGS[tIndex]) {
-                                        return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none', marginRight: '2px' }}><span role="img" aria-label="higher value">&#9650;</span></div>
-                                    } else if (this.state.DAILY_AVGS[tIndex] < this.state.YEST_AVGS[tIndex]) {
-                                        return <div style={{ fontSize: '9px', color: '#FFF', userSelect: 'none', marginRight: '2px' }}><span role="img" aria-label="lower value">&#9660;</span></div>
-                                    } else {
-                                        return <div />
+                                    if (this.state.DAILY_HIGHS_TIMES) {
+                                        var m = moment(this.state.DAILY_HIGHS_TIMES[tIndex])
+                                        return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#4b1a0a' }}>{m.format('HH:mm')}</div>
                                     }
-                                }
-                            })()}
-                        </div>
+                                })()}
+                            </div>
 
-
-                        {(() => {
-                            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-                            var curSensor = this.props.grow.config.SENSORS[tIndex]
-                            if (!curSensor) {
-                                return
-                            }
-
-                            if (this.state.DAILY_AVGS[tIndex]) {
-                                return (
-                                    <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center', paddingBottom: '2px' }}>
-                                        <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600' }}>{Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10}</div>
-                                        <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600, marginTop: '2px' }}>{curSensor.unit}</div>
-                                    </div>
-                                )
-                            }
-                        })()}
-                    </div>
-
-
-                    <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#c77725', marginBottom: '1px', overflow: 'hidden' }}>
-                        <div className="Grow-Details-Main-Data-Time">
                             {(() => {
-                                var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                                var tIndex = this.props.sensorPIDS.indexOf(pid)
+                                var curSensor = this.props.grow.config.SENSORS[tIndex]
+                                if (!curSensor) {
+                                    return
+                                }
 
-                                if (this.state.DAILY_HIGHS_TIMES) {
-                                    var m = moment(this.state.DAILY_HIGHS_TIMES[tIndex])
-                                    return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#4b1a0a' }}>{m.format('HH:mm')}</div>
+                                if (this.state.DAILY_HIGHS) {
+
+                                    return (
+                                        <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                            <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10}</div>
+                                            <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
+                                        </div>
+                                    )
+
                                 }
                             })()}
                         </div>
 
-                        {(() => {
-                            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-                            var curSensor = this.props.grow.config.SENSORS[tIndex]
-                            if (!curSensor) {
-                                return
-                            }
+                        <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px', overflow: 'hidden' }}>
+                            <div className="Grow-Details-Main-Data-Time">
+                                {(() => {
+                                    var tIndex = this.props.sensorPIDS.indexOf(pid)
 
-                            if (this.state.DAILY_HIGHS) {
+                                    if (this.state.DAILY_LOWS_TIMES) {
+                                        var m = moment(this.state.DAILY_LOWS_TIMES[tIndex])
+                                        return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#20314e' }}>{m.format('HH:mm')}</div>
+                                    }
+                                })()}
+                            </div>
 
-                                return (
-                                    <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                                        <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10}</div>
-                                        <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
-                                    </div>
-                                )
-
-                            }
-                        })()}
-                    </div>
-
-                    <div className="Grow-Details-Main-Data-Data" style={{ backgroundColor: '#2584c7', marginBottom: '1px', overflow: 'hidden' }}>
-                        <div className="Grow-Details-Main-Data-Time">
                             {(() => {
-                                var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
+                                var tIndex = this.props.sensorPIDS.indexOf(pid)
+                                var curSensor = this.props.grow.config.SENSORS[tIndex]
+                                if (!curSensor) {
+                                    return
+                                }
 
-                                if (this.state.DAILY_LOWS_TIMES) {
-                                    var m = moment(this.state.DAILY_LOWS_TIMES[tIndex])
-                                    return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#20314e' }}>{m.format('HH:mm')}</div>
+                                if (this.state.DAILY_LOWS) {
+
+                                    return (
+                                        <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
+                                            <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10}</div>
+                                            <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
+                                        </div>
+                                    )
+
                                 }
                             })()}
                         </div>
-
-                        {(() => {
-                            var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-                            var curSensor = this.props.grow.config.SENSORS[tIndex]
-                            if (!curSensor) {
-                                return
-                            }
-
-                            if (this.state.DAILY_LOWS) {
-
-
-                                return (
-                                    <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
-                                        <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10}</div>
-                                        <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
-                                    </div>
-                                )
-
-                            }
-                        })()}
                     </div>
-                </div>
-            )
+                )
+            });
+
         }
-
-
-        );
 
 
 
@@ -590,7 +500,7 @@ class GrowDataDisplay extends Component {
                                 <div className="Component-Grow-Data-Display">
                                     <div className="Grow-Details-Headers-Display-Row">
                                         {(() => {
-                                            if (!this.props.activeLines) {
+                                            if (!this.props.activeLines || this.props.activeLines) {
                                                 return (
                                                     <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '12px', userSelect: 'none', width: '120px', maxWidth: '120px', display: 'flex', flexDirection: 'row' }}>
                                                         <div style={{ color: indicatorColor, marginLeft: '2px', marginRight: '2px', marginTop: '-1px' }}>

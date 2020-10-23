@@ -160,13 +160,6 @@ body {
   background-color: rgb(26, 26, 26);
 }
 
-#Grow-Details-Data-Display {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  background: #010f01;
-}
-
 .Grow-Data-Display {
   width: 100%;
 }

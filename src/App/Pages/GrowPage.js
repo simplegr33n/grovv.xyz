@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import '../../styles/App.css'
 
+import DisplayFunctions from '../_utils/DisplayFunctions.js'
+
 import GraphGrowPage from '../Components/_Pages/GrowPage/GraphGrowPage.js'
 import GrowDataDisplay from '../Components/_Pages/GrowPage/GrowDataDisplay.js'
 import GrowPageSettings from '../Components/_Pages/GrowPage/GrowPageSettings.js'
+
 
 
 import { AiFillControl } from 'react-icons/ai'
@@ -16,13 +19,10 @@ class GrowPage extends Component {
         super(props);
 
         this.state = {
-            SENSOR_PIDS: [],
-            SENSORS_INIT: false,
+            sensorPIDS: [],
 
-            ACTIVE_LINES: [],
+            activeLines: [],
             ACTIVE_INIT: false,
-
-            TABLE_INIT: false,
 
             SHOW_SETTINGS: false,
 
@@ -31,56 +31,31 @@ class GrowPage extends Component {
             graphSizeUpdated: 0 // init at 0
         };
 
+        this.displayFunctions = new DisplayFunctions()
     }
 
     componentDidMount() {
+        this.sensorAndLineInit()
 
-        if (this.props.processedData) {
+        if (this.props.processedData && this.props.processedData[this.props.grow.id]) {
+            this.dataLengthRef = this.props.processedData[this.props.grow.id].length
             this.setState({ processedData: this.props.processedData[this.props.grow.id] })
-        }
-
-        if (this.props.threeDayData) {
-            if (!this.props.threeDayData[this.props.grow.id]) {
-                return;
-            }
-
-            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
-
-            if (this.dataLengthRef !== dataLengthRef) {
-                this.dataLengthRef = dataLengthRef
-                this.initializeGrowPage()
-            } else if (!this.state.TABLE_INIT) {
-                // Gotta get this process in the first time for things to go smooth... not quite sure why.
-                this.dataLengthRef = dataLengthRef
-                this.initializeGrowPage()
-                this.setState({ TABLE_INIT: true })
-            }
         }
 
         this.calcGraphDimensions()
     }
 
     componentDidUpdate = () => {
-        if (this.state.processedData !== this.props.processedData[this.props.grow.id]) {
-            this.setState({ processedData: this.props.processedData[this.props.grow.id] })
+        if (this.props.grow !== this.state.ACTIVE_INIT) {
+            this.sensorAndLineInit()
         }
 
-        if (this.props.threeDayData) {
-            if (!this.props.threeDayData[this.props.grow.id]) {
-                return;
+        if (this.state.processedData !== this.props.processedData[this.props.grow.id]) {
+            if (this.dataLengthRef === this.props.processedData[this.props.grow.id].length) {
+                return
             }
-
-            var dataLengthRef = this.props.threeDayData[this.props.grow.id][this.props.threeDayData[this.props.grow.id].length - 1].length
-
-            if (this.dataLengthRef !== dataLengthRef) {
-                this.dataLengthRef = dataLengthRef
-                this.initializeGrowPage()
-            } else if (!this.state.TABLE_INIT) {
-                // Gotta get this process in the first time for things to go smooth... not quite sure why.
-                this.dataLengthRef = dataLengthRef
-                this.initializeGrowPage()
-                this.setState({ TABLE_INIT: true })
-            }
+            this.dataLengthRef = this.props.processedData[this.props.grow.id].length
+            this.setState({ processedData: this.props.processedData[this.props.grow.id] })
         }
 
         this.calcGraphDimensions()
@@ -102,37 +77,25 @@ class GrowPage extends Component {
         }
     }
 
-    initializeGrowPage = () => {
-        // INITIALIZING SENSOR INFO
-        var SENSOR_PIDS = []
-        if (this.state.SENSORS_INIT !== this.props.grow && this.props.grow.config.SENSORS !== this.state.SENSOR_PIDS) {
-            this.props.grow.config.SENSORS.forEach((sensor, key) => {
-
-                if (SENSOR_PIDS[key] !== sensor.PID) {
-                    SENSOR_PIDS[key] = sensor.PID
-                }
-            });
-
-            this.setState({
-                SENSOR_PIDS: SENSOR_PIDS
-            });
-
-            if (this.state.ACTIVE_INIT !== this.props.grow) {
-                this.setState({
-                    ACTIVE_LINES: SENSOR_PIDS,
-                    ACTIVE_INIT: this.props.grow
-                });
-            }
-        }
+    sensorAndLineInit = () => {
+        var sensorPIDS = []
+        var activeLines = []
+        this.props.grow.config.SENSORS.forEach((sensor, key) => {
+            sensorPIDS[key] = sensor.PID
+            activeLines[key] = sensor.PID
+        });
+        this.setState({
+            sensorPIDS: sensorPIDS,
+            activeLines: activeLines,
+            ACTIVE_INIT: this.props.grow
+        });
     }
 
+    toggleLine = (pid) => {
 
-    toggleLine = (rawPid) => {
-        var pid = rawPid.split("^")[0]
+        var tIndex = this.state.sensorPIDS.indexOf(pid)
 
-        var tIndex = this.state.SENSOR_PIDS.indexOf(pid)
-
-        var tActiveLines = this.state.ACTIVE_LINES
+        var tActiveLines = this.state.activeLines
 
         if (tActiveLines.includes(pid)) {
             tActiveLines[tIndex] = null
@@ -140,10 +103,9 @@ class GrowPage extends Component {
             tActiveLines[tIndex] = pid
         }
 
-        console.log("tactive", tActiveLines)
+        console.log("toggle active lines", tActiveLines)
 
-        this.setState({ ACTIVE_LINES: tActiveLines })
-        this.forceUpdate()
+        this.setState({ activeLines: tActiveLines })
     }
 
     openCloseSettings = () => {
@@ -156,35 +118,7 @@ class GrowPage extends Component {
 
     render() {
 
-        var indicatorColor = "#FFF"
-
-        if (this.props.liveGrowData && this.props.liveGrowData[this.props.grow.id]) {
-
-            var now = new Date().getTime();
-            var difference = now - this.props.liveGrowData[this.props.grow.id].time * 1000
-
-            if (difference > 10000000) {
-                indicatorColor = "#989e98"
-            } else if (difference > 300000) {
-                indicatorColor = "#fa360a"
-            } else if (difference > 60000) {
-                indicatorColor = "#facb23"
-            } else if (difference < 60000) {
-                indicatorColor = "#27d927"
-            }
-        }
-
-
-
-        // .Grow-Details-Page-Content {
-        //     display: flex;
-        //     min-height: 100%;
-        //     max-width: 100%;
-        //     overflow: hidden;
-        //     flex-direction: row;
-        //     flex-wrap: wrap;
-        //     flex: 1;
-        //   }
+        var indicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[this.props.grow.id])
 
         // MAIN RENDER RETURN
         return (
@@ -201,13 +135,13 @@ class GrowPage extends Component {
                         </div>
                     </div>
 
-                    <div style={{ position: 'relative', width: "100%", maxWidth: '100%', height: "70vh", minHeight: "70vh", background: "#000" }} ref={element => this.divRef = element}>
-                        <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} parentSize={this.state.graphElementSize} processedData={this.state.processedData} grow={this.props.grow} />
+                    <div style={{ position: 'relative', width: "100%", maxWidth: '100%', height: "64vh", minHeight: "64vh", background: "#000" }} ref={element => this.divRef = element}>
+                        <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} parentSize={this.state.graphElementSize} processedData={this.state.processedData} grow={this.props.grow} activeLines={this.state.activeLines} />
                     </div>
 
                     <div className="Grow-Details-Page-Panel">
                         <div id="Grow-Details-Data-Display">
-                            <GrowDataDisplay key={this.props.grow.id} grow={this.props.grow} toggleLine={this.toggleLine} threeDayData={this.props.threeDayData} liveGrowData={this.props.liveGrowData} user={this.props.user} activeLines={this.state.ACTIVE_LINES} />
+                            <GrowDataDisplay toggleLine={this.toggleLine} grow={this.props.grow} user={this.props.user} processedData={this.state.processedData} activeLines={this.state.activeLines} sensorPIDS={this.state.sensorPIDS} />
                         </div>
                     </div>
 
@@ -215,7 +149,7 @@ class GrowPage extends Component {
 
                 {(() => {
                     if (this.state.SHOW_SETTINGS) {
-                        return <GrowPageSettings grow={this.props.grow} refreshGrows={this.props.refreshGrows} close={this.openCloseSettings} />
+                        return <GrowPageSettings close={this.openCloseSettings} refreshGrows={this.props.refreshGrows} grow={this.props.grow} />
                     }
                 })()}
 

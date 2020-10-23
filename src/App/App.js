@@ -32,14 +32,10 @@ class App extends Component {
 		this.state = {
 			mainContent: 'signin', // signin, signup, main, journal, grows, etc.
 			UID: null,
-			username: '',
 			currentGrow: null,
 			displayWindow: 259200000, // 1800000, 10800000, 43200000, 86400000, 259200000
 
-			liveGrowData: [],
-
-			threeDayData: [],
-			combinedProcessedData: []
+			processedData: []
 		};
 
 		this.processingFunctions = new ProcessingFunctions()
@@ -52,95 +48,39 @@ class App extends Component {
 		this.firebase.auth.onAuthStateChanged((user) => {
 			if (user) {
 				this.setState({ UID: user.uid })
-				this.getUsername()
 
-				this.dbHelper.getUser(user.uid, this.setUser)
-				this.dbHelper.getUserGrows(this.setUserGrows) // currently grabbing B's hardcoded
+				this.processingFunctions.initializeApp(user.uid, this.appInitFunction, this.appUpdateFunction)
 			}
 		});
 
 	}
 
 	// //////////////
+	// Initialize App
+	// //////////////
+	appInitFunction = (data) => {
+		console.log("initApp", data)
+
+		this.setState({
+			displayWindow: data.displayWindow,
+			user: data.user,
+			userGrows: data.userGrows,
+			currentGrow: data.userGrows[0], //temporary!! TODO> remove
+			mainContent: 'grows'
+		})
+	}
+
+	appUpdateFunction = (data) => {
+		this.setState({
+			processedData: data.processedData
+		})
+	}
+
+
+
+	// //////////////
 	// State setting
 	// //////////////
-	setUser = (u) => {
-		this.setState({
-			user: u,
-			displayWindow: u.PREFS.GRAPHS.AllGraph.timeWindow
-		});
-	}
-
-	setUserGrows = (userGrows) => {
-		userGrows.forEach((grow) => {
-			this.dbHelper.getThreeDayData(grow.id, this.setThreeDayData)
-		})
-
-		this.setState({ userGrows: userGrows });
-
-		this.dbHelper.getLiveGrowData(userGrows, this.setLiveGrowData)
-	}
-
-	refreshGrows = (newGrowConfig) => { // For config settings changes..
-		var tempGrow = this.state.currentGrow
-		tempGrow.config = newGrowConfig
-
-		this.setState({ currentGrow: tempGrow });
-
-	}
-
-	setUserJournals = (userJournals) => {
-		this.setState({ userJournals: userJournals });
-	}
-
-	setLiveGrowData = (dataID, newGrowData) => {
-		if (newGrowData === null) {
-			return;
-		}
-		var currentData = this.state.liveGrowData
-		currentData[dataID.toString()] = newGrowData
-
-		this.setState({ liveGrowData: currentData });
-	}
-
-	setThreeDayData = (growDeprecate, day, data) => {
-		var tempData = this.state.threeDayData
-
-		var tempThreeDayData = []
-
-		day = parseInt(day)
-
-		if (tempData[growDeprecate]) {
-			tempThreeDayData = tempData[growDeprecate]
-		}
-
-		if (tempThreeDayData[day]) {
-			tempThreeDayData[day] = null
-		}
-
-		tempThreeDayData[day] = data
-
-		tempData[growDeprecate] = tempThreeDayData
-
-		this.setState({ threeDayData: tempData });
-
-		this.processingFunctions.concatAllGrowsData(this.concatAllData, tempData, this.state.userGrows, this.dataCheckLengths, this.setAllGrowsConcat)
-	}
-
-	setAllGrowsConcat = (concatData, newCheckLengths) => {
-		this.dataCheckLengths = newCheckLengths
-		this.concatAllData = concatData
-
-		this.processingFunctions.processAllGrowsData(this.concatAllData, this.state.userGrows, this.setAllGrowsProcessed, this.state.displayWindow)
-	}
-
-	setAllGrowsProcessed = (combinedProcessedData, processedData) => {
-		this.setState({
-			combinedProcessedData: combinedProcessedData,
-			processedData: processedData
-		});
-	}
-
 	setDisplayWindow = (displayWindow) => {
 		this.setState({
 			displayWindow: displayWindow
@@ -168,17 +108,16 @@ class App extends Component {
 	}
 
 	handleSignOut = () => {
-		this.setState({
-			UID: null
-		});
-		this.firebase.auth.signOut().then(function () {
-			// Sign-out successful.
-			console.log(`signed out`)
-			window.location.reload()
-		}).catch(function (error) {
-			// An error happened.
-			console.log(`Error signing out: ${error}`)
-		});
+		this.setState({ UID: null });
+
+		this.dbHelper.signOut()
+	}
+
+	refreshGrows = (newGrowConfig) => { // For config settings changes..
+		var tempGrow = this.state.currentGrow
+		tempGrow.config = newGrowConfig
+
+		this.setState({ currentGrow: tempGrow });
 	}
 
 
@@ -191,25 +130,6 @@ class App extends Component {
 		this.dbHelper.setUser(u)
 	}
 
-	// ////////////////
-	// Firebase Getting
-	// ////////////////
-	getUsername = () => {
-		// Users location in tree
-		var ref = this.firebase.db.ref().child('users').child(this.state.UID)
-
-		ref.on("value", (snapshot) => {
-			this.setState({ username: snapshot.val().username });
-		}, function (errorObject) {
-			console.log("The username read failed: " + errorObject.code);
-		});
-	}
-
-
-	// ////////////////
-	// PROCESSING 
-	// ////////////////
-
 
 
 	render() {
@@ -220,27 +140,25 @@ class App extends Component {
 
 					{(() => {
 						if (this.state.UID) {
-							return <AppBar mainContent={this.state.mainContent} setMainContent={this.setMainContent} setGrow={this.setGrow} handleSignOut={this.handleSignOut} liveGrowData={this.state.liveGrowData} userGrows={this.state.userGrows} />
+							return <AppBar setMainContent={this.setMainContent} setGrow={this.setGrow} handleSignOut={this.handleSignOut} userGrows={this.state.userGrows} processedData={this.state.processedData} />
 						}
 					})()}
 
 					<div id="App-Body-Content">
 						{(() => {
-							if (this.state.UID && this.state.userGrows && this.state.user && this.state.threeDayData && this.state.liveGrowData) {
+							if (this.state.UID && this.state.userGrows && this.state.user && this.state.processedData && this.state.currentGrow) {
 								switch (this.state.mainContent) {
 									case 'grows':
-										return <GrowPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} refreshGrows={this.refreshGrows} processedData={this.state.processedData} openMainPage={this.props.openMainPage} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} user={this.state.user} userGrows={this.state.userGrows} />
+										return <GrowPage setDisplayWindow={this.setDisplayWindow} refreshGrows={this.refreshGrows} userGrows={this.state.userGrows} processedData={this.state.processedData} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} user={this.state.user} />
 									case 'lifetime':
 										return <LifetimePage user={this.state.user} userGrows={this.state.userGrows} />
 									case 'feed':
 										return <FeedPage user={this.state.user} />
 									case 'graphs':
-										return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} combinedProcessedData={this.state.combinedProcessedData} userGrows={this.state.userGrows} user={this.state.user} threeDayData={this.state.threeDayData} liveGrowData={this.state.liveGrowData} />
+										return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
 									case 'tobytiles':
 										return <TobyTiles />
-									// todo: return to graphs when possible.
-									default:
-										return <FeedPage user={this.state.user} />
+
 								}
 							} else {
 								switch (this.state.mainContent) {

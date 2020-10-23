@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import '../../../styles/App.css'
 
+import DisplayFunctions from '../../_utils/DisplayFunctions.js'
+
 import cornerLogo from '../../../assets/corner-logo.png'
 import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
 
@@ -18,14 +20,11 @@ class AppBar extends Component {
 
         };
 
+        this.displayFunctions = new DisplayFunctions()
     }
 
 
     setMainContent = (e) => {
-        if (e.currentTarget.getAttribute('data-value') === 'graphs') {
-            alert("broken")
-            return
-        }
         this.props.setMainContent(e.currentTarget.getAttribute('data-value'))
     }
 
@@ -53,13 +52,13 @@ class AppBar extends Component {
             renderedLiveGrowButtons = this.props.userGrows.map((grow) => {
 
                 var liveButtonData = null
-                if (this.props.liveGrowData[grow.id]) {
-                    liveButtonData = this.props.liveGrowData[grow.id]
+                if (this.props.processedData && this.props.processedData[grow.id]) {
+                    liveButtonData = this.props.processedData[grow.id][this.props.processedData[grow.id].length - 1]
                 }
+                var liveButtonIndicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[grow.id])
 
                 var brokenName = grow.name.split(" ")
                 var acroName = ""
-
                 if (grow.name.length >= 4) {
                     brokenName.forEach((piece) => {
                         acroName += piece.charAt(0)
@@ -68,35 +67,15 @@ class AppBar extends Component {
                     acroName = grow.name
                 }
 
-                var indicatorColor = "#FF0000"
-
-                if (this.props.liveGrowData[grow.id]) {
-                    var now = new Date().getTime();
-                    var difference = now - this.props.liveGrowData[grow.id].time * 1000
-
-                    if (difference > 10000000) {
-                        indicatorColor = "#989e98"
-                    } else if (difference > 300000) {
-                        indicatorColor = "#fa360a"
-                    } else if (difference > 60000) {
-                        indicatorColor = "#facb23"
-                    } else if (difference < 60000) {
-                        indicatorColor = "#27d927"
-                    }
-                }
-
-
 
                 return (
                     <div className="App-Bar-Button-Grow" key={grow.id} onClick={this.setGrow} data-value={grow.id}>
                         <div className="App-Bar-Button-Updated" data-value={grow.id}>
-                            <div style={{ color: indicatorColor, marginLeft: '1px', fontSize: '10px' }}>
-                                ⬤
-                            </div>
+                            <div style={{ color: liveButtonIndicatorColor, marginLeft: '1px', fontSize: '10px' }}>⬤</div>
                         </div>
-                        <div className="App-Bar-Button-Grow-Name" data-value={grow.id}>
-                            {acroName}
-                        </div>
+
+                        <div className="App-Bar-Button-Grow-Name" data-value={grow.id}>{acroName}</div>
+
                         {(() => {
                             if (liveButtonData && liveButtonData.s1t) {
                                 return (
@@ -117,7 +96,6 @@ class AppBar extends Component {
                                 )
                             }
                         })()}
-
                     </div>
                 )
             })
@@ -140,7 +118,7 @@ class AppBar extends Component {
                     <FaPrescriptionBottle style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
-                <div style={{ flex: 1 }} ></div>
+                <div style={{ flex: 1 }} />
 
                 {/* SubMenu */}
                 <div className="App-Bar-Dropdown-Icon">
@@ -168,8 +146,6 @@ class AppBar extends Component {
                                     style={{ flex: 1, height: "60%", padding: '20%' }} />
                             </div>
                         </div>
-
-
 
 
                         <div className="App-Bar-Submenu-Logout" onClick={this.handleSignOut}>

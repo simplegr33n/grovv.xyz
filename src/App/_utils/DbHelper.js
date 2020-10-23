@@ -78,26 +78,8 @@ class DbHelper {
 
 
     // .......... //
-    // LIVE DATA  //
+    //    DATA    //
     // .......... //
-    // Get live data from firebase
-    // TODO: FIx when database is changed
-    async getLiveGrowData(userGrows, setData) {
-
-        userGrows.forEach((grow) => {
-            // Grow Live Data in firebase
-            var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('live_data')
-
-            ref.on('value', (snapshot) => {
-                setData(grow.id, snapshot.val())
-            }, function (errorObject) {
-                console.log("follow " + grow + " live failed: " + errorObject.code);
-            });
-        })
-    }
-
-
-
     // ....... //
     // GRAPHS  //
     // ....... //
@@ -230,7 +212,7 @@ class DbHelper {
     // ........... //
 
     // Get live data from firebase
-    getUserGrows(setData) {
+    getUserGrows(userID, setData) {
 
         var ref = this.firebase.db.ref().child('users').child(this.userID).child('grows')
 
@@ -311,15 +293,35 @@ class DbHelper {
         ref.push(entry)
     }
 
-    // .............. //
+    // ............... //
     //   DEVICE RESET  //
-    // .............. //
+    // ............... //
 
 
     resetDevice(UID, growID) {
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config-hardware').child('reset')
         ref.set(1)
     }
+
+
+    // .............. //
+    //   SIGN OUT     //
+    // .............. //
+
+
+    signOut() {
+        this.firebase.auth.signOut().then(function () {
+            // Sign-out successful.
+            console.log(`signed out`)
+            window.location.reload()
+        }).catch(function (error) {
+            // An error happened.
+            console.log(`Error signing out: ${error}`)
+        });
+    }
+
+
+
 
 }
 
