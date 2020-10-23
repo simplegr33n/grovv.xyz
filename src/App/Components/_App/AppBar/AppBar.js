@@ -22,6 +22,10 @@ class AppBar extends Component {
 
 
     setMainContent = (e) => {
+        if (e.currentTarget.getAttribute('data-value') === 'graphs') {
+            alert("broken")
+            return
+        }
         this.props.setMainContent(e.currentTarget.getAttribute('data-value'))
     }
 

@@ -193,7 +193,7 @@ class GraphAllPage extends Component {
 
                     <select onChange={this.toggleWindow
                     } id="AllGraph-Time-Scale" defaultValue={defaultWindow} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
-                        <option value={1800000}>&#189;h</option>
+                        <option value={1800000}>&#189;ʰ</option>
                         <option value={10800000}>3h</option>
                         <option value={43200000}>12h</option>
                         <option value={86400000}>24h</option>
