@@ -112,10 +112,10 @@ class ProcessingFunctions {
         this.dataCheckLengths = newCheckLengths
         this.concatAllData = concatData
 
-        this.processAllGrowsData(this.concatAllData, this.appUpdateObject.userGrows, this.setAllGrowsProcessed, this.appUpdateObject.displayWindow)
+        this.processAllGrowsData(this.appUpdateObject.userGrows, this.appUpdateObject.displayWindow)
     }
 
-    processAllGrowsData = (superData, userGrows, setAllGrowsProcessed, window = 10800000) => {
+    processAllGrowsData = (userGrows, window = 10800000) => {
 
         var now = Math.floor(new Date().getTime() / 1000)
         var processedData = []
@@ -127,14 +127,14 @@ class ProcessingFunctions {
 
         //forEach
         userGrows.forEach((grow) => {
-            if (!superData[grow.id]) {
+            if (!this.concatAllData[grow.id]) {
                 return
             }
 
             var subProcessedData = []
 
             var i = -1
-            superData[grow.id].forEach((dataPoint) => {
+            this.concatAllData[grow.id].forEach((dataPoint) => {
 
                 var subCombined = {}
 

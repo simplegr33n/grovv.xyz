@@ -65,8 +65,8 @@ class App extends Component {
 			displayWindow: data.displayWindow,
 			user: data.user,
 			userGrows: data.userGrows,
-			currentGrow: data.userGrows[0], //temporary!! TODO> remove
-			mainContent: 'grows'
+			// currentGrow: data.userGrows[0], //temporary!! TODO> remove
+			mainContent: 'graphs'
 		})
 	}
 
@@ -86,11 +86,12 @@ class App extends Component {
 			displayWindow: displayWindow
 		});
 
-		this.processingFunctions.processAllGrowsData(this.concatAllData, this.state.userGrows, this.setAllGrowsProcessed, this.state.displayWindow)
+		this.processingFunctions.processAllGrowsData(this.state.userGrows, displayWindow)
 
 		var tempUser = this.state.user
 		tempUser.PREFS.GRAPHS.AllGraph.timeWindow = displayWindow
-		this.postFirebaseUser(tempUser)
+		this.setState({ user: tempUser });
+		this.dbHelper.setUser(tempUser)
 	}
 
 	setMainContent = (setValue) => {
@@ -121,16 +122,6 @@ class App extends Component {
 	}
 
 
-	// ////////////////
-	// Firebase Posting
-	// ////////////////
-	postFirebaseUser = (u) => {
-		this.setState({ user: u });
-
-		this.dbHelper.setUser(u)
-	}
-
-
 
 	render() {
 
@@ -146,7 +137,7 @@ class App extends Component {
 
 					<div id="App-Body-Content">
 						{(() => {
-							if (this.state.UID && this.state.userGrows && this.state.user && this.state.processedData && this.state.currentGrow) {
+							if (this.state.UID && this.state.userGrows && this.state.user && this.state.processedData) {
 								switch (this.state.mainContent) {
 									case 'grows':
 										return <GrowPage setDisplayWindow={this.setDisplayWindow} refreshGrows={this.refreshGrows} userGrows={this.state.userGrows} processedData={this.state.processedData} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} user={this.state.user} />

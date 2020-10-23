@@ -54,19 +54,15 @@ class AllPage extends Component {
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', minWidth: '100%' }}>
-                <div style={{ width: "100%", height: "60vh", minHeight: "60vh", background: "#000" }} ref={element => this.divRef = element} >
 
-
-
-                    {/* {(() => {
+                {/* <div style={{ width: "100%", height: "60vh", minHeight: "60vh", background: "#000" }} ref={element => this.divRef = element} >
+                    {(() => {
                         if (this.state.growIDs && this.state.groupedSensors) {
                             return <GraphAllPage processedData={this.props.processedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
                         }
-                    })()} */}
+                    })()}
+                </div > */}
 
-
-
-                </div >
                 <div className="Grow-Details-Page-Panel">
                     <div style={{ width: "100%", display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                         {renderGrowDataDisplays}

@@ -232,7 +232,7 @@ class GraphGrowPage extends Component {
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('MMM DDᵗʰ - HH:mm')} />
 
-                        <YAxis yAxisId="temperature" orientation="left" type="number" allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="temperature" orientation="left" type="number" width={20} allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="pressure" orientation="right" hide={true} domain={[95]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "#false" }} />
@@ -252,9 +252,9 @@ class GraphGrowPage extends Component {
                 {renderDayGraph}
 
                 {/* Time Scale Select... */}
-                <div style={{ width: '39px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '2px', top: '18px' }}>
+                <div style={{ width: '42px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '28px', top: '2px' }}>
 
-                    <select onChange={this.toggleWindow} id="GraphSensors-Time-Scale" defaultValue={parseInt(this.props.displayWindow)} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
+                    <select onChange={this.toggleWindow} id="GraphSensors-Time-Scale" defaultValue={parseInt(this.props.displayWindow)} style={{ fontSize: '10px', maxWidth: "74px", height: '20px' }} >
                         <option value={1800000}>&#189;ʰ</option>
                         <option value={10800000}>3ʰ</option>
                         <option value={43200000}>12ʰ</option>

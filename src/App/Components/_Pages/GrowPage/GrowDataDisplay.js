@@ -238,14 +238,10 @@ class GrowDataDisplay extends Component {
         var sensorInfoRows = null
         if (this.props.sensorPIDS && this.state.liveData) {
 
-            console.log('we here..', this.props.sensorPIDS)
-
             sensorInfoRows = this.props.sensorPIDS.map((pid) => {
                 var tIndex = this.props.sensorPIDS.indexOf(pid)
                 var curSensor = this.props.grow.config.SENSORS[tIndex]
                 var lineKey = pid + "^" + this.props.grow.id
-
-                console.log('we here..', curSensor)
 
                 var setOpacity = 1
                 var setPaddingTop = '5px'
@@ -265,7 +261,7 @@ class GrowDataDisplay extends Component {
                             }
 
                             return (
-                                <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', cursor: 'pointer', marginBottom: '1px', background: '#1c241d', color: this.props.grow.config.SENSORS[tIndex].color }}  >
+                                <div data-value={pid} key={lineKey} onClick={this.toggleLine} style={{ width: '120px', maxHeight: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', cursor: 'pointer', marginBottom: '1px', background: '#131412', color: this.props.grow.config.SENSORS[tIndex].color }}  >
 
                                     <div style={{ paddingTop: setPaddingTop, fontSize: '12px', lineHeight: '12px', overflow: 'hidden', fontWeight: '500', textAlign: 'right' }} > {curSensor.name}</div>
 
