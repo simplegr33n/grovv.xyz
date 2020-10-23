@@ -175,7 +175,6 @@ class GraphGrowPage extends Component {
 
 
     render() {
-
         var now = new Date().getTime()
 
         const lineItems = this.props.grow.config.SENSORS.map((sensor) =>
@@ -193,21 +192,18 @@ class GraphGrowPage extends Component {
                 }
 
                 if (sensor.type === "airTemp" || sensor.type === "waterTemp") {
-                    return <Line yAxisId="temperature" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="temperature" type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.type === "humidifier" || sensor.type === "fan" || sensor.type === "humidity") {
-                    return <Line yAxisId="percent" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="percent" type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.unit === "ᵖᵖᵐ") {
-                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="ppm" type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.unit === "ᵖᵖᵇ") {
-                    return <Line yAxisId="ppb" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="ppb" type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else if (sensor.unit === "kPa") {
-                    return <Line yAxisId="pressure" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="pressure" type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 } else {
-                    return <Line yAxisId="ppm" connectNulls={true} type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
+                    return <Line yAxisId="ppm" type="monotone" name={lineName} dataKey={lineKey} key={lineKey} stroke={sensor.color} strokeWidth={sensor.thickness} dot={false} />
                 }
-
-
-
 
             })()
         );
@@ -255,14 +251,14 @@ class GraphGrowPage extends Component {
                 {renderDayGraph}
 
                 {/* Time Scale Select... */}
-                <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '2px', top: '18px' }}>
+                <div style={{ width: '39px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '2px', top: '18px' }}>
 
                     <select onChange={this.toggleWindow} id="GraphSensors-Time-Scale" defaultValue={parseInt(this.props.displayWindow)} style={{ fontSize: '0.8em', maxWidth: "74px", height: '20px' }} >
-                        <option value={1800000}>&#189;h</option>
-                        <option value={10800000}>3h</option>
-                        <option value={43200000}>12h</option>
-                        <option value={86400000}>24h</option>
-                        <option value={259200000}>72h</option>
+                        <option value={1800000}>&#189;ʰ</option>
+                        <option value={10800000}>3ʰ</option>
+                        <option value={43200000}>12ʰ</option>
+                        <option value={86400000}>24ʰ</option>
+                        <option value={259200000}>72ʰ</option>
                     </select>
 
                 </div>

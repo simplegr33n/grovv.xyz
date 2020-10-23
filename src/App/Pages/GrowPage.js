@@ -34,6 +34,11 @@ class GrowPage extends Component {
     }
 
     componentDidMount() {
+
+        if (this.props.processedData) {
+            this.setState({ processedData: this.props.processedData[this.props.grow.id] })
+        }
+
         if (this.props.threeDayData) {
             if (!this.props.threeDayData[this.props.grow.id]) {
                 return;
@@ -56,6 +61,9 @@ class GrowPage extends Component {
     }
 
     componentDidUpdate = () => {
+        if (this.state.processedData !== this.props.processedData[this.props.grow.id]) {
+            this.setState({ processedData: this.props.processedData[this.props.grow.id] })
+        }
 
         if (this.props.threeDayData) {
             if (!this.props.threeDayData[this.props.grow.id]) {
@@ -194,7 +202,7 @@ class GrowPage extends Component {
                     </div>
 
                     <div style={{ position: 'relative', width: "100%", maxWidth: '100%', height: "70vh", minHeight: "70vh", background: "#000" }} ref={element => this.divRef = element}>
-                        <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} parentSize={this.state.graphElementSize} processedData={this.props.processedData} grow={this.props.grow} />
+                        <GraphGrowPage setDisplayWindow={this.props.setDisplayWindow} displayWindow={this.props.displayWindow} activeLines={this.state.ACTIVE_LINES} parentSize={this.state.graphElementSize} processedData={this.state.processedData} grow={this.props.grow} />
                     </div>
 
                     <div className="Grow-Details-Page-Panel">
