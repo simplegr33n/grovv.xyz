@@ -49,8 +49,6 @@ class ProcessingFunctions {
         }
 
         var growProcessedData = []
-
-        //forEach
         this.appUpdateObject.userGrows.forEach((grow) => {
             if (!rawData[grow.id]) {
                 return
@@ -70,13 +68,8 @@ class ProcessingFunctions {
             growProcessedData[grow.id] = subProcessedData
         })
 
+        // appUpdateObject construction complete
         this.appUpdateObject['processedData'] = growProcessedData
-        this.setAllGrowsProcessed()
-    }
-
-    setAllGrowsProcessed = () => {
-
-
 
         if (this.APP_INITIALIZED) {
             this.appUpdateFunction(this.appUpdateObject)

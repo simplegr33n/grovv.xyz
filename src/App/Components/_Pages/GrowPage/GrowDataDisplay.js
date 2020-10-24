@@ -400,7 +400,7 @@ class GrowDataDisplay extends Component {
                                     return
                                 }
 
-                                if (this.state.DAILY_AVGS[tIndex]) {
+                                if (this.state.DAILY_AVGS && this.state.DAILY_AVGS[tIndex]) {
                                     return (
                                         <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center', paddingBottom: '2px' }}>
                                             <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600' }}>{Math.round(this.state.DAILY_AVGS[tIndex] * 10) / 10}</div>

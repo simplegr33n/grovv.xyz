@@ -50,13 +50,16 @@ class GrowPage extends Component {
             this.sensorAndLineInit()
         }
 
-        if (this.state.processedData !== this.props.processedData[this.props.grow.id]) {
-            if (this.dataLengthRef === this.props.processedData[this.props.grow.id].length) {
-                return
+        if (this.props.processedData[this.props.grow.id]) {
+            if (this.state.processedData !== this.props.processedData[this.props.grow.id]) {
+                if ((this.props.processedData[this.props.grow.id]) && this.dataLengthRef === this.props.processedData[this.props.grow.id].length) {
+                    return
+                }
+                this.dataLengthRef = this.props.processedData[this.props.grow.id].length
+                this.setState({ processedData: this.props.processedData[this.props.grow.id] })
             }
-            this.dataLengthRef = this.props.processedData[this.props.grow.id].length
-            this.setState({ processedData: this.props.processedData[this.props.grow.id] })
         }
+
 
         this.calcGraphDimensions()
     }
