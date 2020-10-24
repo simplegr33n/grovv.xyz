@@ -38,10 +38,10 @@ class DisplayFunctions {
     /////////////////////
     // Grow Active? Color
     /////////////////////
-    returnActiveIndicatorColor = (processedData, growID) => {
-        if (!growID && processedData && processedData[processedData.length - 1]) {
+    returnActiveIndicatorColor = (processedData) => {
+        if (processedData && processedData[processedData.length - 1]) {
             var now = new Date().getTime();
-            var difference = now - processedData[processedData.length - 1].time * 1000
+            var difference = (now / 1000) - processedData[processedData.length - 1].time
 
             if (difference > 10000000) {
                 return "#989e98"

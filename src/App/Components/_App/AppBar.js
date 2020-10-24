@@ -55,10 +55,8 @@ class AppBar extends Component {
                 if (this.props.processedData && this.props.processedData[grow.id]) {
                     liveButtonData = this.props.processedData[grow.id][this.props.processedData[grow.id].length - 1]
                 }
-                var liveButtonIndicatorColor = null
-                if (this.props.processedData) {
-                    this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[grow.id])
-                }
+                var liveButtonIndicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[grow.id])
+
                 var brokenName = grow.name.split(" ")
                 var acroName = ""
                 if (grow.name.length >= 4) {

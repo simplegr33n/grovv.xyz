@@ -81,8 +81,6 @@ class GrowDataDisplay extends Component {
 
     processGrowData = (preProcessedData) => {
 
-        console.log("GrowDataDisplay[" + this.props.grow.id + "] processing length:", preProcessedData.length)
-
         var now = new Date().valueOf()
 
         var DAILY_HIGHS = []
@@ -419,9 +417,9 @@ class GrowDataDisplay extends Component {
                                 {(() => {
                                     var tIndex = this.props.sensorPIDS.indexOf(pid)
 
-                                    if (this.state.DAILY_HIGHS_TIMES) {
-                                        var m = moment(this.state.DAILY_HIGHS_TIMES[tIndex])
-                                        return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#4b1a0a' }}>{m.format('HH:mm')}</div>
+                                    if (this.state.DAILY_HIGHS_TIMES && this.state.DAILY_HIGHS_TIMES[tIndex]) {
+                                        var time = new Date(this.state.DAILY_HIGHS_TIMES[tIndex])
+                                        return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#4b1a0a' }}>{time.getHours()}:{(time.getMinutes() < 10 ? '0' : '')}{time.getMinutes()}</div>
                                     }
                                 })()}
                             </div>
@@ -433,15 +431,13 @@ class GrowDataDisplay extends Component {
                                     return
                                 }
 
-                                if (this.state.DAILY_HIGHS) {
-
+                                if (this.state.DAILY_HIGHS && this.state.DAILY_HIGHS[tIndex]) {
                                     return (
                                         <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
                                             <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_HIGHS[tIndex] * 10) / 10}</div>
                                             <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
                                         </div>
                                     )
-
                                 }
                             })()}
                         </div>
@@ -451,9 +447,9 @@ class GrowDataDisplay extends Component {
                                 {(() => {
                                     var tIndex = this.props.sensorPIDS.indexOf(pid)
 
-                                    if (this.state.DAILY_LOWS_TIMES) {
-                                        var m = moment(this.state.DAILY_LOWS_TIMES[tIndex])
-                                        return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#20314e' }}>{m.format('HH:mm')}</div>
+                                    if (this.state.DAILY_LOWS_TIMES && this.state.DAILY_LOWS_TIMES[tIndex]) {
+                                        var time = new Date(this.state.DAILY_LOWS_TIMES[tIndex])
+                                        return <div style={{ fontSize: '9px', userSelect: 'none', textAlign: 'right', fontWeight: '200', background: '#20314e' }}>{time.getHours()}:{(time.getMinutes() < 10 ? '0' : '')}{time.getMinutes()}</div>
                                     }
                                 })()}
                             </div>
@@ -465,15 +461,13 @@ class GrowDataDisplay extends Component {
                                     return
                                 }
 
-                                if (this.state.DAILY_LOWS) {
-
+                                if (this.state.DAILY_LOWS && this.state.DAILY_LOWS[tIndex]) {
                                     return (
                                         <div style={{ userSelect: 'none', flex: 1, display: 'flex', justifyContent: 'center' }}>
                                             <div style={{ fontSize: '16px', userSelect: 'none', display: 'flex', fontWeight: '600', paddingBottom: '2px' }}>{Math.round(this.state.DAILY_LOWS[tIndex] * 10) / 10}</div>
                                             <div style={{ fontSize: '11px', userSelect: 'none', display: 'flex', fontWeight: 600 }}>{curSensor.unit}</div>
                                         </div>
                                     )
-
                                 }
                             })()}
                         </div>

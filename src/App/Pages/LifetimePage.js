@@ -17,7 +17,7 @@ class LifetimePage extends Component {
             graphSizeUpdated: 0, // init at 0
 
             // TEMP HERE -- for getting lifetime data to process
-            growID: 'EC1_0__FC:F5:C4:96:8C:A0', // hardcoded for now // 'AQM1_0__48:3F:DA:77:31:CA' // 'EC1_0__D8:F1:5B:10:AB:04' // 'EC1_0__FC:F5:C4:96:8C:A0'
+            growID: 'EC1_0__D8:F1:5B:10:AB:04', // hardcoded for now // 'AQM1_0__48:3F:DA:77:31:CA' // 'EC1_0__D8:F1:5B:10:AB:04' // 'EC1_0__FC:F5:C4:96:8C:A0'
             year: '2020',
             month: '10',
         };

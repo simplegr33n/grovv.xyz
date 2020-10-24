@@ -10,21 +10,11 @@ class ProcessingFunctions {
         this.appUpdateFunction = null
         this.appUpdateObject = []
 
-        this.threeDayData = []
-        this.concatAllData = []
-        this.dataCheckLengths = []
-        this.previousDataCheckLengths = []
-
-
-        this.rawData = []
-        this.rawDataLengths = []
-        this.processedData = []
-
     }
 
-    // //////////////////////////
-    // App Initializing Functions
-    // //////////////////////////
+    // ///////////////////////////////////////
+    // App Init Functions (inc. data updating)
+    // ///////////////////////////////////////
     initializeApp = (userID, appInitFunction, appUpdateFunction) => {
         // Set Init and Update functions
         this.appInitFunction = appInitFunction
@@ -46,18 +36,11 @@ class ProcessingFunctions {
         this.appUpdateObject['userGrows'] = userGrows
 
         userGrows.forEach((grow) => {
-            this.dbHelper.getThreeDayData(grow.id, this.updateThreeDayData)
+            this.dbHelper.getThreeDayData(grow.id, this.processAllGrowsData)
         })
     }
 
-
-    updateThreeDayData = (data) => {
-        this.rawData = data
-
-        this.processAllGrowsData()
-    }
-
-    processAllGrowsData = (window = 10800000) => {
+    processAllGrowsData = (rawData, window = 10800000) => {
         var now = Math.floor(new Date().getTime() / 1000)
 
         var reducerValue = Math.round(window / 10800000)
@@ -65,19 +48,18 @@ class ProcessingFunctions {
             reducerValue = 1
         }
 
+        var growProcessedData = []
+
         //forEach
         this.appUpdateObject.userGrows.forEach((grow) => {
-            if (!this.rawData[grow.id]) {
+            if (!rawData[grow.id]) {
                 return
             }
 
             var subProcessedData = []
-
             var i = -1
-            this.rawData[grow.id].forEach((dataPoint) => {
-
+            rawData[grow.id].forEach((dataPoint) => {
                 if (now - dataPoint.time < window) {
-
                     i++;
                     if (i === 0 || i % reducerValue === 0) {
                         subProcessedData[subProcessedData.length] = dataPoint
@@ -85,25 +67,22 @@ class ProcessingFunctions {
                 }
             })
 
-            this.processedData[grow.id] = subProcessedData
+            growProcessedData[grow.id] = subProcessedData
         })
 
+        this.appUpdateObject['processedData'] = growProcessedData
         this.setAllGrowsProcessed()
     }
 
     setAllGrowsProcessed = () => {
-        this.appUpdateObject['processedData'] = this.processedData
-        this.appUpdateObject['dataCheckLengths'] = this.dataCheckLengths
 
-        if (this.dataCheckLengths !== this.previousDataCheckLengths) {
-            this.previousDataCheckLengths = this.dataCheckLengths
 
-            if (this.APP_INITIALIZED) {
-                this.appUpdateFunction(this.appUpdateObject)
-            } else {
-                this.APP_INITIALIZED = true
-                this.appInitFunction(this.appUpdateObject)
-            }
+
+        if (this.APP_INITIALIZED) {
+            this.appUpdateFunction(this.appUpdateObject)
+        } else {
+            this.APP_INITIALIZED = true
+            this.appInitFunction(this.appUpdateObject)
         }
     }
 

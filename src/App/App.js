@@ -69,17 +69,15 @@ class App extends Component {
 			// currentGrow: data.userGrows[0], //temporary!! TODO> remove
 			mainContent: 'graphs'
 		})
-
-		console.log("what'sthis?", data.processedData)
 	}
 
 	appUpdateFunction = (data) => {
-		console.log("update App", data)
+		console.log("update App")
+
 		this.setState({
 			processedData: data.processedData
 		})
 
-		console.log("whUPDATes?", data.processedData)
 	}
 
 
