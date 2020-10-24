@@ -80,6 +80,7 @@ class DbHelper {
     // ....... //
 
     // Get 3 day data window from firebase
+    // CURRENTLY DISABLED
     getThreeDayData(growID, updateThreeDayData) {
         // Get 2 previous days of data
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
@@ -111,6 +112,10 @@ class DbHelper {
             }
             days[days.length] = tempDay
         }
+        if ((dy.toString().length < 2)) {
+            dy = '0' + dy
+        }
+        days[days.length] = dy
 
         days.forEach((day) => {
             ref.child(date.getFullYear()).child(month).child(day).on('value', (snapshot) => {
@@ -126,10 +131,10 @@ class DbHelper {
         });
 
         // Then set listeners for current day data
-        this.getDaysHoursData(growID, updateThreeDayData, month)
+        this.getCurrentData(growID, updateThreeDayData, month)
     }
 
-    getDaysHoursData(growID, updateThreeDayData, month) {
+    getOneDayData(growID, updateThreeDayData) {
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
 
         if (!this.runningData[growID]) {
@@ -137,12 +142,14 @@ class DbHelper {
         }
 
         var date = new Date();
+        var month = (date.getMonth() + 1).toString()
+        if (month.length < 2) {
+            month = '0' + month
+        }
         var day = date.getDate()
         if ((day.toString().length < 2)) {
             day = '0' + day
         }
-
-        console.log("pre", this.runningData)
 
         var i = 0
         while (i < date.getHours()) {
@@ -170,17 +177,32 @@ class DbHelper {
             day = '0' + day
         }
 
+        //sort time in day before children get added
+        this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
         ref.child(date.getFullYear()).child(month).child(day).child(date.getHours()).on('child_added', (snapshot) => {
+
+
 
             var dataPoint = snapshot.val()
             dataPoint.time = dataPoint.time * 1000
-            this.runningData[growID][this.runningData[growID].length] = dataPoint
 
-            //sort time in day
-            this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
+            if (this.runningData[growID][this.runningData[growID].length - 1] < dataPoint.time) {
+                this.runningData[growID][this.runningData[growID].length] = dataPoint
+            }
 
             updateThreeDayData(this.runningData);
         });
+
+
+        // // test keep up with hour change code
+        // // TODO check..
+        // ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() + 1).on('child_added', (snapshot) => {
+        //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() - 1).off()
+        //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours()).off()
+        //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() + 1).off()
+
+        //     this.getCurrentData(growID, updateThreeDayData, month) // potential bug if posting to later time before client time is there
+        // });
     }
 
     // ............ //

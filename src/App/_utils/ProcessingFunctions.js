@@ -36,7 +36,7 @@ class ProcessingFunctions {
         this.appUpdateObject['userGrows'] = userGrows
 
         userGrows.forEach((grow) => {
-            this.dbHelper.getThreeDayData(grow.id, this.processAllGrowsData)
+            this.dbHelper.getOneDayData(grow.id, this.processAllGrowsData)
         })
     }
 
@@ -72,7 +72,12 @@ class ProcessingFunctions {
         this.appUpdateObject['processedData'] = growProcessedData
 
         if (this.APP_INITIALIZED) {
-            this.appUpdateFunction(this.appUpdateObject)
+            // throttle updates...
+            var time = new Date().getTime()
+            if (!this.lastAppUpdate || time - this.lastAppUpdate > 100) {
+                this.lastAppUpdate = time
+                this.appUpdateFunction(this.appUpdateObject)
+            }
         } else {
             this.APP_INITIALIZED = true
             this.appInitFunction(this.appUpdateObject)

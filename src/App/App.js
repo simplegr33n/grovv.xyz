@@ -72,14 +72,13 @@ class App extends Component {
 	}
 
 	appUpdateFunction = (data) => {
-		console.log("update App", data)
+		console.log("update App")
 
 		this.setState({
 			processedData: data.processedData
 		})
 
 	}
-
 
 
 	// //////////////
