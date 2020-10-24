@@ -71,11 +71,12 @@ class App extends Component {
 		})
 	}
 
-	appUpdateFunction = (data) => {
+	appUpdateFunction = (data, updateDataHour) => {
 		console.log("update App")
 
 		this.setState({
-			processedData: data.processedData
+			processedData: data.processedData,
+			updateDataHour: updateDataHour
 		})
 
 	}
@@ -127,6 +128,10 @@ class App extends Component {
 
 
 	render() {
+
+		if (this.state.updateDataHour && (this.state.updateDataHour !== new Date().getHours)) {
+			this.processingFunctions.updateDataHour()
+		}
 
 		return (
 			<div className="App">

@@ -73,15 +73,30 @@ class ProcessingFunctions {
 
         if (this.APP_INITIALIZED) {
             // throttle updates...
-            var time = new Date().getTime()
-            if (!this.lastAppUpdate || time - this.lastAppUpdate > 100) {
-                this.lastAppUpdate = time
-                this.appUpdateFunction(this.appUpdateObject)
+            var date = new Date()
+            if (!this.lastAppUpdate || date.getTime() - this.lastAppUpdate > 100) {
+                this.lastAppUpdate = date.getTime()
+                this.appUpdateFunction(this.appUpdateObject, date.getHours())
             }
         } else {
             this.APP_INITIALIZED = true
             this.appInitFunction(this.appUpdateObject)
         }
+    }
+
+    updateDataHour = () => {
+
+        var date = new Date();
+        var month = date.getMonth()
+        if ((month.toString().length < 2)) {
+            month = '0' + month
+        }
+
+        this.appUpdateObject.userGrows.forEach((grow) => {
+            this.dbHelper.updateCurrentDataGet(grow.id, this.processAllGrowsData, month)
+        })
+
+
     }
 
 

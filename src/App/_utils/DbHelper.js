@@ -93,28 +93,32 @@ class DbHelper {
             month = '0' + month
         }
 
-        var day = date.getDate()
-        if ((day.toString().length < 2)) {
-            day = '0' + day
-        }
 
-        // days.forEach((day) => {
-        ref.child(date.getFullYear()).child(month).child(day).on('value', (snapshot) => {
-            snapshot.forEach((child) => {
-                child.forEach((gChild) => {
-                    var dataPoint = gChild.val()
-                    dataPoint.time = dataPoint.time * 1000
-                    this.runningData[growID][this.runningData[growID].length] = dataPoint
+        // Two days...
+        var days = [date.getDate(), date.getDate() - 1]
+        days.forEach((day) => {
+            if ((day.toString().length < 2)) {
+                day = '0' + day
+            }
+        })
+
+        days.forEach((day) => {
+            ref.child(date.getFullYear()).child(month).child(day).on('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                    child.forEach((gChild) => {
+                        var dataPoint = gChild.val()
+                        dataPoint.time = dataPoint.time * 1000
+                        this.runningData[growID][this.runningData[growID].length] = dataPoint
+                    });
                 });
-            });
-            // Sort data
-            // Then set listeners for current day data
-            this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
-            this.getCurrentData(growID, updateThreeDayData, month)
+                // Sort data
+                // Then set listeners for current day data
+                this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
+                this.getCurrentData(growID, updateThreeDayData, month)
 
-            ref.child(date.getFullYear()).child(month).child(day).off()
+                ref.child(date.getFullYear()).child(month).child(day).off()
+            });
         });
-        // });
 
 
 
@@ -144,18 +148,40 @@ class DbHelper {
 
             updateThreeDayData(this.runningData);
         });
-
-
-        // // test keep up with hour change code
-        // // TODO check..... OR make work dunno
-        // ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() + 1).on('child_added', (snapshot) => {
-        //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() - 1).off()
-        //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours()).off()
-        //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() + 1).off()
-
-        //     this.getCurrentData(growID, updateThreeDayData, month) // potential bug if posting to later time before client time is there
-        // });
     }
+
+    updateCurrentDataGet(growID, updateThreeDayData, month) {
+
+        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
+
+        var date = new Date();
+        var day = date.getDate()
+        if ((day.toString().length < 2)) {
+            day = '0' + day
+        }
+
+        // turn off listener from previous hour
+        ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() - 1).off()
+        if (date.getHours() === 0) {
+            // turn off for previous day
+            ref.child(date.getFullYear()).child(month).child(date.getDate() - 1).child(24).off()
+        }
+
+        ref.child(date.getFullYear()).child(month).child(day).child(date.getHours()).on('child_added', (snapshot) => {
+
+            var dataPoint = snapshot.val()
+            dataPoint.time = dataPoint.time * 1000
+
+            if (dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time) {
+                this.runningData[growID][this.runningData[growID].length] = dataPoint
+            } else {
+                console.log("skipping already included value")
+            }
+
+            updateThreeDayData(this.runningData);
+        });
+    }
+
 
     // ............ //
     // GROW CONFIG  //
