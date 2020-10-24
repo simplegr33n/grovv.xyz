@@ -79,61 +79,7 @@ class DbHelper {
     // GRAPHS  //
     // ....... //
 
-    // Get 3 day data window from firebase
-    // CURRENTLY DISABLED
-    getThreeDayData(growID, updateThreeDayData) {
-        // Get 2 previous days of data
-        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
-
-        if (!this.runningData[growID]) {
-            this.runningData[growID] = []
-        }
-
-        var date = new Date();
-        var month = (date.getMonth() + 1).toString()
-        if (month.length < 2) {
-            month = '0' + month
-        }
-
-        var days = []
-        var tempDay = null
-        var dy = date.getDate()
-        if ((dy - 2) >= 1) {
-            tempDay = dy - 2
-            if (tempDay.toString().length < 2) {
-                tempDay = '0' + tempDay
-            }
-            days[days.length] = tempDay
-        }
-        if ((dy - 1) >= 1) {
-            tempDay = dy - 1
-            if (tempDay.toString().length < 2) {
-                tempDay = '0' + tempDay
-            }
-            days[days.length] = tempDay
-        }
-        if ((dy.toString().length < 2)) {
-            dy = '0' + dy
-        }
-        days[days.length] = dy
-
-        days.forEach((day) => {
-            ref.child(date.getFullYear()).child(month).child(day).on('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                    child.forEach((gChild) => {
-                        var dataPoint = gChild.val()
-                        dataPoint.time = dataPoint.time * 1000
-                        this.runningData[growID][this.runningData[growID].length] = dataPoint
-                    });
-                });
-                ref.child(date.getFullYear()).child(month).child(day).off()
-            });
-        });
-
-        // Then set listeners for current day data
-        this.getCurrentData(growID, updateThreeDayData, month)
-    }
-
+    // Get 1 day data window from firebase
     getOneDayData(growID, updateThreeDayData) {
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data')
 
@@ -146,26 +92,34 @@ class DbHelper {
         if (month.length < 2) {
             month = '0' + month
         }
+
         var day = date.getDate()
         if ((day.toString().length < 2)) {
             day = '0' + day
         }
 
-        var i = 0
-        while (i < date.getHours()) {
-            i++
-            ref.child(date.getFullYear()).child(month).child(day).child(i).on('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                    var hourPoint = child.val()
-                    hourPoint.time = parseInt(child.val().time) * 1000
-                    this.runningData[growID][this.runningData[growID].length] = hourPoint
+        // days.forEach((day) => {
+        ref.child(date.getFullYear()).child(month).child(day).on('value', (snapshot) => {
+            snapshot.forEach((child) => {
+                child.forEach((gChild) => {
+                    var dataPoint = gChild.val()
+                    dataPoint.time = dataPoint.time * 1000
+                    this.runningData[growID][this.runningData[growID].length] = dataPoint
                 });
-                ref.child(date.getFullYear()).child(month).child(day).child(i).off('value')
             });
-        }
+            // Sort data
+            // Then set listeners for current day data
+            this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
+            this.getCurrentData(growID, updateThreeDayData, month)
 
-        this.getCurrentData(growID, updateThreeDayData, month)
+            ref.child(date.getFullYear()).child(month).child(day).off()
+        });
+        // });
+
+
+
     }
+
 
     getCurrentData(growID, updateThreeDayData, month) {
 
@@ -177,17 +131,15 @@ class DbHelper {
             day = '0' + day
         }
 
-        //sort time in day before children get added
-        this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
         ref.child(date.getFullYear()).child(month).child(day).child(date.getHours()).on('child_added', (snapshot) => {
-
-
 
             var dataPoint = snapshot.val()
             dataPoint.time = dataPoint.time * 1000
 
-            if (this.runningData[growID][this.runningData[growID].length - 1] < dataPoint.time) {
+            if (dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time) {
                 this.runningData[growID][this.runningData[growID].length] = dataPoint
+            } else {
+                console.log("skipping already included value")
             }
 
             updateThreeDayData(this.runningData);
@@ -195,7 +147,7 @@ class DbHelper {
 
 
         // // test keep up with hour change code
-        // // TODO check..
+        // // TODO check..... OR make work dunno
         // ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() + 1).on('child_added', (snapshot) => {
         //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours() - 1).off()
         //     ref.child(date.getFullYear()).child(month).child(day).child(date.getHours()).off()
