@@ -129,7 +129,10 @@ class App extends Component {
 
 	render() {
 
-		if (this.state.updateDataHour && (this.state.updateDataHour !== new Date().getHours)) {
+		// Hour changer... might need to be elsewhere
+		if (this.state.updateDataHour && (this.state.updateDataHour !== new Date().getHours())) {
+			console.log("currR", new Date().getHours())
+			console.log("thinks..", this.state.updateDataHour)
 			this.processingFunctions.updateDataHour()
 		}
 

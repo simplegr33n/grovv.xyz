@@ -9,7 +9,6 @@ class ProcessingFunctions {
 
         this.appUpdateFunction = null
         this.appUpdateObject = []
-
     }
 
     // ///////////////////////////////////////
@@ -35,9 +34,15 @@ class ProcessingFunctions {
     setUserGrows = (userGrows) => {
         this.appUpdateObject['userGrows'] = userGrows
 
-        userGrows.forEach((grow) => {
-            this.dbHelper.getOneDayData(grow.id, this.processAllGrowsData)
-        })
+        this.dbHelper.getOneDayData(userGrows, this.countReturnData, this.processAllGrowsData)
+    }
+
+    countReturnData = (data) => {
+        if (!this.initialDataGrab) {
+            this.initialDataGrab = true
+            // console.log("return data", data)
+            this.dbHelper.getCurrentData(this.appUpdateObject.userGrows, this.processAllGrowsData)
+        }
     }
 
     processAllGrowsData = (rawData, window = 10800000) => {
@@ -85,18 +90,8 @@ class ProcessingFunctions {
     }
 
     updateDataHour = () => {
-
-        var date = new Date();
-        var month = date.getMonth()
-        if ((month.toString().length < 2)) {
-            month = '0' + month
-        }
-
-        this.appUpdateObject.userGrows.forEach((grow) => {
-            this.dbHelper.updateCurrentDataGet(grow.id, this.processAllGrowsData, month)
-        })
-
-
+        console.log("gotta figure...")
+        alert("hour change... refresh page")
     }
 
 
