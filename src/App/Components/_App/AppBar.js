@@ -10,6 +10,7 @@ import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
 import { AiOutlineLineChart } from 'react-icons/ai'
 import { TiThMenu } from 'react-icons/ti'
 import { FaPrescriptionBottle } from 'react-icons/fa'
+import { FcLineChart } from 'react-icons/fc'
 
 
 class AppBar extends Component {
@@ -116,6 +117,10 @@ class AppBar extends Component {
 
                 <div className="App-Bar-Button-Grow" style={{ background: '#77864a' }} onClick={this.setMainContent} data-value={'feed'}>
                     <FaPrescriptionBottle style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                </div>
+
+                <div className="App-Bar-Button-Grow" style={{ background: '#857d6e' }} onClick={this.setMainContent} data-value={'test'}>
+                    <FcLineChart style={{ fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
                 <div style={{ flex: 1 }} />

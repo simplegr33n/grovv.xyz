@@ -17,6 +17,7 @@ import GrowPage from './Pages/GrowPage.js'
 import AllPage from './Pages/AllPage.js'
 import LifetimePage from './Pages/LifetimePage.js'
 import FeedPage from './Pages/FeedPage.js'
+import TestPage from './Pages/TestPage.js'
 
 // Top Bar
 import AppBar from './Components/_App/AppBar.js'
@@ -66,7 +67,6 @@ class App extends Component {
 			user: data.user,
 			userGrows: data.userGrows,
 			processedData: data.processedData,
-			// currentGrow: data.userGrows[0], //temporary!! TODO> remove
 			mainContent: 'graphs'
 		})
 	}
@@ -152,6 +152,8 @@ class App extends Component {
 										return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
 									case 'tobytiles':
 										return <TobyTiles />
+									case 'test':
+										return <TestPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
 
 								}
 							} else {

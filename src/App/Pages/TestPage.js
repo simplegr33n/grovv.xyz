@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import '../../styles/App.css';
 
+import GraphTestPage from '../Components/_Pages/TestPage/GraphTestPage.js'
 import GrowDataDisplay from '../Components/_Pages/GrowPage/GrowDataDisplay.js'
 
 
-class AllPage extends Component {
+class TestPage extends Component {
 
     constructor(props) {
         super(props);
@@ -53,6 +54,14 @@ class AllPage extends Component {
 
         return (
             <div style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden', minWidth: '100%' }}>
+                <div style={{ width: '100%', height: '60vh', minHeight: '60vh', background: '#000', overflow: 'hidden' }} ref={element => this.divRef = element} >
+                    {(() => {
+                        if (this.props.processedData) {
+                            return <GraphTestPage processedData={this.props.processedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
+                        }
+                    })()}
+                </div >
+
                 <div className="Grow-Details-Page-Panel">
                     <div style={{ width: "100%", display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
                         {renderGrowDataDisplays}
@@ -64,4 +73,4 @@ class AllPage extends Component {
     }
 }
 
-export default AllPage;
+export default TestPage;

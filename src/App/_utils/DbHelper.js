@@ -86,12 +86,14 @@ class DbHelper {
         }
 
         // Two days...
-        var days = [date.getDate(), date.getDate() - 1]
+        var days = [date.getDate(), date.getDate() - 1, date.getDate() - 2]
         days.forEach((day) => {
             if ((day.toString().length < 2)) {
                 day = '0' + day
             }
         })
+
+        var i = 0
 
         userGrows.forEach((grow) => {
 
@@ -101,37 +103,45 @@ class DbHelper {
                 this.runningData[grow.id] = []
             }
 
+
+            var dayCount = 0
+
+            // get up to the most recent day
             days.forEach((day) => {
-                ref.child(day).once('value', (snapshot) => {
-                    snapshot.forEach((child) => {
-                        child.forEach((gChild) => {
-                            var dataPoint = gChild.val()
-
-                            dataPoint.time = dataPoint.time * 1000
-                            if (dataPoint.time < 2000000000000) {
-                                this.runningData[grow.id][this.runningData[grow.id].length] = dataPoint
-                            }
-
+                dayCount++
+                if (day !== date.getDate()) {
+                    ref.child(day).once('value', (snapshot) => {
+                        snapshot.forEach((child) => {
+                            child.forEach((gChild) => {
+                                i++;
+                                if (i % 16 * dayCount === 0 || i === 0) {
+                                    var dataPoint = gChild.val()
+                                    dataPoint.time = dataPoint.time * 1000
+                                    if (dataPoint.time < 2000000000000) { // maybe a garbage check i dont need...
+                                        this.runningData[grow.id][this.runningData[grow.id].length] = dataPoint
+                                    }
+                                }
+                            });
                         });
-                    });
-                    // Check if got data for each grow
-                    // Sort data
-                    // Then set listeners for current day data
-                    var checkGrowsBool = true
-                    userGrows.forEach((checkGrow) => {
-                        if (this.runningData[checkGrow.id].length === 0) {
-                            checkGrowsBool = false
-                        } else {
-                            this.runningData[grow.id].sort((a, b) => (a.time > b.time) ? 1 : -1)
+                        // Check if got data for each grow
+                        // Sort data
+                        // Then set listeners for current day data
+                        var checkGrowsBool = true
+                        userGrows.forEach((checkGrow) => {
+                            if (this.runningData[checkGrow.id].length === 0) {
+                                checkGrowsBool = false
+                            } else {
+                                this.runningData[grow.id].sort((a, b) => (a.time > b.time) ? 1 : -1)
+                            }
+                        })
+
+                        if (checkGrowsBool) {
+                            sendGrowData(this.runningData)
+                            this.watchDataHours(userGrows)
                         }
-                    })
 
-                    if (checkGrowsBool) {
-                        sendGrowData(this.runningData)
-                        this.watchDataHours(userGrows)
-                    }
-
-                });
+                    });
+                }
             });
         });
     }
@@ -145,25 +155,52 @@ class DbHelper {
             month = '0' + month
         }
 
+        var hoursReturnCount = -1
+        var i = 0
+
         userGrows.forEach((grow) => {
             var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(date.getFullYear()).child(month).child(day)
             ref.on('child_added', (snapshot) => {
                 var checkDate = new Date();
+                hoursReturnCount++
 
-                if ((parseInt(snapshot.key) === checkDate.getHours()) || (parseInt(snapshot.key) === checkDate.getHours() + 1)) {
+                // datapoints for hours up to the current hour
+                if (parseInt(snapshot.key) < checkDate.getHours()) {
+                    snapshot.forEach((child) => {
+                        i++
+                        if (i % 4 === 0 || i === 0) {
+                            var dataPoint = child.val()
+                            dataPoint.time = dataPoint.time * 1000
+                            this.runningData[grow.id][this.runningData[grow.id].length] = dataPoint
+                        }
+                    })
+                }
 
-                    // remove previous listeners
-                    this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate() - 1).child(23).off()
-                    this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours() - 1).off()
-                    this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours()).off()
+                // open first hour listener only after all previous hours have returned their data
+                if (hoursReturnCount === checkDate.getHours()) {
+                    hoursReturnCount = true
 
+                    this.runningData[grow.id].sort((a, b) => (a.time > b.time) ? 1 : -1)
                     this.getCurrentData(grow.id)
                 }
+
+                // open later hour listeners if hoursReturnCount = true
+                if (hoursReturnCount === true) {
+                    console.log("Is true..")
+                    if ((parseInt(snapshot.key) === checkDate.getHours()) || (parseInt(snapshot.key) === checkDate.getHours() + 1)) {
+
+                        // remove previous listeners
+                        this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate() - 1).child(23).off()
+                        this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours() - 1).off()
+                        this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours()).off()
+
+                        this.getCurrentData(grow.id)
+                    }
+                }
+
             })
         })
     }
-
-
 
 
     getCurrentData(growID) {
@@ -181,8 +218,7 @@ class DbHelper {
             var dataPoint = snapshot.val()
             dataPoint.time = dataPoint.time * 1000
 
-            if (dataPoint.time > date.getTime()) {
-                console.log("adding DP for " + growID + ":", dataPoint)
+            if (dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time) {
                 this.runningData[growID][this.runningData[growID].length] = dataPoint
             }
 
