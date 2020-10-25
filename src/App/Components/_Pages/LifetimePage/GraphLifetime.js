@@ -14,7 +14,7 @@ class LifetimeGraph extends Component {
         super(props);
         this.state = {
             rangeMax: new Date().valueOf(),
-            rangeMin: new Date("2020-10-18").valueOf()
+            rangeMin: new Date("2020-10-20").valueOf()
         };
 
     }

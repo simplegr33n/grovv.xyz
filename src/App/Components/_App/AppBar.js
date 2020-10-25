@@ -8,7 +8,7 @@ import cornerLogo from '../../../assets/corner-logo.png'
 import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
 
 import { AiOutlineLineChart } from 'react-icons/ai'
-import { TiThMenu } from 'react-icons/ti'
+import { TiThMenu, TiCogOutline } from 'react-icons/ti'
 import { FaPrescriptionBottle } from 'react-icons/fa'
 import { FcLineChart } from 'react-icons/fc'
 
@@ -119,10 +119,6 @@ class AppBar extends Component {
                     <FaPrescriptionBottle style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
-                <div className="App-Bar-Button-Grow" style={{ background: '#857d6e' }} onClick={this.setMainContent} data-value={'test'}>
-                    <FcLineChart style={{ fontSize: '30px', paddingTop: '5px' }} />
-                </div>
-
                 <div style={{ flex: 1 }} />
 
                 {/* SubMenu */}
@@ -135,11 +131,20 @@ class AppBar extends Component {
                                 App Settings
                             </div>
                             <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                                <TobyFace
-                                    viewBox="0 0 110 110"
-                                    style={{ flex: 1, height: "60%", padding: '20%' }} />
+                                <TiCogOutline style={{ color: '#000', fontSize: '30px' }} />
                             </div>
                         </div>
+
+                        <div className="App-Bar-Submenu-Item" onClick={this.setMainContent} data-value={'test'}>
+                            <div style={{ flex: 1, paddingTop: '10px' }} >
+                                Test Graph
+                            </div>
+                            <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                                <FcLineChart style={{ fontSize: '30px' }} />
+                            </div>
+                        </div>
+
+
 
                         <div className="App-Bar-Submenu-Item" onClick={this.setMainContent} data-value={'tobytiles'}>
                             <div style={{ flex: 1, paddingTop: '10px' }} >

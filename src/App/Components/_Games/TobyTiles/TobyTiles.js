@@ -12,6 +12,8 @@ class TobyTiles extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			playDimensions: [0, 0], // init
+
 			clickTime: 2,
 			level: 0,
 			selectedTiles: [],
@@ -23,6 +25,8 @@ class TobyTiles extends Component {
 	}
 
 	componentDidMount() {
+		this.calcPlayDimensions()
+
 		if (this.state.level !== 0) {
 			this.initializeLevel(this.state.level)
 		}
@@ -136,6 +140,15 @@ class TobyTiles extends Component {
 		}
 	}
 
+	calcPlayDimensions() {
+		var tempSize = [this.divRef.clientWidth, this.divRef.clientHeight]
+		if (tempSize !== this.state.playDimensions) {
+			this.setState({
+				playDimensions: tempSize
+			});
+		}
+	}
+
 	render() {
 		// Show pair of cards after click for only so long (clickTime)
 		if (this.state.clickTime === 0) {
@@ -158,9 +171,11 @@ class TobyTiles extends Component {
 				rowList[rowList.length] = newRow
 			}
 
+			var tileWidth = Math.floor(this.state.playDimensions[0] / rowsQuantity)
+
 			renderTobyRows = rowList.map((row, index) => {
 				return (
-					<TobyTileRow clickTile={this.clickTile} key={index} row={row} rowIndex={index} foundTiles={this.state.foundTiles} selectedTiles={this.state.selectedTiles} />
+					<TobyTileRow clickTile={this.clickTile} key={index} row={row} rowIndex={index} tileWidth={tileWidth} foundTiles={this.state.foundTiles} selectedTiles={this.state.selectedTiles} />
 				)
 			})
 		}
@@ -170,7 +185,7 @@ class TobyTiles extends Component {
 		return (
 
 			<div style={{ minHeight: "100%", maxHeight: '100%', minWidth: '100%', justifyContent: 'center', userSelect: 'none', display: 'flex' }}>
-				<div id={"TobyTiles-Main"} style={{ backgroundColor: '#243124', display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '90vh', height: '100%', maxHeight: '100vw' }}>
+				<div id={"TobyTiles-Main"} style={{ backgroundColor: '#243124', display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '100vh', height: '100%', maxHeight: '100vw' }} ref={element => this.divRef = element}>
 					{renderTobyRows}
 				</div>
 
