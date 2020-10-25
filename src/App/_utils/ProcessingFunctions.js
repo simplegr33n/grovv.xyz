@@ -34,66 +34,20 @@ class ProcessingFunctions {
     setUserGrows = (userGrows) => {
         this.appUpdateObject['userGrows'] = userGrows
 
-        this.dbHelper.getOneDayData(userGrows, this.countReturnData, this.processAllGrowsData)
+        this.dbHelper.getOneDayData(userGrows, this.sendGrowData)
     }
 
-    countReturnData = (data) => {
-        if (!this.initialDataGrab) {
-            this.initialDataGrab = true
-            // console.log("return data", data)
-            this.dbHelper.getCurrentData(this.appUpdateObject.userGrows, this.processAllGrowsData)
-        }
-    }
-
-    processAllGrowsData = (rawData, window = 10800000) => {
-        var now = Math.floor(new Date().getTime() / 1000)
-
-        var reducerValue = Math.round(window / 10800000)
-        if (reducerValue < 1) {
-            reducerValue = 1
-        }
-
-        var growProcessedData = []
-        this.appUpdateObject.userGrows.forEach((grow) => {
-            if (!rawData[grow.id]) {
-                return
-            }
-
-            var subProcessedData = []
-            var i = -1
-            rawData[grow.id].forEach((dataPoint) => {
-                if (now - dataPoint.time < window) {
-                    i++;
-                    if (i === 0 || i % reducerValue === 0) {
-                        subProcessedData[subProcessedData.length] = dataPoint
-                    }
-                }
-            })
-
-            growProcessedData[grow.id] = subProcessedData
-        })
-
+    sendGrowData = (rawData) => {
         // appUpdateObject construction complete
-        this.appUpdateObject['processedData'] = growProcessedData
+        this.appUpdateObject['processedData'] = rawData
 
         if (this.APP_INITIALIZED) {
-            // throttle updates...
-            var date = new Date()
-            if (!this.lastAppUpdate || date.getTime() - this.lastAppUpdate > 100) {
-                this.lastAppUpdate = date.getTime()
-                this.appUpdateFunction(this.appUpdateObject, date.getHours())
-            }
+            this.appUpdateFunction(this.appUpdateObject)
         } else {
             this.APP_INITIALIZED = true
             this.appInitFunction(this.appUpdateObject)
         }
     }
-
-    updateDataHour = () => {
-        console.log("gotta figure...")
-        alert("hour change... refresh page")
-    }
-
 
 
 

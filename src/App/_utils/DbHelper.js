@@ -76,7 +76,9 @@ class DbHelper {
     // ....... //
 
     // Get 1 day data window from firebase
-    getOneDayData(userGrows, countReturnData) {
+    getOneDayData(userGrows, sendGrowData) {
+        this.sendGrowData = sendGrowData
+
         var date = new Date();
         var month = (date.getMonth() + 1).toString()
         if (month.length < 2) {
@@ -121,12 +123,12 @@ class DbHelper {
                             checkGrowsBool = false
                         } else {
                             this.runningData[grow.id].sort((a, b) => (a.time > b.time) ? 1 : -1)
-                            this.lastEntryTime[grow.id] = this.runningData[grow.id][this.runningData[grow.id].length - 1].time
                         }
                     })
 
                     if (checkGrowsBool) {
-                        countReturnData(this.runningData)
+                        sendGrowData(this.runningData)
+                        this.watchDataHours(userGrows)
                     }
 
                 });
@@ -134,38 +136,62 @@ class DbHelper {
         });
     }
 
-
-    getCurrentData(userGrows, updateThreeDayData) {
-
+    watchDataHours(userGrows) {
         var date = new Date();
         var day = date.getDate()
-        if ((day.toString().length < 2)) {
-            day = '0' + day
-        }
+
         var month = (date.getMonth() + 1).toString()
         if (month.length < 2) {
             month = '0' + month
         }
 
         userGrows.forEach((grow) => {
-            var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(date.getFullYear()).child(month).child(day).child(date.getHours())
-
+            var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(date.getFullYear()).child(month).child(day)
             ref.on('child_added', (snapshot) => {
-                var dataPoint = snapshot.val()
-                dataPoint.time = dataPoint.time * 1000
+                var checkDate = new Date();
 
-                if (dataPoint.time > this.lastEntryTime[grow.id]) {
-                    console.log("adding DP for " + grow.id + ":", dataPoint)
-                    this.runningData[grow.id][this.runningData[grow.id].length] = dataPoint
+                if ((parseInt(snapshot.key) === checkDate.getHours()) || (parseInt(snapshot.key) === checkDate.getHours() + 1)) {
+
+                    // remove previous listeners
+                    this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate() - 1).child(23).off()
+                    this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours() - 1).off()
+                    this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours()).off()
+
+                    this.getCurrentData(grow.id)
                 }
-
-                // could do once before (after days data grab), then only on new instead of throttling the several early child_added listeners in the processing functions
-                updateThreeDayData(this.runningData);
-            });
-
-        });
+            })
+        })
+    }
 
 
+
+
+    getCurrentData(growID) {
+        var date = new Date();
+        var day = date.getDate()
+
+        var month = (date.getMonth() + 1).toString()
+        if (month.length < 2) {
+            month = '0' + month
+        }
+
+        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(day).child(date.getHours())
+
+        ref.on('child_added', (snapshot) => {
+            var dataPoint = snapshot.val()
+            dataPoint.time = dataPoint.time * 1000
+
+            if (dataPoint.time > date.getTime()) {
+                console.log("adding DP for " + growID + ":", dataPoint)
+                this.runningData[growID][this.runningData[growID].length] = dataPoint
+            }
+
+            // will bug if no data in last minute...
+            if ((date.getTime() - dataPoint.time < 60000)) {
+                this.sendGrowData(this.runningData)
+            }
+
+        })
     }
 
 

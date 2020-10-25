@@ -165,9 +165,7 @@ class GraphGrowPage extends Component {
         return (
             <div className="Grow-Details-Graph-Tooltip">
                 <div>{readableTime}</div>
-
                 {listItems}
-
             </div>
 
         )
@@ -176,6 +174,10 @@ class GraphGrowPage extends Component {
 
     render() {
 
+        if (this.props.processedData) {
+            console.log("", this.props.processedData.length)
+        }
+
         var now = new Date().getTime()
 
         const lineItems = this.props.grow.config.SENSORS.map((sensor) =>
@@ -183,7 +185,6 @@ class GraphGrowPage extends Component {
 
                 var lineKey = sensor.PID
                 var lineName = sensor.name
-
 
                 if (this.props.activeLines) {
                     var tIndex = this.props.activeLines.indexOf(sensor.PID)
@@ -211,13 +212,13 @@ class GraphGrowPage extends Component {
 
 
         var renderDayGraph = null
-        if (this.props.processedData && this.props.processedData[0]) {
+        if (this.props.processedData) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 0.91)
                 var ySize = Math.floor(this.props.parentSize[1] * 0.9)
 
                 renderDayGraph = (
-                    <LineChart width={xSize} height={ySize} data={this.props.processedData}>
+                    <LineChart width={xSize} height={ySize} data={this.props.processedData.slice()}>
 
                         {lineItems}
 

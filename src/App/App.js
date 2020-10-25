@@ -71,12 +71,11 @@ class App extends Component {
 		})
 	}
 
-	appUpdateFunction = (data, updateDataHour) => {
-		console.log("update App")
+	appUpdateFunction = (data) => {
+		console.log("update App", data)
 
 		this.setState({
-			processedData: data.processedData,
-			updateDataHour: updateDataHour
+			processedData: data.processedData
 		})
 
 	}
@@ -90,7 +89,7 @@ class App extends Component {
 			displayWindow: displayWindow
 		});
 
-		this.processingFunctions.processAllGrowsData(this.state.userGrows, displayWindow)
+		// this.processingFunctions.sendGrowData(this.state.userGrows, displayWindow)
 
 		var tempUser = this.state.user
 		tempUser.PREFS.GRAPHS.AllGraph.timeWindow = displayWindow
@@ -128,13 +127,6 @@ class App extends Component {
 
 
 	render() {
-
-		// Hour changer... might need to be elsewhere
-		if (this.state.updateDataHour && (this.state.updateDataHour !== new Date().getHours())) {
-			console.log("currR", new Date().getHours())
-			console.log("thinks..", this.state.updateDataHour)
-			this.processingFunctions.updateDataHour()
-		}
 
 		return (
 			<div className="App">
