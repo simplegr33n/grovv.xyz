@@ -86,7 +86,7 @@ class DbHelper {
         }
 
         // Two days...
-        var days = [date.getDate(), date.getDate() - 1, date.getDate() - 2]
+        var days = [date.getDate(), date.getDate() - 1]
         days.forEach((day) => {
             if ((day.toString().length < 2)) {
                 day = '0' + day
@@ -155,17 +155,22 @@ class DbHelper {
             month = '0' + month
         }
 
-        var hoursReturnCount = -1
-        var i = 0
+
 
         userGrows.forEach((grow) => {
+
+            var hoursReturnCount = -1
+            var i = 0
+
+            console.log("watch loop", grow.id)
+
             var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(date.getFullYear()).child(month).child(day)
             ref.on('child_added', (snapshot) => {
                 var checkDate = new Date();
                 hoursReturnCount++
 
                 // datapoints for hours up to the current hour
-                if (parseInt(snapshot.key) < checkDate.getHours()) {
+                if (parseInt(snapshot.key) <= checkDate.getHours()) {
                     snapshot.forEach((child) => {
                         i++
                         if (i % 4 === 0 || i === 0) {
@@ -176,34 +181,18 @@ class DbHelper {
                     })
                 }
 
-                // open first hour listener only after all previous hours have returned their data
-                if (hoursReturnCount === checkDate.getHours()) {
-                    hoursReturnCount = true
-
-                    this.runningData[grow.id].sort((a, b) => (a.time > b.time) ? 1 : -1)
+                // open first hour listener only once for each grow-day
+                if (parseInt(snapshot.key) === checkDate.getHours()) {
                     this.getCurrentData(grow.id)
                 }
-
-                // open later hour listeners if hoursReturnCount = true
-                if (hoursReturnCount === true) {
-                    console.log("Is true..")
-                    if ((parseInt(snapshot.key) === checkDate.getHours()) || (parseInt(snapshot.key) === checkDate.getHours() + 1)) {
-
-                        // remove previous listeners
-                        this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate() - 1).child(23).off()
-                        this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours() - 1).off()
-                        this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(checkDate.getFullYear()).child(month).child(checkDate.getDate()).child(checkDate.getHours()).off()
-
-                        this.getCurrentData(grow.id)
-                    }
-                }
-
             })
         })
     }
 
 
     getCurrentData(growID) {
+        console.log("get current", growID)
+
         var date = new Date();
         var day = date.getDate()
 
@@ -212,13 +201,22 @@ class DbHelper {
             month = '0' + month
         }
 
+        this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
+
+        // remove previous listeners
+        this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(date.getDate() - 1).child(23).off()
+        this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(date.getDate()).child(date.getHours() - 1).off()
+
+        // create new listener
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(day).child(date.getHours())
 
         ref.on('child_added', (snapshot) => {
+            this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
+
             var dataPoint = snapshot.val()
             dataPoint.time = dataPoint.time * 1000
 
-            if (dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time) {
+            if ((dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time)) {
                 this.runningData[growID][this.runningData[growID].length] = dataPoint
             }
 

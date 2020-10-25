@@ -14,33 +14,28 @@ class TestPage extends Component {
     }
 
     componentDidMount() {
-        this.sensorAndLineUpdate()
+
     }
 
     componentDidUpdate = () => {
-        if (this.state.ACTIVE_INIT !== this.props.grow) {
-            this.setState({ ACTIVE_INIT: this.props.grow });
-            this.sensorAndLineUpdate()
-        }
-    }
 
-    sensorAndLineUpdate = () => {
-        var sensorPIDS = []
-
-        this.props.userGrows.forEach((grow) => {
-            sensorPIDS[grow.id] = []
-            grow.config.SENSORS.forEach((sensor, key) => {
-                sensorPIDS[grow.id][key] = sensor.PID
-            });
-        })
-
-        this.setState({
-            sensorPIDS: sensorPIDS
-        });
     }
 
     toggleSensor = (data) => {
         console.log("button not connected", data)
+    }
+
+    fetchWeather = () => {
+        fetch('https://api.openweathermap.org/data/2.5/weather?id=5946768&appid=4132b2c4cef7a9c193bac2021b8c0420')
+            .then(response => response.json())
+            .then(data => console.log(data));
+
+
+        // unnauthorized for below unfortunately
+
+        // fetch('http://history.openweathermap.org/data/2.5/history/city?id=2885679&type=hour&appid=4132b2c4cef7a9c193bac2021b8c0420')
+        //     .then(response => response.json())
+        //     .then(data => console.log(data));
     }
 
     render() {
@@ -60,6 +55,10 @@ class TestPage extends Component {
                             return <GraphTestPage processedData={this.props.processedData} groupedSensors={this.state.groupedSensors} userGrows={this.props.userGrows} user={this.state.user} />
                         }
                     })()}
+                </div >
+
+                <div onClick={this.fetchWeather} style={{ width: '120px', height: '60px', maxHeight: '60px', background: '#FF0000', overflow: 'hidden' }}>
+                    BIG BUTTON!
                 </div >
 
                 <div className="Grow-Details-Page-Panel">

@@ -56,16 +56,11 @@ class GraphTestPage extends Component {
 
         compiledData.temp.sort((a, b) => (a[0] > b[0]) ? 1 : -1)
         compiledData.humidity.sort((a, b) => (a[0] > b[0]) ? 1 : -1)
-        // console.log('compiled', compiledData)
-        // this.compiledData = compiledData
-        // this.render()
 
         this.setState({ compiledData: compiledData })
     }
 
     render() {
-
-        console.log("allgrapsh", this.state.compiledData)
 
         var options = {
             chart: {

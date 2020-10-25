@@ -130,10 +130,10 @@ class GrowPage extends Component {
 
                     <div className="Grow-Details-Header">
                         <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-                            <div style={{ color: indicatorColor, marginLeft: '1px', fontSize: '1.1em', userSelect: 'none' }}>⬤</div>
+                            <div style={{ color: indicatorColor, marginLeft: '4px', fontSize: '1.1em', userSelect: 'none' }}>⬤</div>
                             <div id="Grow-Header-Text">{this.props.grow.name}</div>
                         </div>
-                        <div onClick={() => this.openCloseSettings()} style={{ paddingRight: '30px', color: '#A9A9A9', userSelect: 'none', cursor: 'pointer' }}>
+                        <div onClick={() => this.openCloseSettings()} style={{ marginRight: '4px', color: '#A9A9A9', userSelect: 'none', cursor: 'pointer' }}>
                             <AiFillControl style={{ color: '#9e9e9e', fontSize: '22px', marginTop: '8px' }} />
                         </div>
                     </div>

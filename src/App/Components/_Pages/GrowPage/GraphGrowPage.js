@@ -173,11 +173,6 @@ class GraphGrowPage extends Component {
 
 
     render() {
-
-        if (this.props.processedData) {
-            console.log("", this.props.processedData.length)
-        }
-
         var now = new Date().getTime()
 
         const lineItems = this.props.grow.config.SENSORS.map((sensor) =>

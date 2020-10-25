@@ -72,7 +72,10 @@ class App extends Component {
 	}
 
 	appUpdateFunction = (data) => {
-		console.log("update App", data)
+		console.log("update App")
+
+		console.log("data[1].length", data.processedData['EC1_0__FC:F5:C4:96:8C:A0'].length + ' / ' + data.processedData['EC1_0__D8:F1:5B:10:AB:04'].length + ' / ' + data.processedData['AQM1_0__48:3F:DA:77:31:CA'].length)
+
 
 		this.setState({
 			processedData: data.processedData

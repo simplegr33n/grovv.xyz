@@ -313,14 +313,6 @@ body {
 
 /* GRAPHS PAGE */
 
-.Chart-Container {
-  display: inline-flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  position: relative;
-  max-width: 100%;
-}
-
 .recharts-tooltip-label {
   color: #000;
 }

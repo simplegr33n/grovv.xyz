@@ -277,7 +277,7 @@ class LifetimeGraph extends Component {
                             domain={[this.state.rangeMin, this.state.rangeMax]}
                             tickFormatter={(unixTime) => moment(unixTime).format('MM-D-YYYY')}
                             hide={false} />
-                        <YAxis yAxisId="temperature" orientation="left" domain={[20]} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="temperature" orientation="left" width={20} domain={[20]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="ppm" orientation="right" hide={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="ppb" orientation="right" hide={true} tick={{ fill: "#B3C2B5" }} />
@@ -291,23 +291,21 @@ class LifetimeGraph extends Component {
 
         return (
             <div style={{ overflowY: 'auto', overflowX: 'hidden', maxHeight: '100%' }}>
-                <div className="Chart-Container">
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
 
                     {renderLifetimeGraph}
 
                     {/* Time Scale Select... */}
-                    <div style={{ width: '40px', fontSize: '0.55em', display: 'flex', flexDirection: 'column', position: 'absolute', left: '2px', top: '18px' }}>
-
-                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2020-10-01" max={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMin)).format('YYYY-MM-DD')} style={{ fontSize: '0.8em', padding: 0, maxWidth: '40px', marginTop: '1px' }} />
-                        <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 86400000)).format('YYYY-MM-DD')} max={moment(new Date()).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} style={{ fontSize: '0.8em', padding: 0, marginTop: '1px' }} />
-
+                    <div style={{ fontSize: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2020-10-01" max={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMin)).format('YYYY-MM-DD')} />
+                        <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 86400000)).format('YYYY-MM-DD')} max={moment(new Date()).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} />
                     </div>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', padding: '2px' }}>
                     {renderLifetimeColumns}
                 </div>
-            </div>
+            </div >
         );
     }
 }
