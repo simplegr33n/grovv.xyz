@@ -30,15 +30,15 @@ import TobyTiles from './Components/_Games/TobyTiles/TobyTiles.js'
 class App extends Component {
 
 	constructor(props) {
-		super(props);
+		super(props)
 		this.state = {
 			mainContent: 'signin', // signin, signup, main, journal, grows, etc.
 			UID: null,
 			currentGrow: null,
 			displayWindow: 259200000, // 1800000, 10800000, 43200000, 86400000, 259200000
 
-			// processedData: []
-		};
+			DEBUGGING: false
+		}
 
 		this.processingFunctions = new ProcessingFunctions()
 		this.dbHelper = new DbHelper()
@@ -47,10 +47,11 @@ class App extends Component {
 		this.firebase.auth.onAuthStateChanged((user) => {
 			if (user) {
 				this.setState({ UID: user.uid })
-
-				this.processingFunctions.initializeApp(user.uid, this.appInitFunction, this.appUpdateFunction)
+				if (this.state.DEBUGGING === false) {
+					this.processingFunctions.initializeApp(user.uid, this.appInitFunction, this.appUpdateFunction)
+				}
 			}
-		});
+		})
 
 		this.checkDataTime = new Date().getTime()
 
@@ -124,6 +125,10 @@ class App extends Component {
 		this.setState({ currentGrow: tempGrow });
 	}
 
+	debugInitApp = () => {
+		this.processingFunctions.initializeApp(this.state.UID, this.appInitFunction, this.appUpdateFunction)
+	}
+
 
 
 	render() {
@@ -131,7 +136,7 @@ class App extends Component {
 
 
 		// tODO: Datechecking mechanism of some kind
-		if (this.state.processedData && this.state.userGrows && ((date.getTime() - this.checkDataTime) > 20000)) {
+		if (!this.state.DEBUGGING && this.state.processedData && this.state.userGrows && ((date.getTime() - this.checkDataTime) > 20000)) {
 			this.checkDataTime = date.getTime()
 
 			var refreshBool = false
@@ -156,14 +161,14 @@ class App extends Component {
 				<header className="App-body">
 
 					{(() => {
-						if (this.state.UID && this.state.userGrows && this.state.user) {
-							return <AppBar setMainContent={this.setMainContent} setGrow={this.setGrow} handleSignOut={this.handleSignOut} userGrows={this.state.userGrows} processedData={this.state.processedData} />
+						if (this.state.UID) {
+							return <AppBar setMainContent={this.setMainContent} setGrow={this.setGrow} handleSignOut={this.handleSignOut} userGrows={this.state.userGrows} processedData={this.state.processedData} DEBUGGING={this.state.DEBUGGING} debugInitApp={this.debugInitApp} />
 						}
 					})()}
 
 					<div id="App-Body-Content">
 						{(() => {
-							if (this.state.UID && this.state.userGrows && this.state.user && this.state.processedData) {
+							if (this.state.UID) {
 								switch (this.state.mainContent) {
 									case 'grows':
 										return <GrowPage setDisplayWindow={this.setDisplayWindow} refreshGrows={this.refreshGrows} userGrows={this.state.userGrows} processedData={this.state.processedData} displayWindow={this.state.displayWindow} grow={this.state.currentGrow} user={this.state.user} />

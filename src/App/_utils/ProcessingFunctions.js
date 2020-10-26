@@ -39,7 +39,7 @@ class ProcessingFunctions {
     setUserGrows = (userGrows) => {
         this.appUpdateObject['userGrows'] = userGrows
 
-        this.dbHelper.getOneDayData(userGrows, this.sendGrowData)
+        this.dbHelper.getLastDayData(userGrows, this.sendGrowData)
     }
 
     sendGrowData = (growID, rawData) => {

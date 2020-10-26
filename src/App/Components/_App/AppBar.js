@@ -9,6 +9,7 @@ import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
 
 import { TiThMenu, TiCogOutline, TiChartLineOutline, TiKeyOutline, TiPipette, TiChartAreaOutline } from 'react-icons/ti'
 import { FaPrescriptionBottle } from 'react-icons/fa'
+import { HiOutlineFire } from 'react-icons/hi'
 
 
 class AppBar extends Component {
@@ -34,14 +35,6 @@ class AppBar extends Component {
             }
         })
     }
-
-    // /////////
-    // UI 
-    // /////////
-    handleSignOut = () => {
-        this.props.handleSignOut()
-    }
-
 
 
     render() {
@@ -117,6 +110,16 @@ class AppBar extends Component {
                     <TiPipette style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
+                {(() => {
+                    if (this.props.DEBUGGING) {
+                        return (
+                            <div className="App-Bar-Button-Grow" style={{ background: '#c75427' }} onClick={this.props.debugInitApp} data-value={'feed'}>
+                                <HiOutlineFire style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                            </div>
+                        )
+                    }
+                })()}
+
                 <div style={{ flex: 1 }} />
 
                 {/* SubMenu */}
@@ -163,7 +166,7 @@ class AppBar extends Component {
                         </div>
 
 
-                        <div className="App-Bar-Submenu-Logout" onClick={this.handleSignOut}>
+                        <div className="App-Bar-Submenu-Logout" onClick={this.props.handleSignOut}>
                             <div style={{ flex: 1, paddingTop: '10px' }} >
                                 Logout
                             </div>

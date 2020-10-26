@@ -30,7 +30,9 @@ class LifetimePage extends Component {
 
     componentDidMount() {
         this.calcGraphDimensions()
-        this.dbHelper.getLifetimeData(this.props.user.uid, this.setLifetimeData)
+        if (this.props.user) {
+            this.dbHelper.getLifetimeData(this.props.user.uid, this.setLifetimeData)
+        }
 
         // /////////////
         // SCARY TIMES!

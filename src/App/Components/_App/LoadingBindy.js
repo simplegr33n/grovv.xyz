@@ -17,6 +17,12 @@ class LoadingBindy extends Component {
 
 
     render() {
+
+        var renderDisplayText = "Loading..."
+        if (this.props.displayText) {
+            renderDisplayText = this.props.displayText
+        }
+
         return (
             <div className="Loading-Screensaver">
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden', flexDirection: 'row', flex: 1, background: "#c3e7c340", borderRadius: '50%', marginTop: '30px', marginLeft: '60px', marginRight: '60px' }}>
@@ -26,9 +32,9 @@ class LoadingBindy extends Component {
                             viewBox="0 0 110 110"
                             style={{ flex: 1, height: "10%", paddingLeft: "30%", paddingRight: "30%", paddingTop: "10%" }} />
 
-                        <div style={{ color: "#000", fontWeight: 800, position: 'absolute', color: "#5da55d", top: '60px', fontSize: '50px' }}>
-                            LOADING...
-                            </div>
+                        <div style={{ color: "#000", fontWeight: 700, position: 'absolute', color: "#47d647", top: '60px', fontSize: '44px' }}>
+                            {renderDisplayText}
+                        </div>
                     </div>
                 </div>
             </div>

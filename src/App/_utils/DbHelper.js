@@ -16,7 +16,6 @@ class DbHelper {
     // ............ //
     //    USER      //
     // ............ //
-    // Get User
     getUser(UID, setData) {
 
         // Config data isResetting in firebase 
@@ -29,54 +28,19 @@ class DbHelper {
         });
     }
 
-
     // Set Grow Config in firebase
     setUser(u) {
         var ref = this.firebase.db.ref().child('users').child(u.uid)
         ref.set(u)
     }
 
-    // .................. //
-    // ADD LIFETIME DATA  //
-    // .................. //
-    getLifetimeData(userID, setData) {
-        var ref = this.firebase.db.ref().child('lifetime').child(this.userID)
-
-        ref.once('value', (snapshot) => {
-            setData(snapshot.val())
-        }, function (errorObject) {
-            console.log("Get Lifetime Data failed: " + errorObject.code);
-        });
-    }
-
-    postLifetimeData(lifetimeObject, growID, year, month, day) {
-        console.log("Post Lifetime Data", lifetimeObject)
-
-        var ref = this.firebase.db.ref().child('lifetime').child(this.userID).child(growID).child(year).child(month).child(day)
-        ref.set(lifetimeObject)
-    }
-
-    getMonthChunk(growID, year, month, setData) {
-        console.log("getMonthCHunk!" + growID + " " + year + " " + month)
-
-        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(year).child(month)
-        ref.once('value', (snapshot) => {
-            setData(snapshot.val())
-        }, function (errorObject) {
-            console.log("getMonthChunk: " + errorObject.code);
-        });
-    }
-
-
     // .......... //
     //    DATA    //
     // .......... //
     // ....... //
-    // GRAPHS  //
+    // CURRENT  //
     // ....... //
-
-    // Get 1 day data window from firebase
-    getOneDayData(userGrows, sendGrowData) {
+    getLastDayData(userGrows, sendGrowData) {
         this.sendGrowData = sendGrowData
 
         var date = new Date();
@@ -195,13 +159,11 @@ class DbHelper {
         })
     }
 
-
     getAllCurrentData(userGrows) {
         userGrows.forEach((grow) => {
             this.getCurrentData(grow.id)
         })
     }
-
 
     getCurrentData(growID) {
         console.log("get current", growID)
@@ -239,39 +201,61 @@ class DbHelper {
         })
     }
 
+    // ........... //
+    //  LIFETIME   //
+    // ........... //
+    getLifetimeData(userID, setData) {
+        var ref = this.firebase.db.ref().child('lifetime').child(this.userID)
+
+        ref.once('value', (snapshot) => {
+            setData(snapshot.val())
+        }, function (errorObject) {
+            console.log("Get Lifetime Data failed: " + errorObject.code);
+        });
+    }
+
+    postLifetimeData(lifetimeObject, growID, year, month, day) {
+        console.log("Post Lifetime Data", lifetimeObject)
+
+        var ref = this.firebase.db.ref().child('lifetime').child(this.userID).child(growID).child(year).child(month).child(day)
+        ref.set(lifetimeObject)
+    }
+
+    getMonthChunk(growID, year, month, setData) {
+        console.log("getMonthCHunk!" + growID + " " + year + " " + month)
+
+        var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(year).child(month)
+        ref.once('value', (snapshot) => {
+            setData(snapshot.val())
+        }, function (errorObject) {
+            console.log("getMonthChunk: " + errorObject.code);
+        });
+    }
+
 
     // ............ //
     // GROW CONFIG  //
     // ............ //
-    // Get Reset Value
     getGrowConfig(growID, setData) {
-
-        // Config data isResetting in firebase 
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
 
         ref.on('value', (snapshot) => {
-
             if (snapshot.val() === null) {
                 setData(false);
                 return;
             }
-
             setData(snapshot.val())
-
 
         }, function (errorObject) {
             console.log("watch isResetting failed: " + errorObject.code);
         });
     }
 
-
     // Set Grow Config in firebase
     setGrowConfig(growID, config) {
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config')
         ref.update(config)
     }
-
-
 
 
     // ........... //
@@ -286,7 +270,6 @@ class DbHelper {
         ref.on('value', (snapshot) => {
 
             var userGrowIDs = [];
-
             snapshot.forEach((child) => {
                 if (!child.val().sensors_live) {
                     userGrowIDs[userGrowIDs.length] = child.key
@@ -294,20 +277,15 @@ class DbHelper {
             });
 
             var setUserGrows = []
-
             userGrowIDs.forEach((key) => {
                 var growRef = this.firebase.db.ref().child('grows').child(this.userID).child(key)
 
                 growRef.once('value', (snapshot) => {
-
                     if (!setUserGrows.includes(snapshot.val())) {
                         setUserGrows[setUserGrows.length] = snapshot.val()
                     }
-
                     setUserGrows.sort((a, b) => (a.createdAt > b.createdAt) ? 1 : -1)
-
                     setData(setUserGrows)
-
                 }, function (errorObject) {
                     console.log("watch user grows grow failed: " + errorObject.code);
                 });
@@ -363,8 +341,6 @@ class DbHelper {
     // ............... //
     //   DEVICE RESET  //
     // ............... //
-
-
     resetDevice(UID, growID) {
         var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config-hardware').child('reset')
         ref.set(1)
@@ -374,8 +350,6 @@ class DbHelper {
     // .............. //
     //   SIGN OUT     //
     // .............. //
-
-
     signOut() {
         this.firebase.auth.signOut().then(function () {
             // Sign-out successful.
@@ -386,8 +360,6 @@ class DbHelper {
             console.log(`Error signing out: ${error}`)
         });
     }
-
-
 
 
 }

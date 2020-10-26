@@ -4,7 +4,9 @@ import '../../../../styles/App.css';
 import { LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 import moment from 'moment'
+
 import LifetimeDataRow from './LifetimeDataRow.js'
+import LoadingBindy from '../../_App/LoadingBindy.js'
 
 
 
@@ -260,6 +262,8 @@ class LifetimeGraph extends Component {
         }
 
         var renderLifetimeGraph = null
+        var renderTimescaleSelect = null
+        var renderLoadingBindy = null
         if (this.state.normalizedLifetimeData && this.state.normalizedLifetimeData[0]) {
             if (this.props.parentSize) {
                 var xSize = Math.floor(this.props.parentSize[0] * 1)
@@ -286,20 +290,25 @@ class LifetimeGraph extends Component {
                     </LineChart>
                 );
             }
+
+            renderTimescaleSelect = (
+                <div style={{ fontSize: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                    <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2020-10-01" max={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMin)).format('YYYY-MM-DD')} />
+                    <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 86400000)).format('YYYY-MM-DD')} max={moment(new Date()).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} />
+                </div>
+            )
+        } else {
+            renderLoadingBindy = <LoadingBindy displayText={"tobing lifetime data..."} />
         }
 
 
         return (
             <div style={{ overflowY: 'auto', overflowX: 'hidden', maxHeight: '100%' }}>
+                {renderLoadingBindy}
+
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-
                     {renderLifetimeGraph}
-
-                    {/* Time Scale Select... */}
-                    <div style={{ fontSize: '10px', display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                        <input onChange={this.toggleRangeMin} id="minimumToggle" name="date" min="2020-10-01" max={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMin)).format('YYYY-MM-DD')} />
-                        <input onChange={this.toggleRangeMax} id="maximumToggle" name="date" min={moment(new Date(this.state.rangeMin + 86400000)).format('YYYY-MM-DD')} max={moment(new Date()).format('YYYY-MM-DD')} type="date" defaultValue={moment(new Date(this.state.rangeMax)).format('YYYY-MM-DD')} />
-                    </div>
+                    {renderTimescaleSelect}
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', padding: '2px' }}>

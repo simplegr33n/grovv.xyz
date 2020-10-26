@@ -13,11 +13,13 @@ class AllPage extends Component {
     }
 
     componentDidMount() {
-        this.sensorAndLineUpdate()
+        if (this.props.userGrows) {
+            this.sensorAndLineUpdate()
+        }
     }
 
     componentDidUpdate = () => {
-        if (this.state.ACTIVE_INIT !== this.props.grow) {
+        if (this.props.userGrows && (this.state.ACTIVE_INIT !== this.props.grow)) {
             this.setState({ ACTIVE_INIT: this.props.grow });
             this.sensorAndLineUpdate()
         }
