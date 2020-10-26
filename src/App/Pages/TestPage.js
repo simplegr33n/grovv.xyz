@@ -57,9 +57,9 @@ class TestPage extends Component {
                     })()}
                 </div >
 
-                <div onClick={this.fetchWeather} style={{ width: '120px', height: '60px', maxHeight: '60px', background: '#FF0000', overflow: 'hidden' }}>
+                {/* <div onClick={this.fetchWeather} style={{ width: '120px', height: '60px', maxHeight: '60px', background: '#FF0000', overflow: 'hidden' }}>
                     BIG BUTTON!
-                </div >
+                </div > */}
 
                 <div className="Grow-Details-Page-Panel">
                     <div style={{ width: "100%", display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>

@@ -43,11 +43,12 @@ class ProcessingFunctions {
     }
 
     sendGrowData = (growID, rawData) => {
+        if (!rawData) {
+            return
+        }
         // appUpdateObject construction complete
         this.processedData[growID] = rawData
         this.appUpdateObject['processedData'] = this.processedData
-
-
 
         var sendBool = true
         this.appUpdateObject.userGrows.forEach((grow) => {

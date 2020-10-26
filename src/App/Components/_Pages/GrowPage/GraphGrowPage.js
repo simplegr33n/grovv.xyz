@@ -228,7 +228,7 @@ class GraphGrowPage extends Component {
                             ticks={this.state.tickArray}
                             tickFormatter={(tick) => moment(tick * 1).format('MMM DDᵗʰ - HH:mm')} />
 
-                        <YAxis yAxisId="temperature" orientation="left" type="number" width={20} allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
+                        <YAxis yAxisId="temperature" orientation="left" type="number" width={20} domain={['auto', 'auto']} allowDecimals={false} allowDataOverflow={true} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="percent" orientation="right" hide={true} domain={[0, 100]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="pressure" orientation="right" hide={true} domain={[95]} tick={{ fill: "#B3C2B5" }} />
                         <YAxis yAxisId="ppm" orientation="right" hide={true} domain={[0, 5000]} tick={{ fill: "#false" }} />

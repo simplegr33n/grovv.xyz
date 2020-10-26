@@ -143,7 +143,7 @@ class App extends Component {
 			}
 
 			if (refreshBool === true) {
-				console.log("attempt refresh?")
+				console.log("attempt refresh? (currently doing nothing)")
 				// this.processingFunctions.attemptRefresh()
 			}
 		}
@@ -172,11 +172,11 @@ class App extends Component {
 									case 'feed':
 										return <FeedPage user={this.state.user} />
 									case 'graphs':
-										return <AllPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
+										return <AllPage setGrow={this.setGrow} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
 									case 'tobytiles':
 										return <TobyTiles />
 									case 'test':
-										return <TestPage postFirebaseUser={this.postFirebaseUser} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
+										return <TestPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
 
 								}
 							} else {

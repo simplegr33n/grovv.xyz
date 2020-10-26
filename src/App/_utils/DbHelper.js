@@ -183,15 +183,12 @@ class DbHelper {
                 // open first hour listener only after getting current hour for each grow
                 // will bug if any grow doesnt have a current hour... but the render() App.js catch should fix?
                 if (parseInt(snapshot.key) === checkDate.getHours()) {
-                    console.log("add returnscount", userGrows.length)
                     growsReturnCount++
 
                 }
 
                 if (growsReturnCount === userGrows.length) {
                     this.getAllCurrentData(userGrows)
-                } else {
-                    console.log("DIFF" + growsReturnCount, userGrows.length)
                 }
 
             })
@@ -274,39 +271,6 @@ class DbHelper {
         ref.update(config)
     }
 
-
-    // .................. //
-    // GROW CONFIG RESET  //
-    // .................. //
-
-    // Get Reset Value
-    getResetValue(growID, setData) {
-
-        // Config data isResetting in firebase 
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config').child('isResetting')
-
-        ref.on('value', (snapshot) => {
-
-            if (snapshot.val() === null) {
-                setData(false);
-                return;
-            }
-
-            setData(snapshot.val())
-
-
-        }, function (errorObject) {
-            console.log("watch isResetting failed: " + errorObject.code);
-        });
-    }
-
-    // Get Reset Value
-    resetGrow(growID) {
-        // Config data isResetting in firebase 
-        var ref = this.firebase.db.ref().child('grows').child(this.userID).child(growID).child('config').child('isResetting')
-
-        ref.set(true)
-    }
 
 
 

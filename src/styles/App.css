@@ -566,6 +566,8 @@ body {
   display: flex;
   flex-direction: row;
   background: #0c140d;
+  /* justify-content: space-between; */
+  max-width: 400px;
 }
 
 .Grow-Details-Main-Data-Row-Header {

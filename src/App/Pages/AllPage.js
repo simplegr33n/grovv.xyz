@@ -38,8 +38,12 @@ class AllPage extends Component {
         });
     }
 
-    toggleSensor = (data) => {
-        console.log("button not connected", data)
+    setGrow = (e) => {
+        this.props.userGrows.forEach((grow) => {
+            if (grow.id === e.currentTarget.getAttribute('data-value')) {
+                this.props.setGrow(grow)
+            }
+        })
     }
 
     render() {
@@ -47,7 +51,11 @@ class AllPage extends Component {
         var renderGrowDataDisplays = []
         if (this.props.userGrows && this.state.sensorPIDS) {
             renderGrowDataDisplays = this.props.userGrows.map((grow) => {
-                return <GrowDataDisplay key={grow.id} toggleLine={this.toggleSensor} processedData={this.props.processedData[grow.id]} grow={grow} user={this.state.user} activeLines={this.state.activeLines} sensorPIDS={this.state.sensorPIDS[grow.id]} />
+                return (
+                    < div onClick={this.setGrow} data-value={grow.id} key={grow.id} style={{ cursor: 'pointer' }} >
+                        <GrowDataDisplay key={grow.id} processedData={this.props.processedData[grow.id]} grow={grow} user={this.state.user} activeLines={this.state.activeLines} sensorPIDS={this.state.sensorPIDS[grow.id]} />
+                    </div >
+                )
             })
         }
 

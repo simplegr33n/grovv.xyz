@@ -42,6 +42,8 @@ class GraphTestPage extends Component {
             compiledData.humidity = []
         }
 
+        console.log(this.props)
+
         var i = 0
         for (const [growID, growData] of Object.entries(this.props.processedData)) {
             i++

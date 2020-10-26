@@ -488,11 +488,11 @@ class GrowDataDisplay extends Component {
                         if (this.state.liveData) {
                             return (
                                 <div className="Component-Grow-Data-Display">
-                                    <div className="Grow-Details-Headers-Display-Row">
+                                    <div className="Grow-Details-Headers-Display-Row" >
                                         {(() => {
                                             if (!this.props.activeLines || this.props.activeLines) {
                                                 return (
-                                                    <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '12px', userSelect: 'none', width: '120px', maxWidth: '120px', display: 'flex', flexDirection: 'row' }}>
+                                                    <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '20px', userSelect: 'none', flex: 1, width: '208px', maxWidth: '208px', display: 'flex', flexDirection: 'row' }}>
                                                         <div style={{ color: indicatorColor, marginLeft: '2px', marginRight: '2px', marginTop: '-1px' }}>
                                                             ⬤
                                                         </div>
@@ -500,13 +500,13 @@ class GrowDataDisplay extends Component {
                                                     </div>
                                                 )
                                             } else {
-                                                return <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '12px', userSelect: 'none', width: '120px', maxWidth: '120px', display: 'flex', flexDirection: 'row' }} />
+                                                return <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '12px', userSelect: 'none', flex: 1, width: '208px', maxWidth: '208px', display: 'flex', flexDirection: 'row' }} />
                                             }
                                         })()}
-                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '88px', maxWidth: '88px', userSelect: 'none' }}></div>
-                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px', userSelect: 'none' }}>24h~</div>
-                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px', userSelect: 'none' }}>24h&#8593;</div>
-                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px', userSelect: 'none' }}>24h&#8595;</div>
+                                        {/* <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '88px', maxWidth: '88px', userSelect: 'none' }}></div> */}
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', userSelect: 'none' }}>24h~</div>
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', userSelect: 'none' }}>24h&#8593;</div>
+                                        <div className="Grow-Details-Main-Data-Row-Header" style={{ width: '64px', maxWidth: '64px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', userSelect: 'none' }}>24h&#8595;</div>
                                     </div>
 
                                     {sensorInfoRows}
