@@ -226,7 +226,9 @@ class GrowDataDisplay extends Component {
     }
 
     toggleLine = (e) => {
-        this.props.toggleLine(e.currentTarget.getAttribute('data-value'))
+        if (this.props.toggleLine) {
+            this.props.toggleLine(e.currentTarget.getAttribute('data-value'))
+        }
     }
 
     render() {
@@ -490,7 +492,7 @@ class GrowDataDisplay extends Component {
                                 <div className="Component-Grow-Data-Display">
                                     <div className="Grow-Details-Headers-Display-Row" >
                                         {(() => {
-                                            if (!this.props.activeLines || this.props.activeLines) {
+                                            if (!this.props.toggleLine) {
                                                 return (
                                                     <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '20px', userSelect: 'none', flex: 1, width: '208px', maxWidth: '208px', display: 'flex', flexDirection: 'row' }}>
                                                         <div style={{ color: indicatorColor, marginLeft: '2px', marginRight: '2px', marginTop: '-1px' }}>
