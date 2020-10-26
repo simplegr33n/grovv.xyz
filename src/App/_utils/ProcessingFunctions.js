@@ -58,7 +58,7 @@ class ProcessingFunctions {
         })
 
         if (sendBool === true) {
-            console.log("dataL for: " + growID, this.processedData[growID].length)
+            console.log(growID + " update:", "length: (" + this.processedData[growID].length + ")")
             if (this.APP_INITIALIZED) {
                 this.appUpdateFunction(this.appUpdateObject)
             } else {

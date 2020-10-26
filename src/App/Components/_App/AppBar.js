@@ -7,10 +7,8 @@ import DisplayFunctions from '../../_utils/DisplayFunctions.js'
 import cornerLogo from '../../../assets/corner-logo.png'
 import { ReactComponent as TobyFace } from '../../../assets/tobyface.svg'
 
-import { AiOutlineLineChart } from 'react-icons/ai'
-import { TiThMenu, TiCogOutline } from 'react-icons/ti'
+import { TiThMenu, TiCogOutline, TiChartLineOutline, TiKeyOutline, TiPipette, TiChartAreaOutline } from 'react-icons/ti'
 import { FaPrescriptionBottle } from 'react-icons/fa'
-import { FcLineChart } from 'react-icons/fc'
 
 
 class AppBar extends Component {
@@ -112,11 +110,11 @@ class AppBar extends Component {
                 {renderedLiveGrowButtons}
 
                 <div className="App-Bar-Button-Grow" style={{ background: '#4d55b1' }} onClick={this.setMainContent} data-value={'lifetime'}>
-                    <AiOutlineLineChart style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                    <TiChartLineOutline style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
                 <div className="App-Bar-Button-Grow" style={{ background: '#77864a' }} onClick={this.setMainContent} data-value={'feed'}>
-                    <FaPrescriptionBottle style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
+                    <TiPipette style={{ color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                 </div>
 
                 <div style={{ flex: 1 }} />
@@ -126,12 +124,12 @@ class AppBar extends Component {
                     <TiThMenu style={{ paddingLeft: '7px', color: '#FFF', fontSize: '30px', paddingTop: '5px' }} />
                     <div className="App-Bar-Submenu" style={{ width: '200px', background: '#FFF', position: 'fixed', right: '0px', top: '40px', color: "#000" }}>
 
-                        <div className="App-Bar-Submenu-Settings" onClick={this.setMainContent} data-value={'settings'}>
+                        <div className="App-Bar-Submenu-Item" onClick={this.setMainContent} data-value={'nutes'}>
                             <div style={{ flex: 1, paddingTop: '10px' }} >
-                                App Settings
+                                Nute Info
                             </div>
                             <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                                <TiCogOutline style={{ color: '#000', fontSize: '30px' }} />
+                                <FaPrescriptionBottle style={{ fontSize: '30px' }} />
                             </div>
                         </div>
 
@@ -140,11 +138,9 @@ class AppBar extends Component {
                                 Test Graph
                             </div>
                             <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                                <FcLineChart style={{ fontSize: '30px' }} />
+                                <TiChartAreaOutline style={{ fontSize: '30px' }} />
                             </div>
                         </div>
-
-
 
                         <div className="App-Bar-Submenu-Item" onClick={this.setMainContent} data-value={'tobytiles'}>
                             <div style={{ flex: 1, paddingTop: '10px' }} >
@@ -157,15 +153,26 @@ class AppBar extends Component {
                             </div>
                         </div>
 
+                        <div className="App-Bar-Submenu-Settings" onClick={this.setMainContent} data-value={'settings'}>
+                            <div style={{ flex: 1, paddingTop: '10px' }} >
+                                App Settings
+                            </div>
+                            <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                                <TiCogOutline style={{ color: '#000', fontSize: '30px' }} />
+                            </div>
+                        </div>
+
 
                         <div className="App-Bar-Submenu-Logout" onClick={this.handleSignOut}>
                             <div style={{ flex: 1, paddingTop: '10px' }} >
                                 Logout
                             </div>
-                            <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden', fontSize: '30px' }}>
-                                &#10162;
+                            <div style={{ display: 'flex', width: "50px", justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+                                <TiKeyOutline style={{ color: '#000', fontSize: '30px' }} />
                             </div>
                         </div>
+
+
 
 
                     </div>

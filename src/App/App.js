@@ -17,7 +17,8 @@ import GrowPage from './Pages/GrowPage.js'
 import AllPage from './Pages/AllPage.js'
 import LifetimePage from './Pages/LifetimePage.js'
 import FeedPage from './Pages/FeedPage.js'
-import TestPage from './Pages/TestPage.js'
+import TestPage from './SubPages/TestPage.js'
+import NutrientInfo from './SubPages/NutrientInfo.js'
 
 // Top Bar
 import AppBar from './Components/_App/AppBar.js'
@@ -71,8 +72,7 @@ class App extends Component {
 	}
 
 	appUpdateFunction = (data) => {
-		console.log("update App")
-		// console.log("data[1].length", data.processedData['EC1_0__FC:F5:C4:96:8C:A0'].length + ' / ' + data.processedData['EC1_0__D8:F1:5B:10:AB:04'].length + ' / ' + data.processedData['AQM1_0__48:3F:DA:77:31:CA'].length)
+		// console.log("update App")
 
 		this.setState({
 			processedData: data.processedData
@@ -175,6 +175,8 @@ class App extends Component {
 										return <AllPage setGrow={this.setGrow} setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
 									case 'tobytiles':
 										return <TobyTiles />
+									case 'nutes':
+										return <NutrientInfo />
 									case 'test':
 										return <TestPage setDisplayWindow={this.setDisplayWindow} displayWindow={this.state.displayWindow} processedData={this.state.processedData} userGrows={this.state.userGrows} user={this.state.user} />
 

@@ -227,12 +227,12 @@ class DbHelper {
             var dataPoint = snapshot.val()
             dataPoint.time = dataPoint.time * 1000
 
-            if ((dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time) && (dataPoint.time > date.getTime() - 20000)) {
+            if ((dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time) && (dataPoint.time > date.getTime() - 20 * 1000)) {
                 this.runningData[growID][this.runningData[growID].length] = dataPoint
             }
 
-            // will bug if no data in last minute...
-            if ((date.getTime() - dataPoint.time < 60000)) {
+            // TODO: can basically just rely on the second part as a wait to load timer..
+            if ((date.getTime() - dataPoint.time < 600 * 1000) || (new Date().getTime() - date.getTime() > 10 * 1000)) {
                 this.sendGrowData(growID, this.runningData[growID])
             }
 

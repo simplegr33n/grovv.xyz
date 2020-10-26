@@ -341,7 +341,15 @@ body {
   width: 40px;
   max-width: 40px;
   user-select: none;
-  background-color: #477915;
+  background-color: #93f538;
+}
+
+#App-Bar-Logo:hover {
+  padding-top: 1px;
+}
+
+#App-Bar-Logo:active {
+  color: #fff;
 }
 
 .App-Bar-Button {
