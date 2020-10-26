@@ -44,7 +44,7 @@ class DisplayFunctions {
             var difference = (now / 1000) - processedData[processedData.length - 1].time
 
             if (difference > 10000000) {
-                return "#989e98"
+                return "#212521"
             } else if (difference > 300000) {
                 return "#fa360a"
             } else if (difference > 60000) {
