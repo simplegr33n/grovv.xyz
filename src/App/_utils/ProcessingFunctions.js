@@ -9,6 +9,7 @@ class ProcessingFunctions {
 
         this.appUpdateFunction = null
         this.appUpdateObject = []
+        this.processedData = []
     }
 
     // ///////////////////////////////////////
@@ -25,6 +26,10 @@ class ProcessingFunctions {
         this.dbHelper.getUserGrows("", this.setUserGrows) // currently grabbing B's hardcoded
     }
 
+    attemptRefresh = () => {
+        this.dbHelper.getAllCurrentData(this.setUserGrows) // currently grabbing B's hardcoded
+    }
+
 
     setUser = (u) => {
         this.appUpdateObject['user'] = u
@@ -37,16 +42,30 @@ class ProcessingFunctions {
         this.dbHelper.getOneDayData(userGrows, this.sendGrowData)
     }
 
-    sendGrowData = (rawData) => {
+    sendGrowData = (growID, rawData) => {
         // appUpdateObject construction complete
-        this.appUpdateObject['processedData'] = rawData
+        this.processedData[growID] = rawData
+        this.appUpdateObject['processedData'] = this.processedData
 
-        if (this.APP_INITIALIZED) {
-            this.appUpdateFunction(this.appUpdateObject)
-        } else {
-            this.APP_INITIALIZED = true
-            this.appInitFunction(this.appUpdateObject)
+
+
+        var sendBool = true
+        this.appUpdateObject.userGrows.forEach((grow) => {
+            if (!this.processedData[grow.id]) {
+                sendBool = false
+            }
+        })
+
+        if (sendBool === true) {
+            console.log("dataL for: " + growID, this.processedData[growID].length)
+            if (this.APP_INITIALIZED) {
+                this.appUpdateFunction(this.appUpdateObject)
+            } else {
+                this.APP_INITIALIZED = true
+                this.appInitFunction(this.appUpdateObject)
+            }
         }
+
     }
 
 

@@ -155,19 +155,18 @@ class DbHelper {
             month = '0' + month
         }
 
-
+        var growsReturnCount = 0
 
         userGrows.forEach((grow) => {
 
-            var hoursReturnCount = -1
             var i = 0
 
             console.log("watch loop", grow.id)
 
             var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(grow.id).child('sensor_data').child(date.getFullYear()).child(month).child(day)
+            ref.off()
             ref.on('child_added', (snapshot) => {
                 var checkDate = new Date();
-                hoursReturnCount++
 
                 // datapoints for hours up to the current hour
                 if (parseInt(snapshot.key) <= checkDate.getHours()) {
@@ -181,11 +180,28 @@ class DbHelper {
                     })
                 }
 
-                // open first hour listener only once for each grow-day
+                // open first hour listener only after getting current hour for each grow
+                // will bug if any grow doesnt have a current hour... but the render() App.js catch should fix?
                 if (parseInt(snapshot.key) === checkDate.getHours()) {
-                    this.getCurrentData(grow.id)
+                    console.log("add returnscount", userGrows.length)
+                    growsReturnCount++
+
                 }
+
+                if (growsReturnCount === userGrows.length) {
+                    this.getAllCurrentData(userGrows)
+                } else {
+                    console.log("DIFF" + growsReturnCount, userGrows.length)
+                }
+
             })
+        })
+    }
+
+
+    getAllCurrentData(userGrows) {
+        userGrows.forEach((grow) => {
+            this.getCurrentData(grow.id)
         })
     }
 
@@ -201,28 +217,26 @@ class DbHelper {
             month = '0' + month
         }
 
-        this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
-
         // remove previous listeners
         this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(date.getDate() - 1).child(23).off()
         this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(date.getDate()).child(date.getHours() - 1).off()
 
         // create new listener
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(day).child(date.getHours())
-
+        ref.off()
         ref.on('child_added', (snapshot) => {
             this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
 
             var dataPoint = snapshot.val()
             dataPoint.time = dataPoint.time * 1000
 
-            if ((dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time)) {
+            if ((dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time) && (dataPoint.time > date.getTime() - 20000)) {
                 this.runningData[growID][this.runningData[growID].length] = dataPoint
             }
 
             // will bug if no data in last minute...
             if ((date.getTime() - dataPoint.time < 60000)) {
-                this.sendGrowData(this.runningData)
+                this.sendGrowData(growID, this.runningData[growID])
             }
 
         })

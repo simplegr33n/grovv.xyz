@@ -43,9 +43,6 @@ class App extends Component {
 		this.dbHelper = new DbHelper()
 		this.firebase = new Firebase()
 
-		this.concatAllData = []
-		this.dataCheckLengths = []
-
 		this.firebase.auth.onAuthStateChanged((user) => {
 			if (user) {
 				this.setState({ UID: user.uid })
@@ -53,6 +50,8 @@ class App extends Component {
 				this.processingFunctions.initializeApp(user.uid, this.appInitFunction, this.appUpdateFunction)
 			}
 		});
+
+		this.checkDataTime = new Date().getTime()
 
 	}
 
@@ -73,9 +72,7 @@ class App extends Component {
 
 	appUpdateFunction = (data) => {
 		console.log("update App")
-
-		console.log("data[1].length", data.processedData['EC1_0__FC:F5:C4:96:8C:A0'].length + ' / ' + data.processedData['EC1_0__D8:F1:5B:10:AB:04'].length + ' / ' + data.processedData['AQM1_0__48:3F:DA:77:31:CA'].length)
-
+		// console.log("data[1].length", data.processedData['EC1_0__FC:F5:C4:96:8C:A0'].length + ' / ' + data.processedData['EC1_0__D8:F1:5B:10:AB:04'].length + ' / ' + data.processedData['AQM1_0__48:3F:DA:77:31:CA'].length)
 
 		this.setState({
 			processedData: data.processedData
@@ -130,6 +127,30 @@ class App extends Component {
 
 
 	render() {
+		var date = new Date()
+
+
+		// tODO: Datechecking mechanism of some kind
+		if (this.state.processedData && this.state.userGrows && ((date.getTime() - this.checkDataTime) > 20000)) {
+			this.checkDataTime = date.getTime()
+
+			var refreshBool = false
+			for (var [index, grow] of Object.entries(this.state.userGrows)) {
+				if (this.state.processedData[grow.id] && (date.getTime() - this.state.processedData[grow.id][this.state.processedData[grow.id].length - 1].time) > 60000) {
+					refreshBool = true
+					console.log("recency try refresh:", grow.id)
+				}
+			}
+
+			if (refreshBool === true) {
+				console.log("attempt refresh?")
+				// this.processingFunctions.attemptRefresh()
+			}
+		}
+
+
+
+
 		return (
 			<div className="App">
 				<header className="App-body">
