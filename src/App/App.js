@@ -37,7 +37,7 @@ class App extends Component {
 			currentGrow: null,
 			displayWindow: 259200000, // 1800000, 10800000, 43200000, 86400000, 259200000
 
-			DEBUGGING: false
+			DEBUGGING: true
 		}
 
 		this.processingFunctions = new ProcessingFunctions()

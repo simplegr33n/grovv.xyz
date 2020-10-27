@@ -353,11 +353,11 @@ class GrowSettings extends Component {
 
                                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                                             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
-                                                <div id="GROW-DETAILS-SAVE-CONFIG-BTN" style={{ background: '#aa8b3b' }} onClick={() => this.resetDevice()}>RESET <br></br> BRAIN</div>
+                                                <div id="GROW-DETAILS-SAVE-CONFIG-BTN" style={{ background: '#aa8b3b' }} onClick={this.resetDevice}>RESET <br></br> BRAIN</div>
                                             </div>
 
                                             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '4px' }}>
-                                                <div id="GROW-DETAILS-SAVE-CONFIG-BTN" style={{ background: '#3ba2aa' }} onClick={() => this.postConfig()}>SAVE <br></br> SETTINGS</div>
+                                                <div id="GROW-DETAILS-SAVE-CONFIG-BTN" style={{ background: '#3ba2aa' }} onClick={this.postConfig}>SAVE <br></br> SETTINGS</div>
                                             </div>
                                         </div>
 
