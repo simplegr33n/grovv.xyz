@@ -41,7 +41,7 @@ class DisplayFunctions {
     returnActiveIndicatorColor = (processedData) => {
         if (processedData && processedData[processedData.length - 1]) {
             var now = new Date().getTime();
-            var difference = (now / 1000) - processedData[processedData.length - 1].time
+            var difference = now - processedData[processedData.length - 1].time
 
             if (difference > 10000000) {
                 return "#212521"
@@ -56,6 +56,7 @@ class DisplayFunctions {
             }
         }
     }
+
 }
 
 export default DisplayFunctions;

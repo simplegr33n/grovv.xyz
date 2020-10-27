@@ -235,6 +235,11 @@ class GrowDataDisplay extends Component {
 
         var indicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData)
 
+        if (this.props.processedData && this.indicatorTimeCheck !== this.props.processedData[this.props.processedData.length - 1].time) {
+            this.indicatorTimeCheck = this.props.processedData[this.props.processedData.length - 1].time
+        }
+
+
         var sensorInfoRows = null
         if (this.props.sensorPIDS && this.state.liveData) {
 
@@ -495,7 +500,7 @@ class GrowDataDisplay extends Component {
                                             if (!this.props.toggleLine) {
                                                 return (
                                                     <div className="Grow-Details-Main-Data-Row-Header" style={{ color: '#FFF', fontSize: '20px', userSelect: 'none', flex: 1, width: '208px', maxWidth: '208px', display: 'flex', flexDirection: 'row' }}>
-                                                        <div style={{ color: indicatorColor, marginLeft: '2px', marginRight: '2px', marginTop: '-1px' }}>
+                                                        <div style={{ color: this.displayFunctions.returnActiveIndicatorColor(this.props.processedData), marginLeft: '2px', marginRight: '2px', marginTop: '-1px' }}>
                                                             ⬤
                                                         </div>
                                                         {this.props.grow.name}

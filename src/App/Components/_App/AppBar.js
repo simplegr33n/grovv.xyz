@@ -44,10 +44,10 @@ class AppBar extends Component {
             renderedLiveGrowButtons = this.props.userGrows.map((grow) => {
 
                 var liveButtonData = null
+                // var liveButtonIndicatorColor = null
                 if (this.props.processedData && this.props.processedData[grow.id]) {
                     liveButtonData = this.props.processedData[grow.id][this.props.processedData[grow.id].length - 1]
                 }
-                var liveButtonIndicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[grow.id])
 
                 var brokenName = grow.name.split(" ")
                 var acroName = ""
@@ -63,7 +63,7 @@ class AppBar extends Component {
                 return (
                     <div className="App-Bar-Button-Grow" key={grow.id} onClick={this.setGrow} data-value={grow.id}>
                         <div className="App-Bar-Button-Updated" data-value={grow.id}>
-                            <div style={{ color: liveButtonIndicatorColor, marginLeft: '1px', fontSize: '10px' }}>⬤</div>
+                            <div style={{ color: this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[grow.id]), marginLeft: '1px', fontSize: '10px' }}>⬤</div>
                         </div>
 
                         <div className="App-Bar-Button-Grow-Name" data-value={grow.id}>{acroName}</div>

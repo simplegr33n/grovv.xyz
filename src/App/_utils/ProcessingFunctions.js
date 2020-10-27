@@ -53,19 +53,22 @@ class ProcessingFunctions {
         var sendBool = true
         this.appUpdateObject.userGrows.forEach((grow) => {
             if (!this.processedData[grow.id]) {
+                console.log("send attempt.." + grow.id, this.processedData)
                 sendBool = false
             }
         })
 
-        if (sendBool === true) {
-            console.log(growID + " update:", "length: (" + this.processedData[growID].length + ")")
-            if (this.APP_INITIALIZED) {
-                this.appUpdateFunction(this.appUpdateObject)
-            } else {
-                this.APP_INITIALIZED = true
-                this.appInitFunction(this.appUpdateObject)
-            }
+        console.log("send attempt..", sendBool)
+
+        // if (sendBool === true) {
+        console.log(growID + " update:", "length: (" + this.processedData[growID].length + ")")
+        if (this.APP_INITIALIZED) {
+            this.appUpdateFunction(this.appUpdateObject)
+        } else {
+            this.APP_INITIALIZED = true
+            this.appInitFunction(this.appUpdateObject)
         }
+        // }
 
     }
 

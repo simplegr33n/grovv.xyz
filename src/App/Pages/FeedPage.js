@@ -33,7 +33,7 @@ class FeedPage extends Component {
 
     render() {
 
-        if (this.state.feedData && this.state.user) {
+        if (this.state.feedData && this.props.user) {
             var renderGrowRows = Object.entries(this.props.user.grows).map((userGrowData) => {
                 return <FeedGrowSection key={userGrowData[0]} feedData={this.state.feedData} userGrowData={userGrowData} />
             })

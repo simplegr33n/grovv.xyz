@@ -494,6 +494,10 @@ body {
   background: #b8ccd2;
 }
 
+.App-Bar-Submenu-Item:active .App-Bar-Submenu {
+  visibility: hidden;
+}
+
 .App-Bar-Submenu-Settings {
   height: 50px;
   display: flex;

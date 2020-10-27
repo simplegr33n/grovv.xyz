@@ -101,7 +101,10 @@ class DbHelper {
                         })
 
                         if (checkGrowsBool) {
-                            // sendGrowData(this.runningData)
+                            userGrows.forEach((grow) => {
+                                sendGrowData(grow.id, this.runningData[grow.id])
+                            })
+
                             this.watchDataHours(userGrows)
                         }
 
@@ -140,12 +143,13 @@ class DbHelper {
                         if (i % 4 === 0 || i === 0) {
                             var dataPoint = child.val()
                             dataPoint.time = dataPoint.time * 1000
+                            // TODO: figure out why times of this value are popping up at all..
+                            // for now filtering them out keeps the site running.
                             if (dataPoint.time < 2000000000000) {
                                 this.runningData[grow.id][this.runningData[grow.id].length] = dataPoint
                             } else {
-                                console.log("overtimer...")
+                                console.log("dataPoint in future... go figure")
                             }
-
                         }
                     })
                 }
@@ -181,8 +185,6 @@ class DbHelper {
             month = '0' + month
         }
 
-
-
         // remove previous listeners
         this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(date.getDate() - 1).child(23).off()
         this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(date.getDate()).child(date.getHours() - 1).off()
@@ -191,24 +193,18 @@ class DbHelper {
         var ref = this.firebase.db.ref().child('grow_data').child(this.userID).child(growID).child('sensor_data').child(date.getFullYear()).child(month).child(day).child(date.getHours())
         ref.off()
         ref.on('child_added', (snapshot) => {
-            var growData = this.runningData[growID].slice()
-            growData.sort((a, b) => (a.time > b.time) ? 1 : -1)
+            this.runningData[growID].sort((a, b) => (a.time > b.time) ? 1 : -1)
 
             var dataPoint = snapshot.val()
-
             dataPoint.time = dataPoint.time * 1000
 
-            console.log("growdata len:", growData.length)
-            console.log("gt:", dataPoint.time)
-            console.log("gt:", growData[growData.length - 1].time)
-            if ((dataPoint.time > growData[growData.length - 1].time) && (dataPoint.time > date.getTime() - 20 * 1000)) {
-                growData[growData.length] = dataPoint
-            }
-            console.log("growdata len aft:", growData.length)
-
-            // TODO: can basically just rely on the second part as a wait to load timer..
-            if ((date.getTime() - dataPoint.time < 120 * 1000) || (new Date().getTime() - date.getTime() > 10 * 1000)) {
-                this.sendGrowData(growID, growData)
+            // Add point if more recent than last point
+            // Then send (whether new point added or not)
+            if ((dataPoint.time > this.runningData[growID][this.runningData[growID].length - 1].time)) {
+                this.runningData[growID][this.runningData[growID].length] = dataPoint
+                this.sendGrowData(growID, this.runningData[growID])
+            } else if ((dataPoint.time === this.runningData[growID][this.runningData[growID].length - 1].time)) {
+                this.sendGrowData(growID, this.runningData[growID])
             }
 
         })
@@ -318,8 +314,7 @@ class DbHelper {
         // Config data isResetting in firebase 
         var ref = this.firebase.db.ref().child('feed').child(this.userID)
 
-        ref.on('value', (snapshot) => {
-
+        ref.once('value', (snapshot) => {
             if (snapshot.val() === null) {
                 setData(false);
                 return;

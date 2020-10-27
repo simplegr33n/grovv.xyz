@@ -23,6 +23,7 @@ class FeedGrowSection extends Component {
 
 
     render() {
+        console.log(this.props.feedData)
 
         var fullSubstancesList = []
         for (const [key, value] of Object.entries(this.props.feedData._SUBSTANCE_DEFS)) {

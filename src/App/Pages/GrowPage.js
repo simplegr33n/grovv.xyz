@@ -28,7 +28,9 @@ class GrowPage extends Component {
 
             // Graph sizing
             graphElementSize: [150, 150], // needs init
-            graphSizeUpdated: 0 // init at 0
+            graphSizeUpdated: 0, // init at 0
+
+            componentLastUpdated: 0
         };
 
         this.displayFunctions = new DisplayFunctions()
@@ -39,7 +41,10 @@ class GrowPage extends Component {
 
         if (this.props.processedData && this.props.processedData[this.props.grow.id]) {
             this.dataLengthRef = this.props.processedData[this.props.grow.id].length
-            this.setState({ processedData: this.props.processedData[this.props.grow.id] })
+            this.setState({
+                processedData: this.props.processedData[this.props.grow.id],
+                componentLastUpdated: new Date().getTime()
+            })
         }
 
         this.calcGraphDimensions()
@@ -121,7 +126,6 @@ class GrowPage extends Component {
 
     render() {
 
-        var indicatorColor = this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[this.props.grow.id])
 
         // MAIN RENDER RETURN
         return (
@@ -130,7 +134,7 @@ class GrowPage extends Component {
 
                     <div className="Grow-Details-Header">
                         <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-                            <div style={{ color: indicatorColor, marginLeft: '4px', fontSize: '1.1em', userSelect: 'none' }}>⬤</div>
+                            <div style={{ color: this.displayFunctions.returnActiveIndicatorColor(this.props.processedData[this.props.grow.id]), marginLeft: '4px', fontSize: '1.1em', userSelect: 'none' }}>⬤</div>
                             <div id="Grow-Header-Text">{this.props.grow.name}</div>
                         </div>
                         <div onClick={() => this.openCloseSettings()} style={{ marginRight: '4px', color: '#A9A9A9', userSelect: 'none', cursor: 'pointer' }}>
