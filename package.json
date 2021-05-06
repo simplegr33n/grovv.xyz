@@ -7,7 +7,7 @@
     "@firebase/database": "^0.3.13",
     "firebase": "^6.0.2",
     "gh-pages": "^2.0.1",
-    "highcharts": "^8.2.2",
+    "highcharts": "^9.0.0",
     "highcharts-react-official": "^3.0.0",
     "moment": "^2.24.0",
     "react": "^16.8.3",
